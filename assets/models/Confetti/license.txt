@@ -1,0 +1,11 @@
+Model Information:
+* title:	Confetti
+* source:	https://sketchfab.com/3d-models/confetti-b442e6fc171443138a919fdc90f24654
+* author:	jhsuuu (https://sketchfab.com/jhsuuu)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Confetti" (https://sketchfab.com/3d-models/confetti-b442e6fc171443138a919fdc90f24654) by jhsuuu (https://sketchfab.com/jhsuuu) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
