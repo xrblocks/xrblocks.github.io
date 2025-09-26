@@ -18,11 +18,12 @@ jobs:
           repository: google/xrblocks
           ssh-key: ${{ secrets.READ_XRBLOCKS_SSH_KEY }}
           path: ./xrblocks
-      - name: Setup Node.js
+      - name: Setup Node.js for xrblocks
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
+          cache-dependency-path: './xrblocks/package-lock.json'
       - name: Install Dependencies
         run: npm ci
         working-directory: ./xrblocks
@@ -31,6 +32,12 @@ jobs:
         working-directory: ./xrblocks
       - name: Copy out build
         run : mv ./xrblocks/build ./build/
+      - name: Setup Node.js for docs
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: './xrblocks/docs/package-lock.json'
       - name: Install Docs Dependencies
         run: npm ci
         working-directory: ./xrblocks/docs
