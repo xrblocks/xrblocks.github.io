@@ -45,6 +45,8 @@ jobs:
         run: npm run build
         working-directory: ./xrblocks/docs
         env:
+            URL: https://xrblocks.github.io/
+            BASE_URL: /docs/
             XRBLOCKS_BASE_URL: https://xrblocks.github.io/
       - name: Copy out docs
         run : mv ./xrblocks/docs/build/ ./build/docs
