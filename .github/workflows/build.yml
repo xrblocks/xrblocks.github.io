@@ -1,11 +1,12 @@
-# This revised workflow streamlines the original by reducing redundant steps
-# and optimizing the build and deployment process.
-
 name: Create build branch
 
 on:
   # Allows manual triggering of the workflow from the GitHub Actions UI.
   workflow_dispatch:
+  # Also triggers the workflow on any push to the 'main' branch.
+  push:
+    branches:
+      - main
 
 # Defines the permissions for the GITHUB_TOKEN. 'write' is required for
 # pushing the build artifacts to the 'build' branch.
