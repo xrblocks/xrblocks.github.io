@@ -55,7 +55,6 @@ jobs:
         working-directory: ./xrblocks
 
       # Step 5: Build both the main project and the docs.
-      # Grouping build steps keeps the logic clean.
       - name: Build Project & Docs
         run: |
           npm run build
@@ -69,9 +68,9 @@ jobs:
       # robust than a series of 'mv' commands.
       - name: Stage build artifacts
         run: |
-          mkdir -p ./build/docs
+          mkdir -p ./build/
           cp -r ./xrblocks/build ./build/
-          cp -r ./xrblocks/docs/build/* ./build/docs/
+          cp -r ./xrblocks/docs/build/docs ./build/
           cp -r ./xrblocks/demos ./build/
           cp -r ./xrblocks/samples ./build/
 
