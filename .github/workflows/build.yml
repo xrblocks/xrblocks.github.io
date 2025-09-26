@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Checkout the current repo
         uses: actions/checkout@v4
-      - name: Checkout repo-B (the other private repo)
+      - name: Checkout google/xrblocks
         uses: actions/checkout@v4
         with:
           repository: google/xrblocks
