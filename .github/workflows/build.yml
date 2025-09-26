@@ -64,8 +64,7 @@ jobs:
 
       # Step 6: Stage all artifacts for deployment.
       # This step creates a clean 'build' directory and copies all necessary
-      # files and folders into it in a single, clear command. This is more
-      # robust than a series of 'mv' commands.
+      # files and folders into it in a single, clear command.
       - name: Stage build artifacts
         run: |
           mkdir -p ./build/
@@ -73,6 +72,7 @@ jobs:
           cp -r ./xrblocks/docs/build/docs ./build/
           cp -r ./xrblocks/demos ./build/
           cp -r ./xrblocks/samples ./build/
+          cp -r ./xrblocks/templates ./build/
 
       # Step 7: Deploy the staged artifacts to the 'build' branch.
       # The peaceiris/actions-gh-pages action handles committing and pushing
