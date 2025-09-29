@@ -68,7 +68,7 @@ jobs:
       # files and folders into it in a single, clear command.
       - name: Stage build artifacts
         run: |
-          mkdir -p ./build/
+          mkdir -p ./build/docs/
           cp -r ./xrblocks/build ./build/
           cp -r ./xrblocks/docs/build/* ./build/docs/
           cp -r ./xrblocks/demos ./build/
