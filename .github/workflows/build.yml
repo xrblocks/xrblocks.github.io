@@ -70,7 +70,7 @@ jobs:
         run: |
           mkdir -p ./build/
           cp -r ./xrblocks/build ./build/
-          cp -r ./xrblocks/docs/build/* ./build/
+          cp -r ./xrblocks/docs/build/* ./build/docs/
           cp -r ./xrblocks/demos ./build/
           cp -r ./xrblocks/samples ./build/
           cp -r ./xrblocks/templates ./build/
