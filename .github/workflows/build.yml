@@ -7,6 +7,9 @@ on:
   push:
     branches:
       - main
+  repository_dispatch:
+    types:
+      - xrblocks_update
 
 # Defines the permissions for the GITHUB_TOKEN. 'write' is required for
 # pushing the build artifacts to the 'build' branch.
