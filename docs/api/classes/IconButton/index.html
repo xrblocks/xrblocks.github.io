@@ -17,7 +17,7 @@
 <link rel="icon" href="/img/web-app-manifest-192x192.png" sizes="192x192" type="image/png">
 <link rel="icon" href="/img/web-app-manifest-512x512.png" sizes="512x512" type="image/png">
 <link rel="manifest" href="/img/site.webmanifest"><link rel="stylesheet" href="/docs/assets/css/styles.a90d15d9.css">
-<script src="/docs/assets/js/runtime~main.0ea9e4a4.js" defer="defer"></script>
+<script src="/docs/assets/js/runtime~main.db677f39.js" defer="defer"></script>
 <script src="/docs/assets/js/main.cafb0df4.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -473,7 +473,7 @@ by panel aspect ratio.</p>
 <blockquote>
 <p><code>protected</code> <strong>_initializeText</strong>(): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ui/components/IconButton.ts#L118" target="_blank" rel="noopener noreferrer">src/ui/components/IconButton.ts:118</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ui/components/IconButton.ts#L133" target="_blank" rel="noopener noreferrer">src/ui/components/IconButton.ts:133</a></p>
 <p>Overrides the parent&#x27;s private initialization method. This is called by the
 parent&#x27;s <code>init()</code> method after the Troika module is confirmed to be loaded.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-5">Returns<a href="#returns-5" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
@@ -551,15 +551,14 @@ is true and the <code>troika-three-text</code> module has been successfully impo
 <blockquote>
 <p><strong>init</strong>(<code>_?</code>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener noreferrer"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ui/components/TextView.ts#L182" target="_blank" rel="noopener noreferrer">src/ui/components/TextView.ts:182</a></p>
-<p>Initializes the TextView. It waits for the Troika module to be imported
-and then creates the text object, sets up aspect ratio, and loads overlays.</p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ui/components/IconButton.ts#L85" target="_blank" rel="noopener noreferrer">src/ui/components/IconButton.ts:85</a></p>
+<p>Initializes the component and sets the render order.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-4">Parameters<a href="#parameters-4" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_">_?<a href="#_" class="hash-link" aria-label="Direct link to _?" title="Direct link to _?" translate="no">​</a></h5>
 <p><code>object</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-11">Returns<a href="#returns-11" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener noreferrer"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-40">Inherited from<a href="#inherited-from-40" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="overrides-7">Overrides<a href="#overrides-7" class="hash-link" aria-label="Direct link to Overrides" title="Direct link to Overrides" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#init"><code>init</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="initphysics">initPhysics()<a href="#initphysics" class="hash-link" aria-label="Direct link to initPhysics()" title="Direct link to initPhysics()" translate="no">​</a></h3>
@@ -573,7 +572,7 @@ and then creates the text object, sets up aspect ratio, and loads overlays.</p>
 <p><a href="/docs/api/classes/Physics"><code>Physics</code></a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-12">Returns<a href="#returns-12" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener noreferrer"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-41">Inherited from<a href="#inherited-from-41" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-40">Inherited from<a href="#inherited-from-40" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#initphysics"><code>initPhysics</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onhoverenter">onHoverEnter()<a href="#onhoverenter" class="hash-link" aria-label="Direct link to onHoverEnter()" title="Direct link to onHoverEnter()" translate="no">​</a></h3>
@@ -588,7 +587,7 @@ and then creates the text object, sets up aspect ratio, and loads overlays.</p>
 <p>An XR controller.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-13">Returns<a href="#returns-13" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-42">Inherited from<a href="#inherited-from-42" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-41">Inherited from<a href="#inherited-from-41" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onhoverenter"><code>onHoverEnter</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onhoverexit">onHoverExit()<a href="#onhoverexit" class="hash-link" aria-label="Direct link to onHoverExit()" title="Direct link to onHoverExit()" translate="no">​</a></h3>
@@ -603,7 +602,7 @@ and then creates the text object, sets up aspect ratio, and loads overlays.</p>
 <p>An XR controller.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-14">Returns<a href="#returns-14" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-43">Inherited from<a href="#inherited-from-43" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-42">Inherited from<a href="#inherited-from-42" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onhoverexit"><code>onHoverExit</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onhovering">onHovering()<a href="#onhovering" class="hash-link" aria-label="Direct link to onHovering()" title="Direct link to onHovering()" translate="no">​</a></h3>
@@ -618,14 +617,14 @@ and then creates the text object, sets up aspect ratio, and loads overlays.</p>
 <p>An XR controller.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-15">Returns<a href="#returns-15" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-44">Inherited from<a href="#inherited-from-44" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-43">Inherited from<a href="#inherited-from-43" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onhovering"><code>onHovering</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onhoverout">onHoverOut()<a href="#onhoverout" class="hash-link" aria-label="Direct link to onHoverOut()" title="Direct link to onHoverOut()" translate="no">​</a></h3>
 <blockquote>
 <p><strong>onHoverOut</strong>(): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ui/components/IconButton.ts#L95" target="_blank" rel="noopener noreferrer">src/ui/components/IconButton.ts:95</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ui/components/IconButton.ts#L110" target="_blank" rel="noopener noreferrer">src/ui/components/IconButton.ts:110</a></p>
 <p>Handles behavior when the cursor moves off the button.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-16">Returns<a href="#returns-16" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
@@ -634,8 +633,11 @@ and then creates the text object, sets up aspect ratio, and loads overlays.</p>
 <blockquote>
 <p><strong>onHoverOver</strong>(): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ui/components/IconButton.ts#L86" target="_blank" rel="noopener noreferrer">src/ui/components/IconButton.ts:86</a></p>
-<p>Handles behavior when the cursor hovers over the button.</p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ui/components/IconButton.ts#L102" target="_blank" rel="noopener noreferrer">src/ui/components/IconButton.ts:102</a></p>
+<p>/**</p>
+<ul>
+<li>Handles behavior when the cursor hovers over the button.</li>
+</ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-17">Returns<a href="#returns-17" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <hr>
@@ -651,7 +653,7 @@ and then creates the text object, sets up aspect ratio, and loads overlays.</p>
 <p>Event containing <code>.code</code> to read the keyboard key.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-18">Returns<a href="#returns-18" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-45">Inherited from<a href="#inherited-from-45" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-44">Inherited from<a href="#inherited-from-44" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onkeydown"><code>onKeyDown</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onkeyup">onKeyUp()<a href="#onkeyup" class="hash-link" aria-label="Direct link to onKeyUp()" title="Direct link to onKeyUp()" translate="no">​</a></h3>
@@ -664,7 +666,7 @@ and then creates the text object, sets up aspect ratio, and loads overlays.</p>
 <p><a href="/docs/api/interfaces/KeyEvent"><code>KeyEvent</code></a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-19">Returns<a href="#returns-19" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-46">Inherited from<a href="#inherited-from-46" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-45">Inherited from<a href="#inherited-from-45" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onkeyup"><code>onKeyUp</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onobjectgrabbing">onObjectGrabbing()<a href="#onobjectgrabbing" class="hash-link" aria-label="Direct link to onObjectGrabbing()" title="Direct link to onObjectGrabbing()" translate="no">​</a></h3>
@@ -678,7 +680,7 @@ and then creates the text object, sets up aspect ratio, and loads overlays.</p>
 <p><a href="/docs/api/interfaces/ObjectGrabEvent"><code>ObjectGrabEvent</code></a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-20">Returns<a href="#returns-20" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-47">Inherited from<a href="#inherited-from-47" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-46">Inherited from<a href="#inherited-from-46" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onobjectgrabbing"><code>onObjectGrabbing</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onobjectgrabend">onObjectGrabEnd()<a href="#onobjectgrabend" class="hash-link" aria-label="Direct link to onObjectGrabEnd()" title="Direct link to onObjectGrabEnd()" translate="no">​</a></h3>
@@ -692,7 +694,7 @@ and then creates the text object, sets up aspect ratio, and loads overlays.</p>
 <p><a href="/docs/api/interfaces/ObjectGrabEvent"><code>ObjectGrabEvent</code></a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-21">Returns<a href="#returns-21" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-48">Inherited from<a href="#inherited-from-48" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-47">Inherited from<a href="#inherited-from-47" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onobjectgrabend"><code>onObjectGrabEnd</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onobjectgrabstart">onObjectGrabStart()<a href="#onobjectgrabstart" class="hash-link" aria-label="Direct link to onObjectGrabStart()" title="Direct link to onObjectGrabStart()" translate="no">​</a></h3>
@@ -706,7 +708,7 @@ and then creates the text object, sets up aspect ratio, and loads overlays.</p>
 <p><a href="/docs/api/interfaces/ObjectGrabEvent"><code>ObjectGrabEvent</code></a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-22">Returns<a href="#returns-22" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-49">Inherited from<a href="#inherited-from-49" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-48">Inherited from<a href="#inherited-from-48" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onobjectgrabstart"><code>onObjectGrabStart</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onobjectselectend">onObjectSelectEnd()<a href="#onobjectselectend" class="hash-link" aria-label="Direct link to onObjectSelectEnd()" title="Direct link to onObjectSelectEnd()" translate="no">​</a></h3>
@@ -723,7 +725,7 @@ represents, e.g. View, ModelView.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-23">Returns<a href="#returns-23" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>boolean</code></p>
 <p>Whether the event was handled</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-50">Inherited from<a href="#inherited-from-50" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-49">Inherited from<a href="#inherited-from-49" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onobjectselectend"><code>onObjectSelectEnd</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onobjectselectstart">onObjectSelectStart()<a href="#onobjectselectstart" class="hash-link" aria-label="Direct link to onObjectSelectStart()" title="Direct link to onObjectSelectStart()" translate="no">​</a></h3>
@@ -740,7 +742,7 @@ represents, e.g. View, ModelView.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-24">Returns<a href="#returns-24" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>boolean</code></p>
 <p>Whether the event was handled</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-51">Inherited from<a href="#inherited-from-51" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-50">Inherited from<a href="#inherited-from-50" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onobjectselectstart"><code>onObjectSelectStart</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onobjecttouchend">onObjectTouchEnd()<a href="#onobjecttouchend" class="hash-link" aria-label="Direct link to onObjectTouchEnd()" title="Direct link to onObjectTouchEnd()" translate="no">​</a></h3>
@@ -754,7 +756,7 @@ represents, e.g. View, ModelView.</p>
 <p><a href="/docs/api/interfaces/ObjectTouchEvent"><code>ObjectTouchEvent</code></a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-25">Returns<a href="#returns-25" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-52">Inherited from<a href="#inherited-from-52" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-51">Inherited from<a href="#inherited-from-51" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onobjecttouchend"><code>onObjectTouchEnd</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onobjecttouching">onObjectTouching()<a href="#onobjecttouching" class="hash-link" aria-label="Direct link to onObjectTouching()" title="Direct link to onObjectTouching()" translate="no">​</a></h3>
@@ -768,7 +770,7 @@ represents, e.g. View, ModelView.</p>
 <p><a href="/docs/api/interfaces/ObjectTouchEvent"><code>ObjectTouchEvent</code></a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-26">Returns<a href="#returns-26" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-53">Inherited from<a href="#inherited-from-53" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-52">Inherited from<a href="#inherited-from-52" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onobjecttouching"><code>onObjectTouching</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onobjecttouchstart">onObjectTouchStart()<a href="#onobjecttouchstart" class="hash-link" aria-label="Direct link to onObjectTouchStart()" title="Direct link to onObjectTouchStart()" translate="no">​</a></h3>
@@ -782,7 +784,7 @@ represents, e.g. View, ModelView.</p>
 <p><a href="/docs/api/interfaces/ObjectTouchEvent"><code>ObjectTouchEvent</code></a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-27">Returns<a href="#returns-27" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-54">Inherited from<a href="#inherited-from-54" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-53">Inherited from<a href="#inherited-from-53" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onobjecttouchstart"><code>onObjectTouchStart</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onselect">onSelect()<a href="#onselect" class="hash-link" aria-label="Direct link to onSelect()" title="Direct link to onSelect()" translate="no">​</a></h3>
@@ -797,7 +799,7 @@ represents, e.g. View, ModelView.</p>
 <p>event.target holds its controller.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-28">Returns<a href="#returns-28" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-55">Inherited from<a href="#inherited-from-55" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-54">Inherited from<a href="#inherited-from-54" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onselect"><code>onSelect</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onselectend">onSelectEnd()<a href="#onselectend" class="hash-link" aria-label="Direct link to onSelectEnd()" title="Direct link to onSelectEnd()" translate="no">​</a></h3>
@@ -812,7 +814,7 @@ represents, e.g. View, ModelView.</p>
 <p>event.target holds its controller</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-29">Returns<a href="#returns-29" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-56">Inherited from<a href="#inherited-from-56" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-55">Inherited from<a href="#inherited-from-55" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onselectend"><code>onSelectEnd</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onselecting">onSelecting()<a href="#onselecting" class="hash-link" aria-label="Direct link to onSelecting()" title="Direct link to onSelecting()" translate="no">​</a></h3>
@@ -826,7 +828,7 @@ represents, e.g. View, ModelView.</p>
 <p><a href="/docs/api/interfaces/SelectEvent"><code>SelectEvent</code></a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-30">Returns<a href="#returns-30" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-57">Inherited from<a href="#inherited-from-57" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-56">Inherited from<a href="#inherited-from-56" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onselecting"><code>onSelecting</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onselectstart">onSelectStart()<a href="#onselectstart" class="hash-link" aria-label="Direct link to onSelectStart()" title="Direct link to onSelectStart()" translate="no">​</a></h3>
@@ -841,7 +843,7 @@ represents, e.g. View, ModelView.</p>
 <p>event.target holds its controller</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-31">Returns<a href="#returns-31" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-58">Inherited from<a href="#inherited-from-58" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-57">Inherited from<a href="#inherited-from-57" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onselectstart"><code>onSelectStart</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onsimulatorstarted">onSimulatorStarted()<a href="#onsimulatorstarted" class="hash-link" aria-label="Direct link to onSimulatorStarted()" title="Direct link to onSimulatorStarted()" translate="no">​</a></h3>
@@ -851,7 +853,7 @@ represents, e.g. View, ModelView.</p>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L78" target="_blank" rel="noopener noreferrer">src/core/Script.ts:78</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-32">Returns<a href="#returns-32" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-59">Inherited from<a href="#inherited-from-59" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-58">Inherited from<a href="#inherited-from-58" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onsimulatorstarted"><code>onSimulatorStarted</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onsqueeze">onSqueeze()<a href="#onsqueeze" class="hash-link" aria-label="Direct link to onSqueeze()" title="Direct link to onSqueeze()" translate="no">​</a></h3>
@@ -866,7 +868,7 @@ represents, e.g. View, ModelView.</p>
 <p>event.target holds its controller.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-33">Returns<a href="#returns-33" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-60">Inherited from<a href="#inherited-from-60" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-59">Inherited from<a href="#inherited-from-59" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onsqueeze"><code>onSqueeze</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onsqueezeend">onSqueezeEnd()<a href="#onsqueezeend" class="hash-link" aria-label="Direct link to onSqueezeEnd()" title="Direct link to onSqueezeEnd()" translate="no">​</a></h3>
@@ -881,7 +883,7 @@ represents, e.g. View, ModelView.</p>
 <p>event.target holds its controller.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-34">Returns<a href="#returns-34" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-61">Inherited from<a href="#inherited-from-61" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-60">Inherited from<a href="#inherited-from-60" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onsqueezeend"><code>onSqueezeEnd</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onsqueezestart">onSqueezeStart()<a href="#onsqueezestart" class="hash-link" aria-label="Direct link to onSqueezeStart()" title="Direct link to onSqueezeStart()" translate="no">​</a></h3>
@@ -896,7 +898,7 @@ represents, e.g. View, ModelView.</p>
 <p>event.target holds its controller.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-35">Returns<a href="#returns-35" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-62">Inherited from<a href="#inherited-from-62" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-61">Inherited from<a href="#inherited-from-61" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onsqueezestart"><code>onSqueezeStart</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onsqueezing">onSqueezing()<a href="#onsqueezing" class="hash-link" aria-label="Direct link to onSqueezing()" title="Direct link to onSqueezing()" translate="no">​</a></h3>
@@ -910,7 +912,7 @@ represents, e.g. View, ModelView.</p>
 <p><a href="/docs/api/interfaces/SelectEvent"><code>SelectEvent</code></a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-36">Returns<a href="#returns-36" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-63">Inherited from<a href="#inherited-from-63" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-62">Inherited from<a href="#inherited-from-62" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onsqueezing"><code>onSqueezing</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onsynccomplete">onSyncComplete()<a href="#onsynccomplete" class="hash-link" aria-label="Direct link to onSyncComplete()" title="Direct link to onSyncComplete()" translate="no">​</a></h3>
@@ -922,7 +924,7 @@ represents, e.g. View, ModelView.</p>
 It captures layout data like total height and line count.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-37">Returns<a href="#returns-37" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-64">Inherited from<a href="#inherited-from-64" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-63">Inherited from<a href="#inherited-from-63" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onsynccomplete"><code>onSyncComplete</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="ontriggered">onTriggered()<a href="#ontriggered" class="hash-link" aria-label="Direct link to onTriggered()" title="Direct link to onTriggered()" translate="no">​</a></h3>
@@ -938,7 +940,7 @@ the target. Intended for override by subclasses.</p>
 <p>The ID of the controller that triggered the action.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-38">Returns<a href="#returns-38" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-65">Inherited from<a href="#inherited-from-65" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-64">Inherited from<a href="#inherited-from-64" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#ontriggered"><code>onTriggered</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onxrsessionended">onXRSessionEnded()<a href="#onxrsessionended" class="hash-link" aria-label="Direct link to onXRSessionEnded()" title="Direct link to onXRSessionEnded()" translate="no">​</a></h3>
@@ -948,7 +950,7 @@ the target. Intended for override by subclasses.</p>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L76" target="_blank" rel="noopener noreferrer">src/core/Script.ts:76</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-39">Returns<a href="#returns-39" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-66">Inherited from<a href="#inherited-from-66" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-65">Inherited from<a href="#inherited-from-65" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onxrsessionended"><code>onXRSessionEnded</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onxrsessionstarted">onXRSessionStarted()<a href="#onxrsessionstarted" class="hash-link" aria-label="Direct link to onXRSessionStarted()" title="Direct link to onXRSessionStarted()" translate="no">​</a></h3>
@@ -961,7 +963,7 @@ the target. Intended for override by subclasses.</p>
 <p><a href="https://developer.mozilla.org/docs/Web/API/XRSession" target="_blank" rel="noopener noreferrer"><code>XRSession</code></a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-40">Returns<a href="#returns-40" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-67">Inherited from<a href="#inherited-from-67" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-66">Inherited from<a href="#inherited-from-66" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#onxrsessionstarted"><code>onXRSessionStarted</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="physicsstep">physicsStep()<a href="#physicsstep" class="hash-link" aria-label="Direct link to physicsStep()" title="Direct link to physicsStep()" translate="no">​</a></h3>
@@ -971,7 +973,7 @@ the target. Intended for override by subclasses.</p>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L73" target="_blank" rel="noopener noreferrer">src/core/Script.ts:73</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-41">Returns<a href="#returns-41" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-68">Inherited from<a href="#inherited-from-68" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-67">Inherited from<a href="#inherited-from-67" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#physicsstep"><code>physicsStep</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="resetlayout">resetLayout()<a href="#resetlayout" class="hash-link" aria-label="Direct link to resetLayout()" title="Direct link to resetLayout()" translate="no">​</a></h3>
@@ -982,7 +984,7 @@ the target. Intended for override by subclasses.</p>
 <p>Resets the layout state of this view. Intended for override by subclasses.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-42">Returns<a href="#returns-42" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-69">Inherited from<a href="#inherited-from-69" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-68">Inherited from<a href="#inherited-from-68" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#resetlayout"><code>resetLayout</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="resetlayouts">resetLayouts()<a href="#resetlayouts" class="hash-link" aria-label="Direct link to resetLayouts()" title="Direct link to resetLayouts()" translate="no">​</a></h3>
@@ -993,7 +995,7 @@ the target. Intended for override by subclasses.</p>
 <p>Resets the layout state for this view and all its descendants.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-43">Returns<a href="#returns-43" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-70">Inherited from<a href="#inherited-from-70" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-69">Inherited from<a href="#inherited-from-69" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#resetlayouts"><code>resetLayouts</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="settext">setText()<a href="#settext" class="hash-link" aria-label="Direct link to setText()" title="Direct link to setText()" translate="no">​</a></h3>
@@ -1008,7 +1010,7 @@ the target. Intended for override by subclasses.</p>
 <p>The text to be displayed.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-44">Returns<a href="#returns-44" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-71">Inherited from<a href="#inherited-from-71" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-70">Inherited from<a href="#inherited-from-70" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#settext"><code>setText</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="settextcolor">setTextColor()<a href="#settextcolor" class="hash-link" aria-label="Direct link to setTextColor()" title="Direct link to setTextColor()" translate="no">​</a></h3>
@@ -1021,7 +1023,7 @@ the target. Intended for override by subclasses.</p>
 <p><code>number</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-45">Returns<a href="#returns-45" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-72">Inherited from<a href="#inherited-from-72" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-71">Inherited from<a href="#inherited-from-71" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#settextcolor"><code>setTextColor</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="show">show()<a href="#show" class="hash-link" aria-label="Direct link to show()" title="Direct link to show()" translate="no">​</a></h3>
@@ -1032,7 +1034,7 @@ the target. Intended for override by subclasses.</p>
 <p>Makes the view and all its descendants visible.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-46">Returns<a href="#returns-46" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-73">Inherited from<a href="#inherited-from-73" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-72">Inherited from<a href="#inherited-from-72" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#show"><code>show</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="synctextobj">syncTextObj()<a href="#synctextobj" class="hash-link" aria-label="Direct link to syncTextObj()" title="Direct link to syncTextObj()" translate="no">​</a></h3>
@@ -1042,18 +1044,18 @@ the target. Intended for override by subclasses.</p>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ui/components/TextView.ts#L368" target="_blank" rel="noopener noreferrer">src/ui/components/TextView.ts:368</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-47">Returns<a href="#returns-47" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-74">Inherited from<a href="#inherited-from-74" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-73">Inherited from<a href="#inherited-from-73" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#synctextobj"><code>syncTextObj</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="update">update()<a href="#update" class="hash-link" aria-label="Direct link to update()" title="Direct link to update()" translate="no">​</a></h3>
 <blockquote>
 <p><strong>update</strong>(): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ui/components/IconButton.ts#L103" target="_blank" rel="noopener noreferrer">src/ui/components/IconButton.ts:103</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ui/components/IconButton.ts#L118" target="_blank" rel="noopener noreferrer">src/ui/components/IconButton.ts:118</a></p>
 <p>Updates the button&#x27;s visual state based on hover and selection status.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-48">Returns<a href="#returns-48" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="overrides-7">Overrides<a href="#overrides-7" class="hash-link" aria-label="Direct link to Overrides" title="Direct link to Overrides" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="overrides-8">Overrides<a href="#overrides-8" class="hash-link" aria-label="Direct link to Overrides" title="Direct link to Overrides" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#update"><code>update</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="updatelayout">updateLayout()<a href="#updatelayout" class="hash-link" aria-label="Direct link to updateLayout()" title="Direct link to updateLayout()" translate="no">​</a></h3>
@@ -1064,7 +1066,7 @@ the target. Intended for override by subclasses.</p>
 <p>Updates the layout of the text object, such as its render order.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-49">Returns<a href="#returns-49" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-75">Inherited from<a href="#inherited-from-75" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-74">Inherited from<a href="#inherited-from-74" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#updatelayout"><code>updateLayout</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="updatelayouts">updateLayouts()<a href="#updatelayouts" class="hash-link" aria-label="Direct link to updateLayouts()" title="Direct link to updateLayouts()" translate="no">​</a></h3>
@@ -1075,7 +1077,7 @@ the target. Intended for override by subclasses.</p>
 <p>Triggers a layout update for this view and all its descendants.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-50">Returns<a href="#returns-50" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-76">Inherited from<a href="#inherited-from-76" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-75">Inherited from<a href="#inherited-from-75" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#updatelayouts"><code>updateLayouts</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="updatelayoutsbfs">updateLayoutsBFS()<a href="#updatelayoutsbfs" class="hash-link" aria-label="Direct link to updateLayoutsBFS()" title="Direct link to updateLayoutsBFS()" translate="no">​</a></h3>
@@ -1087,7 +1089,7 @@ the target. Intended for override by subclasses.</p>
 ensuring parent layouts are calculated before their children.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-51">Returns<a href="#returns-51" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-77">Inherited from<a href="#inherited-from-77" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-76">Inherited from<a href="#inherited-from-76" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#updatelayoutsbfs"><code>updateLayoutsBFS</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="dptometers">dpToMeters()<a href="#dptometers" class="hash-link" aria-label="Direct link to dpToMeters()" title="Direct link to dpToMeters()" translate="no">​</a></h3>
@@ -1103,7 +1105,7 @@ ensuring parent layouts are calculated before their children.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-52">Returns<a href="#returns-52" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>number</code></p>
 <p>The equivalent value in meters.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-78">Inherited from<a href="#inherited-from-78" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-77">Inherited from<a href="#inherited-from-77" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/TextView"><code>TextView</code></a>.<a href="/docs/api/classes/TextView#dptometers"><code>dpToMeters</code></a></p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/api/classes/HorizontalPager"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">HorizontalPager</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/api/classes/IconView"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">IconView</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#extends" class="table-of-contents__link toc-highlight">Extends</a></li><li><a href="#extended-by" class="table-of-contents__link toc-highlight">Extended by</a></li><li><a href="#constructors" class="table-of-contents__link toc-highlight">Constructors</a><ul><li><a href="#constructor" class="table-of-contents__link toc-highlight">Constructor</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#anchorx" class="table-of-contents__link toc-highlight">anchorX</a></li><li><a href="#anchory" class="table-of-contents__link toc-highlight">anchorY</a></li><li><a href="#aspectratio" class="table-of-contents__link toc-highlight">aspectRatio</a></li><li><a href="#canvas" class="table-of-contents__link toc-highlight">canvas?</a></li><li><a href="#ctx" class="table-of-contents__link toc-highlight">ctx?</a></li><li><a href="#defaultopacity" class="table-of-contents__link toc-highlight">defaultOpacity</a></li><li><a href="#font" class="table-of-contents__link toc-highlight">font</a></li><li><a href="#fontcolor" class="table-of-contents__link toc-highlight">fontColor</a></li><li><a href="#fontsize" class="table-of-contents__link toc-highlight">fontSize?</a></li><li><a href="#fontsizedp" class="table-of-contents__link toc-highlight">fontSizeDp?</a></li><li><a href="#height" class="table-of-contents__link toc-highlight">height</a></li><li><a href="#hovercolor" class="table-of-contents__link toc-highlight">hoverColor</a></li><li><a href="#hoveropacity" class="table-of-contents__link toc-highlight">hoverOpacity</a></li><li><a href="#imageoffsetx" class="table-of-contents__link toc-highlight">imageOffsetX</a></li><li><a href="#imageoffsety" class="table-of-contents__link toc-highlight">imageOffsetY</a></li><li><a href="#imageoverlay" class="table-of-contents__link toc-highlight">imageOverlay?</a></li><li><a href="#isquad" class="table-of-contents__link toc-highlight">isQuad</a></li><li><a href="#isroot" class="table-of-contents__link toc-highlight">isRoot</a></li><li><a href="#isview" class="table-of-contents__link toc-highlight">isView</a></li><li><a href="#isxrscript" class="table-of-contents__link toc-highlight">isXRScript</a></li><li><a href="#linecount" class="table-of-contents__link toc-highlight">lineCount</a></li><li><a href="#lineheight" class="table-of-contents__link toc-highlight">lineHeight</a></li><li><a href="#maxwidth" class="table-of-contents__link toc-highlight">maxWidth</a></li><li><a href="#mesh" class="table-of-contents__link toc-highlight">mesh</a></li><li><a href="#mode" class="table-of-contents__link toc-highlight">mode</a></li><li><a href="#name" class="table-of-contents__link toc-highlight">name</a></li><li><a href="#opacity" class="table-of-contents__link toc-highlight">opacity</a></li><li><a href="#paddingx" class="table-of-contents__link toc-highlight">paddingX</a></li><li><a href="#paddingy" class="table-of-contents__link toc-highlight">paddingY</a></li><li><a href="#paddingz" class="table-of-contents__link toc-highlight">paddingZ</a></li><li><a href="#selectable" class="table-of-contents__link toc-highlight">selectable</a></li><li><a href="#selectedopacity" class="table-of-contents__link toc-highlight">selectedOpacity</a></li><li><a href="#textalign" class="table-of-contents__link toc-highlight">textAlign</a></li><li><a href="#textobj" class="table-of-contents__link toc-highlight">textObj?</a></li><li><a href="#usesdftext" class="table-of-contents__link toc-highlight">useSDFText</a></li><li><a href="#ux" class="table-of-contents__link toc-highlight">ux</a></li><li><a href="#weight" class="table-of-contents__link toc-highlight">weight</a></li><li><a href="#width" class="table-of-contents__link toc-highlight">width</a></li><li><a href="#x" class="table-of-contents__link toc-highlight">x</a></li><li><a href="#y" class="table-of-contents__link toc-highlight">y</a></li><li><a href="#z" class="table-of-contents__link toc-highlight">z</a></li></ul></li><li><a href="#accessors" class="table-of-contents__link toc-highlight">Accessors</a><ul><li><a href="#rangex" class="table-of-contents__link toc-highlight">rangeX</a></li><li><a href="#rangey" class="table-of-contents__link toc-highlight">rangeY</a></li><li><a href="#text" class="table-of-contents__link toc-highlight">text</a></li></ul></li><li><a href="#methods" class="table-of-contents__link toc-highlight">Methods</a><ul><li><a href="#_initializetext" class="table-of-contents__link toc-highlight">_initializeText()</a></li><li><a href="#add" class="table-of-contents__link toc-highlight">add()</a></li><li><a href="#createtextsdf" class="table-of-contents__link toc-highlight">createTextSDF()</a></li><li><a href="#dispose" class="table-of-contents__link toc-highlight">dispose()</a></li><li><a href="#dptolocalunits" class="table-of-contents__link toc-highlight">dpToLocalUnits()</a></li><li><a href="#hide" class="table-of-contents__link toc-highlight">hide()</a></li><li><a href="#init" class="table-of-contents__link toc-highlight">init()</a></li><li><a href="#initphysics" class="table-of-contents__link toc-highlight">initPhysics()</a></li><li><a href="#onhoverenter" class="table-of-contents__link toc-highlight">onHoverEnter()</a></li><li><a href="#onhoverexit" class="table-of-contents__link toc-highlight">onHoverExit()</a></li><li><a href="#onhovering" class="table-of-contents__link toc-highlight">onHovering()</a></li><li><a href="#onhoverout" class="table-of-contents__link toc-highlight">onHoverOut()</a></li><li><a href="#onhoverover" class="table-of-contents__link toc-highlight">onHoverOver()</a></li><li><a href="#onkeydown" class="table-of-contents__link toc-highlight">onKeyDown()</a></li><li><a href="#onkeyup" class="table-of-contents__link toc-highlight">onKeyUp()</a></li><li><a href="#onobjectgrabbing" class="table-of-contents__link toc-highlight">onObjectGrabbing()</a></li><li><a href="#onobjectgrabend" class="table-of-contents__link toc-highlight">onObjectGrabEnd()</a></li><li><a href="#onobjectgrabstart" class="table-of-contents__link toc-highlight">onObjectGrabStart()</a></li><li><a href="#onobjectselectend" class="table-of-contents__link toc-highlight">onObjectSelectEnd()</a></li><li><a href="#onobjectselectstart" class="table-of-contents__link toc-highlight">onObjectSelectStart()</a></li><li><a href="#onobjecttouchend" class="table-of-contents__link toc-highlight">onObjectTouchEnd()</a></li><li><a href="#onobjecttouching" class="table-of-contents__link toc-highlight">onObjectTouching()</a></li><li><a href="#onobjecttouchstart" class="table-of-contents__link toc-highlight">onObjectTouchStart()</a></li><li><a href="#onselect" class="table-of-contents__link toc-highlight">onSelect()</a></li><li><a href="#onselectend" class="table-of-contents__link toc-highlight">onSelectEnd()</a></li><li><a href="#onselecting" class="table-of-contents__link toc-highlight">onSelecting()</a></li><li><a href="#onselectstart" class="table-of-contents__link toc-highlight">onSelectStart()</a></li><li><a href="#onsimulatorstarted" class="table-of-contents__link toc-highlight">onSimulatorStarted()</a></li><li><a href="#onsqueeze" class="table-of-contents__link toc-highlight">onSqueeze()</a></li><li><a href="#onsqueezeend" class="table-of-contents__link toc-highlight">onSqueezeEnd()</a></li><li><a href="#onsqueezestart" class="table-of-contents__link toc-highlight">onSqueezeStart()</a></li><li><a href="#onsqueezing" class="table-of-contents__link toc-highlight">onSqueezing()</a></li><li><a href="#onsynccomplete" class="table-of-contents__link toc-highlight">onSyncComplete()</a></li><li><a href="#ontriggered" class="table-of-contents__link toc-highlight">onTriggered()</a></li><li><a href="#onxrsessionended" class="table-of-contents__link toc-highlight">onXRSessionEnded()</a></li><li><a href="#onxrsessionstarted" class="table-of-contents__link toc-highlight">onXRSessionStarted()</a></li><li><a href="#physicsstep" class="table-of-contents__link toc-highlight">physicsStep()</a></li><li><a href="#resetlayout" class="table-of-contents__link toc-highlight">resetLayout()</a></li><li><a href="#resetlayouts" class="table-of-contents__link toc-highlight">resetLayouts()</a></li><li><a href="#settext" class="table-of-contents__link toc-highlight">setText()</a></li><li><a href="#settextcolor" class="table-of-contents__link toc-highlight">setTextColor()</a></li><li><a href="#show" class="table-of-contents__link toc-highlight">show()</a></li><li><a href="#synctextobj" class="table-of-contents__link toc-highlight">syncTextObj()</a></li><li><a href="#update" class="table-of-contents__link toc-highlight">update()</a></li><li><a href="#updatelayout" class="table-of-contents__link toc-highlight">updateLayout()</a></li><li><a href="#updatelayouts" class="table-of-contents__link toc-highlight">updateLayouts()</a></li><li><a href="#updatelayoutsbfs" class="table-of-contents__link toc-highlight">updateLayoutsBFS()</a></li><li><a href="#dptometers" class="table-of-contents__link toc-highlight">dpToMeters()</a></li></ul></li></ul></div></div></div></div></main></div></div></div></div>
 </body>
 </html>
