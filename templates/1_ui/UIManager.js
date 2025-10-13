@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import * as xb from 'xrblocks';
 
 /**
@@ -33,14 +32,14 @@ export class UIManager extends xb.Script {
 
     // onTriggered defines unified behavior for `onSelected`, `onClicked`,
     // `onPinched`, `onTouched` for buttons.
-    yesButton.onTriggered = (id) => {
+    yesButton.onTriggered = () => {
       this._onYes();
     };
 
     const noButton = ctrlRow.addCol({weight: 0.5})
                          .addIconButton({text: 'cancel', fontSize: 0.5});
 
-    noButton.onTriggered = (id) => {
+    noButton.onTriggered = () => {
       this._onNo();
     };
   }
