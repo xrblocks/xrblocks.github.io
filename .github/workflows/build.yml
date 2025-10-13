@@ -56,16 +56,15 @@ jobs:
           npm ci
           # Navigate into the docs directory and install its specific dependencies.
           npm ci --prefix ./docs
-          npm ci --prefix ./demos
         working-directory: ./xrblocks
 
-      # Step 5: Build both the main project and the docs.
+      # Step 5: Build both the main project, the docs, and the demos.
       - name: Build Project & Docs
         run: |
           npm run build
           # Build the docs with the required environment variables.
           XRBLOCKS_BASE_URL=https://xrblocks.github.io/ URL=https://xrblocks.github.io/ BASE_URL=/docs/ npm run build --prefix ./docs
-          npm run build --prefix ./demos
+          ./demos/build_all.sh
         working-directory: ./xrblocks
 
       # Step 6: Stage all artifacts for deployment.
