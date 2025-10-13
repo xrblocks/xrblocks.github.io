@@ -24,7 +24,9 @@ a new sample by starting from scratch or an existing template from `/templates/`
 or `/samples/`.
 
 When using third-party assets, make sure they are compatible with Apache 2
-license and add corresponding LICENSE file to the demo folder.
+license and add corresponding LICENSE file to the demo folder. Please submit large assets as a PR to https://github.com/xrblocks/proprietary-assets and use a jsdelivr CDN link to reference them.
+
+For samples with third-party npm dependencies or requiring a build, please configure a `package.json` using `pnpm` and add your project to the `build_all.sh` script. See `drone` for an example.
 
 ### Step 3: Create a pull request
 

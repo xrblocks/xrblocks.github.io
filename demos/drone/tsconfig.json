@@ -2,7 +2,8 @@
   "extends": "../tsconfig.base.json", // Path to the base config
   "compilerOptions": {
     "outDir": "./build", // Output directory for this specific project
-    "rootDir": "./src",
+    "rootDir": "",
+    "sourceMap": true,
     "paths": {
       "rapier3d": [
         "../node_modules/@dimforge/rapier3d-simd-compat/rapier"
