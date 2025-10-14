@@ -72,7 +72,7 @@ export class PoemGenerator extends xb.Script {
         type: 'multiPart',
         parts: parts,
       });
-      this.responseDisplay.addText(`${response}\n\n`);
+      this.responseDisplay.addText(`${response.text}\n\n`);
     } catch (error) {
       this.responseDisplay.addText(`Error: ${error.message}\n\n`);
     }
