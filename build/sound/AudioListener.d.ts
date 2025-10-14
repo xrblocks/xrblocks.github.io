@@ -14,11 +14,13 @@ export declare class AudioListener extends Script {
     };
     private options;
     private audioStream?;
-    private audioContext?;
+    audioContext?: AudioContext;
     private sourceNode?;
     private processorNode?;
     private isCapturing;
     private latestAudioBuffer;
+    private accumulatedChunks;
+    private isAccumulating;
     private registry;
     aiService?: AI;
     private onAudioData?;
@@ -33,6 +35,7 @@ export declare class AudioListener extends Script {
     startCapture(callbacks?: {
         onAudioData?: (audioBuffer: ArrayBuffer) => void;
         onError?: (error: Error) => void;
+        accumulate?: boolean;
     }): Promise<void>;
     stopCapture(): void;
     setupAudioCapture(): Promise<void>;
@@ -44,5 +47,17 @@ export declare class AudioListener extends Script {
     getIsCapturing(): boolean;
     getLatestAudioBuffer(): ArrayBuffer | null;
     clearLatestAudioBuffer(): void;
+    /**
+     * Gets all accumulated audio chunks as a single combined buffer
+     */
+    getAccumulatedBuffer(): ArrayBuffer | null;
+    /**
+     * Clears accumulated chunks
+     */
+    clearAccumulatedBuffer(): void;
+    /**
+     * Gets the number of accumulated chunks
+     */
+    getAccumulatedChunkCount(): number;
     dispose(): void;
 }

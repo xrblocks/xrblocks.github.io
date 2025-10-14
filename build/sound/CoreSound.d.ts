@@ -35,13 +35,38 @@ export declare class CoreSound extends Script {
     getCategoryVolume(category: VolumeCategory): number;
     enableAudio(options?: {
         streamToAI?: boolean;
+        accumulate?: boolean;
     }): Promise<void>;
     disableAudio(): void;
+    /**
+     * Starts recording audio with chunk accumulation
+     */
+    startRecording(): Promise<void>;
+    /**
+     * Stops recording and returns the accumulated audio buffer
+     */
+    stopRecording(): ArrayBuffer | null;
+    /**
+     * Gets the accumulated recording buffer without stopping
+     */
+    getRecordedBuffer(): ArrayBuffer | null;
+    /**
+     * Clears the accumulated recording buffer
+     */
+    clearRecordedBuffer(): void;
+    /**
+     * Gets the sample rate being used for recording
+     */
+    getRecordingSampleRate(): number;
     setAIStreaming(enabled: boolean): void;
     isAIStreamingEnabled(): boolean;
     playAIAudio(base64AudioData: string): Promise<void>;
     stopAIAudio(): void;
     isAIAudioPlaying(): boolean;
+    /**
+     * Plays a raw audio buffer (Int16 PCM data) with proper sample rate
+     */
+    playRecordedAudio(audioBuffer: ArrayBuffer, sampleRate?: number): Promise<void>;
     isAudioEnabled(): boolean;
     getLatestAudioBuffer(): ArrayBuffer | null;
     clearLatestAudioBuffer(): void;

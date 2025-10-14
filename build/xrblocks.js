@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.1.0
- * @commitid cbd2388
- * @builddate 2025-10-13T20:23:18.374Z
+ * @commitid bbe1b2d
+ * @builddate 2025-10-14T02:34:38.005Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -8382,6 +8382,8 @@ class AudioListener extends Script {
         super();
         this.isCapturing = false;
         this.latestAudioBuffer = null;
+        this.accumulatedChunks = [];
+        this.isAccumulating = false;
         this.options = {
             sampleRate: 16000,
             channelCount: 1,
@@ -8402,6 +8404,10 @@ class AudioListener extends Script {
             return;
         this.onAudioData = callbacks.onAudioData;
         this.onError = callbacks.onError;
+        this.isAccumulating = callbacks.accumulate || false;
+        if (this.isAccumulating) {
+            this.accumulatedChunks = [];
+        }
         try {
             await this.setupAudioCapture();
             this.isCapturing = true;
@@ -8431,6 +8437,10 @@ class AudioListener extends Script {
         this.processorNode.port.onmessage = (event) => {
             if (event.data.type === 'audioData') {
                 this.latestAudioBuffer = event.data.data;
+                // Accumulate chunks if requested
+                if (this.isAccumulating) {
+                    this.accumulatedChunks.push(event.data.data);
+                }
                 this.onAudioData?.(event.data.data);
                 this.streamToAI(event.data.data);
             }
@@ -8490,6 +8500,8 @@ class AudioListener extends Script {
         this.onAudioData = undefined;
         this.onError = undefined;
         this.latestAudioBuffer = null;
+        this.accumulatedChunks = [];
+        this.isAccumulating = false;
         this.aiService = undefined;
     }
     static isSupported() {
@@ -8504,6 +8516,34 @@ class AudioListener extends Script {
     clearLatestAudioBuffer() {
         this.latestAudioBuffer = null;
     }
+    /**
+     * Gets all accumulated audio chunks as a single combined buffer
+     */
+    getAccumulatedBuffer() {
+        if (this.accumulatedChunks.length === 0)
+            return null;
+        const totalLength = this.accumulatedChunks.reduce((sum, chunk) => sum + chunk.byteLength, 0);
+        const combined = new ArrayBuffer(totalLength);
+        const combinedArray = new Uint8Array(combined);
+        let offset = 0;
+        for (const chunk of this.accumulatedChunks) {
+            combinedArray.set(new Uint8Array(chunk), offset);
+            offset += chunk.byteLength;
+        }
+        return combined;
+    }
+    /**
+     * Clears accumulated chunks
+     */
+    clearAccumulatedBuffer() {
+        this.accumulatedChunks = [];
+    }
+    /**
+     * Gets the number of accumulated chunks
+     */
+    getAccumulatedChunkCount() {
+        return this.accumulatedChunks.length;
+    }
     dispose() {
         this.stopCapture();
         super.dispose();
@@ -8517,13 +8557,49 @@ class AudioPlayer extends Script {
         this.audioQueue = [];
         this.isPlaying = false;
         this.nextStartTime = 0;
-        this.options = { sampleRate: 24000, channelCount: 1, ...options };
+        this.volume = 1.0;
+        this.category = 'speech';
+        this.options = { sampleRate: 48000, channelCount: 1, ...options };
+        if (options.category) {
+            this.category = options.category;
+        }
+    }
+    /**
+     * Sets the CategoryVolumes instance for this player to respect master/category volumes
+     */
+    setCategoryVolumes(categoryVolumes) {
+        this.categoryVolumes = categoryVolumes;
+        this.updateGainNodeVolume();
+    }
+    /**
+     * Sets the specific volume for this player (0.0 to 1.0)
+     */
+    setVolume(level) {
+        this.volume = Math.max(0, Math.min(1, level));
+        this.updateGainNodeVolume();
+    }
+    /**
+     * Updates the gain node volume based on category volumes
+     * Public so CoreSound can update it when master volume changes
+     */
+    updateGainNodeVolume() {
+        if (this.gainNode && this.categoryVolumes) {
+            const effectiveVolume = this.categoryVolumes.getEffectiveVolume(this.category, this.volume);
+            this.gainNode.gain.value = effectiveVolume;
+        }
+        else if (this.gainNode) {
+            this.gainNode.gain.value = this.volume;
+        }
     }
     async initializeAudioContext() {
         if (!this.audioContext) {
             this.audioContext =
                 new AudioContext({ sampleRate: this.options.sampleRate });
             this.nextStartTime = this.audioContext.currentTime;
+            // Create gain node for volume control
+            this.gainNode = this.audioContext.createGain();
+            this.gainNode.connect(this.audioContext.destination);
+            this.updateGainNodeVolume();
         }
     }
     async playAudioChunk(base64AudioData) {
@@ -8552,7 +8628,8 @@ class AudioPlayer extends Script {
         const startTime = Math.max(this.nextStartTime, currentTime);
         const source = this.audioContext.createBufferSource();
         source.buffer = audioBuffer;
-        source.connect(this.audioContext.destination);
+        // Connect through gain node for volume control
+        source.connect(this.gainNode || this.audioContext.destination);
         source.onended = () => this.playNextAudioBuffer();
         source.start(startTime);
         this.nextStartTime = startTime + audioBuffer.duration;
@@ -8580,6 +8657,7 @@ class AudioPlayer extends Script {
         if (this.audioContext) {
             this.audioContext.close();
             this.audioContext = undefined;
+            this.gainNode = undefined;
         }
     }
     static isSupported() {
@@ -9280,6 +9358,8 @@ class CoreSound extends Script {
         this.spatialAudio = new SpatialAudio(this.listener, this.categoryVolumes);
         this.audioListener = new AudioListener();
         this.audioPlayer = new AudioPlayer();
+        // Wire up volume control for audio player
+        this.audioPlayer.setCategoryVolumes(this.categoryVolumes);
         camera.add(this.listener);
         this.add(this.backgroundMusic);
         this.add(this.spatialAudio);
@@ -9300,6 +9380,7 @@ class CoreSound extends Script {
     }
     setMasterVolume(level) {
         this.categoryVolumes.masterVolume = THREE.MathUtils.clamp(level, 0.0, 1.0);
+        this.audioPlayer?.updateGainNodeVolume();
     }
     getMasterVolume() {
         return this.categoryVolumes.isMuted ? 0.0 :
@@ -9317,16 +9398,48 @@ class CoreSound extends Script {
             1.0;
     }
     async enableAudio(options = {}) {
-        const { streamToAI = true } = options;
+        const { streamToAI = true, accumulate = false } = options;
         if (streamToAI && this.speechRecognizer?.isListening) {
             console.log('Disabling SpeechRecognizer while streaming audio.');
             this.speechRecognizer.stop();
         }
         this.audioListener.setAIStreaming(streamToAI);
-        await this.audioListener.startCapture({});
+        await this.audioListener.startCapture({ accumulate });
     }
     disableAudio() {
         this.audioListener?.stopCapture();
+    }
+    /**
+     * Starts recording audio with chunk accumulation
+     */
+    async startRecording() {
+        await this.audioListener.startCapture({ accumulate: true });
+    }
+    /**
+     * Stops recording and returns the accumulated audio buffer
+     */
+    stopRecording() {
+        const buffer = this.audioListener.getAccumulatedBuffer();
+        this.audioListener.stopCapture();
+        return buffer;
+    }
+    /**
+     * Gets the accumulated recording buffer without stopping
+     */
+    getRecordedBuffer() {
+        return this.audioListener.getAccumulatedBuffer();
+    }
+    /**
+     * Clears the accumulated recording buffer
+     */
+    clearRecordedBuffer() {
+        this.audioListener.clearAccumulatedBuffer();
+    }
+    /**
+     * Gets the sample rate being used for recording
+     */
+    getRecordingSampleRate() {
+        return this.audioListener.audioContext?.sampleRate || 48000;
     }
     setAIStreaming(enabled) {
         this.audioListener?.setAIStreaming(enabled);
@@ -9342,6 +9455,26 @@ class CoreSound extends Script {
     }
     isAIAudioPlaying() {
         return this.audioPlayer?.getIsPlaying();
+    }
+    /**
+     * Plays a raw audio buffer (Int16 PCM data) with proper sample rate
+     */
+    async playRecordedAudio(audioBuffer, sampleRate) {
+        if (!audioBuffer)
+            return;
+        // Update sample rate if needed
+        if (sampleRate && sampleRate !== this.audioPlayer['options'].sampleRate) {
+            this.audioPlayer['options'].sampleRate = sampleRate;
+            this.audioPlayer.stop(); // Reset context with new sample rate
+        }
+        // Convert ArrayBuffer to base64
+        const bytes = new Uint8Array(audioBuffer);
+        let binary = '';
+        for (let i = 0; i < bytes.length; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        const base64Audio = btoa(binary);
+        await this.audioPlayer.playAudioChunk(base64Audio);
     }
     isAudioEnabled() {
         return this.audioListener?.getIsCapturing();

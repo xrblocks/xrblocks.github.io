@@ -19,7 +19,7 @@
 <link rel="icon" href="/docs/img/web-app-manifest-512x512.png" sizes="512x512" type="image/png">
 <link rel="manifest" href="/docs/img/site.webmanifest">
 <meta name="algolia-site-verification" content="C7A25C1609F793C8"><link rel="stylesheet" href="/docs/assets/css/styles.727fbdee.css">
-<script src="/docs/assets/js/runtime~main.204fc317.js" defer="defer"></script>
+<script src="/docs/assets/js/runtime~main.2ee86170.js" defer="defer"></script>
 <script src="/docs/assets/js/main.1426226f.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -37,7 +37,7 @@
 <blockquote>
 <p><strong>new AudioListener</strong>(<code>options</code>): <code>AudioListener</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L36" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:36</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L38" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:38</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters">Parameters<a href="#parameters" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="options">options<a href="#options" class="hash-link" aria-label="Direct link to options" title="Direct link to options" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/AudioListenerOptions/"><code>AudioListenerOptions</code></a> = <code>{}</code></p>
@@ -50,7 +50,13 @@
 <blockquote>
 <p><code>optional</code> <strong>aiService</strong>: <a href="/docs/api/classes/AI/"><code>AI</code></a></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L32" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:32</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L34" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:34</a></p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="audiocontext">audioContext?<a href="#audiocontext" class="hash-link" aria-label="Direct link to audioContext?" title="Direct link to audioContext?" translate="no">​</a></h3>
+<blockquote>
+<p><code>optional</code> <strong>audioContext</strong>: <a href="https://developer.mozilla.org/docs/Web/API/AudioContext" target="_blank" rel="noopener noreferrer"><code>AudioContext</code></a></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L26" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:26</a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="isxrscript">isXRScript<a href="#isxrscript" class="hash-link" aria-label="Direct link to isXRScript" title="Direct link to isXRScript" translate="no">​</a></h3>
 <blockquote>
@@ -82,56 +88,83 @@
 <blockquote>
 <p><strong>cleanup</strong>(): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L147" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:147</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L162" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:162</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-1">Returns<a href="#returns-1" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<p><code>void</code></p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="clearaccumulatedbuffer">clearAccumulatedBuffer()<a href="#clearaccumulatedbuffer" class="hash-link" aria-label="Direct link to clearAccumulatedBuffer()" title="Direct link to clearAccumulatedBuffer()" translate="no">​</a></h3>
+<blockquote>
+<p><strong>clearAccumulatedBuffer</strong>(): <code>void</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L220" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:220</a></p>
+<p>Clears accumulated chunks</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-2">Returns<a href="#returns-2" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="clearlatestaudiobuffer">clearLatestAudioBuffer()<a href="#clearlatestaudiobuffer" class="hash-link" aria-label="Direct link to clearLatestAudioBuffer()" title="Direct link to clearLatestAudioBuffer()" translate="no">​</a></h3>
 <blockquote>
 <p><strong>clearLatestAudioBuffer</strong>(): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L176" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:176</a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-2">Returns<a href="#returns-2" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L193" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:193</a></p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-3">Returns<a href="#returns-3" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="dispose">dispose()<a href="#dispose" class="hash-link" aria-label="Direct link to dispose()" title="Direct link to dispose()" translate="no">​</a></h3>
 <blockquote>
 <p><strong>dispose</strong>(): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L180" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:180</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L231" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:231</a></p>
 <p>Called when the script is removed from the scene. Opposite of init.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-3">Returns<a href="#returns-3" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-4">Returns<a href="#returns-4" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="overrides-1">Overrides<a href="#overrides-1" class="hash-link" aria-label="Direct link to Overrides" title="Direct link to Overrides" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#dispose"><code>dispose</code></a></p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="getaccumulatedbuffer">getAccumulatedBuffer()<a href="#getaccumulatedbuffer" class="hash-link" aria-label="Direct link to getAccumulatedBuffer()" title="Direct link to getAccumulatedBuffer()" translate="no">​</a></h3>
+<blockquote>
+<p><strong>getAccumulatedBuffer</strong>(): <code>null</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer" target="_blank" rel="noopener noreferrer"><code>ArrayBuffer</code></a></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L200" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:200</a></p>
+<p>Gets all accumulated audio chunks as a single combined buffer</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-5">Returns<a href="#returns-5" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<p><code>null</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer" target="_blank" rel="noopener noreferrer"><code>ArrayBuffer</code></a></p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="getaccumulatedchunkcount">getAccumulatedChunkCount()<a href="#getaccumulatedchunkcount" class="hash-link" aria-label="Direct link to getAccumulatedChunkCount()" title="Direct link to getAccumulatedChunkCount()" translate="no">​</a></h3>
+<blockquote>
+<p><strong>getAccumulatedChunkCount</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L227" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:227</a></p>
+<p>Gets the number of accumulated chunks</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-6">Returns<a href="#returns-6" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<p><code>number</code></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="getiscapturing">getIsCapturing()<a href="#getiscapturing" class="hash-link" aria-label="Direct link to getIsCapturing()" title="Direct link to getIsCapturing()" translate="no">​</a></h3>
 <blockquote>
 <p><strong>getIsCapturing</strong>(): <code>boolean</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L168" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:168</a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-4">Returns<a href="#returns-4" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L185" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:185</a></p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-7">Returns<a href="#returns-7" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>boolean</code></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="getlatestaudiobuffer">getLatestAudioBuffer()<a href="#getlatestaudiobuffer" class="hash-link" aria-label="Direct link to getLatestAudioBuffer()" title="Direct link to getLatestAudioBuffer()" translate="no">​</a></h3>
 <blockquote>
 <p><strong>getLatestAudioBuffer</strong>(): <code>null</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer" target="_blank" rel="noopener noreferrer"><code>ArrayBuffer</code></a></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L172" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:172</a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-5">Returns<a href="#returns-5" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L189" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:189</a></p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-8">Returns<a href="#returns-8" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>null</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer" target="_blank" rel="noopener noreferrer"><code>ArrayBuffer</code></a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="init">init()<a href="#init" class="hash-link" aria-label="Direct link to init()" title="Direct link to init()" translate="no">​</a></h3>
 <blockquote>
 <p><strong>init</strong>(<code>__namedParameters</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L51" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:51</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L53" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:53</a></p>
 <p>Init the AudioListener.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-1">Parameters<a href="#parameters-1" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="__namedparameters">__namedParameters<a href="#__namedparameters" class="hash-link" aria-label="Direct link to __namedParameters" title="Direct link to __namedParameters" translate="no">​</a></h5>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="registry-1">registry<a href="#registry-1" class="hash-link" aria-label="Direct link to registry" title="Direct link to registry" translate="no">​</a></h6>
 <p><a href="/docs/api/classes/Registry/"><code>Registry</code></a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-6">Returns<a href="#returns-6" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-9">Returns<a href="#returns-9" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="overrides-2">Overrides<a href="#overrides-2" class="hash-link" aria-label="Direct link to Overrides" title="Direct link to Overrides" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#init"><code>init</code></a></p>
@@ -145,7 +178,7 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-2">Parameters<a href="#parameters-2" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_physics">_physics<a href="#_physics" class="hash-link" aria-label="Direct link to _physics" title="Direct link to _physics" translate="no">​</a></h5>
 <p><a href="/docs/api/classes/Physics/"><code>Physics</code></a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-7">Returns<a href="#returns-7" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-10">Returns<a href="#returns-10" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener noreferrer"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-2">Inherited from<a href="#inherited-from-2" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#initphysics"><code>initPhysics</code></a></p>
@@ -160,7 +193,7 @@
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_controller">_controller<a href="#_controller" class="hash-link" aria-label="Direct link to _controller" title="Direct link to _controller" translate="no">​</a></h5>
 <p><a href="https://threejs.org/docs/#api/en/core/Object3D" target="_blank" rel="noopener noreferrer"><code>Object3D</code></a></p>
 <p>An XR controller.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-8">Returns<a href="#returns-8" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-11">Returns<a href="#returns-11" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-3">Inherited from<a href="#inherited-from-3" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onhoverenter"><code>onHoverEnter</code></a></p>
@@ -175,7 +208,7 @@
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_controller-1">_controller<a href="#_controller-1" class="hash-link" aria-label="Direct link to _controller" title="Direct link to _controller" translate="no">​</a></h5>
 <p><a href="https://threejs.org/docs/#api/en/core/Object3D" target="_blank" rel="noopener noreferrer"><code>Object3D</code></a></p>
 <p>An XR controller.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-9">Returns<a href="#returns-9" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-12">Returns<a href="#returns-12" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-4">Inherited from<a href="#inherited-from-4" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onhoverexit"><code>onHoverExit</code></a></p>
@@ -190,7 +223,7 @@
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_controller-2">_controller<a href="#_controller-2" class="hash-link" aria-label="Direct link to _controller" title="Direct link to _controller" translate="no">​</a></h5>
 <p><a href="https://threejs.org/docs/#api/en/core/Object3D" target="_blank" rel="noopener noreferrer"><code>Object3D</code></a></p>
 <p>An XR controller.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-10">Returns<a href="#returns-10" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-13">Returns<a href="#returns-13" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-5">Inherited from<a href="#inherited-from-5" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onhovering"><code>onHovering</code></a></p>
@@ -205,7 +238,7 @@
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_event">_event<a href="#_event" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/KeyEvent/"><code>KeyEvent</code></a></p>
 <p>Event containing <code>.code</code> to read the keyboard key.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-11">Returns<a href="#returns-11" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-14">Returns<a href="#returns-14" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-6">Inherited from<a href="#inherited-from-6" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onkeydown"><code>onKeyDown</code></a></p>
@@ -218,7 +251,7 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-7">Parameters<a href="#parameters-7" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_event-1">_event<a href="#_event-1" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/KeyEvent/"><code>KeyEvent</code></a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-12">Returns<a href="#returns-12" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-15">Returns<a href="#returns-15" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-7">Inherited from<a href="#inherited-from-7" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onkeyup"><code>onKeyUp</code></a></p>
@@ -232,7 +265,7 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-8">Parameters<a href="#parameters-8" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_event-2">_event<a href="#_event-2" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/ObjectGrabEvent/"><code>ObjectGrabEvent</code></a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-13">Returns<a href="#returns-13" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-16">Returns<a href="#returns-16" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-8">Inherited from<a href="#inherited-from-8" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onobjectgrabbing"><code>onObjectGrabbing</code></a></p>
@@ -246,7 +279,7 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-9">Parameters<a href="#parameters-9" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_event-3">_event<a href="#_event-3" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/ObjectGrabEvent/"><code>ObjectGrabEvent</code></a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-14">Returns<a href="#returns-14" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-17">Returns<a href="#returns-17" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-9">Inherited from<a href="#inherited-from-9" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onobjectgrabend"><code>onObjectGrabEnd</code></a></p>
@@ -260,7 +293,7 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-10">Parameters<a href="#parameters-10" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_event-4">_event<a href="#_event-4" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/ObjectGrabEvent/"><code>ObjectGrabEvent</code></a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-15">Returns<a href="#returns-15" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-18">Returns<a href="#returns-18" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-10">Inherited from<a href="#inherited-from-10" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onobjectgrabstart"><code>onObjectGrabStart</code></a></p>
@@ -276,7 +309,7 @@ represents, e.g. View, ModelView.</p>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_event-5">_event<a href="#_event-5" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/SelectEvent/"><code>SelectEvent</code></a></p>
 <p>event.target holds its controller.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-16">Returns<a href="#returns-16" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-19">Returns<a href="#returns-19" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>boolean</code></p>
 <p>Whether the event was handled</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-11">Inherited from<a href="#inherited-from-11" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
@@ -293,7 +326,7 @@ represents, e.g. View, ModelView.</p>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_event-6">_event<a href="#_event-6" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/SelectEvent/"><code>SelectEvent</code></a></p>
 <p>event.target holds its controller.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-17">Returns<a href="#returns-17" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-20">Returns<a href="#returns-20" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>boolean</code></p>
 <p>Whether the event was handled</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-12">Inherited from<a href="#inherited-from-12" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
@@ -308,7 +341,7 @@ represents, e.g. View, ModelView.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-13">Parameters<a href="#parameters-13" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_event-7">_event<a href="#_event-7" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/ObjectTouchEvent/"><code>ObjectTouchEvent</code></a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-18">Returns<a href="#returns-18" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-21">Returns<a href="#returns-21" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-13">Inherited from<a href="#inherited-from-13" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onobjecttouchend"><code>onObjectTouchEnd</code></a></p>
@@ -322,7 +355,7 @@ represents, e.g. View, ModelView.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-14">Parameters<a href="#parameters-14" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_event-8">_event<a href="#_event-8" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/ObjectTouchEvent/"><code>ObjectTouchEvent</code></a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-19">Returns<a href="#returns-19" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-22">Returns<a href="#returns-22" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-14">Inherited from<a href="#inherited-from-14" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onobjecttouching"><code>onObjectTouching</code></a></p>
@@ -336,7 +369,7 @@ represents, e.g. View, ModelView.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-15">Parameters<a href="#parameters-15" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_event-9">_event<a href="#_event-9" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/ObjectTouchEvent/"><code>ObjectTouchEvent</code></a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-20">Returns<a href="#returns-20" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-23">Returns<a href="#returns-23" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-15">Inherited from<a href="#inherited-from-15" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onobjecttouchstart"><code>onObjectTouchStart</code></a></p>
@@ -351,7 +384,7 @@ represents, e.g. View, ModelView.</p>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_event-10">_event<a href="#_event-10" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/SelectEvent/"><code>SelectEvent</code></a></p>
 <p>event.target holds its controller.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-21">Returns<a href="#returns-21" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-24">Returns<a href="#returns-24" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-16">Inherited from<a href="#inherited-from-16" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onselect"><code>onSelect</code></a></p>
@@ -366,7 +399,7 @@ represents, e.g. View, ModelView.</p>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_event-11">_event<a href="#_event-11" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/SelectEvent/"><code>SelectEvent</code></a></p>
 <p>event.target holds its controller</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-22">Returns<a href="#returns-22" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-25">Returns<a href="#returns-25" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-17">Inherited from<a href="#inherited-from-17" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onselectend"><code>onSelectEnd</code></a></p>
@@ -380,7 +413,7 @@ represents, e.g. View, ModelView.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-18">Parameters<a href="#parameters-18" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_event-12">_event<a href="#_event-12" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/SelectEvent/"><code>SelectEvent</code></a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-23">Returns<a href="#returns-23" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-26">Returns<a href="#returns-26" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-18">Inherited from<a href="#inherited-from-18" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onselecting"><code>onSelecting</code></a></p>
@@ -395,7 +428,7 @@ represents, e.g. View, ModelView.</p>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_event-13">_event<a href="#_event-13" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/SelectEvent/"><code>SelectEvent</code></a></p>
 <p>event.target holds its controller</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-24">Returns<a href="#returns-24" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-27">Returns<a href="#returns-27" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-19">Inherited from<a href="#inherited-from-19" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onselectstart"><code>onSelectStart</code></a></p>
@@ -405,7 +438,7 @@ represents, e.g. View, ModelView.</p>
 <p><strong>onSimulatorStarted</strong>(): <code>void</code></p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L78" target="_blank" rel="noopener noreferrer">src/core/Script.ts:78</a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-25">Returns<a href="#returns-25" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-28">Returns<a href="#returns-28" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-20">Inherited from<a href="#inherited-from-20" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onsimulatorstarted"><code>onSimulatorStarted</code></a></p>
@@ -420,7 +453,7 @@ represents, e.g. View, ModelView.</p>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_event-14">_event<a href="#_event-14" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/SelectEvent/"><code>SelectEvent</code></a></p>
 <p>event.target holds its controller.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-26">Returns<a href="#returns-26" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-29">Returns<a href="#returns-29" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-21">Inherited from<a href="#inherited-from-21" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onsqueeze"><code>onSqueeze</code></a></p>
@@ -435,7 +468,7 @@ represents, e.g. View, ModelView.</p>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_event-15">_event<a href="#_event-15" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/SelectEvent/"><code>SelectEvent</code></a></p>
 <p>event.target holds its controller.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-27">Returns<a href="#returns-27" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-30">Returns<a href="#returns-30" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-22">Inherited from<a href="#inherited-from-22" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onsqueezeend"><code>onSqueezeEnd</code></a></p>
@@ -450,7 +483,7 @@ represents, e.g. View, ModelView.</p>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_event-16">_event<a href="#_event-16" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/SelectEvent/"><code>SelectEvent</code></a></p>
 <p>event.target holds its controller.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-28">Returns<a href="#returns-28" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-31">Returns<a href="#returns-31" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-23">Inherited from<a href="#inherited-from-23" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onsqueezestart"><code>onSqueezeStart</code></a></p>
@@ -464,7 +497,7 @@ represents, e.g. View, ModelView.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-23">Parameters<a href="#parameters-23" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_event-17">_event<a href="#_event-17" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
 <p><a href="/docs/api/interfaces/SelectEvent/"><code>SelectEvent</code></a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-29">Returns<a href="#returns-29" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-32">Returns<a href="#returns-32" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-24">Inherited from<a href="#inherited-from-24" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onsqueezing"><code>onSqueezing</code></a></p>
@@ -474,7 +507,7 @@ represents, e.g. View, ModelView.</p>
 <p><strong>onXRSessionEnded</strong>(): <code>void</code></p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L76" target="_blank" rel="noopener noreferrer">src/core/Script.ts:76</a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-30">Returns<a href="#returns-30" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-33">Returns<a href="#returns-33" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-25">Inherited from<a href="#inherited-from-25" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onxrsessionended"><code>onXRSessionEnded</code></a></p>
@@ -487,7 +520,7 @@ represents, e.g. View, ModelView.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-24">Parameters<a href="#parameters-24" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_session">_session?<a href="#_session" class="hash-link" aria-label="Direct link to _session?" title="Direct link to _session?" translate="no">​</a></h5>
 <p><a href="https://developer.mozilla.org/docs/Web/API/XRSession" target="_blank" rel="noopener noreferrer"><code>XRSession</code></a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-31">Returns<a href="#returns-31" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-34">Returns<a href="#returns-34" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-26">Inherited from<a href="#inherited-from-26" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#onxrsessionstarted"><code>onXRSessionStarted</code></a></p>
@@ -497,7 +530,7 @@ represents, e.g. View, ModelView.</p>
 <p><strong>physicsStep</strong>(): <code>void</code></p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L73" target="_blank" rel="noopener noreferrer">src/core/Script.ts:73</a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-32">Returns<a href="#returns-32" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-35">Returns<a href="#returns-35" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-27">Inherited from<a href="#inherited-from-27" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#physicsstep"><code>physicsStep</code></a></p>
@@ -506,52 +539,54 @@ represents, e.g. View, ModelView.</p>
 <blockquote>
 <p><strong>setAIStreaming</strong>(<code>enabled</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L143" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:143</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L158" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:158</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-25">Parameters<a href="#parameters-25" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="enabled">enabled<a href="#enabled" class="hash-link" aria-label="Direct link to enabled" title="Direct link to enabled" translate="no">​</a></h5>
 <p><code>boolean</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-33">Returns<a href="#returns-33" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-36">Returns<a href="#returns-36" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="setupaudiocapture">setupAudioCapture()<a href="#setupaudiocapture" class="hash-link" aria-label="Direct link to setupAudioCapture()" title="Direct link to setupAudioCapture()" translate="no">​</a></h3>
 <blockquote>
 <p><strong>setupAudioCapture</strong>(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener noreferrer"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L78" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:78</a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-34">Returns<a href="#returns-34" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L87" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:87</a></p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-37">Returns<a href="#returns-37" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener noreferrer"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="startcapture">startCapture()<a href="#startcapture" class="hash-link" aria-label="Direct link to startCapture()" title="Direct link to startCapture()" translate="no">​</a></h3>
 <blockquote>
 <p><strong>startCapture</strong>(<code>callbacks</code>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener noreferrer"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L55" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:55</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L57" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:57</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-26">Parameters<a href="#parameters-26" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="callbacks">callbacks<a href="#callbacks" class="hash-link" aria-label="Direct link to callbacks" title="Direct link to callbacks" translate="no">​</a></h5>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="accumulate">accumulate?<a href="#accumulate" class="hash-link" aria-label="Direct link to accumulate?" title="Direct link to accumulate?" translate="no">​</a></h6>
+<p><code>boolean</code></p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="onaudiodata">onAudioData?<a href="#onaudiodata" class="hash-link" aria-label="Direct link to onAudioData?" title="Direct link to onAudioData?" translate="no">​</a></h6>
 <p>(<code>audioBuffer</code>) =&gt; <code>void</code></p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="onerror">onError?<a href="#onerror" class="hash-link" aria-label="Direct link to onError?" title="Direct link to onError?" translate="no">​</a></h6>
 <p>(<code>error</code>) =&gt; <code>void</code></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-35">Returns<a href="#returns-35" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-38">Returns<a href="#returns-38" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener noreferrer"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="stopcapture">stopCapture()<a href="#stopcapture" class="hash-link" aria-label="Direct link to stopCapture()" title="Direct link to stopCapture()" translate="no">​</a></h3>
 <blockquote>
 <p><strong>stopCapture</strong>(): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L72" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:72</a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-36">Returns<a href="#returns-36" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L81" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:81</a></p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-39">Returns<a href="#returns-39" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="streamtoai">streamToAI()<a href="#streamtoai" class="hash-link" aria-label="Direct link to streamToAI()" title="Direct link to streamToAI()" translate="no">​</a></h3>
 <blockquote>
 <p><strong>streamToAI</strong>(<code>audioBuffer</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L133" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:133</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L148" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:148</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-27">Parameters<a href="#parameters-27" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="audiobuffer">audioBuffer<a href="#audiobuffer" class="hash-link" aria-label="Direct link to audioBuffer" title="Direct link to audioBuffer" translate="no">​</a></h5>
 <p><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer" target="_blank" rel="noopener noreferrer"><code>ArrayBuffer</code></a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-37">Returns<a href="#returns-37" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-40">Returns<a href="#returns-40" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="update">update()<a href="#update" class="hash-link" aria-label="Direct link to update()" title="Direct link to update()" translate="no">​</a></h3>
@@ -565,7 +600,7 @@ represents, e.g. View, ModelView.</p>
 <p><code>number</code></p>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="_frame">_frame?<a href="#_frame" class="hash-link" aria-label="Direct link to _frame?" title="Direct link to _frame?" translate="no">​</a></h5>
 <p><a href="https://developer.mozilla.org/docs/Web/API/XRFrame" target="_blank" rel="noopener noreferrer"><code>XRFrame</code></a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-38">Returns<a href="#returns-38" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-41">Returns<a href="#returns-41" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="inherited-from-28">Inherited from<a href="#inherited-from-28" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a href="/docs/api/classes/Script/"><code>Script</code></a>.<a href="/docs/api/classes/Script/#update"><code>update</code></a></p>
@@ -574,8 +609,8 @@ represents, e.g. View, ModelView.</p>
 <blockquote>
 <p><code>static</code> <strong>isSupported</strong>(): <code>boolean</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L164" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:164</a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-39">Returns<a href="#returns-39" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
-<p><code>boolean</code></p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/api/classes/AnimatableNumber/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">AnimatableNumber</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/api/classes/AudioPlayer/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">AudioPlayer</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#extends" class="table-of-contents__link toc-highlight">Extends</a></li><li><a href="#constructors" class="table-of-contents__link toc-highlight">Constructors</a><ul><li><a href="#constructor" class="table-of-contents__link toc-highlight">Constructor</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#aiservice" class="table-of-contents__link toc-highlight">aiService?</a></li><li><a href="#isxrscript" class="table-of-contents__link toc-highlight">isXRScript</a></li><li><a href="#ux" class="table-of-contents__link toc-highlight">ux</a></li><li><a href="#dependencies" class="table-of-contents__link toc-highlight">dependencies</a></li></ul></li><li><a href="#methods" class="table-of-contents__link toc-highlight">Methods</a><ul><li><a href="#cleanup" class="table-of-contents__link toc-highlight">cleanup()</a></li><li><a href="#clearlatestaudiobuffer" class="table-of-contents__link toc-highlight">clearLatestAudioBuffer()</a></li><li><a href="#dispose" class="table-of-contents__link toc-highlight">dispose()</a></li><li><a href="#getiscapturing" class="table-of-contents__link toc-highlight">getIsCapturing()</a></li><li><a href="#getlatestaudiobuffer" class="table-of-contents__link toc-highlight">getLatestAudioBuffer()</a></li><li><a href="#init" class="table-of-contents__link toc-highlight">init()</a></li><li><a href="#initphysics" class="table-of-contents__link toc-highlight">initPhysics()</a></li><li><a href="#onhoverenter" class="table-of-contents__link toc-highlight">onHoverEnter()</a></li><li><a href="#onhoverexit" class="table-of-contents__link toc-highlight">onHoverExit()</a></li><li><a href="#onhovering" class="table-of-contents__link toc-highlight">onHovering()</a></li><li><a href="#onkeydown" class="table-of-contents__link toc-highlight">onKeyDown()</a></li><li><a href="#onkeyup" class="table-of-contents__link toc-highlight">onKeyUp()</a></li><li><a href="#onobjectgrabbing" class="table-of-contents__link toc-highlight">onObjectGrabbing()</a></li><li><a href="#onobjectgrabend" class="table-of-contents__link toc-highlight">onObjectGrabEnd()</a></li><li><a href="#onobjectgrabstart" class="table-of-contents__link toc-highlight">onObjectGrabStart()</a></li><li><a href="#onobjectselectend" class="table-of-contents__link toc-highlight">onObjectSelectEnd()</a></li><li><a href="#onobjectselectstart" class="table-of-contents__link toc-highlight">onObjectSelectStart()</a></li><li><a href="#onobjecttouchend" class="table-of-contents__link toc-highlight">onObjectTouchEnd()</a></li><li><a href="#onobjecttouching" class="table-of-contents__link toc-highlight">onObjectTouching()</a></li><li><a href="#onobjecttouchstart" class="table-of-contents__link toc-highlight">onObjectTouchStart()</a></li><li><a href="#onselect" class="table-of-contents__link toc-highlight">onSelect()</a></li><li><a href="#onselectend" class="table-of-contents__link toc-highlight">onSelectEnd()</a></li><li><a href="#onselecting" class="table-of-contents__link toc-highlight">onSelecting()</a></li><li><a href="#onselectstart" class="table-of-contents__link toc-highlight">onSelectStart()</a></li><li><a href="#onsimulatorstarted" class="table-of-contents__link toc-highlight">onSimulatorStarted()</a></li><li><a href="#onsqueeze" class="table-of-contents__link toc-highlight">onSqueeze()</a></li><li><a href="#onsqueezeend" class="table-of-contents__link toc-highlight">onSqueezeEnd()</a></li><li><a href="#onsqueezestart" class="table-of-contents__link toc-highlight">onSqueezeStart()</a></li><li><a href="#onsqueezing" class="table-of-contents__link toc-highlight">onSqueezing()</a></li><li><a href="#onxrsessionended" class="table-of-contents__link toc-highlight">onXRSessionEnded()</a></li><li><a href="#onxrsessionstarted" class="table-of-contents__link toc-highlight">onXRSessionStarted()</a></li><li><a href="#physicsstep" class="table-of-contents__link toc-highlight">physicsStep()</a></li><li><a href="#setaistreaming" class="table-of-contents__link toc-highlight">setAIStreaming()</a></li><li><a href="#setupaudiocapture" class="table-of-contents__link toc-highlight">setupAudioCapture()</a></li><li><a href="#startcapture" class="table-of-contents__link toc-highlight">startCapture()</a></li><li><a href="#stopcapture" class="table-of-contents__link toc-highlight">stopCapture()</a></li><li><a href="#streamtoai" class="table-of-contents__link toc-highlight">streamToAI()</a></li><li><a href="#update" class="table-of-contents__link toc-highlight">update()</a></li><li><a href="#issupported" class="table-of-contents__link toc-highlight">isSupported()</a></li></ul></li></ul></div></div></div></div></main></div></div></div></div>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/sound/AudioListener.ts#L181" target="_blank" rel="noopener noreferrer">src/sound/AudioListener.ts:181</a></p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-42">Returns<a href="#returns-42" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<p><code>boolean</code></p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/api/classes/AnimatableNumber/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">AnimatableNumber</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/api/classes/AudioPlayer/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">AudioPlayer</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#extends" class="table-of-contents__link toc-highlight">Extends</a></li><li><a href="#constructors" class="table-of-contents__link toc-highlight">Constructors</a><ul><li><a href="#constructor" class="table-of-contents__link toc-highlight">Constructor</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#aiservice" class="table-of-contents__link toc-highlight">aiService?</a></li><li><a href="#audiocontext" class="table-of-contents__link toc-highlight">audioContext?</a></li><li><a href="#isxrscript" class="table-of-contents__link toc-highlight">isXRScript</a></li><li><a href="#ux" class="table-of-contents__link toc-highlight">ux</a></li><li><a href="#dependencies" class="table-of-contents__link toc-highlight">dependencies</a></li></ul></li><li><a href="#methods" class="table-of-contents__link toc-highlight">Methods</a><ul><li><a href="#cleanup" class="table-of-contents__link toc-highlight">cleanup()</a></li><li><a href="#clearaccumulatedbuffer" class="table-of-contents__link toc-highlight">clearAccumulatedBuffer()</a></li><li><a href="#clearlatestaudiobuffer" class="table-of-contents__link toc-highlight">clearLatestAudioBuffer()</a></li><li><a href="#dispose" class="table-of-contents__link toc-highlight">dispose()</a></li><li><a href="#getaccumulatedbuffer" class="table-of-contents__link toc-highlight">getAccumulatedBuffer()</a></li><li><a href="#getaccumulatedchunkcount" class="table-of-contents__link toc-highlight">getAccumulatedChunkCount()</a></li><li><a href="#getiscapturing" class="table-of-contents__link toc-highlight">getIsCapturing()</a></li><li><a href="#getlatestaudiobuffer" class="table-of-contents__link toc-highlight">getLatestAudioBuffer()</a></li><li><a href="#init" class="table-of-contents__link toc-highlight">init()</a></li><li><a href="#initphysics" class="table-of-contents__link toc-highlight">initPhysics()</a></li><li><a href="#onhoverenter" class="table-of-contents__link toc-highlight">onHoverEnter()</a></li><li><a href="#onhoverexit" class="table-of-contents__link toc-highlight">onHoverExit()</a></li><li><a href="#onhovering" class="table-of-contents__link toc-highlight">onHovering()</a></li><li><a href="#onkeydown" class="table-of-contents__link toc-highlight">onKeyDown()</a></li><li><a href="#onkeyup" class="table-of-contents__link toc-highlight">onKeyUp()</a></li><li><a href="#onobjectgrabbing" class="table-of-contents__link toc-highlight">onObjectGrabbing()</a></li><li><a href="#onobjectgrabend" class="table-of-contents__link toc-highlight">onObjectGrabEnd()</a></li><li><a href="#onobjectgrabstart" class="table-of-contents__link toc-highlight">onObjectGrabStart()</a></li><li><a href="#onobjectselectend" class="table-of-contents__link toc-highlight">onObjectSelectEnd()</a></li><li><a href="#onobjectselectstart" class="table-of-contents__link toc-highlight">onObjectSelectStart()</a></li><li><a href="#onobjecttouchend" class="table-of-contents__link toc-highlight">onObjectTouchEnd()</a></li><li><a href="#onobjecttouching" class="table-of-contents__link toc-highlight">onObjectTouching()</a></li><li><a href="#onobjecttouchstart" class="table-of-contents__link toc-highlight">onObjectTouchStart()</a></li><li><a href="#onselect" class="table-of-contents__link toc-highlight">onSelect()</a></li><li><a href="#onselectend" class="table-of-contents__link toc-highlight">onSelectEnd()</a></li><li><a href="#onselecting" class="table-of-contents__link toc-highlight">onSelecting()</a></li><li><a href="#onselectstart" class="table-of-contents__link toc-highlight">onSelectStart()</a></li><li><a href="#onsimulatorstarted" class="table-of-contents__link toc-highlight">onSimulatorStarted()</a></li><li><a href="#onsqueeze" class="table-of-contents__link toc-highlight">onSqueeze()</a></li><li><a href="#onsqueezeend" class="table-of-contents__link toc-highlight">onSqueezeEnd()</a></li><li><a href="#onsqueezestart" class="table-of-contents__link toc-highlight">onSqueezeStart()</a></li><li><a href="#onsqueezing" class="table-of-contents__link toc-highlight">onSqueezing()</a></li><li><a href="#onxrsessionended" class="table-of-contents__link toc-highlight">onXRSessionEnded()</a></li><li><a href="#onxrsessionstarted" class="table-of-contents__link toc-highlight">onXRSessionStarted()</a></li><li><a href="#physicsstep" class="table-of-contents__link toc-highlight">physicsStep()</a></li><li><a href="#setaistreaming" class="table-of-contents__link toc-highlight">setAIStreaming()</a></li><li><a href="#setupaudiocapture" class="table-of-contents__link toc-highlight">setupAudioCapture()</a></li><li><a href="#startcapture" class="table-of-contents__link toc-highlight">startCapture()</a></li><li><a href="#stopcapture" class="table-of-contents__link toc-highlight">stopCapture()</a></li><li><a href="#streamtoai" class="table-of-contents__link toc-highlight">streamToAI()</a></li><li><a href="#update" class="table-of-contents__link toc-highlight">update()</a></li><li><a href="#issupported" class="table-of-contents__link toc-highlight">isSupported()</a></li></ul></li></ul></div></div></div></div></main></div></div></div></div>
 </body>
 </html>
