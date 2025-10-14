@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.1.0
- * @commitid bbe1b2d
- * @builddate 2025-10-14T02:34:38.005Z
+ * @commitid adfdcb6
+ * @builddate 2025-10-14T03:29:42.275Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -14178,14 +14178,14 @@ class MaterialSymbolsView extends View {
         const paths = svgData.paths;
         const group = new THREE.Group();
         const scale = 1 / Math.max(viewWidth, viewHeight);
+        const material = new THREE.MeshBasicMaterial({
+            color: this.iconColor,
+            transparent: true,
+            side: THREE.DoubleSide,
+            depthWrite: false,
+        });
         for (let i = 0; i < paths.length; i++) {
             const path = paths[i];
-            const material = new THREE.MeshBasicMaterial({
-                color: this.iconColor,
-                side: THREE.DoubleSide,
-                depthWrite: false,
-                depthTest: false
-            });
             const shapes = SVGLoader.createShapes(path);
             for (let j = 0; j < shapes.length; j++) {
                 const shape = shapes[j];
