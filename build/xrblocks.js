@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.1.0
- * @commitid adfdcb6
- * @builddate 2025-10-14T03:53:33.595Z
+ * @commitid d2caed2
+ * @builddate 2025-10-14T04:21:15.109Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -120,11 +120,13 @@ class Memory {
  */
 class Agent {
     static { this.dependencies = {}; }
-    constructor(ai, tools = [], instruction = '') {
+    constructor(ai, tools = [], instruction = '', callbacks) {
+        this.isSessionActive = false;
         this.ai = ai;
         this.tools = tools;
         this.memory = new Memory();
         this.contextBuilder = new Context(instruction);
+        this.lifecycleCallbacks = callbacks;
     }
     /**
      * Starts the agent's reasoning loop with an initial prompt.
@@ -176,6 +178,17 @@ class Agent {
     findTool(name) {
         return this.tools.find(tool => tool.name === name);
     }
+    /**
+     * Get the current session state.
+     * @returns Object containing session information
+     */
+    getSessionState() {
+        return {
+            isActive: this.isSessionActive,
+            toolCount: this.tools.length,
+            memorySize: this.memory.getShortTerm?.()?.length || 0,
+        };
+    }
 }
 
 /**
@@ -192,15 +205,29 @@ class Tool {
         this.onTriggered = options.onTriggered;
     }
     /**
-     * Executes the tool's action.
+     * Executes the tool's action with standardized error handling.
      * @param args - The arguments for the tool.
-     * @returns The result of the tool's action.
+     * @returns A promise that resolves with a ToolResult containing success/error information.
      */
-    execute(args) {
-        if (this.onTriggered) {
-            return this.onTriggered(args);
+    async execute(args) {
+        try {
+            if (this.onTriggered) {
+                const result = await Promise.resolve(this.onTriggered(args));
+                return {
+                    success: true,
+                    data: result,
+                    metadata: { executedAt: Date.now(), toolName: this.name }
+                };
+            }
+            throw new Error('The execute method must be implemented by a subclass or onTriggered must be provided.');
         }
-        throw new Error('The execute method must be implemented by a subclass or onTriggered must be provided.');
+        catch (error) {
+            return {
+                success: false,
+                error: error instanceof Error ? error.message : String(error),
+                metadata: { executedAt: Date.now(), toolName: this.name }
+            };
+        }
     }
     /**
      * Returns a JSON representation of the tool.
@@ -211,7 +238,7 @@ class Tool {
         if (this.description) {
             result.description = this.description;
         }
-        if (this.parameters && this.parameters.required) {
+        if (this.parameters) {
             result.parameters = this.parameters;
         }
         return result;
@@ -244,7 +271,7 @@ class GenerateSkyboxTool extends Tool {
     /**
      * Executes the tool's action.
      * @param args - The prompt to use to generate the skybox.
-     * @returns A promise that resolves with the result of the skybox generation.
+     * @returns A promise that resolves with a ToolResult containing success/error information.
      */
     async execute(args) {
         try {
@@ -254,30 +281,105 @@ class GenerateSkyboxTool extends Tool {
                 console.log('Applying texture...');
                 this.scene.background = new THREE.TextureLoader().load(image);
                 this.scene.background.mapping = THREE.EquirectangularReflectionMapping;
-                return 'Skybox generated successfully.';
+                return {
+                    success: true,
+                    data: 'Skybox generated successfully.',
+                    metadata: { prompt: args.prompt, timestamp: Date.now() }
+                };
             }
             else {
-                return 'Sorry, I had trouble creating that skybox.';
+                return {
+                    success: false,
+                    error: 'Failed to generate skybox image',
+                    metadata: { prompt: args.prompt, timestamp: Date.now() }
+                };
             }
         }
         catch (e) {
             console.error('error:', e);
-            return 'Sorry, I encountered an error while creating the skybox.';
+            return {
+                success: false,
+                error: e instanceof Error ? e.message :
+                    'Unknown error while creating skybox',
+                metadata: { prompt: args.prompt, timestamp: Date.now() }
+            };
         }
     }
 }
 
+/**
+ * Skybox Agent for generating 360-degree equirectangular backgrounds through conversation.
+ *
+ * @example Basic usage
+ * ```typescript
+ * // 1. Enable audio (required for live sessions)
+ * await xb.core.sound.enableAudio();
+ *
+ * // 2. Create agent
+ * const agent = new xb.SkyboxAgent(xb.core.ai, xb.core.sound, xb.core.scene);
+ *
+ * // 3. Start session
+ * await agent.startLiveSession({
+ *   onopen: () => console.log('Session ready'),
+ *   onmessage: (msg) => handleMessage(msg),
+ *   onclose: () => console.log('Session closed')
+ * });
+ *
+ * // 4. Clean up when done
+ * await agent.stopLiveSession();
+ * xb.core.sound.disableAudio();
+ * ```
+ *
+ * @example With lifecycle callbacks
+ * ```typescript
+ * const agent = new xb.SkyboxAgent(
+ *   xb.core.ai,
+ *   xb.core.sound,
+ *   xb.core.scene,
+ *   {
+ *     onSessionStart: () => updateUI('active'),
+ *     onSessionEnd: () => updateUI('inactive'),
+ *     onError: (error) => showError(error)
+ *   }
+ * );
+ * ```
+ *
+ * @remarks
+ * - Audio must be enabled BEFORE starting live session using `xb.core.sound.enableAudio()`
+ * - Users are responsible for managing audio lifecycle
+ * - Always call `stopLiveSession()` before disabling audio
+ * - Session state can be checked using `getSessionState()` and `getLiveSessionState()`
+ */
 class SkyboxAgent extends Agent {
-    constructor(ai, sound, scene) {
+    constructor(ai, sound, scene, callbacks) {
         super(ai, [new GenerateSkyboxTool(ai, scene)], `You are a friendly and helpful skybox designer. The response should be short. Your only capability
          is to generate a 360-degree equirectangular skybox image based on
          a user's description. You will generate a default skybox if the user
          does not provide any description. You will use the tool 'generateSkybox'
-         with the summarized description as the 'prompt' argument to create the skybox.`);
+         with the summarized description as the 'prompt' argument to create the skybox.`, callbacks);
         this.sound = sound;
+        this.sessionState = {
+            isActive: false,
+            messageCount: 0,
+            toolCallCount: 0
+        };
     }
+    /**
+     * Starts a live AI session for real-time conversation.
+     *
+     * @param callbacks - Optional callbacks for session events. Can also be set using ai.setLiveCallbacks()
+     * @throws {Error} If AI model is not initialized or live session is not available
+     *
+     * @remarks
+     * Audio must be enabled separately using `xb.core.sound.enableAudio()` before starting the session.
+     * This gives users control over when microphone permissions are requested.
+     */
     async startLiveSession(callbacks) {
-        this.ai.setLiveCallbacks(callbacks);
+        // Wrap callbacks to track session state
+        const wrappedCallbacks = this.wrapCallbacks(callbacks);
+        if (callbacks) {
+            this.ai.setLiveCallbacks(wrappedCallbacks);
+        }
         const functionDeclarations = this.tools.map(tool => tool.toJSON());
         const systemInstruction = {
             parts: [{ text: this.contextBuilder.instruction }]
@@ -286,15 +388,117 @@ class SkyboxAgent extends Agent {
             tools: functionDeclarations,
             systemInstruction: systemInstruction,
         });
-        this.sound.enableAudio();
+        this.sessionState.isActive = true;
+        this.sessionState.startTime = Date.now();
+        this.isSessionActive = true;
+        await this.lifecycleCallbacks?.onSessionStart?.();
     }
+    /**
+     * Stops the live AI session.
+     *
+     * @remarks
+     * Audio must be disabled separately using `xb.core.sound.disableAudio()` after stopping the session.
+     */
     async stopLiveSession() {
         await this.ai.stopLiveSession();
-        this.sound.disableAudio();
+        this.sessionState.isActive = false;
+        this.sessionState.endTime = Date.now();
+        this.isSessionActive = false;
+        await this.lifecycleCallbacks?.onSessionEnd?.();
     }
+    /**
+     * Wraps user callbacks to track session state and trigger lifecycle events.
+     * @param callbacks - The callbacks to wrap.
+     * @returns The wrapped callbacks.
+     */
+    wrapCallbacks(callbacks) {
+        return {
+            onopen: () => {
+                callbacks?.onopen?.();
+            },
+            onmessage: (message) => {
+                this.sessionState.messageCount++;
+                callbacks?.onmessage?.(message);
+            },
+            onerror: (error) => {
+                this.sessionState.lastError = error.message;
+                this.lifecycleCallbacks?.onError?.(new Error(error.message));
+                callbacks?.onerror?.(error);
+            },
+            onclose: (event) => {
+                this.sessionState.isActive = false;
+                this.sessionState.endTime = Date.now();
+                this.isSessionActive = false;
+                callbacks?.onclose?.(event);
+            }
+        };
+    }
+    /**
+     * Sends tool execution results back to the AI.
+     *
+     * @param response - The tool response containing function results
+     */
     async sendToolResponse(response) {
+        if (!this.validateToolResponse(response)) {
+            console.error('Invalid tool response format:', response);
+            return;
+        }
+        // Handle both single response and array of responses
+        const responses = Array.isArray(response.functionResponses) ?
+            response.functionResponses :
+            [response.functionResponses];
+        this.sessionState.toolCallCount += responses.length;
         console.log('Sending tool response:', response);
         this.ai.sendToolResponse(response);
+    }
+    /**
+     * Validates that a tool response has the correct format.
+     * @param response - The tool response to validate.
+     * @returns True if the response is valid, false otherwise.
+     */
+    validateToolResponse(response) {
+        if (!response.functionResponses) {
+            return false;
+        }
+        // Handle both single response and array of responses
+        const responses = Array.isArray(response.functionResponses) ?
+            response.functionResponses :
+            [response.functionResponses];
+        return responses.every(fr => fr.id && fr.name && fr.response !== undefined);
+    }
+    /**
+     * Helper to create a properly formatted tool response from a ToolResult.
+     *
+     * @param id - The function call ID
+     * @param name - The function name
+     * @param result - The ToolResult from tool execution
+     * @returns A properly formatted FunctionResponse
+     */
+    static createToolResponse(id, name, result) {
+        return {
+            id,
+            name,
+            response: result.success ? { result: result.data } : { error: result.error }
+        };
+    }
+    /**
+     * Gets the current live session state.
+     *
+     * @returns Read-only session state information
+     */
+    getLiveSessionState() {
+        return { ...this.sessionState };
+    }
+    /**
+     * Gets the duration of the session in milliseconds.
+     *
+     * @returns Duration in ms, or null if session hasn't started
+     */
+    getSessionDuration() {
+        if (!this.sessionState.startTime)
+            return null;
+        const endTime = this.sessionState.endTime || Date.now();
+        return endTime - this.sessionState.startTime;
     }
 }
 
@@ -325,7 +529,7 @@ class GetWeatherTool extends Tool {
     /**
      * Executes the tool's action.
      * @param args - The arguments for the tool.
-     * @returns A promise that resolves with the weather information.
+     * @returns A promise that resolves with a ToolResult containing weather information.
      */
     async execute(args) {
         if (!args.latitude || !args.longitude) {
@@ -338,20 +542,33 @@ class GetWeatherTool extends Tool {
             const data = await response.json();
             if (response.ok) {
                 return {
-                    temperature: data.current.temperature_2m,
-                    weathercode: data.current.weather_code,
+                    success: true,
+                    data: {
+                        temperature: data.current.temperature_2m,
+                        weathercode: data.current.weather_code,
+                    },
+                    metadata: {
+                        latitude: args.latitude,
+                        longitude: args.longitude,
+                        timestamp: Date.now()
+                    }
                 };
             }
             else {
                 return {
-                    error: 'Could not retrieve weather for the specified location.'
+                    success: false,
+                    error: 'Could not retrieve weather for the specified location.',
+                    metadata: { latitude: args.latitude, longitude: args.longitude }
                 };
             }
         }
         catch (error) {
             console.error('Error fetching weather:', error);
             return {
-                error: 'There was an error fetching the weather.'
+                success: false,
+                error: error instanceof Error ? error.message :
+                    'There was an error fetching the weather.',
+                metadata: { latitude: args.latitude, longitude: args.longitude }
             };
         }
     }
@@ -8559,7 +8776,7 @@ class AudioPlayer extends Script {
         this.nextStartTime = 0;
         this.volume = 1.0;
         this.category = 'speech';
-        this.options = { sampleRate: 48000, channelCount: 1, ...options };
+        this.options = { sampleRate: 24000, channelCount: 1, ...options };
         if (options.category) {
             this.category = options.category;
         }
@@ -8601,6 +8818,10 @@ class AudioPlayer extends Script {
             this.gainNode.connect(this.audioContext.destination);
             this.updateGainNodeVolume();
         }
+        // Ensure audio context is running (not suspended)
+        if (this.audioContext.state === 'suspended') {
+            await this.audioContext.resume();
+        }
     }
     async playAudioChunk(base64AudioData) {
         if (!base64AudioData)
@@ -8631,8 +8852,11 @@ class AudioPlayer extends Script {
         // Connect through gain node for volume control
         source.connect(this.gainNode || this.audioContext.destination);
         source.onended = () => this.playNextAudioBuffer();
+        // Start playback
         source.start(startTime);
-        this.nextStartTime = startTime + audioBuffer.duration;
+        // Calculate next start time with a tiny overlap to prevent gaps
+        // This helps create smooth transitions between audio chunks
+        this.nextStartTime = startTime + audioBuffer.duration - 0.001;
     }
     clearQueue() {
         this.audioQueue = [];
@@ -8658,6 +8882,7 @@ class AudioPlayer extends Script {
             this.audioContext.close();
             this.audioContext = undefined;
             this.gainNode = undefined;
+            this.nextStartTime = 0; // Reset timing
         }
     }
     static isSupported() {
@@ -9357,8 +9582,9 @@ class CoreSound extends Script {
             new BackgroundMusic(this.listener, this.categoryVolumes);
         this.spatialAudio = new SpatialAudio(this.listener, this.categoryVolumes);
         this.audioListener = new AudioListener();
-        this.audioPlayer = new AudioPlayer();
-        // Wire up volume control for audio player
+        // Initialize with 48kHz for general audio playback
+        // Gemini Live uses 24kHz but that gets handled automatically via playAIAudio
+        this.audioPlayer = new AudioPlayer({ sampleRate: 48000 });
         this.audioPlayer.setCategoryVolumes(this.categoryVolumes);
         camera.add(this.listener);
         this.add(this.backgroundMusic);
@@ -9448,6 +9674,16 @@ class CoreSound extends Script {
         return this.audioListener?.aiService !== null;
     }
     async playAIAudio(base64AudioData) {
+        // Gemini Live API outputs audio at 24kHz
+        // Only recreate AudioContext if sample rate needs to change
+        const currentRate = this.audioPlayer['options'].sampleRate;
+        if (currentRate !== 24000) {
+            this.audioPlayer['options'].sampleRate = 24000;
+            // Only stop if context exists and is different sample rate
+            if (this.audioPlayer['audioContext']) {
+                this.audioPlayer.stop(); // Reset context with new sample rate
+            }
+        }
         await this.audioPlayer.playAudioChunk(base64AudioData);
     }
     stopAIAudio() {
