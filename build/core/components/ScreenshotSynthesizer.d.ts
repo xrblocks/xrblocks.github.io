@@ -4,11 +4,13 @@ export declare class ScreenshotSynthesizer {
     private pendingScreenshotRequests;
     private virtualCanvas?;
     private virtualBuffer;
+    private virtualRenderTarget?;
     private virtualRealCanvas?;
     private virtualRealBuffer;
-    private realVirtualRenderTarget?;
+    private virtualRealRenderTarget?;
     private fullScreenQuad?;
-    onAfterRender(renderer: THREE.WebGLRenderer, deviceCamera?: XRDeviceCamera): Promise<void>;
+    private renderTargetWidth;
+    onAfterRender(renderer: THREE.WebGLRenderer, renderSceneFn: () => void, deviceCamera?: XRDeviceCamera): Promise<void>;
     private createVirtualImageDataURL;
     private resolveVirtualOnlyRequests;
     private createVirtualRealImageDataURL;

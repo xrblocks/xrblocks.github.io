@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.1.0
- * @commitid c024ccd
- * @builddate 2025-10-15T19:39:42.963Z
+ * @commitid b870236
+ * @builddate 2025-10-15T21:41:00.733Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -3811,6 +3811,9 @@ class Registry {
     }
 }
 
+// Use a small canvas since a full size canvas can consume a lot of memory and
+// cause toDataUrl to be slow.
+const DEFAULT_CANVAS_WIDTH = 640;
 function flipBufferVertically(buffer, width, height) {
     const bytesPerRow = width * 4;
     const tempRow = new Uint8Array(bytesPerRow);
@@ -3836,8 +3839,9 @@ class ScreenshotSynthesizer {
         this.pendingScreenshotRequests = [];
         this.virtualBuffer = new Uint8Array();
         this.virtualRealBuffer = new Uint8Array();
+        this.renderTargetWidth = DEFAULT_CANVAS_WIDTH;
     }
-    async onAfterRender(renderer, deviceCamera) {
+    async onAfterRender(renderer, renderSceneFn, deviceCamera) {
         if (this.pendingScreenshotRequests.length == 0) {
             return;
         }
@@ -3847,13 +3851,14 @@ class ScreenshotSynthesizer {
         }
         const haveVirtualOnlyRequests = this.pendingScreenshotRequests.every((request) => !request.overlayOnCamera);
         if (haveVirtualOnlyRequests) {
-            this.createVirtualImageDataURL(renderer).then((virtualImageDataUrl) => {
+            this.createVirtualImageDataURL(renderer, renderSceneFn)
+                .then((virtualImageDataUrl) => {
                 this.resolveVirtualOnlyRequests(virtualImageDataUrl);
             });
         }
         const haveVirtualAndRealReqeusts = this.pendingScreenshotRequests.some((request) => request.overlayOnCamera);
         if (haveVirtualAndRealReqeusts && deviceCamera) {
-            this.createVirtualRealImageDataURL(renderer, deviceCamera)
+            this.createVirtualRealImageDataURL(renderer, renderSceneFn, deviceCamera)
                 .then((virtualRealImageDataUrl) => {
                 if (virtualRealImageDataUrl) {
                     this.resolveVirtualRealRequests(virtualRealImageDataUrl);
@@ -3864,25 +3869,42 @@ class ScreenshotSynthesizer {
             throw new Error('No device camera provided');
         }
     }
-    async createVirtualImageDataURL(renderer) {
-        const renderTarget = renderer.getRenderTarget();
-        if (this.virtualBuffer.length !=
-            renderTarget.width * renderTarget.height * 4) {
-            this.virtualBuffer =
-                new Uint8Array(renderTarget.width * renderTarget.height * 4);
+    async createVirtualImageDataURL(renderer, renderSceneFn) {
+        const mainRenderTarget = renderer.getRenderTarget();
+        const isRenderingStereo = renderer.xr.isPresenting && renderer.xr.getCamera().cameras.length == 2;
+        const mainRenderTargetSingleViewWidth = isRenderingStereo ? mainRenderTarget.width / 2 : mainRenderTarget.width;
+        const scaledHeight = Math.round(mainRenderTarget.height *
+            (this.renderTargetWidth / mainRenderTargetSingleViewWidth));
+        if (!this.virtualRenderTarget ||
+            this.virtualRenderTarget.width != this.renderTargetWidth) {
+            this.virtualRenderTarget?.dispose();
+            this.virtualRenderTarget = new THREE.WebGLRenderTarget(this.renderTargetWidth, scaledHeight, { colorSpace: THREE.SRGBColorSpace });
+        }
+        const xrIsPresenting = renderer.xr.isPresenting;
+        renderer.xr.isPresenting = false;
+        const virtualRenderTarget = this.virtualRenderTarget;
+        renderer.setRenderTarget(virtualRenderTarget);
+        renderer.clearColor();
+        renderer.clearDepth();
+        renderSceneFn();
+        renderer.setRenderTarget(mainRenderTarget);
+        renderer.xr.isPresenting = xrIsPresenting;
+        const expectedBufferLength = virtualRenderTarget.width * virtualRenderTarget.height * 4;
+        if (this.virtualBuffer.length != expectedBufferLength) {
+            this.virtualBuffer = new Uint8Array(expectedBufferLength);
         }
         const buffer = this.virtualBuffer;
-        await renderer.readRenderTargetPixelsAsync(renderTarget, 0, 0, renderTarget.width, renderTarget.height, buffer);
-        flipBufferVertically(buffer, renderTarget.width, renderTarget.height);
+        await renderer.readRenderTargetPixelsAsync(virtualRenderTarget, 0, 0, virtualRenderTarget.width, virtualRenderTarget.height, buffer);
+        flipBufferVertically(buffer, virtualRenderTarget.width, virtualRenderTarget.height);
         const canvas = this.virtualCanvas ||
             (this.virtualCanvas = document.createElement('canvas'));
-        canvas.width = renderTarget.width;
-        canvas.height = renderTarget.height;
+        canvas.width = virtualRenderTarget.width;
+        canvas.height = virtualRenderTarget.height;
         const context = canvas.getContext('2d');
         if (!context) {
             throw new Error('Failed to get 2D context');
         }
-        const imageData = new ImageData(new Uint8ClampedArray(buffer), renderTarget.width, renderTarget.height);
+        const imageData = new ImageData(new Uint8ClampedArray(buffer), virtualRenderTarget.width, virtualRenderTarget.height);
         context.putImageData(imageData, 0, 0);
         return canvas.toDataURL();
     }
@@ -3899,24 +3921,31 @@ class ScreenshotSynthesizer {
         }
         this.pendingScreenshotRequests.length = remainingRequests;
     }
-    async createVirtualRealImageDataURL(renderer, deviceCamera) {
+    async createVirtualRealImageDataURL(renderer, renderSceneFn, deviceCamera) {
         if (!deviceCamera.loaded) {
-            console.log('Waiting for device camera to be loaded');
+            console.debug('Waiting for device camera to be loaded');
             return null;
         }
-        if (!this.realVirtualRenderTarget) {
-            this.realVirtualRenderTarget = new THREE.WebGLRenderTarget(640, 480);
+        const mainRenderTarget = renderer.getRenderTarget();
+        const isRenderingStereo = renderer.xr.isPresenting && renderer.xr.getCamera().cameras.length == 2;
+        const mainRenderTargetSingleViewWidth = isRenderingStereo ? mainRenderTarget.width / 2 : mainRenderTarget.width;
+        const scaledHeight = Math.round(mainRenderTarget.height *
+            (this.renderTargetWidth / mainRenderTargetSingleViewWidth));
+        if (!this.virtualRealRenderTarget ||
+            this.virtualRealRenderTarget.height != scaledHeight) {
+            this.virtualRealRenderTarget?.dispose();
+            this.virtualRealRenderTarget = new THREE.WebGLRenderTarget(this.renderTargetWidth, scaledHeight, { colorSpace: THREE.SRGBColorSpace });
         }
-        const virtualRenderTarget = renderer.getRenderTarget();
-        const renderTarget = this.realVirtualRenderTarget;
+        const renderTarget = this.virtualRealRenderTarget;
         renderer.setRenderTarget(renderTarget);
+        const xrIsPresenting = renderer.xr.isPresenting;
+        renderer.xr.isPresenting = false;
         const quad = this.getFullScreenQuad();
         quad.material.map = deviceCamera.texture;
         quad.render(renderer);
-        quad.material.map =
-            virtualRenderTarget.texture;
-        quad.render(renderer);
-        renderer.setRenderTarget(virtualRenderTarget);
+        renderSceneFn();
+        renderer.xr.isPresenting = xrIsPresenting;
+        renderer.setRenderTarget(mainRenderTarget);
         if (this.virtualRealBuffer.length !=
             renderTarget.width * renderTarget.height * 4) {
             this.virtualRealBuffer =
@@ -13679,8 +13708,9 @@ class Core {
         this.ui = new UI();
         /** Manages all (spatial) audio playback. */
         this.sound = new CoreSound();
+        this.renderSceneBound = this.renderScene.bind(this);
         /** Manages the desktop XR simulator. */
-        this.simulator = new Simulator(this.renderScene.bind(this));
+        this.simulator = new Simulator(this.renderSceneBound);
         /** Manages drag-and-drop interactions. */
         this.dragManager = new DragManager();
         /** Manages drag-and-drop interactions. */
@@ -13913,7 +13943,7 @@ class Core {
             script.update(time, frame);
         }
         this.renderSimulatorAndScene();
-        this.screenshotSynthesizer.onAfterRender(this.renderer, this.deviceCamera);
+        this.screenshotSynthesizer.onAfterRender(this.renderer, this.renderSceneBound, this.deviceCamera);
         if (this.simulatorRunning) {
             this.simulator.renderSimulatorScene();
         }

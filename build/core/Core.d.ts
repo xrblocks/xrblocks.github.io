@@ -56,6 +56,7 @@ export declare class Core {
     ui: UI;
     /** Manages all (spatial) audio playback. */
     sound: CoreSound;
+    private renderSceneBound;
     /** Manages the desktop XR simulator. */
     simulator: Simulator;
     /** Manages drag-and-drop interactions. */
