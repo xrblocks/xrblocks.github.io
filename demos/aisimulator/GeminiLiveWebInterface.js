@@ -1,4 +1,4 @@
-import {EndSensitivity, GoogleGenAI, Modality, StartSensitivity} from '@google/genai';
+import {GoogleGenAI, Modality} from '@google/genai';
 
 export class GeminiLiveWebInterface {
   constructor(apiKey) {
@@ -8,14 +8,7 @@ export class GeminiLiveWebInterface {
       responseModalities: [Modality.AUDIO],
       speechConfig: {voiceConfig: {prebuiltVoiceConfig: {voiceName: 'Aoede'}}},
       outputAudioTranscription: {},
-      inputAudioTranscription: {},
-      realtimeInputConfig: {
-        automaticActivityDetection: {
-          disabled: false,
-          startOfSpeechSensitivity: StartSensitivity.START_SENSITIVITY_LOW,
-          endOfSpeechSensitivity: EndSensitivity.END_SENSITIVITY_LOW
-        },
-      }
+      inputAudioTranscription: {}
     };
 
     // Session and state management
