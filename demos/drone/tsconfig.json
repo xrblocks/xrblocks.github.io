@@ -2,7 +2,7 @@
   "extends": "../tsconfig.base.json", // Path to the base config
   "compilerOptions": {
     "outDir": "./build", // Output directory for this specific project
-    "rootDir": "",
+    "rootDir": "src",
     "sourceMap": true,
     "paths": {
       "rapier3d": [
