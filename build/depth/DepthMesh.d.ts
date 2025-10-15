@@ -30,6 +30,11 @@ export declare class DepthMesh extends MeshScript {
     private lastColliderUpdateTime;
     private options;
     private depthTextureMaterialUniforms?;
+    private depthTarget;
+    private depthTexture;
+    private depthScene;
+    private depthCamera;
+    private gpuPixels;
     private RAPIER?;
     private blendedWorld?;
     private rigidBody?;
@@ -47,6 +52,8 @@ export declare class DepthMesh extends MeshScript {
      * and depth data.
      */
     updateDepth(depthData: XRCPUDepthInformation): void;
+    updateGPUDepth(depthData: XRWebGLDepthInformation): void;
+    convertGPUToGPU(depthData: XRWebGLDepthInformation): XRCPUDepthInformation;
     /**
      * Method to manually update the full resolution geometry.
      * Only needed if options.updateFullResolutionGeometry is false.

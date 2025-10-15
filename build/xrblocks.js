@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.1.0
- * @commitid 1ce0b4b
- * @builddate 2025-10-15T18:04:15.025Z
+ * @commitid ebbcb6d
+ * @builddate 2025-10-15T18:48:50.068Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -1869,6 +1869,7 @@ void main() {
 
 uniform vec3 uColor;
 uniform sampler2D uDepthTexture;
+uniform sampler2DArray uDepthTextureArray;
 uniform vec3 uLightDirection;
 uniform vec2 uResolution;
 uniform float uRawValueToMeters;
@@ -1884,6 +1885,7 @@ uniform float uMaxDepth;
 uniform float uDebug;
 uniform float uOpacity;
 uniform bool uUsingFloatDepth;
+uniform bool uIsTextureArray;
 
 float saturate(in float x) {
   return clamp(x, 0.0, 1.0);
@@ -1916,6 +1918,10 @@ float DepthGetMeters(in sampler2D depth_texture, in vec2 depth_uv) {
   }
   vec2 packedDepthAndVisibility = texture2D(depth_texture, depth_uv).rg;
   return dot(packedDepthAndVisibility, vec2(255.0, 256.0 * 255.0)) * uRawValueToMeters;
+}
+
+float DepthArrayGetMeters(in sampler2DArray depth_texture, in vec2 depth_uv) {
+  return uRawValueToMeters * texture(uDepthTextureArray, vec3 (depth_uv.x, depth_uv.y, 0)).r;
 }
 
 vec3 DepthGetColorVisualization(in float x) {
@@ -1953,7 +1959,7 @@ void main() {
   vec2 depth_uv = uv;
   depth_uv.y = 1.0 - depth_uv.y;
 
-  float depth = DepthGetMeters(uDepthTexture, depth_uv) * 8.0;
+  float depth = (uIsTextureArray ? DepthArrayGetMeters(uDepthTextureArray, depth_uv) : DepthGetMeters(uDepthTexture, depth_uv)) * 8.0;
   float normalized_depth =
     saturate((depth - uMinDepth) / (uMaxDepth - uMinDepth));
   gl_FragColor = uOpacity * vec4(TurboColormap(normalized_depth), 1.0);
@@ -1975,6 +1981,8 @@ class DepthMesh extends MeshScript {
         if (options.useDepthTexture || options.showDebugTexture) {
             uniforms = {
                 uDepthTexture: { value: null },
+                uDepthTextureArray: { value: null },
+                uIsTextureArray: { value: 0.0 },
                 uColor: { value: new THREE.Color(0xaaaaaa) },
                 uResolution: { value: new THREE.Vector2(width, height) },
                 uRawValueToMeters: { value: 1.0 },
@@ -2061,17 +2069,87 @@ class DepthMesh extends MeshScript {
         this.geometry.attributes.position.needsUpdate = true;
         const depthTextureLeft = this.depthTextures?.get(0);
         if (depthTextureLeft && this.depthTextureMaterialUniforms) {
-            this.depthTextureMaterialUniforms.uDepthTexture.value = depthTextureLeft;
+            const isTextureArray = depthTextureLeft instanceof THREE.ExternalTexture;
+            this.depthTextureMaterialUniforms.uIsTextureArray.value = isTextureArray ? 1.0 : 0;
+            if (isTextureArray)
+                this.depthTextureMaterialUniforms.uDepthTextureArray.value = depthTextureLeft;
+            else
+                this.depthTextureMaterialUniforms.uDepthTexture.value = depthTextureLeft;
             this.depthTextureMaterialUniforms.uMinDepth.value = this.minDepth;
             this.depthTextureMaterialUniforms.uMaxDepth.value = this.maxDepth;
             this.depthTextureMaterialUniforms.uRawValueToMeters.value =
-                this.depthTextures.depthData[0].rawValueToMeters;
+                this.depthTextures.depthData.length ? this.depthTextures.depthData[0].rawValueToMeters : 1.0;
             this.material.needsUpdate = true;
         }
         if (this.options.updateVertexNormals) {
             this.geometry.computeVertexNormals();
         }
         this.updateColliderIfNeeded();
+    }
+    updateGPUDepth(depthData) {
+        this.updateDepth(this.convertGPUToGPU(depthData));
+    }
+    convertGPUToGPU(depthData) {
+        if (!this.depthTarget) {
+            this.depthTarget = new THREE.WebGLRenderTarget(depthData.width, depthData.height, {
+                format: THREE.RedFormat,
+                type: THREE.FloatType,
+                internalFormat: 'R32F',
+                minFilter: THREE.NearestFilter,
+                magFilter: THREE.NearestFilter,
+                depthBuffer: false
+            });
+            this.depthTexture = new THREE.ExternalTexture(depthData.texture);
+            const textureProperties = this.renderer.properties.get(this.depthTexture);
+            textureProperties.__webglTexture = depthData.texture;
+            this.gpuPixels = new Float32Array(depthData.width * depthData.height);
+            const depthShader = new THREE.ShaderMaterial({
+                vertexShader: `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    vUv.y = 1.0-vUv.y;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `,
+                fragmentShader: `
+                precision highp float;
+                precision highp sampler2DArray;
+
+                uniform sampler2DArray uTexture;
+                uniform float uCameraNear;
+                varying vec2 vUv;
+
+                void main() {
+                  float z = texture(uTexture, vec3(vUv, 0)).r;
+                  z = uCameraNear / (1.0 - z);
+                  z = clamp(z, 0.0, 20.0);
+                  
+                  gl_FragColor = vec4(z, 0, 0, 1.0);
+                }
+            `,
+                uniforms: {
+                    uTexture: { value: this.depthTexture },
+                    uCameraNear: { value: depthData.depthNear }
+                },
+                blending: THREE.NoBlending,
+                depthTest: false,
+                depthWrite: false,
+                side: THREE.DoubleSide
+            });
+            const depthMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), depthShader);
+            this.depthScene = new THREE.Scene();
+            this.depthScene.add(depthMesh);
+            this.depthCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        }
+        const originalRenderTarget = this.renderer.getRenderTarget();
+        this.renderer.xr.enabled = false;
+        this.renderer.setRenderTarget(this.depthTarget);
+        this.renderer.render(this.depthScene, this.depthCamera);
+        this.renderer.readRenderTargetPixels(this.depthTarget, 0, 0, depthData.width, depthData.height, this.gpuPixels, 0);
+        this.renderer.xr.enabled = true;
+        this.renderer.setRenderTarget(originalRenderTarget);
+        return { width: depthData.width, height: depthData.height, data: this.gpuPixels, rawValueToMeters: depthData.rawValueToMeters };
     }
     /**
      * Method to manually update the full resolution geometry.
@@ -2344,33 +2422,34 @@ class DepthTextures {
         this.options = options;
         this.uint16Arrays = [];
         this.uint8Arrays = [];
-        this.textures = [];
+        this.dataTextures = [];
+        this.nativeTextures = [];
         this.depthData = [];
     }
-    createDepthTextures(depthData, view_id) {
-        if (this.textures[view_id]) {
-            this.textures[view_id].dispose();
+    createDataDepthTextures(depthData, view_id) {
+        if (this.dataTextures[view_id]) {
+            this.dataTextures[view_id].dispose();
         }
         if (this.options.useFloat32) {
             const typedArray = new Uint16Array(depthData.width * depthData.height);
             const format = THREE.RedFormat;
             const type = THREE.HalfFloatType;
             this.uint16Arrays[view_id] = typedArray;
-            this.textures[view_id] = new THREE.DataTexture(typedArray, depthData.width, depthData.height, format, type);
+            this.dataTextures[view_id] = new THREE.DataTexture(typedArray, depthData.width, depthData.height, format, type);
         }
         else {
             const typedArray = new Uint8Array(depthData.width * depthData.height * 2);
             const format = THREE.RGFormat;
             const type = THREE.UnsignedByteType;
             this.uint8Arrays[view_id] = typedArray;
-            this.textures[view_id] = new THREE.DataTexture(typedArray, depthData.width, depthData.height, format, type);
+            this.dataTextures[view_id] = new THREE.DataTexture(typedArray, depthData.width, depthData.height, format, type);
         }
     }
-    update(depthData, view_id) {
-        if (this.textures.length < view_id + 1 ||
-            this.textures[view_id].image.width !== depthData.width ||
-            this.textures[view_id].image.height !== depthData.height) {
-            this.createDepthTextures(depthData, view_id);
+    updateData(depthData, view_id) {
+        if (this.dataTextures.length < view_id + 1 ||
+            this.dataTextures[view_id].image.width !== depthData.width ||
+            this.dataTextures[view_id].image.height !== depthData.height) {
+            this.createDataDepthTextures(depthData, view_id);
         }
         if (this.options.useFloat32) {
             const float32Data = new Float32Array(depthData.data);
@@ -2383,11 +2462,26 @@ class DepthTextures {
         else {
             this.uint8Arrays[view_id].set(new Uint8Array(depthData.data));
         }
-        this.textures[view_id].needsUpdate = true;
+        this.dataTextures[view_id].needsUpdate = true;
         this.depthData[view_id] = depthData;
     }
+    updateNativeTexture(depthData, renderer, view_id) {
+        if (this.dataTextures.length < view_id + 1) {
+            this.nativeTextures[view_id] = new THREE.ExternalTexture(depthData.texture);
+        }
+        else {
+            this.nativeTextures[view_id].sourceTexture = depthData.texture;
+        }
+        // fixed in newer revision of three
+        const textureProperties = renderer.properties.get(this.nativeTextures[view_id]);
+        textureProperties.__webglTexture = depthData.texture;
+        textureProperties.__version = 1;
+    }
     get(view_id) {
-        return this.textures[view_id];
+        if (this.dataTextures.length > 0) {
+            return this.dataTextures[view_id];
+        }
+        return this.nativeTextures[view_id];
     }
 }
 
@@ -2587,6 +2681,9 @@ class OcclusionMapMeshMaterial extends THREE.MeshBasicMaterial {
         super();
         this.uniforms = {
             uDepthTexture: { value: null },
+            uDepthTextureArray: { value: null },
+            uViewId: { value: 0.0 },
+            uIsTextureArray: { value: 0.0 },
             uRawValueToMeters: { value: 8.0 / 65536.0 },
             cameraFar: { value: camera.far },
             cameraNear: { value: camera.near },
@@ -2612,9 +2709,11 @@ class OcclusionMapMeshMaterial extends THREE.MeshBasicMaterial {
                 shader.fragmentShader
                     .replace('uniform vec3 diffuse;', [
                     'uniform vec3 diffuse;', 'uniform sampler2D uDepthTexture;',
+                    'uniform sampler2DArray uDepthTextureArray;',
                     'uniform float uRawValueToMeters;',
                     'uniform float cameraNear;', 'uniform float cameraFar;',
-                    'uniform bool uFloatDepth;', 'varying vec2 vTexCoord;',
+                    'uniform bool uFloatDepth;', 'uniform bool uIsTextureArray;',
+                    'uniform int uViewId;', 'varying vec2 vTexCoord;',
                     'varying float vVirtualDepth;'
                 ].join('\n'))
                     .replace('#include <clipping_planes_pars_fragment>', [
@@ -2629,13 +2728,16 @@ class OcclusionMapMeshMaterial extends THREE.MeshBasicMaterial {
     }
     return dot(packedDepthAndVisibility, vec2(255.0, 256.0 * 255.0)) * uRawValueToMeters;
   }
+  float DepthArrayGetMeters(in sampler2DArray depth_texture, in vec2 depth_uv) {
+    return uRawValueToMeters * texture(uDepthTextureArray, vec3 (depth_uv.x, depth_uv.y, uViewId)).r;
+  }
 `
                 ].join('\n'))
                     .replace('#include <dithering_fragment>', [
                     '#include <dithering_fragment>',
                     'vec4 texCoord = vec4(vTexCoord, 0, 1);',
-                    'vec2 uv = vec2(texCoord.x, 1.0 - texCoord.y);',
-                    'highp float real_depth = DepthGetMeters(uDepthTexture, uv);',
+                    'vec2 uv = vec2(texCoord.x, uIsTextureArray?texCoord.y:(1.0 - texCoord.y));',
+                    'highp float real_depth = uIsTextureArray ? DepthArrayGetMeters(uDepthTextureArray, uv) : DepthGetMeters(uDepthTexture, uv);',
                     'gl_FragColor = vec4(step(vVirtualDepth, real_depth), 1.0, 0.0, 1.0);'
                 ].join('\n'));
         };
@@ -2671,6 +2773,9 @@ class OcclusionPass extends Pass {
             new OcclusionMapMeshMaterial(camera, useFloatDepth);
         this.occlusionMapUniforms = {
             uDepthTexture: { value: null },
+            uDepthTextureArray: { value: null },
+            uViewId: { value: 0.0 },
+            uIsTextureArray: { value: 0.0 },
             uUvTransform: { value: new THREE.Matrix4() },
             uRawValueToMeters: { value: 8.0 / 65536.0 },
             uAlpha: { value: 0.75 },
@@ -2761,8 +2866,14 @@ class OcclusionPass extends Pass {
     }
     renderOcclusionMapFromScene(renderer, dimensions, view_id) {
         // Compute our own read buffer.
-        this.occlusionMeshMaterial.uniforms.uDepthTexture.value =
-            this.depthTextures[view_id];
+        const texture = this.depthTextures[view_id];
+        const isTextureArray = texture instanceof THREE.ExternalTexture;
+        this.occlusionMeshMaterial.uniforms.uIsTextureArray.value = isTextureArray ? 1.0 : 0;
+        this.occlusionMeshMaterial.uniforms.uViewId.value = view_id;
+        if (isTextureArray)
+            this.occlusionMeshMaterial.uniforms.uDepthTextureArray.value = texture;
+        else
+            this.occlusionMeshMaterial.uniforms.uDepthTexture.value = texture;
         this.scene.overrideMaterial = this.occlusionMeshMaterial;
         renderer.getDrawingBufferSize(dimensions);
         this.occlusionMapTexture.setSize(dimensions.x, dimensions.y);
@@ -2784,7 +2895,14 @@ class OcclusionPass extends Pass {
         // Render depth into texture
         this.occlusionMapUniforms.tDiffuse.value = readBuffer.texture;
         this.occlusionMapUniforms.tDepth.value = readBuffer.depthTexture;
-        this.occlusionMapUniforms.uDepthTexture.value = this.depthTextures[view_id];
+        const texture = this.depthTextures[view_id];
+        const isTextureArray = texture instanceof THREE.ExternalTexture;
+        this.occlusionMeshMaterial.uniforms.uIsTextureArray.value = isTextureArray ? 1.0 : 0;
+        this.occlusionMeshMaterial.uniforms.uViewId.value = view_id;
+        if (isTextureArray)
+            this.occlusionMeshMaterial.uniforms.uDepthTextureArray.value = texture;
+        else
+            this.occlusionMeshMaterial.uniforms.uDepthTexture.value = texture;
         // First render the occlusion map to an intermediate buffer.
         renderer.getDrawingBufferSize(dimensions);
         this.occlusionMapTexture.setSize(dimensions.x, dimensions.y);
@@ -2847,7 +2965,8 @@ class Depth {
     constructor() {
         this.projectionMatrixInverse = new THREE.Matrix4();
         this.view = [];
-        this.depthData = [];
+        this.cpuDepthData = [];
+        this.gpuDepthData = [];
         this.depthArray = [];
         this.options = new DepthOptions();
         this.width = DEFAULT_DEPTH_WIDTH;
@@ -2939,8 +3058,8 @@ class Depth {
         vertexPosition.multiplyScalar(-depth / vertexPosition.z);
         return vertexPosition;
     }
-    updateDepthData(depthData, view_id = 0) {
-        this.depthData[view_id] = depthData;
+    updateCPUDepthData(depthData, view_id = 0) {
+        this.cpuDepthData[view_id] = depthData;
         // Workaround for b/382679381.
         this.rawValueToMeters = depthData.rawValueToMeters;
         if (this.options.useFloat32) {
@@ -2961,10 +3080,25 @@ class Depth {
         }
         // Updates Depth Texture.
         if (this.options.depthTexture.enabled && this.depthTextures) {
-            this.depthTextures.update(depthData, view_id);
+            this.depthTextures.updateData(depthData, view_id);
         }
         if (this.options.depthMesh.enabled && this.depthMesh && view_id == 0) {
             this.depthMesh.updateDepth(depthData);
+        }
+    }
+    updateGPUDepthData(depthData, view_id = 0) {
+        this.gpuDepthData[view_id] = depthData;
+        // Workaround for b/382679381.
+        this.rawValueToMeters = depthData.rawValueToMeters;
+        if (this.options.useFloat32) {
+            this.rawValueToMeters = 1.0;
+        }
+        // Updates Depth Texture.
+        if (this.options.depthTexture.enabled && this.depthTextures) {
+            this.depthTextures.updateNativeTexture(depthData, this.renderer, view_id);
+        }
+        if (this.options.depthMesh.enabled && this.depthMesh && view_id == 0) {
+            this.depthMesh.updateGPUDepth(depthData);
         }
     }
     getTexture(view_id) {
@@ -2992,6 +3126,7 @@ class Depth {
         if (!frame)
             return;
         const session = frame.session;
+        const binding = this.renderer.xr.getBinding();
         // Enable or disable depth based on the number of clients.
         const pausingDepthSupported = session.depthActive !== undefined;
         if (pausingDepthSupported && this.depthClientsInitialized) {
@@ -3020,11 +3155,20 @@ class Depth {
                 for (let view_id = 0; view_id < pose.views.length; ++view_id) {
                     const view = pose.views[view_id];
                     this.view[view_id] = view;
-                    const depthData = frame.getDepthInformation(view);
-                    if (!depthData) {
-                        return;
+                    if (session.depthUsage === 'gpu-optimized') {
+                        const depthData = binding.getDepthInformation(view);
+                        if (!depthData) {
+                            return;
+                        }
+                        this.updateGPUDepthData(depthData, view_id);
                     }
-                    this.updateDepthData(depthData, view_id);
+                    else {
+                        const depthData = frame.getDepthInformation(view);
+                        if (!depthData) {
+                            return;
+                        }
+                        this.updateCPUDepthData(depthData, view_id);
+                    }
                 }
             }
             else {
@@ -3050,7 +3194,7 @@ class Depth {
         }
     }
     debugLog() {
-        const arrayBuffer = this.depthData[0].data;
+        const arrayBuffer = this.cpuDepthData[0].data;
         const uint8Array = new Uint8Array(arrayBuffer);
         // Convert Uint8Array to a string where each character represents a byte
         const binaryString = Array.from(uint8Array, byte => String.fromCharCode(byte)).join('');
@@ -6684,7 +6828,7 @@ class SimulatorDepth {
             data: this.depthBuffer.buffer,
             rawValueToMeters: 1.0,
         };
-        this.depth.updateDepthData(depthData, 0);
+        this.depth.updateCPUDepthData(depthData, 0);
     }
 }
 
@@ -13616,6 +13760,8 @@ class Core {
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.xr.enabled = true;
+        // disable built-in occlusion
+        this.renderer.xr.getDepthSensingMesh = function () { return null; };
         this.registry.register(this.renderer);
         this.renderer.xr.setReferenceSpaceType(options.referenceSpaceType);
         if (!options.canvas) {
@@ -13639,7 +13785,6 @@ class Core {
         // Sets up device camera.
         if (options.deviceCamera?.enabled) {
             this.deviceCamera = new XRDeviceCamera(options.deviceCamera);
-            await this.deviceCamera.init();
             this.registry.register(this.deviceCamera);
         }
         const webXRRequiredFeatures = options.webxrRequiredFeatures;
@@ -13649,7 +13794,7 @@ class Core {
             webXRRequiredFeatures.push('depth-sensing');
             webXRRequiredFeatures.push('local-floor');
             this.webXRSettings.depthSensing = {
-                usagePreference: ['cpu-optimized'],
+                usagePreference: [],
                 dataFormatPreference: [this.options.depth.useFloat32 ? 'float32' : 'luminance-alpha'],
             };
             this.depth.init(this.camera, options.depth, this.renderer, this.registry, this.scene);
@@ -13788,7 +13933,10 @@ class Core {
      * scripts.
      * @param session - The newly started WebXR session.
      */
-    onXRSessionStarted(session) {
+    async onXRSessionStarted(session) {
+        if (this.options.deviceCamera?.enabled) {
+            await this.deviceCamera.init();
+        }
         this.scriptsManager.onXRSessionStarted(session);
     }
     async startSimulator() {

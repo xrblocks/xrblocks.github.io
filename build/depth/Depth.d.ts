@@ -12,7 +12,8 @@ export declare class Depth {
     private projectionMatrixInverse;
     private xrRefSpace?;
     view: XRView[];
-    depthData: XRCPUDepthInformation[];
+    cpuDepthData: XRCPUDepthInformation[];
+    gpuDepthData: XRWebGLDepthInformation[];
     depthArray: DepthArray[];
     depthMesh?: DepthMesh;
     private depthTextures?;
@@ -53,8 +54,9 @@ export declare class Depth {
      * @returns Vertex at (u, v)
      */
     getVertex(u: number, v: number): THREE.Vector3 | null;
-    updateDepthData(depthData: XRCPUDepthInformation, view_id?: number): void;
-    getTexture(view_id: number): THREE.DataTexture | undefined;
+    updateCPUDepthData(depthData: XRCPUDepthInformation, view_id?: number): void;
+    updateGPUDepthData(depthData: XRWebGLDepthInformation, view_id?: number): void;
+    getTexture(view_id: number): THREE.DataTexture | THREE.ExternalTexture | undefined;
     update(frame: XRFrame): void;
     updateLocalDepth(frame: XRFrame): void;
     renderOcclusionPass(): void;

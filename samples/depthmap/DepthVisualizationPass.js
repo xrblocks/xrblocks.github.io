@@ -13,9 +13,12 @@ export class DepthVisualizationPass extends xb.XRPass {
     this.depthTextures = [null, null];
     this.uniforms = {
       uDepthTexture: {value: null},
+      uDepthTextureArray: {value: null},
       uRawValueToMeters: {value: 8.0 / 65536.0},
       uAlpha: {value: 1.0},
       tDiffuse: {value: null},
+      uView: {value: 0},
+      uIsTextureArray: {value: 0}
     };
     this.depthMapQuad = new FullScreenQuad(new THREE.ShaderMaterial({
       name: 'DepthMapShader',
@@ -33,12 +36,24 @@ export class DepthVisualizationPass extends xb.XRPass {
     this.depthTextures[0] = xrDepth.getTexture(0);
     this.depthTextures[1] = xrDepth.getTexture(1);
     this.uniforms.uRawValueToMeters.value = xrDepth.rawValueToMeters;
+    if (this.depthTextures[0]) {
+      this.uniforms.uIsTextureArray.value = this.depthTextures[0].isExternalTexture ? 1.0 : 0;
+    }
   }
 
   render(renderer, writeBuffer, readBuffer, deltaTime, maskActive, viewId) {
     // Fuse the rendered image and the occlusion map.
-    this.uniforms.uDepthTexture.value = this.depthTextures[viewId];
+    const texture = this.depthTextures[viewId];
+
+    if (!texture)
+      return;
+
+    if (texture.isExternalTexture) 
+      this.uniforms.uDepthTextureArray.value = texture;
+    else
+      this.uniforms.uDepthTexture.value = texture;
     this.uniforms.tDiffuse.value = readBuffer.texture;
+    this.uniforms.uView.value = viewId;
     renderer.setRenderTarget(this.renderToScreen ? null : writeBuffer);
     this.depthMapQuad.render(renderer);
   }

@@ -19,7 +19,7 @@
 <link rel="icon" href="/docs/img/web-app-manifest-512x512.png" sizes="512x512" type="image/png">
 <link rel="manifest" href="/docs/img/site.webmanifest">
 <meta name="algolia-site-verification" content="C7A25C1609F793C8"><link rel="stylesheet" href="/docs/assets/css/styles.727fbdee.css">
-<script src="/docs/assets/js/runtime~main.f4105425.js" defer="defer"></script>
+<script src="/docs/assets/js/runtime~main.e01955b9.js" defer="defer"></script>
 <script src="/docs/assets/js/main.0e2d7136.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -33,7 +33,7 @@
 <blockquote>
 <p><strong>new DepthTextures</strong>(<code>options</code>): <code>DepthTextures</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/DepthTextures.ts#L11" target="_blank" rel="noopener noreferrer">src/depth/DepthTextures.ts:11</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/DepthTextures.ts#L12" target="_blank" rel="noopener noreferrer">src/depth/DepthTextures.ts:12</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters">Parameters<a href="#parameters" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="options">options<a href="#options" class="hash-link" aria-label="Direct link to options" title="Direct link to options" translate="no">​</a></h5>
 <p><a href="/docs/api/classes/DepthOptions/"><code>DepthOptions</code></a></p>
@@ -44,30 +44,45 @@
 <blockquote>
 <p><strong>depthData</strong>: <a href="https://developer.mozilla.org/docs/Web/API/XRCPUDepthInformation" target="_blank" rel="noopener noreferrer"><code>XRCPUDepthInformation</code></a>[] = <code>[]</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/DepthTextures.ts#L9" target="_blank" rel="noopener noreferrer">src/depth/DepthTextures.ts:9</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/DepthTextures.ts#L10" target="_blank" rel="noopener noreferrer">src/depth/DepthTextures.ts:10</a></p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="methods">Methods<a href="#methods" class="hash-link" aria-label="Direct link to Methods" title="Direct link to Methods" translate="no">​</a></h2>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="get">get()<a href="#get" class="hash-link" aria-label="Direct link to get()" title="Direct link to get()" translate="no">​</a></h3>
 <blockquote>
-<p><strong>get</strong>(<code>view_id</code>): <a href="https://threejs.org/docs/#api/en/textures/DataTexture" target="_blank" rel="noopener noreferrer"><code>DataTexture</code></a></p>
+<p><strong>get</strong>(<code>view_id</code>): <a href="https://threejs.org/docs/#api/en/textures/DataTexture" target="_blank" rel="noopener noreferrer"><code>DataTexture</code></a> | <code>ExternalTexture</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/DepthTextures.ts#L55" target="_blank" rel="noopener noreferrer">src/depth/DepthTextures.ts:55</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/DepthTextures.ts#L68" target="_blank" rel="noopener noreferrer">src/depth/DepthTextures.ts:68</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-1">Parameters<a href="#parameters-1" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="view_id">view_id<a href="#view_id" class="hash-link" aria-label="Direct link to view_id" title="Direct link to view_id" translate="no">​</a></h5>
 <p><code>number</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-1">Returns<a href="#returns-1" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
-<p><a href="https://threejs.org/docs/#api/en/textures/DataTexture" target="_blank" rel="noopener noreferrer"><code>DataTexture</code></a></p>
+<p><a href="https://threejs.org/docs/#api/en/textures/DataTexture" target="_blank" rel="noopener noreferrer"><code>DataTexture</code></a> | <code>ExternalTexture</code></p>
 <hr>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="update">update()<a href="#update" class="hash-link" aria-label="Direct link to update()" title="Direct link to update()" translate="no">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="updatedata">updateData()<a href="#updatedata" class="hash-link" aria-label="Direct link to updateData()" title="Direct link to updateData()" translate="no">​</a></h3>
 <blockquote>
-<p><strong>update</strong>(<code>depthData</code>, <code>view_id</code>): <code>void</code></p>
+<p><strong>updateData</strong>(<code>depthData</code>, <code>view_id</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/DepthTextures.ts#L35" target="_blank" rel="noopener noreferrer">src/depth/DepthTextures.ts:35</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/DepthTextures.ts#L36" target="_blank" rel="noopener noreferrer">src/depth/DepthTextures.ts:36</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-2">Parameters<a href="#parameters-2" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="depthdata">depthData<a href="#depthdata" class="hash-link" aria-label="Direct link to depthData" title="Direct link to depthData" translate="no">​</a></h5>
 <p><a href="https://developer.mozilla.org/docs/Web/API/XRCPUDepthInformation" target="_blank" rel="noopener noreferrer"><code>XRCPUDepthInformation</code></a></p>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="view_id-1">view_id<a href="#view_id-1" class="hash-link" aria-label="Direct link to view_id" title="Direct link to view_id" translate="no">​</a></h5>
 <p><code>number</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-2">Returns<a href="#returns-2" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
-<p><code>void</code></p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/api/classes/DepthOptions/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">DepthOptions</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/api/classes/DetectedObject/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">DetectedObject</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#constructors" class="table-of-contents__link toc-highlight">Constructors</a><ul><li><a href="#constructor" class="table-of-contents__link toc-highlight">Constructor</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#depthdata" class="table-of-contents__link toc-highlight">depthData</a></li></ul></li><li><a href="#methods" class="table-of-contents__link toc-highlight">Methods</a><ul><li><a href="#get" class="table-of-contents__link toc-highlight">get()</a></li><li><a href="#update" class="table-of-contents__link toc-highlight">update()</a></li></ul></li></ul></div></div></div></div></main></div></div></div></div>
+<p><code>void</code></p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="updatenativetexture">updateNativeTexture()<a href="#updatenativetexture" class="hash-link" aria-label="Direct link to updateNativeTexture()" title="Direct link to updateNativeTexture()" translate="no">​</a></h3>
+<blockquote>
+<p><strong>updateNativeTexture</strong>(<code>depthData</code>, <code>renderer</code>, <code>view_id</code>): <code>void</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/DepthTextures.ts#L56" target="_blank" rel="noopener noreferrer">src/depth/DepthTextures.ts:56</a></p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-3">Parameters<a href="#parameters-3" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
+<h5 class="anchor anchorWithStickyNavbar_LWe7" id="depthdata-1">depthData<a href="#depthdata-1" class="hash-link" aria-label="Direct link to depthData" title="Direct link to depthData" translate="no">​</a></h5>
+<p><a href="https://developer.mozilla.org/docs/Web/API/XRWebGLDepthInformation" target="_blank" rel="noopener noreferrer"><code>XRWebGLDepthInformation</code></a></p>
+<h5 class="anchor anchorWithStickyNavbar_LWe7" id="renderer">renderer<a href="#renderer" class="hash-link" aria-label="Direct link to renderer" title="Direct link to renderer" translate="no">​</a></h5>
+<p><a href="https://threejs.org/docs/#api/en/renderers/WebGLRenderer" target="_blank" rel="noopener noreferrer"><code>WebGLRenderer</code></a></p>
+<h5 class="anchor anchorWithStickyNavbar_LWe7" id="view_id-2">view_id<a href="#view_id-2" class="hash-link" aria-label="Direct link to view_id" title="Direct link to view_id" translate="no">​</a></h5>
+<p><code>number</code></p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-3">Returns<a href="#returns-3" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<p><code>void</code></p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/api/classes/DepthOptions/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">DepthOptions</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/api/classes/DetectedObject/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">DetectedObject</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#constructors" class="table-of-contents__link toc-highlight">Constructors</a><ul><li><a href="#constructor" class="table-of-contents__link toc-highlight">Constructor</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#depthdata" class="table-of-contents__link toc-highlight">depthData</a></li></ul></li><li><a href="#methods" class="table-of-contents__link toc-highlight">Methods</a><ul><li><a href="#get" class="table-of-contents__link toc-highlight">get()</a></li><li><a href="#updatedata" class="table-of-contents__link toc-highlight">updateData()</a></li><li><a href="#updatenativetexture" class="table-of-contents__link toc-highlight">updateNativeTexture()</a></li></ul></li></ul></div></div></div></div></main></div></div></div></div>
 </body>
 </html>
