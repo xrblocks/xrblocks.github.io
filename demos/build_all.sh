@@ -12,6 +12,6 @@ for folder in "${SUBFOLDERS[@]}"; do
     (
         cd "$folder" &&
             pnpm install --frozen-lockfile &&
-            pnpm build
+            pnpm run build
     )
 done
