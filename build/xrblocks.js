@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.1.0
- * @commitid 268adef
- * @builddate 2025-10-15T23:15:55.635Z
+ * @commitid e9074ca
+ * @builddate 2025-10-16T17:23:35.779Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -8945,7 +8945,6 @@ class AudioPlayer extends Script {
         super();
         this.options = {};
         this.audioQueue = [];
-        this.isPlaying = false;
         this.nextStartTime = 0;
         this.volume = 1.0;
         this.category = 'speech';
@@ -8955,7 +8954,8 @@ class AudioPlayer extends Script {
         }
     }
     /**
-     * Sets the CategoryVolumes instance for this player to respect master/category volumes
+     * Sets the CategoryVolumes instance for this player to respect
+     * master/category volumes
      */
     setCategoryVolumes(categoryVolumes) {
         this.categoryVolumes = categoryVolumes;
@@ -9008,35 +9008,31 @@ class AudioPlayer extends Script {
             channelData[i] = int16View[i] / 32768.0;
         }
         this.audioQueue.push(audioBuffer);
-        if (!this.isPlaying)
-            this.playNextAudioBuffer();
+        this.scheduleAudioBuffers();
     }
-    playNextAudioBuffer() {
-        if (this.audioQueue.length === 0) {
-            this.isPlaying = false;
-            return;
+    scheduleAudioBuffers() {
+        const SCHEDULE_AHEAD_TIME = 0.2;
+        while (this.audioQueue.length > 0 &&
+            this.nextStartTime <=
+                this.audioContext.currentTime + SCHEDULE_AHEAD_TIME) {
+            const audioBuffer = this.audioQueue.shift();
+            const currentTime = this.audioContext.currentTime;
+            const startTime = Math.max(this.nextStartTime, currentTime);
+            const source = this.audioContext.createBufferSource();
+            source.buffer = audioBuffer;
+            // Connect through gain node for volume control
+            source.connect(this.gainNode || this.audioContext.destination);
+            source.onended = () => this.scheduleAudioBuffers();
+            // Start playback
+            source.start(startTime);
+            this.nextStartTime = startTime + audioBuffer.duration;
         }
-        this.isPlaying = true;
-        const audioBuffer = this.audioQueue.shift();
-        const currentTime = this.audioContext.currentTime;
-        const startTime = Math.max(this.nextStartTime, currentTime);
-        const source = this.audioContext.createBufferSource();
-        source.buffer = audioBuffer;
-        // Connect through gain node for volume control
-        source.connect(this.gainNode || this.audioContext.destination);
-        source.onended = () => this.playNextAudioBuffer();
-        // Start playback
-        source.start(startTime);
-        // Calculate next start time with a tiny overlap to prevent gaps
-        // This helps create smooth transitions between audio chunks
-        this.nextStartTime = startTime + audioBuffer.duration - 0.001;
     }
     clearQueue() {
         this.audioQueue = [];
-        this.isPlaying = false;
     }
     getIsPlaying() {
-        return this.isPlaying;
+        return this.nextStartTime > this.audioContext.currentTime;
     }
     getQueueLength() {
         return this.audioQueue.length;

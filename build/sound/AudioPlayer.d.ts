@@ -9,7 +9,6 @@ export declare class AudioPlayer extends Script {
     private options;
     private audioContext?;
     private audioQueue;
-    private isPlaying;
     private nextStartTime;
     private gainNode?;
     private categoryVolumes?;
@@ -17,7 +16,8 @@ export declare class AudioPlayer extends Script {
     private category;
     constructor(options?: AudioPlayerOptions);
     /**
-     * Sets the CategoryVolumes instance for this player to respect master/category volumes
+     * Sets the CategoryVolumes instance for this player to respect
+     * master/category volumes
      */
     setCategoryVolumes(categoryVolumes: CategoryVolumes): void;
     /**
@@ -31,7 +31,7 @@ export declare class AudioPlayer extends Script {
     updateGainNodeVolume(): void;
     initializeAudioContext(): Promise<void>;
     playAudioChunk(base64AudioData: string): Promise<void>;
-    playNextAudioBuffer(): void;
+    private scheduleAudioBuffers;
     clearQueue(): void;
     getIsPlaying(): boolean;
     getQueueLength(): number;
