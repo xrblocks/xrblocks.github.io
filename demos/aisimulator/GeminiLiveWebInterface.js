@@ -51,9 +51,7 @@ export class GeminiLiveWebInterface {
   async initialize() {
     try {
       console.log('Initializing Web Audio Context...');
-      this.audioContext =
-          new (window.AudioContext || window.webkitAudioContext)(
-              {sampleRate: 16000});
+      this.audioContext = new AudioContext({sampleRate: 16000});
 
       if (this.audioContext.state === 'suspended') {
         await this.audioContext.resume();

@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.1.0
- * @commitid e9074ca
- * @builddate 2025-10-16T17:23:35.779Z
+ * @commitid c526380
+ * @builddate 2025-10-16T17:41:36.789Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -9055,7 +9055,7 @@ class AudioPlayer extends Script {
         }
     }
     static isSupported() {
-        return !!('AudioContext' in window || 'webkitAudioContext' in window);
+        return !!('AudioContext' in window);
     }
     dispose() {
         this.stop();
