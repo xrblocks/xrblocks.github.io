@@ -19,7 +19,7 @@ export declare class GeminiManager extends xb.Script<GeminiManagerEventMap> {
     processorNode: AudioWorkletNode | null;
     isAIRunning: boolean;
     audioQueue: AudioBuffer[];
-    isPlayingAudio: boolean;
+    nextAudioStartTime: number;
     private screenshotInterval?;
     currentInputText: string;
     currentOutputText: string;
@@ -38,7 +38,7 @@ export declare class GeminiManager extends xb.Script<GeminiManagerEventMap> {
     sendVideoFrame(base64Image: string): void;
     initializeAudioContext(): Promise<void>;
     playAudioChunk(audioData: string): Promise<void>;
-    playNextAudioBuffer(): void;
+    scheduleAudioBuffers(): void;
     cleanup(): void;
     handleAIMessage(message: GoogleGenAITypes.LiveServerMessage): void;
     arrayBufferToBase64(buffer: ArrayBuffer): string;

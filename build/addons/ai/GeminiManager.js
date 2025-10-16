@@ -12,7 +12,7 @@ class GeminiManager extends xb.Script {
         this.isAIRunning = false;
         // Audio playback setup
         this.audioQueue = [];
-        this.isPlayingAudio = false;
+        this.nextAudioStartTime = 0;
         // Transcription state
         this.currentInputText = '';
         this.currentOutputText = '';
@@ -180,28 +180,28 @@ class GeminiManager extends xb.Script {
                 channelData[i] = int16View[i] / 32768.0;
             }
             this.audioQueue.push(audioBuffer);
-            if (!this.isPlayingAudio) {
-                this.playNextAudioBuffer();
-            }
+            this.scheduleAudioBuffers();
         }
         catch (error) {
             console.error('Error playing audio chunk:', error);
         }
     }
-    playNextAudioBuffer() {
-        if (this.audioQueue.length === 0) {
-            this.isPlayingAudio = false;
-            return;
+    scheduleAudioBuffers() {
+        const SCHEDULE_AHEAD_TIME = 0.2;
+        while (this.audioQueue.length > 0 &&
+            this.nextAudioStartTime <=
+                this.audioContext.currentTime + SCHEDULE_AHEAD_TIME) {
+            const audioBuffer = this.audioQueue.shift();
+            const source = this.audioContext.createBufferSource();
+            source.buffer = audioBuffer;
+            source.connect(this.audioContext.destination);
+            source.onended = () => {
+                this.scheduleAudioBuffers();
+            };
+            const startTime = Math.max(this.nextAudioStartTime, this.audioContext.currentTime);
+            source.start(startTime);
+            this.nextAudioStartTime = startTime + audioBuffer.duration;
         }
-        this.isPlayingAudio = true;
-        const audioBuffer = this.audioQueue.shift();
-        const source = this.audioContext.createBufferSource();
-        source.buffer = audioBuffer;
-        source.connect(this.audioContext.destination);
-        source.onended = () => {
-            this.playNextAudioBuffer();
-        };
-        source.start();
     }
     cleanup() {
         if (this.screenshotInterval) {
@@ -210,7 +210,6 @@ class GeminiManager extends xb.Script {
         }
         // Clear audio queue and stop playback
         this.audioQueue = [];
-        this.isPlayingAudio = false;
         if (this.processorNode) {
             this.processorNode.disconnect();
             this.processorNode = null;
