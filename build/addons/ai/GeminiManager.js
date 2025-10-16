@@ -16,19 +16,25 @@ class GeminiManager extends xb.Script {
         // Transcription state
         this.currentInputText = '';
         this.currentOutputText = '';
+        this.tools = [];
     }
     init() {
         this.xrDeviceCamera = xb.core.deviceCamera;
         this.ai = xb.core.ai;
     }
-    async startGeminiLive() {
+    async startGeminiLive({ liveParams } = {}) {
         if (this.isAIRunning || !this.ai) {
             console.warn('AI already running or not available');
             return;
         }
+        liveParams = liveParams || {};
+        liveParams.tools = liveParams.tools || [];
+        for (const tool of this.tools) {
+            liveParams.tools.push(tool.toJSON());
+        }
         try {
             await this.setupAudioCapture();
-            await this.startLiveAI();
+            await this.startLiveAI(liveParams);
             this.startScreenshotCapture();
             this.isAIRunning = true;
         }
@@ -82,7 +88,7 @@ class GeminiManager extends xb.Script {
         this.sourceNode.connect(this.processorNode);
         this.processorNode.connect(this.audioContext.destination);
     }
-    async startLiveAI() {
+    async startLiveAI(params) {
         return new Promise((resolve, reject) => {
             this.ai.setLiveCallbacks({
                 onopen: () => {
@@ -99,7 +105,7 @@ class GeminiManager extends xb.Script {
                     this.isAIRunning = false;
                 }
             });
-            this.ai.startLiveSession().catch(reject);
+            this.ai.startLiveSession(params).catch(reject);
         });
     }
     startScreenshotCapture(intervalMs = 1000) {
@@ -225,6 +231,22 @@ class GeminiManager extends xb.Script {
     handleAIMessage(message) {
         if (message.data) {
             this.playAudioChunk(message.data);
+        }
+        for (const functionCall of message.toolCall?.functionCalls ?? []) {
+            const tool = this.tools.find(tool => tool.name == functionCall.name);
+            if (tool) {
+                const exec = tool.execute(functionCall.args);
+                exec.then(result => {
+                    this.ai.sendToolResponse({
+                        functionResponses: {
+                            id: functionCall.id,
+                            name: functionCall.name,
+                            response: { 'output': result }
+                        }
+                    });
+                })
+                    .catch((error) => console.error('Tool error:', error));
+            }
         }
         if (message.serverContent) {
             if (message.serverContent.inputTranscription) {

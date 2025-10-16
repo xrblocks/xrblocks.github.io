@@ -2,7 +2,7 @@ import type * as GoogleGenAITypes from '@google/genai';
 import { Script } from '../core/Script';
 import { AIOptions, GeminiOptions, OpenAIOptions } from './AIOptions';
 import { GeminiResponse } from './AITypes';
-import { Gemini } from './Gemini';
+import { Gemini, GeminiStartLiveSessionParams } from './Gemini';
 import { OpenAI } from './OpenAI';
 export type ModelClass = Gemini | OpenAI;
 export type ModelOptions = GeminiOptions | OpenAIOptions;
@@ -60,7 +60,7 @@ export declare class AI extends Script {
     query(input: {
         prompt: string;
     }, tools?: never[]): Promise<GeminiResponse | string | null>;
-    startLiveSession(config?: {}): Promise<GoogleGenAITypes.Session>;
+    startLiveSession(config?: GeminiStartLiveSessionParams): Promise<GoogleGenAITypes.Session>;
     stopLiveSession(): Promise<void>;
     setLiveCallbacks(callbacks: GoogleGenAITypes.LiveCallbacks): Promise<void>;
     sendToolResponse(response: GoogleGenAITypes.LiveSendToolResponseParameters): void;

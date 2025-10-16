@@ -23,12 +23,15 @@ export declare class GeminiManager extends xb.Script<GeminiManagerEventMap> {
     private screenshotInterval?;
     currentInputText: string;
     currentOutputText: string;
+    tools: xb.Tool[];
     constructor();
     init(): void;
-    startGeminiLive(): Promise<void>;
+    startGeminiLive({ liveParams }?: {
+        liveParams?: xb.GeminiStartLiveSessionParams;
+    }): Promise<void>;
     stopGeminiLive(): Promise<void>;
     setupAudioCapture(): Promise<void>;
-    startLiveAI(): Promise<void>;
+    startLiveAI(params: xb.GeminiStartLiveSessionParams): Promise<void>;
     startScreenshotCapture(intervalMs?: number): void;
     captureAndSendScreenshot(): void;
     sendAudioData(audioBuffer: ArrayBuffer): void;

@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.1.0
- * @commitid c526380
- * @builddate 2025-10-16T17:41:36.789Z
+ * @commitid dfb19f5
+ * @builddate 2025-10-16T21:20:18.096Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -368,7 +368,7 @@ class SkyboxAgent extends Agent {
      * Starts a live AI session for real-time conversation.
      *
      * @param callbacks - Optional callbacks for session events. Can also be set using ai.setLiveCallbacks()
-     * @throws {Error} If AI model is not initialized or live session is not available
+     * @throws If AI model is not initialized or live session is not available
      *
      * @remarks
      * Audio must be enabled separately using `xb.core.sound.enableAudio()` before starting the session.
@@ -1278,7 +1278,7 @@ class Gemini extends BaseAIModel {
     }
     sendToolResponse(response) {
         if (this.liveSession) {
-            console.log('Sending tool response from gemini:', response);
+            console.debug('Sending tool response to gemini:', response);
             this.liveSession.sendToolResponse(response);
         }
     }
@@ -2070,15 +2070,20 @@ class DepthMesh extends MeshScript {
         const depthTextureLeft = this.depthTextures?.get(0);
         if (depthTextureLeft && this.depthTextureMaterialUniforms) {
             const isTextureArray = depthTextureLeft instanceof THREE.ExternalTexture;
-            this.depthTextureMaterialUniforms.uIsTextureArray.value = isTextureArray ? 1.0 : 0;
+            this.depthTextureMaterialUniforms.uIsTextureArray.value =
+                isTextureArray ? 1.0 : 0;
             if (isTextureArray)
-                this.depthTextureMaterialUniforms.uDepthTextureArray.value = depthTextureLeft;
+                this.depthTextureMaterialUniforms.uDepthTextureArray.value =
+                    depthTextureLeft;
             else
-                this.depthTextureMaterialUniforms.uDepthTexture.value = depthTextureLeft;
+                this.depthTextureMaterialUniforms.uDepthTexture.value =
+                    depthTextureLeft;
             this.depthTextureMaterialUniforms.uMinDepth.value = this.minDepth;
             this.depthTextureMaterialUniforms.uMaxDepth.value = this.maxDepth;
             this.depthTextureMaterialUniforms.uRawValueToMeters.value =
-                this.depthTextures.depthData.length ? this.depthTextures.depthData[0].rawValueToMeters : 1.0;
+                this.depthTextures.depthData.length ?
+                    this.depthTextures.depthData[0].rawValueToMeters :
+                    1.0;
             this.material.needsUpdate = true;
         }
         if (this.options.updateVertexNormals) {
@@ -2091,14 +2096,15 @@ class DepthMesh extends MeshScript {
     }
     convertGPUToGPU(depthData) {
         if (!this.depthTarget) {
-            this.depthTarget = new THREE.WebGLRenderTarget(depthData.width, depthData.height, {
-                format: THREE.RedFormat,
-                type: THREE.FloatType,
-                internalFormat: 'R32F',
-                minFilter: THREE.NearestFilter,
-                magFilter: THREE.NearestFilter,
-                depthBuffer: false
-            });
+            this.depthTarget =
+                new THREE.WebGLRenderTarget(depthData.width, depthData.height, {
+                    format: THREE.RedFormat,
+                    type: THREE.FloatType,
+                    internalFormat: 'R32F',
+                    minFilter: THREE.NearestFilter,
+                    magFilter: THREE.NearestFilter,
+                    depthBuffer: false
+                });
             this.depthTexture = new THREE.ExternalTexture(depthData.texture);
             const textureProperties = this.renderer.properties.get(this.depthTexture);
             textureProperties.__webglTexture = depthData.texture;
@@ -2149,7 +2155,12 @@ class DepthMesh extends MeshScript {
         this.renderer.readRenderTargetPixels(this.depthTarget, 0, 0, depthData.width, depthData.height, this.gpuPixels, 0);
         this.renderer.xr.enabled = true;
         this.renderer.setRenderTarget(originalRenderTarget);
-        return { width: depthData.width, height: depthData.height, data: this.gpuPixels, rawValueToMeters: depthData.rawValueToMeters };
+        return {
+            width: depthData.width,
+            height: depthData.height,
+            data: this.gpuPixels,
+            rawValueToMeters: depthData.rawValueToMeters
+        };
     }
     /**
      * Method to manually update the full resolution geometry.
