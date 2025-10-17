@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.1.0
- * @commitid 870dea3
- * @builddate 2025-10-16T21:48:21.614Z
+ * @commitid 1ab107c
+ * @builddate 2025-10-17T04:07:16.500Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -2130,7 +2130,6 @@ class DepthMesh extends MeshScript {
                   float z = texture(uTexture, vec3(vUv, 0)).r;
                   z = uCameraNear / (1.0 - z);
                   z = clamp(z, 0.0, 20.0);
-                  
                   gl_FragColor = vec4(z, 0, 0, 1.0);
                 }
             `,
@@ -2158,7 +2157,7 @@ class DepthMesh extends MeshScript {
         return {
             width: depthData.width,
             height: depthData.height,
-            data: this.gpuPixels,
+            data: this.gpuPixels.buffer,
             rawValueToMeters: depthData.rawValueToMeters
         };
     }
@@ -3104,12 +3103,37 @@ class Depth {
         if (this.options.useFloat32) {
             this.rawValueToMeters = 1.0;
         }
+        // For now, assume that we need cpu depth only if depth mesh is enabled.
+        // In the future, add a separate option.
+        const needCpuDepth = this.options.depthMesh.enabled;
+        const cpuDepth = needCpuDepth && this.depthMesh ?
+            this.depthMesh.convertGPUToGPU(depthData) :
+            null;
+        if (cpuDepth) {
+            if (this.depthArray[view_id] == null) {
+                this.depthArray[view_id] = this.options.useFloat32 ?
+                    new Float32Array(cpuDepth.data) :
+                    new Uint16Array(cpuDepth.data);
+                this.width = cpuDepth.width;
+                this.height = cpuDepth.height;
+            }
+            else {
+                // Copies the data from an ArrayBuffer to the existing TypedArray.
+                this.depthArray[view_id].set(this.options.useFloat32 ? new Float32Array(cpuDepth.data) :
+                    new Uint16Array(cpuDepth.data));
+            }
+        }
         // Updates Depth Texture.
         if (this.options.depthTexture.enabled && this.depthTextures) {
             this.depthTextures.updateNativeTexture(depthData, this.renderer, view_id);
         }
         if (this.options.depthMesh.enabled && this.depthMesh && view_id == 0) {
-            this.depthMesh.updateGPUDepth(depthData);
+            if (cpuDepth) {
+                this.depthMesh.updateDepth(cpuDepth);
+            }
+            else {
+                this.depthMesh.updateGPUDepth(depthData);
+            }
         }
     }
     getTexture(view_id) {
