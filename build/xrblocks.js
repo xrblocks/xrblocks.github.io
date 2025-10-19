@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.1.0
- * @commitid 19bebf8
- * @builddate 2025-10-19T06:49:38.662Z
+ * @commitid 53687ea
+ * @builddate 2025-10-19T17:34:42.660Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -2084,7 +2084,6 @@ class DepthMesh extends MeshScript {
                 this.depthTextures.depthData.length ?
                     this.depthTextures.depthData[0].rawValueToMeters :
                     1.0;
-            this.material.needsUpdate = true;
         }
         if (this.options.updateVertexNormals) {
             this.geometry.computeVertexNormals();
@@ -10439,7 +10438,6 @@ class TextView extends View {
                     texture.offset.x = this.imageOffsetX;
                     const textObj = this.textObj;
                     textObj.material.map = texture;
-                    textObj.material.needsUpdate = true;
                     textObj.sync();
                 });
             }
@@ -10639,7 +10637,6 @@ class ImageView extends View {
             // If no source, ensure no texture is displayed.
             if (this.material.map) {
                 this.material.map = null;
-                this.material.needsUpdate = true;
             }
             this.texture?.dispose();
             this.texture = undefined;
@@ -10649,7 +10646,6 @@ class ImageView extends View {
         this.texture = this.textureLoader.load(this.src, (loadedTexture) => {
             loadedTexture.colorSpace = THREE.SRGBColorSpace;
             this.material.map = loadedTexture;
-            this.material.needsUpdate = true;
             // Updates layout after the image has loaded to get correct dimensions.
             this.updateLayout();
         });
@@ -11071,7 +11067,6 @@ class VideoView extends View {
         videoTextureInstance.colorSpace = THREE.SRGBColorSpace;
         this.texture = videoTextureInstance; // Update internal texture reference
         this.material.map = this.texture;
-        this.material.needsUpdate = true;
         const onLoadedMetadata = () => {
             if (this.video.videoWidth && this.video.videoHeight) {
                 this.videoAspectRatio =
@@ -11097,7 +11092,6 @@ class VideoView extends View {
     loadFromVideoTexture(videoTextureInstance) {
         this.texture = videoTextureInstance;
         this.material.map = this.texture;
-        this.material.needsUpdate = true;
         this.video = this.texture.image; // Underlying HTMLVideoElement
         if (this.video && this.video.videoWidth && this.video.videoHeight) {
             this.videoAspectRatio = this.video.videoWidth / this.video.videoHeight;
