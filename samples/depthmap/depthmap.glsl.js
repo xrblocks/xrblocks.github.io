@@ -22,6 +22,7 @@ export const DepthMapShader = {
   uniform float uAlpha;
   uniform float uIsTextureArray;
   uniform int uView;
+  uniform float uDepthNear;
 
   uniform sampler2D tDiffuse;
   uniform float cameraNear;
@@ -35,7 +36,8 @@ export const DepthMapShader = {
   }
 
   float DepthArrayGetMeters(in sampler2DArray depth_texture, in vec2 depth_uv) {
-    return uRawValueToMeters * texture(depth_texture, vec3 (depth_uv.x, depth_uv.y, uView)).r;
+    float textureValue = texture(depth_texture, vec3(depth_uv.x, depth_uv.y, uView)).r;
+    return uRawValueToMeters * uDepthNear / (1.0 - textureValue);
   }
 
   vec3 TurboColormap(in float x) {

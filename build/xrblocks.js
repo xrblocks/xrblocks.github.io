@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.1.0
- * @commitid 53687ea
- * @builddate 2025-10-19T17:34:42.660Z
+ * @commitid 005d21f
+ * @builddate 2025-10-20T22:04:39.869Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -2697,6 +2697,8 @@ class OcclusionMapMeshMaterial extends THREE.MeshBasicMaterial {
             cameraFar: { value: camera.far },
             cameraNear: { value: camera.near },
             uFloatDepth: { value: useFloatDepth },
+            // Used for interpreting Quest 3 depth.
+            uDepthNear: { value: 0 }
         };
         this.onBeforeCompile = (shader) => {
             Object.assign(shader.uniforms, this.uniforms);
@@ -2721,9 +2723,10 @@ class OcclusionMapMeshMaterial extends THREE.MeshBasicMaterial {
                     'uniform sampler2DArray uDepthTextureArray;',
                     'uniform float uRawValueToMeters;',
                     'uniform float cameraNear;', 'uniform float cameraFar;',
-                    'uniform bool uFloatDepth;', 'uniform bool uIsTextureArray;',
-                    'uniform int uViewId;', 'varying vec2 vTexCoord;',
-                    'varying float vVirtualDepth;'
+                    'uniform bool uFloatDepth;',
+                    'uniform bool uIsTextureArray;',
+                    'uniform float uDepthNear;', 'uniform int uViewId;',
+                    'varying vec2 vTexCoord;', 'varying float vVirtualDepth;'
                 ].join('\n'))
                     .replace('#include <clipping_planes_pars_fragment>', [
                     '#include <clipping_planes_pars_fragment>', `
@@ -2738,7 +2741,8 @@ class OcclusionMapMeshMaterial extends THREE.MeshBasicMaterial {
     return dot(packedDepthAndVisibility, vec2(255.0, 256.0 * 255.0)) * uRawValueToMeters;
   }
   float DepthArrayGetMeters(in sampler2DArray depth_texture, in vec2 depth_uv) {
-    return uRawValueToMeters * texture(uDepthTextureArray, vec3 (depth_uv.x, depth_uv.y, uViewId)).r;
+    float textureValue = texture(depth_texture, vec3(depth_uv.x, depth_uv.y, uViewId)).r;
+    return uRawValueToMeters * uDepthNear / (1.0 - textureValue);
   }
 `
                 ].join('\n'))
@@ -2778,6 +2782,7 @@ class OcclusionPass extends Pass {
         this.renderToScreen = renderToScreen;
         this.occludableItemsLayer = occludableItemsLayer;
         this.depthTextures = [];
+        this.depthNear = [];
         this.occlusionMeshMaterial =
             new OcclusionMapMeshMaterial(camera, useFloatDepth);
         this.occlusionMapUniforms = {
@@ -2841,14 +2846,12 @@ class OcclusionPass extends Pass {
         });
         return new FullScreenQuad(kawase1Material);
     }
-    setDepthTexture(depthTexture, rawValueToMeters, view_id) {
-        if (view_id > 1) {
-            return;
-        }
-        this.depthTextures[view_id] = depthTexture;
+    setDepthTexture(depthTexture, rawValueToMeters, viewId, depthNear) {
+        this.depthTextures[viewId] = depthTexture;
         this.occlusionMapUniforms.uRawValueToMeters.value = rawValueToMeters;
         this.occlusionMeshMaterial.uniforms.uRawValueToMeters.value =
             rawValueToMeters;
+        this.depthNear[viewId] = depthNear;
         depthTexture.needsUpdate = true;
     }
     /**
@@ -2856,16 +2859,16 @@ class OcclusionPass extends Pass {
      * @param renderer - The three.js renderer.
      * @param writeBuffer - The buffer to write the final result.
      * @param readBuffer - The buffer for the current of virtual depth.
-     * @param view_id - The view to render.
+     * @param viewId - The view to render.
      */
-    render(renderer, writeBuffer, readBuffer, view_id = 0) {
+    render(renderer, writeBuffer, readBuffer, viewId = 0) {
         const originalRenderTarget = renderer.getRenderTarget();
         const dimensions = new THREE.Vector2();
         if (readBuffer == null) {
-            this.renderOcclusionMapFromScene(renderer, dimensions, view_id);
+            this.renderOcclusionMapFromScene(renderer, dimensions, viewId);
         }
         else {
-            this.renderOcclusionMapFromReadBuffer(renderer, readBuffer, dimensions, view_id);
+            this.renderOcclusionMapFromReadBuffer(renderer, readBuffer, dimensions, viewId);
         }
         // Blur the occlusion map
         this.blurOcclusionMap(renderer, dimensions);
@@ -2873,22 +2876,27 @@ class OcclusionPass extends Pass {
         this.applyOcclusionMapToRenderedImage(renderer, readBuffer, writeBuffer);
         renderer.setRenderTarget(originalRenderTarget);
     }
-    renderOcclusionMapFromScene(renderer, dimensions, view_id) {
+    renderOcclusionMapFromScene(renderer, dimensions, viewId) {
         // Compute our own read buffer.
-        const texture = this.depthTextures[view_id];
+        const texture = this.depthTextures[viewId];
         const isTextureArray = texture instanceof THREE.ExternalTexture;
-        this.occlusionMeshMaterial.uniforms.uIsTextureArray.value = isTextureArray ? 1.0 : 0;
-        this.occlusionMeshMaterial.uniforms.uViewId.value = view_id;
-        if (isTextureArray)
+        this.occlusionMeshMaterial.uniforms.uIsTextureArray.value =
+            isTextureArray ? 1.0 : 0;
+        this.occlusionMeshMaterial.uniforms.uViewId.value = viewId;
+        if (isTextureArray) {
             this.occlusionMeshMaterial.uniforms.uDepthTextureArray.value = texture;
-        else
+            this.occlusionMeshMaterial.uniforms.uDepthNear.value =
+                this.depthNear[viewId];
+        }
+        else {
             this.occlusionMeshMaterial.uniforms.uDepthTexture.value = texture;
+        }
         this.scene.overrideMaterial = this.occlusionMeshMaterial;
         renderer.getDrawingBufferSize(dimensions);
         this.occlusionMapTexture.setSize(dimensions.x, dimensions.y);
         const renderTarget = this.occlusionMapTexture;
         renderer.setRenderTarget(renderTarget);
-        const camera = renderer.xr.getCamera().cameras[view_id] || this.camera;
+        const camera = renderer.xr.getCamera().cameras[viewId] || this.camera;
         const originalCameraLayers = Array.from(Array(32).keys())
             .filter(element => camera.layers.isEnabled(element));
         camera.layers.set(this.occludableItemsLayer);
@@ -2899,19 +2907,24 @@ class OcclusionPass extends Pass {
         });
         this.scene.overrideMaterial = null;
     }
-    renderOcclusionMapFromReadBuffer(renderer, readBuffer, dimensions, view_id) {
+    renderOcclusionMapFromReadBuffer(renderer, readBuffer, dimensions, viewId) {
         // Convert the readBuffer into an occlusion map.
         // Render depth into texture
         this.occlusionMapUniforms.tDiffuse.value = readBuffer.texture;
         this.occlusionMapUniforms.tDepth.value = readBuffer.depthTexture;
-        const texture = this.depthTextures[view_id];
+        const texture = this.depthTextures[viewId];
         const isTextureArray = texture instanceof THREE.ExternalTexture;
-        this.occlusionMeshMaterial.uniforms.uIsTextureArray.value = isTextureArray ? 1.0 : 0;
-        this.occlusionMeshMaterial.uniforms.uViewId.value = view_id;
-        if (isTextureArray)
+        this.occlusionMeshMaterial.uniforms.uIsTextureArray.value =
+            isTextureArray ? 1.0 : 0;
+        this.occlusionMeshMaterial.uniforms.uViewId.value = viewId;
+        if (isTextureArray) {
             this.occlusionMeshMaterial.uniforms.uDepthTextureArray.value = texture;
-        else
+            this.occlusionMeshMaterial.uniforms.uDepthNear.value =
+                this.depthNear[viewId];
+        }
+        else {
             this.occlusionMeshMaterial.uniforms.uDepthTexture.value = texture;
+        }
         // First render the occlusion map to an intermediate buffer.
         renderer.getDrawingBufferSize(dimensions);
         this.occlusionMapTexture.setSize(dimensions.x, dimensions.y);
@@ -3213,11 +3226,13 @@ class Depth {
     renderOcclusionPass() {
         const leftDepthTexture = this.getTexture(0);
         if (leftDepthTexture) {
-            this.occlusionPass.setDepthTexture(leftDepthTexture, this.rawValueToMeters, 0);
+            this.occlusionPass.setDepthTexture(leftDepthTexture, this.rawValueToMeters, 0, this.gpuDepthData[0]
+                ?.depthNear);
         }
         const rightDepthTexture = this.getTexture(1);
         if (rightDepthTexture) {
-            this.occlusionPass.setDepthTexture(rightDepthTexture, this.rawValueToMeters, 1);
+            this.occlusionPass.setDepthTexture(rightDepthTexture, this.rawValueToMeters, 1, this.gpuDepthData[1]
+                ?.depthNear);
         }
         const xrIsPresenting = this.renderer.xr.isPresenting;
         this.renderer.xr.isPresenting = false;
