@@ -2,6 +2,7 @@ import { AIOptions } from '../ai/AIOptions';
 import { DeviceCameraOptions } from '../camera/CameraOptions.js';
 import { DepthOptions } from '../depth/DepthOptions.js';
 import { HandsOptions } from '../input/HandsOptions.js';
+import { GestureRecognitionOptions } from '../input/gestures/GestureRecognitionOptions.js';
 import { LightingOptions } from '../lighting/LightingOptions.js';
 import { PhysicsOptions } from '../physics/PhysicsOptions';
 import { SimulatorOptions } from '../simulator/SimulatorOptions';
@@ -78,6 +79,7 @@ export declare class Options {
     lighting: LightingOptions;
     deviceCamera: DeviceCameraOptions;
     hands: HandsOptions;
+    gestures: GestureRecognitionOptions;
     reticles: ReticleOptions;
     sound: SoundOptions;
     ai: AIOptions;
@@ -150,6 +152,11 @@ export declare class Options {
      * @returns The instance for chaining.
      */
     enableHands(): this;
+    /**
+     * Enables the gesture recognition block and ensures hands are available.
+     * @returns The instance for chaining.
+     */
+    enableGestures(): this;
     /**
      * Enables the visualization of rays for hand tracking.
      * @returns The instance for chaining.

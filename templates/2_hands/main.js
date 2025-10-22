@@ -7,7 +7,7 @@ import {HandsInteraction} from './HandsInteraction.js'
 
 const options = new xb.Options();
 options.enableReticles();
-options.enableHands();
+options.enableGestures();
 
 options.hands.enabled = true;
 options.hands.visualization = true;

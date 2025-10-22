@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.2.0
- * @commitid c8d6262
- * @builddate 2025-10-22T19:28:08.151Z
+ * @commitid 1309962
+ * @builddate 2025-10-22T20:08:30.424Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -5621,6 +5621,1166 @@ class Input {
     }
 }
 
+/**
+ * Checks if a given object is a descendant of another object in the scene
+ * graph. This function is useful for determining if an interaction (like a
+ * raycast hit) has occurred on a component that is part of a larger, complex
+ * entity.
+ *
+ * It uses an iterative approach to traverse up the hierarchy from the child.
+ *
+ * @param child - The potential descendant object.
+ * @param parent - The potential ancestor object.
+ * @returns True if `child` is the same as `parent` or is a descendant of
+ *     `parent`.
+ */
+function objectIsDescendantOf(child, parent) {
+    // Starts the search from the child object.
+    let currentNode = child;
+    // Traverses up the scene graph hierarchy until we reach the top (null parent)
+    // or find the target parent.
+    while (currentNode) {
+        // If the current node is the parent we're looking for, we've found a match.
+        if (currentNode === parent) {
+            return true;
+        }
+        // Moves up to the next level in the hierarchy.
+        currentNode = currentNode.parent;
+    }
+    // If we reach the top of the hierarchy without finding the parent,
+    // it is not an ancestor.
+    return false;
+}
+/**
+ * Traverses the scene graph from a given node, calling a callback function for
+ * each node. The traversal stops if the callback returns true.
+ *
+ * This function is similar to THREE.Object3D.traverse, but allows for early
+ * exit from the traversal based on the callback's return value.
+ *
+ * @param node - The starting node for the traversal.
+ * @param callback - The function to call for each node. It receives the current
+ *     node as an argument. If the callback returns `true`, the traversal will
+ *     stop.
+ * @returns Whether the callback returned true for any node.
+ */
+function traverseUtil(node, callback) {
+    if (callback(node)) {
+        return true;
+    }
+    for (const child of node.children) {
+        if (traverseUtil(child, callback)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * User is an embodied instance to manage hands, controllers, speech, and
+ * avatars. It extends Script to update human-world interaction.
+ *
+ * In the long run, User is to manages avatars, hands, and everything of Human
+ * I/O. In third-person view simulation, it should come with an low-poly avatar.
+ * To support multi-user social XR planned for future iterations.
+ */
+class User extends Script {
+    static { this.dependencies = {
+        input: Input,
+        scene: THREE.Scene,
+    }; }
+    /**
+     * Constructs a new User.
+     */
+    constructor() {
+        super();
+        /**
+         * Whether to represent a local user, or another user in a multi-user session.
+         */
+        this.local = true;
+        /**
+         * The number of hands associated with the XR user.
+         */
+        this.numHands = 2;
+        /**
+         * The height of the user in meters.
+         */
+        this.height = 1.6;
+        /**
+         * The default distance of a UI panel from the user in meters.
+         */
+        this.panelDistance = 1.75;
+        /**
+         * The handedness (primary hand) of the user (0 for left, 1 for right, 2 for
+         * both).
+         */
+        this.handedness = 1;
+        /**
+         * The radius of the safe space around the user in meters.
+         */
+        this.safeSpaceRadius = 0.2;
+        /**
+         * The distance of a newly spawned object from the user in meters.
+         */
+        this.objectDistance = 1.5;
+        /**
+         * The angle of a newly spawned object from the user in radians.
+         */
+        this.objectAngle = -18 / 180.0 * Math.PI;
+        /**
+         * An array of pivot objects. Pivot are sphere at the **starting** tip of
+         * user's hand / controller / mouse rays for debugging / drawing applications.
+         */
+        this.pivots = [];
+        /**
+         * Maps a controller to the object it is currently hovering over.
+         */
+        this.hoveredObjectsForController = new Map();
+        /**
+         * Maps a controller to the object it has currently selected.
+         */
+        this.selectedObjectsForController = new Map();
+        /**
+         * Maps a hand index (0 or 1) to a set of meshes it is currently touching.
+         */
+        this.touchedObjects = new Map();
+        /**
+         * Maps a hand index to another map that associates a grabbed mesh with its
+         * initial grab event data.
+         */
+        this.grabbedObjects = new Map();
+    }
+    /**
+     * Initializes the User.
+     */
+    init({ input, scene }) {
+        this.input = input;
+        this.controllers = input.controllers;
+        this.scene = scene;
+    }
+    /**
+     * Sets the user's height on the first frame.
+     * @param camera -
+     */
+    setHeight(camera) {
+        this.height = camera.position.y;
+    }
+    /**
+     * Adds pivots at the starting tip of user's hand / controller / mouse rays.
+     */
+    enablePivots() {
+        this.input.enablePivots();
+    }
+    /**
+     * Gets the pivot object for a given controller id.
+     * @param id - The controller id.
+     * @returns The pivot object.
+     */
+    getPivot(id) {
+        return this.controllers[id].getObjectByName('pivot');
+    }
+    /**
+     * Gets the world position of the pivot for a given controller id.
+     * @param id - The controller id.
+     * @returns The world position of the pivot.
+     */
+    getPivotPosition(id) {
+        return this.getPivot(id)?.getWorldPosition(new THREE.Vector3());
+    }
+    /**
+     * Gets reticle's direction in THREE.Vector3.
+     * Requires reticle enabled to be called.
+     * @param controllerId -
+     */
+    getReticleDirection(controllerId) {
+        return this.controllers[controllerId].reticle?.direction;
+    }
+    /**
+     * Gets the object targeted by the reticle.
+     * Requires `options.reticle.enabled`.
+     * @param id - The controller id.
+     * @returns The targeted object, or null.
+     */
+    getReticleTarget(id) {
+        return this.controllers[id].reticle?.targetObject;
+    }
+    /**
+     * Gets the intersection details from the reticle's raycast.
+     * Requires `options.reticle.enabled`.
+     * @param id - The controller id.
+     * @returns The intersection object, or null if no intersection.
+     */
+    getReticleIntersection(id) {
+        return this.controllers[id].reticle?.intersection;
+    }
+    /**
+     * Checks if any controller is pointing at the given object or its children.
+     * @param obj - The object to check against.
+     * @returns True if a controller is pointing at the object.
+     */
+    isPointingAt(obj) {
+        for (const selected of this.hoveredObjectsForController.values()) {
+            if (objectIsDescendantOf(selected, obj)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * Checks if any controller is selecting the given object or its children.
+     * @param obj - The object to check against.
+     * @returns True if a controller is selecting the object.
+     */
+    isSelectingAt(obj) {
+        for (const selected of this.selectedObjectsForController.values()) {
+            if (objectIsDescendantOf(selected, obj)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * Gets the intersection point on a specific object.
+     * Not recommended for general use, since a View / ModelView's
+     * ux.positions contains the intersected points.
+     * @param obj - The object to check for intersection.
+     * @param id - The controller ID, or -1 for any controller.
+     * @returns The intersection details, or null if no intersection.
+     */
+    getIntersectionAt(obj, id = -1) {
+        if (id == -1) {
+            for (let i = 0; i < 2; ++i) {
+                if (this.getReticleTarget(i) === obj) {
+                    return this.getReticleIntersection(i);
+                }
+            }
+        }
+        else {
+            if (this.getReticleTarget(id) === obj) {
+                return this.getReticleIntersection(id);
+            }
+        }
+        return null;
+    }
+    /**
+     * Gets the world position of a controller.
+     * @param id - The controller id.
+     * @param target - The target vector to
+     * store the result.
+     * @returns The world position of the controller.
+     */
+    getControllerPosition(id, target = new THREE.Vector3()) {
+        this.controllers[id].getWorldPosition(target);
+        return target;
+    }
+    /**
+     * Calculates the distance between a controller and an object.
+     * @param id - The controller id.
+     * @param object - The object to measure the distance to.
+     * @returns The distance between the controller and the object.
+     */
+    getControllerObjectDistance(id, object) {
+        const controllerPos = this.getControllerPosition(id);
+        const objPos = new THREE.Vector3();
+        object.getWorldPosition(objPos);
+        return controllerPos.distanceTo(objPos);
+    }
+    /**
+     * Checks if either controller is selecting.
+     * @param id - The controller id. If -1, check both controllers.
+     * @returns True if selecting, false otherwise.
+     */
+    isSelecting(id = -1) {
+        if (id == -1) {
+            return this.input.controllers.some((controller) => {
+                return controller.userData.selected;
+            });
+        }
+        return this.input.controllers[id].userData.selected;
+    }
+    /**
+     * Checks if either controller is squeezing.
+     * @param id - The controller id. If -1, check both controllers.
+     * @returns True if squeezing, false otherwise.
+     */
+    isSqueezing(id = -1) {
+        if (id == -1) {
+            return this.input.controllers.some((controller) => {
+                return controller.userData.squeezing;
+            });
+        }
+        return this.input.controllers[id].userData.squeezing;
+    }
+    /**
+     * Handles the select start event for a controller.
+     * @param event - The event object.
+     */
+    onSelectStart(event) {
+        const controller = event.target;
+        const intersections = this.input.intersectionsForController.get(controller).filter(intersection => {
+            let target = intersection.object;
+            while (target) {
+                if (target
+                    .ignoreReticleRaycast === true) {
+                    return false;
+                }
+                target = target.parent;
+            }
+            return true;
+        });
+        if (intersections && intersections.length > 0) {
+            this.selectedObjectsForController.set(controller, intersections[0].object);
+            this.callObjectSelectStart(event, intersections[0].object);
+        }
+    }
+    /**
+     * Handles the select end event for a controller.
+     * @param event - The event object.
+     */
+    onSelectEnd(event) {
+        const controller = event.target;
+        const intersections = this.input.intersectionsForController.get(controller);
+        if (intersections && intersections.length > 0) {
+            const selectedObject = this.selectedObjectsForController.get(controller);
+            this.callObjectSelectEnd(event, selectedObject || null);
+            this.selectedObjectsForController.delete(controller);
+            let ancestor = selectedObject || null;
+            while (ancestor) {
+                if (ancestor.isView && ancestor.visible) {
+                    ancestor.onTriggered(controller.userData.id);
+                    break;
+                }
+                ancestor = ancestor.parent;
+            }
+        }
+    }
+    /**
+     * Handles the squeeze start event for a controller.
+     * @param _event - The event object.
+     */
+    onSqueezeStart(_event) { }
+    /**
+     * Handles the squeeze end event for a controller.
+     * @param _event - The event object.
+     */
+    onSqueezeEnd(_event) { }
+    /**
+     * The main update loop called each frame. Updates hover state for all
+     * controllers.
+     */
+    update() {
+        if (this.input.controllersEnabled) {
+            for (const controller of this.input.controllers) {
+                this.updateForController(controller);
+            }
+        }
+        // Direct touch detection.
+        this.updateTouchState();
+        // Direct grab detection.
+        this.updateGrabState();
+    }
+    /**
+     * Checks for and handles grab events (touching + pinching).
+     */
+    updateGrabState() {
+        if (!this.hands) {
+            return;
+        }
+        for (let i = 0; i < this.numHands; i++) {
+            const isPinching = this.isSelecting(i);
+            const touchedMeshes = this.touchedObjects.get(i) || new Set();
+            const currentlyGrabbedMeshes = isPinching ? touchedMeshes : new Set();
+            const previouslyGrabbedMeshesMap = this.grabbedObjects.get(i) || new Map();
+            const newlyGrabbedMeshes = [...currentlyGrabbedMeshes].filter(mesh => !previouslyGrabbedMeshesMap.has(mesh));
+            const releasedMeshes = [...previouslyGrabbedMeshesMap.keys()].filter(mesh => !currentlyGrabbedMeshes.has(mesh));
+            for (const mesh of newlyGrabbedMeshes) {
+                const hand = this.hands.getWrist(i);
+                if (!hand)
+                    continue;
+                const grabEvent = { handIndex: i, hand: hand };
+                if (!this.grabbedObjects.has(i)) {
+                    this.grabbedObjects.set(i, new Map());
+                }
+                this.grabbedObjects.get(i).set(mesh, grabEvent);
+                this.callObjectGrabStart(grabEvent, mesh);
+            }
+            for (const mesh of releasedMeshes) {
+                const grabEvent = previouslyGrabbedMeshesMap.get(mesh);
+                this.callObjectGrabEnd(grabEvent, mesh);
+                previouslyGrabbedMeshesMap.delete(mesh);
+            }
+            for (const mesh of currentlyGrabbedMeshes) {
+                if (previouslyGrabbedMeshesMap.has(mesh)) {
+                    const grabEvent = previouslyGrabbedMeshesMap.get(mesh);
+                    this.callObjectGrabbing(grabEvent, mesh);
+                }
+            }
+        }
+    }
+    /**
+     * Checks for and handles touch events for the hands' index fingers.
+     */
+    updateTouchState() {
+        if (!this.hands) {
+            return;
+        }
+        for (let i = 0; i < this.numHands; i++) {
+            const indexTip = this.hands.getIndexTip(i);
+            if (!indexTip) {
+                continue;
+            }
+            const indexTipPosition = new THREE.Vector3();
+            indexTip.getWorldPosition(indexTipPosition);
+            const currentlyTouchedMeshes = [];
+            this.scene.traverse((object) => {
+                if (object.isMesh && object.visible) {
+                    const boundingBox = new THREE.Box3().setFromObject(object);
+                    if (boundingBox.containsPoint(indexTipPosition)) {
+                        currentlyTouchedMeshes.push(object);
+                    }
+                }
+            });
+            const previouslyTouchedMeshes = this.touchedObjects.get(i) || new Set();
+            const currentMeshesSet = new Set(currentlyTouchedMeshes);
+            const newlyTouchedMeshes = currentlyTouchedMeshes.filter(mesh => !previouslyTouchedMeshes.has(mesh));
+            const removedMeshes = [...previouslyTouchedMeshes].filter(mesh => !currentMeshesSet.has(mesh));
+            const touchingEvent = { handIndex: i, touchPosition: indexTipPosition };
+            if (newlyTouchedMeshes.length > 0) {
+                for (const mesh of newlyTouchedMeshes) {
+                    this.callObjectTouchStart(touchingEvent, mesh);
+                }
+            }
+            if (removedMeshes.length > 0) {
+                for (const mesh of removedMeshes) {
+                    this.callObjectTouchEnd(touchingEvent, mesh);
+                }
+            }
+            for (const mesh of currentMeshesSet) {
+                this.callObjectTouching(touchingEvent, mesh);
+            }
+            if (currentMeshesSet.size > 0) {
+                this.touchedObjects.set(i, currentMeshesSet);
+            }
+            else {
+                this.touchedObjects.delete(i);
+            }
+        }
+    }
+    /**
+     * Updates the hover state for a single controller.
+     * @param controller - The controller to update.
+     */
+    updateForController(controller) {
+        const intersections = this.input.intersectionsForController.get(controller);
+        const currentHoverTarget = intersections.length > 0 ? intersections[0].object : null;
+        const previousHoverTarget = this.hoveredObjectsForController.get(controller);
+        if (previousHoverTarget !== currentHoverTarget) {
+            this.callHoverExit(controller, previousHoverTarget || null);
+            this.hoveredObjectsForController.set(controller, currentHoverTarget);
+            this.callHoverEnter(controller, currentHoverTarget);
+        }
+        else if (previousHoverTarget) {
+            this.callOnHovering(controller, previousHoverTarget);
+        }
+    }
+    /**
+     * Recursively calls onHoverExit on a target and its ancestors.
+     * @param controller - The controller exiting hover.
+     * @param target - The object being exited.
+     */
+    callHoverExit(controller, target) {
+        if (target == null)
+            return;
+        if (target.isXRScript) {
+            target.onHoverExit(controller);
+        }
+        this.callHoverExit(controller, target.parent);
+    }
+    /**
+     * Recursively calls onHoverEnter on a target and its ancestors.
+     * @param controller - The controller entering hover.
+     * @param target - The object being entered.
+     */
+    callHoverEnter(controller, target) {
+        if (target == null)
+            return;
+        if (target.isXRScript) {
+            target.onHoverEnter(controller);
+        }
+        this.callHoverEnter(controller, target.parent);
+    }
+    /**
+     * Recursively calls onHovering on a target and its ancestors.
+     * @param controller - The controller hovering.
+     * @param target - The object being entered.
+     */
+    callOnHovering(controller, target) {
+        if (target == null)
+            return;
+        if (target.isXRScript) {
+            target.onHovering(controller);
+        }
+        this.callOnHovering(controller, target.parent);
+    }
+    /**
+     * Recursively calls onObjectSelectStart on a target and its ancestors until
+     * the event is handled.
+     * @param event - The original select start event.
+     * @param target - The object being selected.
+     */
+    callObjectSelectStart(event, target) {
+        if (target == null)
+            return;
+        if (target.isXRScript &&
+            target.onObjectSelectStart(event)) {
+            // The event was handled already so do not propagate up.
+            return;
+        }
+        this.callObjectSelectStart(event, target.parent);
+    }
+    /**
+     * Recursively calls onObjectSelectEnd on a target and its ancestors until
+     * the event is handled.
+     * @param event - The original select end event.
+     * @param target - The object being un-selected.
+     */
+    callObjectSelectEnd(event, target) {
+        if (target == null)
+            return;
+        if (target.isXRScript &&
+            target.onObjectSelectEnd(event)) {
+            // The event was handled already so do not propagate up.
+            return;
+        }
+        this.callObjectSelectEnd(event, target.parent);
+    }
+    /**
+     * Recursively calls onObjectTouchStart on a target and its ancestors.
+     * @param event - The original touch start event.
+     * @param target - The object being touched.
+     */
+    callObjectTouchStart(event, target) {
+        if (target == null)
+            return;
+        if (target.isXRScript) {
+            target.onObjectTouchStart(event);
+        }
+        this.callObjectTouchStart(event, target.parent);
+    }
+    /**
+     * Recursively calls onObjectTouching on a target and its ancestors.
+     * @param event - The original touch event.
+     * @param target - The object being touched.
+     */
+    callObjectTouching(event, target) {
+        if (target == null)
+            return;
+        if (target.isXRScript) {
+            target.onObjectTouching(event);
+        }
+        this.callObjectTouching(event, target.parent);
+    }
+    /**
+     * Recursively calls onObjectTouchEnd on a target and its ancestors.
+     * @param event - The original touch end event.
+     * @param target - The object being un-touched.
+     */
+    callObjectTouchEnd(event, target) {
+        if (target == null)
+            return;
+        if (target.isXRScript) {
+            target.onObjectTouchEnd(event);
+        }
+        this.callObjectTouchEnd(event, target.parent);
+    }
+    /**
+     * Recursively calls onObjectGrabStart on a target and its ancestors.
+     * @param event - The original grab start event.
+     * @param target - The object being grabbed.
+     */
+    callObjectGrabStart(event, target) {
+        if (target == null)
+            return;
+        if (target.isXRScript) {
+            target.onObjectGrabStart(event);
+        }
+        this.callObjectGrabStart(event, target.parent);
+    }
+    /**
+     * Recursively calls onObjectGrabbing on a target and its ancestors.
+     * @param event - The original grabbing event.
+     * @param target - The object being grabbed.
+     */
+    callObjectGrabbing(event, target) {
+        if (target == null)
+            return;
+        if (target.isXRScript) {
+            target.onObjectGrabbing(event);
+        }
+        this.callObjectGrabbing(event, target.parent);
+    }
+    /**
+     * Recursively calls onObjectGrabEnd on a target and its ancestors.
+     * @param event - The original grab end event.
+     * @param target - The object being released.
+     */
+    callObjectGrabEnd(event, target) {
+        if (target == null)
+            return;
+        if (target.isXRScript) {
+            target.onObjectGrabEnd(event);
+        }
+        this.callObjectGrabEnd(event, target.parent);
+    }
+    /**
+     * Checks if a controller is selecting a specific object. Returns the
+     * intersection details if true.
+     * @param obj - The object to check for selection.
+     * @param controller - The controller performing the select.
+     * @returns The intersection object if a match is found, else null.
+     */
+    select(obj, controller) {
+        const intersections = this.input.intersectionsForController.get(controller);
+        return intersections && intersections.length > 0 &&
+            objectIsDescendantOf(intersections[0].object, obj) ?
+            intersections[0] :
+            null;
+    }
+}
+
+class GestureRecognitionOptions {
+    constructor(options) {
+        /** Master switch for the gesture recognition block. */
+        this.enabled = false;
+        /**
+         * Backing provider that extracts gesture information.
+         *  - 'heuristics': WebXR joint heuristics only (no external ML dependency).
+         *  - 'mediapipe': MediaPipe Hands running via Web APIs / wasm.
+         *  - 'tfjs': TensorFlow.js hand-pose-detection models.
+         */
+        this.provider = 'heuristics';
+        /**
+         * Minimum confidence score to emit gesture events. Different providers map to
+         * different score domains so this value is normalised to [0-1].
+         */
+        this.minimumConfidence = 0.6;
+        /**
+         * Optional throttle window for expensive providers.
+         */
+        this.updateIntervalMs = 33;
+        /**
+         * Default gesture catalogue.
+         */
+        this.gestures = {
+            'pinch': { enabled: true, threshold: 0.025 },
+            'open-palm': { enabled: true },
+            'fist': { enabled: true },
+            'thumbs-up': { enabled: true },
+            'point': { enabled: false },
+            'spread': { enabled: false, threshold: 0.04 },
+        };
+        deepMerge(this, options);
+        if (options?.gestures) {
+            for (const [name, config] of Object.entries(options.gestures)) {
+                const gestureName = name;
+                this.gestures[gestureName] = deepMerge({ ...this.gestures[gestureName] }, config);
+            }
+        }
+    }
+    enable() {
+        this.enabled = true;
+        return this;
+    }
+    /**
+     * Convenience helper to toggle specific gestures.
+     */
+    setGestureEnabled(name, enabled) {
+        this.gestures[name] ??= { enabled };
+        this.gestures[name].enabled = enabled;
+        return this;
+    }
+}
+
+const EPSILON = 1e-6;
+const FINGER_ORDER = ['index', 'middle', 'ring', 'pinky'];
+const FINGER_PREFIX = {
+    index: 'index-finger',
+    middle: 'middle-finger',
+    ring: 'ring-finger',
+    pinky: 'pinky-finger',
+};
+const heuristicDetectors = {
+    'pinch': computePinch,
+    'open-palm': computeOpenPalm,
+    'fist': computeFist,
+    'thumbs-up': computeThumbsUp,
+    'point': computePoint,
+    'spread': computeSpread,
+};
+function computePinch(context, config) {
+    const thumb = getJoint(context, 'thumb-tip');
+    const index = getJoint(context, 'index-finger-tip');
+    if (!thumb || !index)
+        return undefined;
+    const handScale = estimateHandScale(context);
+    const threshold = config.threshold ?? Math.max(0.018, handScale * 0.35);
+    const distance = thumb.distanceTo(index);
+    if (!Number.isFinite(distance) || distance < EPSILON) {
+        return { confidence: 0 };
+    }
+    const tightness = clamp01(1 - (distance / (threshold * 0.85)));
+    const loosePenalty = clamp01(1 - (distance / (threshold * 1.4)));
+    const confidence = clamp01(distance <= threshold ? tightness :
+        loosePenalty * 0.4);
+    return {
+        confidence,
+        data: { distance, threshold },
+    };
+}
+function computeOpenPalm(context, config) {
+    const fingerMetrics = getFingerMetrics(context);
+    if (!fingerMetrics.length)
+        return undefined;
+    const handScale = estimateHandScale(context);
+    const palmWidth = getPalmWidth(context) ?? handScale * 0.85;
+    const extensionScores = fingerMetrics.map(({ tipDistance }) => clamp01((tipDistance - handScale * 0.5) / (handScale * 0.45)));
+    const straightnessScores = fingerMetrics.map(({ curlRatio }) => clamp01((curlRatio - 1.1) / 0.5));
+    const neighbors = getAdjacentFingerDistances(context);
+    const spreadScore = neighbors.average !== Infinity && palmWidth > EPSILON ?
+        clamp01((neighbors.average - palmWidth * 0.55) / (palmWidth * 0.35)) :
+        0;
+    const extensionScore = average(extensionScores);
+    const straightScore = average(straightnessScores);
+    const confidence = clamp01((extensionScore * 0.5) + (straightScore * 0.3) + (spreadScore * 0.2));
+    return {
+        confidence,
+        data: {
+            extensionScore,
+            straightScore,
+            spreadScore,
+            threshold: config.threshold,
+        },
+    };
+}
+function computeFist(context, config) {
+    const fingerMetrics = getFingerMetrics(context);
+    if (!fingerMetrics.length)
+        return undefined;
+    const handScale = estimateHandScale(context);
+    const palmWidth = getPalmWidth(context) ?? handScale * 0.85;
+    const tipAverage = average(fingerMetrics.map(metrics => metrics.tipDistance));
+    const curlAverage = average(fingerMetrics.map(metrics => metrics.curlRatio));
+    const neighbors = getAdjacentFingerDistances(context);
+    const clusterScore = neighbors.average !== Infinity && palmWidth > EPSILON ?
+        clamp01((palmWidth * 0.5 - neighbors.average) / (palmWidth * 0.35)) :
+        0;
+    const tipScore = clamp01((handScale * 0.55 - tipAverage) / (handScale * 0.25));
+    const curlScore = clamp01((1.08 - curlAverage) / 0.25);
+    const confidence = clamp01((tipScore * 0.5) + (curlScore * 0.35) + (clusterScore * 0.15));
+    return {
+        confidence,
+        data: {
+            tipAverage,
+            curlAverage,
+            clusterScore,
+            threshold: config.threshold,
+        },
+    };
+}
+function computeThumbsUp(context, config) {
+    const thumbMetrics = getThumbMetrics(context);
+    const fingerMetrics = getFingerMetrics(context);
+    if (!thumbMetrics || fingerMetrics.length < 2)
+        return undefined;
+    const handScale = estimateHandScale(context);
+    const palmWidth = getPalmWidth(context) ?? handScale * 0.85;
+    const palmUp = getPalmUp(context);
+    const otherCurls = fingerMetrics.map(m => m.curlRatio);
+    const curledScore = clamp01((1.05 - average(otherCurls)) / 0.25);
+    const thumbReachRatio = thumbMetrics.referenceDistance > EPSILON ?
+        thumbMetrics.tipDistance / thumbMetrics.referenceDistance :
+        0;
+    const thumbExtendedScore = clamp01((thumbReachRatio - 1.15) / 0.5);
+    const indexTip = getJoint(context, 'index-finger-tip');
+    const thumbIndexDistance = indexTip ? thumbMetrics.tip.distanceTo(indexTip) : 0;
+    const separationScore = palmWidth > EPSILON ?
+        clamp01((thumbIndexDistance - palmWidth * 0.4) / (palmWidth * 0.25)) :
+        0;
+    let orientationScore = 0;
+    if (palmUp) {
+        const thumbVector = new THREE.Vector3()
+            .copy(thumbMetrics.tip)
+            .sub(thumbMetrics.metacarpal ?? thumbMetrics.tip);
+        if (thumbVector.lengthSq() > EPSILON) {
+            thumbVector.normalize();
+            const alignment = thumbVector.dot(palmUp);
+            orientationScore = clamp01((alignment - 0.35) / 0.35);
+        }
+    }
+    const confidence = clamp01((thumbExtendedScore * 0.35) + (curledScore * 0.3) +
+        (orientationScore * 0.2) + (separationScore * 0.15));
+    return {
+        confidence,
+        data: {
+            thumbReachRatio,
+            curledScore,
+            orientationScore,
+            separationScore,
+            threshold: config.threshold,
+        },
+    };
+}
+function computePoint(context, config) {
+    const indexMetrics = computeFingerMetric(context, 'index');
+    if (!indexMetrics)
+        return undefined;
+    const otherMetrics = FINGER_ORDER.slice(1).map(finger => computeFingerMetric(context, finger))
+        .filter(Boolean);
+    if (!otherMetrics.length)
+        return undefined;
+    const handScale = estimateHandScale(context);
+    const indexCurlScore = clamp01((indexMetrics.curlRatio - 1.2) / 0.35);
+    const indexReachScore = clamp01((indexMetrics.tipDistance - handScale * 0.6) / (handScale * 0.25));
+    const othersCurl = average(otherMetrics.map(metrics => metrics.curlRatio));
+    const othersCurledScore = clamp01((1.05 - othersCurl) / 0.25);
+    const confidence = clamp01((indexCurlScore * 0.45) + (indexReachScore * 0.25) +
+        (othersCurledScore * 0.3));
+    return {
+        confidence,
+        data: {
+            indexCurlScore,
+            indexReachScore,
+            othersCurledScore,
+            threshold: config.threshold,
+        },
+    };
+}
+function computeSpread(context, config) {
+    const fingerMetrics = getFingerMetrics(context);
+    if (!fingerMetrics.length)
+        return undefined;
+    const handScale = estimateHandScale(context);
+    const palmWidth = getPalmWidth(context) ?? handScale * 0.85;
+    const neighbors = getAdjacentFingerDistances(context);
+    const spreadScore = neighbors.average !== Infinity && palmWidth > EPSILON ?
+        clamp01((neighbors.average - palmWidth * 0.6) / (palmWidth * 0.35)) :
+        0;
+    const extensionScore = clamp01((average(fingerMetrics.map(metrics => metrics.curlRatio)) - 1.15) / 0.45);
+    const confidence = clamp01((spreadScore * 0.6) + (extensionScore * 0.4));
+    return {
+        confidence,
+        data: {
+            spreadScore,
+            extensionScore,
+            threshold: config.threshold,
+        },
+    };
+}
+function computeFingerMetric(context, finger) {
+    const tip = getFingerJoint(context, finger, 'tip');
+    const proximal = getFingerJoint(context, finger, 'phalanx-proximal');
+    const metacarpal = getFingerJoint(context, finger, 'metacarpal');
+    const wrist = getJoint(context, 'wrist');
+    if (!tip || !wrist)
+        return null;
+    const reference = proximal ?? metacarpal;
+    if (!reference)
+        return null;
+    const referenceDistance = reference.distanceTo(wrist);
+    const tipDistance = tip.distanceTo(wrist);
+    const curlRatio = referenceDistance > EPSILON ? tipDistance / referenceDistance : 0;
+    return {
+        tip,
+        metacarpal,
+        referenceDistance,
+        tipDistance,
+        curlRatio,
+    };
+}
+function getFingerMetrics(context) {
+    return FINGER_ORDER.map(finger => computeFingerMetric(context, finger))
+        .filter(Boolean);
+}
+function getThumbMetrics(context) {
+    const tip = getJoint(context, 'thumb-tip');
+    const wrist = getJoint(context, 'wrist');
+    if (!tip || !wrist)
+        return undefined;
+    const metacarpal = getJoint(context, 'thumb-metacarpal') ??
+        getJoint(context, 'thumb-phalanx-proximal');
+    if (!metacarpal)
+        return undefined;
+    const referenceDistance = metacarpal.distanceTo(wrist);
+    const tipDistance = tip.distanceTo(wrist);
+    return {
+        tip,
+        metacarpal,
+        referenceDistance,
+        tipDistance,
+    };
+}
+function estimateHandScale(context) {
+    const wrist = getJoint(context, 'wrist');
+    const middleTip = getJoint(context, 'middle-finger-tip');
+    const middleBase = getJoint(context, 'middle-finger-metacarpal');
+    const palmWidth = getPalmWidth(context);
+    const measurements = [];
+    if (wrist && middleTip)
+        measurements.push(middleTip.distanceTo(wrist));
+    if (palmWidth)
+        measurements.push(palmWidth);
+    if (wrist && middleBase)
+        measurements.push(middleBase.distanceTo(wrist) * 2);
+    if (!measurements.length)
+        return 0.08;
+    return average(measurements);
+}
+function getPalmWidth(context) {
+    const indexBase = getFingerJoint(context, 'index', 'metacarpal');
+    const pinkyBase = getFingerJoint(context, 'pinky', 'metacarpal');
+    if (!indexBase || !pinkyBase)
+        return null;
+    return indexBase.distanceTo(pinkyBase);
+}
+function getPalmNormal(context) {
+    const wrist = getJoint(context, 'wrist');
+    const indexBase = getFingerJoint(context, 'index', 'metacarpal');
+    const pinkyBase = getFingerJoint(context, 'pinky', 'metacarpal');
+    if (!wrist || !indexBase || !pinkyBase)
+        return null;
+    const u = new THREE.Vector3().subVectors(indexBase, wrist);
+    const v = new THREE.Vector3().subVectors(pinkyBase, wrist);
+    if (u.lengthSq() === 0 || v.lengthSq() === 0)
+        return null;
+    const normal = new THREE.Vector3().crossVectors(u, v);
+    if (normal.lengthSq() === 0)
+        return null;
+    if (context.handLabel === 'left')
+        normal.multiplyScalar(-1);
+    return normal.normalize();
+}
+function getPalmRight(context) {
+    const indexBase = getFingerJoint(context, 'index', 'metacarpal');
+    const pinkyBase = getFingerJoint(context, 'pinky', 'metacarpal');
+    if (!indexBase || !pinkyBase)
+        return null;
+    const right = new THREE.Vector3().subVectors(indexBase, pinkyBase);
+    if (context.handLabel === 'left')
+        right.multiplyScalar(-1);
+    if (right.lengthSq() === 0)
+        return null;
+    return right.normalize();
+}
+function getPalmUp(context) {
+    const normal = getPalmNormal(context);
+    const right = getPalmRight(context);
+    if (!normal || !right)
+        return null;
+    const up = new THREE.Vector3().copy(right).cross(normal);
+    if (up.lengthSq() === 0)
+        return null;
+    return up.normalize();
+}
+function getAdjacentFingerDistances(context) {
+    const tips = FINGER_ORDER.map(finger => getFingerJoint(context, finger, 'tip'));
+    if (tips.some(tip => !tip)) {
+        return { average: Infinity };
+    }
+    const distances = [
+        tips[0].distanceTo(tips[1]),
+        tips[1].distanceTo(tips[2]),
+        tips[2].distanceTo(tips[3]),
+    ];
+    return { average: average(distances) };
+}
+function getJoint(context, jointName) {
+    return context.joints.get(jointName);
+}
+function getFingerJoint(context, finger, suffix) {
+    const prefix = FINGER_PREFIX[finger];
+    return getJoint(context, `${prefix}-${suffix}`);
+}
+function clamp01(value) {
+    return THREE.MathUtils.clamp(value, 0, 1);
+}
+function average(values) {
+    if (!values.length)
+        return 0;
+    return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
+const HAND_INDEX_TO_LABEL = {
+    [Handedness.LEFT]: 'left',
+    [Handedness.RIGHT]: 'right',
+};
+const JOINT_TEMP_POOL = new Map();
+class GestureRecognition extends Script {
+    constructor() {
+        super(...arguments);
+        this.activeGestures = { left: new Map(), right: new Map() };
+        this.lastEvaluation = 0;
+        this.detectors = new Map();
+        this.activeProvider = null;
+        this.providerWarned = false;
+    }
+    static { this.dependencies = {
+        input: Input,
+        user: User,
+        options: GestureRecognitionOptions,
+    }; }
+    async init({ options, user, input }) {
+        this.options = options;
+        this.user = user;
+        this.input = input;
+        this.configureProvider(true);
+        if (!this.options.enabled) {
+            console.info('GestureRecognition initialized but disabled. Call options.enableGestures() to activate.');
+        }
+    }
+    update() {
+        if (!this.options.enabled)
+            return;
+        if (!this.user.hands?.isValid?.())
+            return;
+        this.configureProvider();
+        const now = performance.now();
+        const interval = this.activeProvider === 'heuristics' ?
+            0 :
+            this.options.updateIntervalMs;
+        if (interval > 0 && (now - this.lastEvaluation) < interval) {
+            return;
+        }
+        this.lastEvaluation = now;
+        this.evaluateHand(Handedness.LEFT);
+        this.evaluateHand(Handedness.RIGHT);
+    }
+    configureProvider(force = false) {
+        const provider = this.options.provider;
+        if (!force && provider === this.activeProvider)
+            return;
+        this.detectors.clear();
+        switch (provider) {
+            case 'heuristics':
+                this.assignDetectors(heuristicDetectors);
+                this.providerWarned = false;
+                break;
+            case 'mediapipe':
+            case 'tfjs':
+                this.assignDetectors(heuristicDetectors);
+                if (!this.providerWarned) {
+                    console.warn(`GestureRecognition: provider '${provider}' is not yet implemented; falling back to heuristics.`);
+                    this.providerWarned = true;
+                }
+                break;
+            default:
+                this.assignDetectors(heuristicDetectors);
+                if (!this.providerWarned) {
+                    console.warn(`GestureRecognition: provider '${provider}' is unknown; falling back to heuristics.`);
+                    this.providerWarned = true;
+                }
+                break;
+        }
+        this.activeProvider = provider;
+    }
+    assignDetectors(detectors) {
+        for (const [name, detector] of Object.entries(detectors)) {
+            if (!detector)
+                continue;
+            this.detectors.set(name, detector);
+        }
+    }
+    evaluateHand(handedness) {
+        const handLabel = HAND_INDEX_TO_LABEL[handedness];
+        const activeMap = this.activeGestures[handLabel];
+        if (!handLabel)
+            return;
+        const context = this.buildHandContext(handedness, handLabel);
+        if (!context) {
+            for (const [name] of activeMap.entries()) {
+                this.emitGesture('gestureend', { name, hand: handLabel, confidence: 0 });
+            }
+            activeMap.clear();
+            return;
+        }
+        const processed = new Set();
+        for (const [name, config] of Object.entries(this.options.gestures)) {
+            const gestureName = name;
+            if (!config?.enabled)
+                continue;
+            const detector = this.detectors.get(gestureName);
+            if (!detector)
+                continue;
+            const result = detector(context, config);
+            const isActive = result && result.confidence >= this.options.minimumConfidence;
+            processed.add(gestureName);
+            const previousState = activeMap.get(gestureName);
+            if (isActive) {
+                const detail = {
+                    name: gestureName,
+                    hand: handLabel,
+                    confidence: THREE.MathUtils.clamp(result.confidence, 0, 1),
+                    data: result.data,
+                };
+                if (!previousState) {
+                    activeMap.set(gestureName, { confidence: detail.confidence, data: detail.data });
+                    this.emitGesture('gesturestart', detail);
+                }
+                else {
+                    previousState.confidence = detail.confidence;
+                    previousState.data = detail.data;
+                    this.emitGesture('gestureupdate', detail);
+                }
+            }
+            else if (previousState) {
+                activeMap.delete(gestureName);
+                this.emitGesture('gestureend', { name: gestureName, hand: handLabel, confidence: 0.0 });
+            }
+        }
+        for (const name of Array.from(activeMap.keys())) {
+            if (!processed.has(name)) {
+                activeMap.delete(name);
+                this.emitGesture('gestureend', { name, hand: handLabel, confidence: 0.0 });
+            }
+        }
+    }
+    buildHandContext(handedness, handLabel) {
+        if (!this.user.hands)
+            return null;
+        const hand = this.user.hands.hands[handedness];
+        if (!hand?.joints)
+            return null;
+        let jointCache = JOINT_TEMP_POOL.get(handLabel);
+        if (!jointCache) {
+            jointCache = new Map();
+            JOINT_TEMP_POOL.set(handLabel, jointCache);
+        }
+        const joints = jointCache;
+        joints.clear();
+        for (const jointName of HAND_JOINT_NAMES) {
+            const joint = hand.joints[jointName];
+            if (!joint)
+                continue;
+            let vector = joints.get(jointName);
+            if (!vector) {
+                vector = new THREE.Vector3();
+                joints.set(jointName, vector);
+            }
+            vector.setFromMatrixPosition(joint.matrixWorld);
+        }
+        if (!joints.size)
+            return null;
+        return {
+            handedness,
+            handLabel,
+            joints,
+        };
+    }
+    emitGesture(type, detail) {
+        const event = { type, detail, target: this };
+        this.dispatchEvent(event);
+    }
+}
+
 const DEBUGGING = false;
 /**
  * Lighting provides XR lighting capabilities within the XR Blocks framework.
@@ -6152,6 +7312,7 @@ class Options {
         this.lighting = new LightingOptions();
         this.deviceCamera = new DeviceCameraOptions();
         this.hands = new HandsOptions();
+        this.gestures = new GestureRecognitionOptions();
         this.reticles = new ReticleOptions();
         this.sound = new SoundOptions();
         this.ai = new AIOptions();
@@ -6242,6 +7403,15 @@ class Options {
      */
     enableHands() {
         this.hands.enabled = true;
+        return this;
+    }
+    /**
+     * Enables the gesture recognition block and ensures hands are available.
+     * @returns The instance for chaining.
+     */
+    enableGestures() {
+        this.enableHands();
+        this.gestures.enable();
         return this;
     }
     /**
@@ -11181,633 +12351,6 @@ class VideoView extends View {
     }
 }
 
-/**
- * Checks if a given object is a descendant of another object in the scene
- * graph. This function is useful for determining if an interaction (like a
- * raycast hit) has occurred on a component that is part of a larger, complex
- * entity.
- *
- * It uses an iterative approach to traverse up the hierarchy from the child.
- *
- * @param child - The potential descendant object.
- * @param parent - The potential ancestor object.
- * @returns True if `child` is the same as `parent` or is a descendant of
- *     `parent`.
- */
-function objectIsDescendantOf(child, parent) {
-    // Starts the search from the child object.
-    let currentNode = child;
-    // Traverses up the scene graph hierarchy until we reach the top (null parent)
-    // or find the target parent.
-    while (currentNode) {
-        // If the current node is the parent we're looking for, we've found a match.
-        if (currentNode === parent) {
-            return true;
-        }
-        // Moves up to the next level in the hierarchy.
-        currentNode = currentNode.parent;
-    }
-    // If we reach the top of the hierarchy without finding the parent,
-    // it is not an ancestor.
-    return false;
-}
-/**
- * Traverses the scene graph from a given node, calling a callback function for
- * each node. The traversal stops if the callback returns true.
- *
- * This function is similar to THREE.Object3D.traverse, but allows for early
- * exit from the traversal based on the callback's return value.
- *
- * @param node - The starting node for the traversal.
- * @param callback - The function to call for each node. It receives the current
- *     node as an argument. If the callback returns `true`, the traversal will
- *     stop.
- * @returns Whether the callback returned true for any node.
- */
-function traverseUtil(node, callback) {
-    if (callback(node)) {
-        return true;
-    }
-    for (const child of node.children) {
-        if (traverseUtil(child, callback)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-/**
- * User is an embodied instance to manage hands, controllers, speech, and
- * avatars. It extends Script to update human-world interaction.
- *
- * In the long run, User is to manages avatars, hands, and everything of Human
- * I/O. In third-person view simulation, it should come with an low-poly avatar.
- * To support multi-user social XR planned for future iterations.
- */
-class User extends Script {
-    static { this.dependencies = {
-        input: Input,
-        scene: THREE.Scene,
-    }; }
-    /**
-     * Constructs a new User.
-     */
-    constructor() {
-        super();
-        /**
-         * Whether to represent a local user, or another user in a multi-user session.
-         */
-        this.local = true;
-        /**
-         * The number of hands associated with the XR user.
-         */
-        this.numHands = 2;
-        /**
-         * The height of the user in meters.
-         */
-        this.height = 1.6;
-        /**
-         * The default distance of a UI panel from the user in meters.
-         */
-        this.panelDistance = 1.75;
-        /**
-         * The handedness (primary hand) of the user (0 for left, 1 for right, 2 for
-         * both).
-         */
-        this.handedness = 1;
-        /**
-         * The radius of the safe space around the user in meters.
-         */
-        this.safeSpaceRadius = 0.2;
-        /**
-         * The distance of a newly spawned object from the user in meters.
-         */
-        this.objectDistance = 1.5;
-        /**
-         * The angle of a newly spawned object from the user in radians.
-         */
-        this.objectAngle = -18 / 180.0 * Math.PI;
-        /**
-         * An array of pivot objects. Pivot are sphere at the **starting** tip of
-         * user's hand / controller / mouse rays for debugging / drawing applications.
-         */
-        this.pivots = [];
-        /**
-         * Maps a controller to the object it is currently hovering over.
-         */
-        this.hoveredObjectsForController = new Map();
-        /**
-         * Maps a controller to the object it has currently selected.
-         */
-        this.selectedObjectsForController = new Map();
-        /**
-         * Maps a hand index (0 or 1) to a set of meshes it is currently touching.
-         */
-        this.touchedObjects = new Map();
-        /**
-         * Maps a hand index to another map that associates a grabbed mesh with its
-         * initial grab event data.
-         */
-        this.grabbedObjects = new Map();
-    }
-    /**
-     * Initializes the User.
-     */
-    init({ input, scene }) {
-        this.input = input;
-        this.controllers = input.controllers;
-        this.scene = scene;
-    }
-    /**
-     * Sets the user's height on the first frame.
-     * @param camera -
-     */
-    setHeight(camera) {
-        this.height = camera.position.y;
-    }
-    /**
-     * Adds pivots at the starting tip of user's hand / controller / mouse rays.
-     */
-    enablePivots() {
-        this.input.enablePivots();
-    }
-    /**
-     * Gets the pivot object for a given controller id.
-     * @param id - The controller id.
-     * @returns The pivot object.
-     */
-    getPivot(id) {
-        return this.controllers[id].getObjectByName('pivot');
-    }
-    /**
-     * Gets the world position of the pivot for a given controller id.
-     * @param id - The controller id.
-     * @returns The world position of the pivot.
-     */
-    getPivotPosition(id) {
-        return this.getPivot(id)?.getWorldPosition(new THREE.Vector3());
-    }
-    /**
-     * Gets reticle's direction in THREE.Vector3.
-     * Requires reticle enabled to be called.
-     * @param controllerId -
-     */
-    getReticleDirection(controllerId) {
-        return this.controllers[controllerId].reticle?.direction;
-    }
-    /**
-     * Gets the object targeted by the reticle.
-     * Requires `options.reticle.enabled`.
-     * @param id - The controller id.
-     * @returns The targeted object, or null.
-     */
-    getReticleTarget(id) {
-        return this.controllers[id].reticle?.targetObject;
-    }
-    /**
-     * Gets the intersection details from the reticle's raycast.
-     * Requires `options.reticle.enabled`.
-     * @param id - The controller id.
-     * @returns The intersection object, or null if no intersection.
-     */
-    getReticleIntersection(id) {
-        return this.controllers[id].reticle?.intersection;
-    }
-    /**
-     * Checks if any controller is pointing at the given object or its children.
-     * @param obj - The object to check against.
-     * @returns True if a controller is pointing at the object.
-     */
-    isPointingAt(obj) {
-        for (const selected of this.hoveredObjectsForController.values()) {
-            if (objectIsDescendantOf(selected, obj)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    /**
-     * Checks if any controller is selecting the given object or its children.
-     * @param obj - The object to check against.
-     * @returns True if a controller is selecting the object.
-     */
-    isSelectingAt(obj) {
-        for (const selected of this.selectedObjectsForController.values()) {
-            if (objectIsDescendantOf(selected, obj)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    /**
-     * Gets the intersection point on a specific object.
-     * Not recommended for general use, since a View / ModelView's
-     * ux.positions contains the intersected points.
-     * @param obj - The object to check for intersection.
-     * @param id - The controller ID, or -1 for any controller.
-     * @returns The intersection details, or null if no intersection.
-     */
-    getIntersectionAt(obj, id = -1) {
-        if (id == -1) {
-            for (let i = 0; i < 2; ++i) {
-                if (this.getReticleTarget(i) === obj) {
-                    return this.getReticleIntersection(i);
-                }
-            }
-        }
-        else {
-            if (this.getReticleTarget(id) === obj) {
-                return this.getReticleIntersection(id);
-            }
-        }
-        return null;
-    }
-    /**
-     * Gets the world position of a controller.
-     * @param id - The controller id.
-     * @param target - The target vector to
-     * store the result.
-     * @returns The world position of the controller.
-     */
-    getControllerPosition(id, target = new THREE.Vector3()) {
-        this.controllers[id].getWorldPosition(target);
-        return target;
-    }
-    /**
-     * Calculates the distance between a controller and an object.
-     * @param id - The controller id.
-     * @param object - The object to measure the distance to.
-     * @returns The distance between the controller and the object.
-     */
-    getControllerObjectDistance(id, object) {
-        const controllerPos = this.getControllerPosition(id);
-        const objPos = new THREE.Vector3();
-        object.getWorldPosition(objPos);
-        return controllerPos.distanceTo(objPos);
-    }
-    /**
-     * Checks if either controller is selecting.
-     * @param id - The controller id. If -1, check both controllers.
-     * @returns True if selecting, false otherwise.
-     */
-    isSelecting(id = -1) {
-        if (id == -1) {
-            return this.input.controllers.some((controller) => {
-                return controller.userData.selected;
-            });
-        }
-        return this.input.controllers[id].userData.selected;
-    }
-    /**
-     * Checks if either controller is squeezing.
-     * @param id - The controller id. If -1, check both controllers.
-     * @returns True if squeezing, false otherwise.
-     */
-    isSqueezing(id = -1) {
-        if (id == -1) {
-            return this.input.controllers.some((controller) => {
-                return controller.userData.squeezing;
-            });
-        }
-        return this.input.controllers[id].userData.squeezing;
-    }
-    /**
-     * Handles the select start event for a controller.
-     * @param event - The event object.
-     */
-    onSelectStart(event) {
-        const controller = event.target;
-        const intersections = this.input.intersectionsForController.get(controller).filter(intersection => {
-            let target = intersection.object;
-            while (target) {
-                if (target
-                    .ignoreReticleRaycast === true) {
-                    return false;
-                }
-                target = target.parent;
-            }
-            return true;
-        });
-        if (intersections && intersections.length > 0) {
-            this.selectedObjectsForController.set(controller, intersections[0].object);
-            this.callObjectSelectStart(event, intersections[0].object);
-        }
-    }
-    /**
-     * Handles the select end event for a controller.
-     * @param event - The event object.
-     */
-    onSelectEnd(event) {
-        const controller = event.target;
-        const intersections = this.input.intersectionsForController.get(controller);
-        if (intersections && intersections.length > 0) {
-            const selectedObject = this.selectedObjectsForController.get(controller);
-            this.callObjectSelectEnd(event, selectedObject || null);
-            this.selectedObjectsForController.delete(controller);
-            let ancestor = selectedObject || null;
-            while (ancestor) {
-                if (ancestor.isView && ancestor.visible) {
-                    ancestor.onTriggered(controller.userData.id);
-                    break;
-                }
-                ancestor = ancestor.parent;
-            }
-        }
-    }
-    /**
-     * Handles the squeeze start event for a controller.
-     * @param _event - The event object.
-     */
-    onSqueezeStart(_event) { }
-    /**
-     * Handles the squeeze end event for a controller.
-     * @param _event - The event object.
-     */
-    onSqueezeEnd(_event) { }
-    /**
-     * The main update loop called each frame. Updates hover state for all
-     * controllers.
-     */
-    update() {
-        if (this.input.controllersEnabled) {
-            for (const controller of this.input.controllers) {
-                this.updateForController(controller);
-            }
-        }
-        // Direct touch detection.
-        this.updateTouchState();
-        // Direct grab detection.
-        this.updateGrabState();
-    }
-    /**
-     * Checks for and handles grab events (touching + pinching).
-     */
-    updateGrabState() {
-        if (!this.hands) {
-            return;
-        }
-        for (let i = 0; i < this.numHands; i++) {
-            const isPinching = this.isSelecting(i);
-            const touchedMeshes = this.touchedObjects.get(i) || new Set();
-            const currentlyGrabbedMeshes = isPinching ? touchedMeshes : new Set();
-            const previouslyGrabbedMeshesMap = this.grabbedObjects.get(i) || new Map();
-            const newlyGrabbedMeshes = [...currentlyGrabbedMeshes].filter(mesh => !previouslyGrabbedMeshesMap.has(mesh));
-            const releasedMeshes = [...previouslyGrabbedMeshesMap.keys()].filter(mesh => !currentlyGrabbedMeshes.has(mesh));
-            for (const mesh of newlyGrabbedMeshes) {
-                const hand = this.hands.getWrist(i);
-                if (!hand)
-                    continue;
-                const grabEvent = { handIndex: i, hand: hand };
-                if (!this.grabbedObjects.has(i)) {
-                    this.grabbedObjects.set(i, new Map());
-                }
-                this.grabbedObjects.get(i).set(mesh, grabEvent);
-                this.callObjectGrabStart(grabEvent, mesh);
-            }
-            for (const mesh of releasedMeshes) {
-                const grabEvent = previouslyGrabbedMeshesMap.get(mesh);
-                this.callObjectGrabEnd(grabEvent, mesh);
-                previouslyGrabbedMeshesMap.delete(mesh);
-            }
-            for (const mesh of currentlyGrabbedMeshes) {
-                if (previouslyGrabbedMeshesMap.has(mesh)) {
-                    const grabEvent = previouslyGrabbedMeshesMap.get(mesh);
-                    this.callObjectGrabbing(grabEvent, mesh);
-                }
-            }
-        }
-    }
-    /**
-     * Checks for and handles touch events for the hands' index fingers.
-     */
-    updateTouchState() {
-        if (!this.hands) {
-            return;
-        }
-        for (let i = 0; i < this.numHands; i++) {
-            const indexTip = this.hands.getIndexTip(i);
-            if (!indexTip) {
-                continue;
-            }
-            const indexTipPosition = new THREE.Vector3();
-            indexTip.getWorldPosition(indexTipPosition);
-            const currentlyTouchedMeshes = [];
-            this.scene.traverse((object) => {
-                if (object.isMesh && object.visible) {
-                    const boundingBox = new THREE.Box3().setFromObject(object);
-                    if (boundingBox.containsPoint(indexTipPosition)) {
-                        currentlyTouchedMeshes.push(object);
-                    }
-                }
-            });
-            const previouslyTouchedMeshes = this.touchedObjects.get(i) || new Set();
-            const currentMeshesSet = new Set(currentlyTouchedMeshes);
-            const newlyTouchedMeshes = currentlyTouchedMeshes.filter(mesh => !previouslyTouchedMeshes.has(mesh));
-            const removedMeshes = [...previouslyTouchedMeshes].filter(mesh => !currentMeshesSet.has(mesh));
-            const touchingEvent = { handIndex: i, touchPosition: indexTipPosition };
-            if (newlyTouchedMeshes.length > 0) {
-                for (const mesh of newlyTouchedMeshes) {
-                    this.callObjectTouchStart(touchingEvent, mesh);
-                }
-            }
-            if (removedMeshes.length > 0) {
-                for (const mesh of removedMeshes) {
-                    this.callObjectTouchEnd(touchingEvent, mesh);
-                }
-            }
-            for (const mesh of currentMeshesSet) {
-                this.callObjectTouching(touchingEvent, mesh);
-            }
-            if (currentMeshesSet.size > 0) {
-                this.touchedObjects.set(i, currentMeshesSet);
-            }
-            else {
-                this.touchedObjects.delete(i);
-            }
-        }
-    }
-    /**
-     * Updates the hover state for a single controller.
-     * @param controller - The controller to update.
-     */
-    updateForController(controller) {
-        const intersections = this.input.intersectionsForController.get(controller);
-        const currentHoverTarget = intersections.length > 0 ? intersections[0].object : null;
-        const previousHoverTarget = this.hoveredObjectsForController.get(controller);
-        if (previousHoverTarget !== currentHoverTarget) {
-            this.callHoverExit(controller, previousHoverTarget || null);
-            this.hoveredObjectsForController.set(controller, currentHoverTarget);
-            this.callHoverEnter(controller, currentHoverTarget);
-        }
-        else if (previousHoverTarget) {
-            this.callOnHovering(controller, previousHoverTarget);
-        }
-    }
-    /**
-     * Recursively calls onHoverExit on a target and its ancestors.
-     * @param controller - The controller exiting hover.
-     * @param target - The object being exited.
-     */
-    callHoverExit(controller, target) {
-        if (target == null)
-            return;
-        if (target.isXRScript) {
-            target.onHoverExit(controller);
-        }
-        this.callHoverExit(controller, target.parent);
-    }
-    /**
-     * Recursively calls onHoverEnter on a target and its ancestors.
-     * @param controller - The controller entering hover.
-     * @param target - The object being entered.
-     */
-    callHoverEnter(controller, target) {
-        if (target == null)
-            return;
-        if (target.isXRScript) {
-            target.onHoverEnter(controller);
-        }
-        this.callHoverEnter(controller, target.parent);
-    }
-    /**
-     * Recursively calls onHovering on a target and its ancestors.
-     * @param controller - The controller hovering.
-     * @param target - The object being entered.
-     */
-    callOnHovering(controller, target) {
-        if (target == null)
-            return;
-        if (target.isXRScript) {
-            target.onHovering(controller);
-        }
-        this.callOnHovering(controller, target.parent);
-    }
-    /**
-     * Recursively calls onObjectSelectStart on a target and its ancestors until
-     * the event is handled.
-     * @param event - The original select start event.
-     * @param target - The object being selected.
-     */
-    callObjectSelectStart(event, target) {
-        if (target == null)
-            return;
-        if (target.isXRScript &&
-            target.onObjectSelectStart(event)) {
-            // The event was handled already so do not propagate up.
-            return;
-        }
-        this.callObjectSelectStart(event, target.parent);
-    }
-    /**
-     * Recursively calls onObjectSelectEnd on a target and its ancestors until
-     * the event is handled.
-     * @param event - The original select end event.
-     * @param target - The object being un-selected.
-     */
-    callObjectSelectEnd(event, target) {
-        if (target == null)
-            return;
-        if (target.isXRScript &&
-            target.onObjectSelectEnd(event)) {
-            // The event was handled already so do not propagate up.
-            return;
-        }
-        this.callObjectSelectEnd(event, target.parent);
-    }
-    /**
-     * Recursively calls onObjectTouchStart on a target and its ancestors.
-     * @param event - The original touch start event.
-     * @param target - The object being touched.
-     */
-    callObjectTouchStart(event, target) {
-        if (target == null)
-            return;
-        if (target.isXRScript) {
-            target.onObjectTouchStart(event);
-        }
-        this.callObjectTouchStart(event, target.parent);
-    }
-    /**
-     * Recursively calls onObjectTouching on a target and its ancestors.
-     * @param event - The original touch event.
-     * @param target - The object being touched.
-     */
-    callObjectTouching(event, target) {
-        if (target == null)
-            return;
-        if (target.isXRScript) {
-            target.onObjectTouching(event);
-        }
-        this.callObjectTouching(event, target.parent);
-    }
-    /**
-     * Recursively calls onObjectTouchEnd on a target and its ancestors.
-     * @param event - The original touch end event.
-     * @param target - The object being un-touched.
-     */
-    callObjectTouchEnd(event, target) {
-        if (target == null)
-            return;
-        if (target.isXRScript) {
-            target.onObjectTouchEnd(event);
-        }
-        this.callObjectTouchEnd(event, target.parent);
-    }
-    /**
-     * Recursively calls onObjectGrabStart on a target and its ancestors.
-     * @param event - The original grab start event.
-     * @param target - The object being grabbed.
-     */
-    callObjectGrabStart(event, target) {
-        if (target == null)
-            return;
-        if (target.isXRScript) {
-            target.onObjectGrabStart(event);
-        }
-        this.callObjectGrabStart(event, target.parent);
-    }
-    /**
-     * Recursively calls onObjectGrabbing on a target and its ancestors.
-     * @param event - The original grabbing event.
-     * @param target - The object being grabbed.
-     */
-    callObjectGrabbing(event, target) {
-        if (target == null)
-            return;
-        if (target.isXRScript) {
-            target.onObjectGrabbing(event);
-        }
-        this.callObjectGrabbing(event, target.parent);
-    }
-    /**
-     * Recursively calls onObjectGrabEnd on a target and its ancestors.
-     * @param event - The original grab end event.
-     * @param target - The object being released.
-     */
-    callObjectGrabEnd(event, target) {
-        if (target == null)
-            return;
-        if (target.isXRScript) {
-            target.onObjectGrabEnd(event);
-        }
-        this.callObjectGrabEnd(event, target.parent);
-    }
-    /**
-     * Checks if a controller is selecting a specific object. Returns the
-     * intersection details if true.
-     * @param obj - The object to check for selection.
-     * @param controller - The controller performing the select.
-     * @returns The intersection object if a match is found, else null.
-     */
-    select(obj, controller) {
-        const intersections = this.input.intersectionsForController.get(controller);
-        return intersections && intersections.length > 0 &&
-            objectIsDescendantOf(intersections[0].object, obj) ?
-            intersections[0] :
-            null;
-    }
-}
-
 const DOWN = Object.freeze(new THREE.Vector3(0, -1, 0));
 const UP = Object.freeze(new THREE.Vector3(0, 1, 0));
 const FORWARD = Object.freeze(new THREE.Vector3(0, 0, -1));
@@ -13810,6 +14353,7 @@ class Core {
         this.registry.register(options.world, WorldOptions);
         this.registry.register(options.ai, AIOptions);
         this.registry.register(options.sound, SoundOptions);
+        this.registry.register(options.gestures, GestureRecognitionOptions);
         if (options.transition.enabled) {
             this.transition = new XRTransition();
             this.user.add(this.transition);
@@ -13872,6 +14416,11 @@ class Core {
         if (options.hands.enabled) {
             webXRRequiredFeatures.push('hand-tracking');
             this.user.hands = new Hands(this.input.hands);
+            if (options.gestures.enabled) {
+                this.gestureRecognition = new GestureRecognition();
+                this.scene.add(this.gestureRecognition);
+                this.registry.register(this.gestureRecognition);
+            }
         }
         if (options.world.planes.enabled) {
             webXRRequiredFeatures.push('plane-detection');
@@ -16063,5 +16612,5 @@ class VideoFileStream extends VideoStream {
     }
 }
 
-export { AI, AIOptions, AVERAGE_IPD_METERS, ActiveControllers, Agent, AnimatableNumber, AudioListener, AudioPlayer, BACK, BackgroundMusic, CategoryVolumes, Col, Core, CoreSound, DEFAULT_DEVICE_CAMERA_HEIGHT, DEFAULT_DEVICE_CAMERA_WIDTH, DOWN, Depth, DepthMesh, DepthMeshOptions, DepthOptions, DepthTextures, DetectedObject, DetectedPlane, DeviceCameraOptions, DragManager, DragMode, ExitButton, FORWARD, FreestandingSlider, GazeController, Gemini, GeminiOptions, GenerateSkyboxTool, GetWeatherTool, Grid, HAND_BONE_IDX_CONNECTION_MAP, HAND_JOINT_COUNT, HAND_JOINT_IDX_CONNECTION_MAP, HAND_JOINT_NAMES, Handedness, Hands, HandsOptions, HorizontalPager, IconButton, IconView, ImageView, Input, InputOptions, Keycodes, LEFT, LEFT_VIEW_ONLY_LAYER, LabelView, Lighting, LightingOptions, LoadingSpinnerManager, MaterialSymbolsView, MeshScript, ModelLoader, ModelViewer, MouseController, NEXT_SIMULATOR_MODE, NUM_HANDS, OCCLUDABLE_ITEMS_LAYER, ObjectDetector, ObjectsOptions, OcclusionPass, OcclusionUtils, OpenAI, OpenAIOptions, Options, PageIndicator, Pager, PagerState, Panel, PanelMesh, Physics, PhysicsOptions, PinchOnButtonAction, PlaneDetector, PlanesOptions, RIGHT, RIGHT_VIEW_ONLY_LAYER, Registry, Reticle, ReticleOptions, RotationRaycastMesh, Row, SIMULATOR_HAND_POSE_NAMES, SIMULATOR_HAND_POSE_TO_JOINTS_LEFT, SIMULATOR_HAND_POSE_TO_JOINTS_RIGHT, SOUND_PRESETS, ScreenshotSynthesizer, Script, ScriptMixin, ScriptsManager, ScrollingTroikaTextView, SetSimulatorModeEvent, ShowHandsAction, Simulator, SimulatorCamera, SimulatorControlMode, SimulatorControllerState, SimulatorControls, SimulatorDepth, SimulatorDepthMaterial, SimulatorHandPose, SimulatorHandPoseChangeRequestEvent, SimulatorHands, SimulatorInterface, SimulatorMediaDeviceInfo, SimulatorMode, SimulatorOptions, SimulatorRenderMode, SimulatorScene, SimulatorUser, SimulatorUserAction, SketchPanel, SkyboxAgent, SoundOptions, SoundSynthesizer, SpatialAudio, SpatialPanel, SpeechRecognizer, SpeechRecognizerOptions, SpeechSynthesizer, SpeechSynthesizerOptions, SplatAnchor, StreamState, TextButton, TextScrollerState, TextView, Tool, UI, UI_OVERLAY_LAYER, UP, UX, User, VIEW_DEPTH_GAP, VerticalPager, VideoFileStream, VideoStream, VideoView, View, VolumeCategory, WaitFrame, WalkTowardsPanelAction, World, WorldOptions, XRButton, XRDeviceCamera, XREffects, XRPass, XRTransitionOptions, XR_BLOCKS_ASSETS_PATH, ZERO_VECTOR3, add, ai, aspectRatios, callInitWithDependencyInjection, clamp, clampRotationToAngle, core, cropImage, extractYaw, getColorHex, getDeltaTime, getUrlParamBool, getUrlParamFloat, getUrlParamInt, getUrlParameter, getVec4ByColorString, getXrCameraLeft, getXrCameraRight, init, initScript, lerp, loadStereoImageAsTextures, loadingSpinnerManager, lookAtRotation, objectIsDescendantOf, onDesktopUserAgent, parseBase64DataURL, placeObjectAtIntersectionFacingTarget, print, rgbToDepthParams, scene, showOnlyInLeftEye, showOnlyInRightEye, showReticleOnDepthMesh, transformRgbToDepthUv, transformRgbUvToWorld, traverseUtil, uninitScript, urlParams, user, world, xrDepthMeshOptions, xrDepthMeshPhysicsOptions, xrDepthMeshVisualizationOptions, xrDeviceCameraEnvironmentContinuousOptions, xrDeviceCameraEnvironmentOptions, xrDeviceCameraUserContinuousOptions, xrDeviceCameraUserOptions };
+export { AI, AIOptions, AVERAGE_IPD_METERS, ActiveControllers, Agent, AnimatableNumber, AudioListener, AudioPlayer, BACK, BackgroundMusic, CategoryVolumes, Col, Core, CoreSound, DEFAULT_DEVICE_CAMERA_HEIGHT, DEFAULT_DEVICE_CAMERA_WIDTH, DOWN, Depth, DepthMesh, DepthMeshOptions, DepthOptions, DepthTextures, DetectedObject, DetectedPlane, DeviceCameraOptions, DragManager, DragMode, ExitButton, FORWARD, FreestandingSlider, GazeController, Gemini, GeminiOptions, GenerateSkyboxTool, GestureRecognition, GestureRecognitionOptions, GetWeatherTool, Grid, HAND_BONE_IDX_CONNECTION_MAP, HAND_JOINT_COUNT, HAND_JOINT_IDX_CONNECTION_MAP, HAND_JOINT_NAMES, Handedness, Hands, HandsOptions, HorizontalPager, IconButton, IconView, ImageView, Input, InputOptions, Keycodes, LEFT, LEFT_VIEW_ONLY_LAYER, LabelView, Lighting, LightingOptions, LoadingSpinnerManager, MaterialSymbolsView, MeshScript, ModelLoader, ModelViewer, MouseController, NEXT_SIMULATOR_MODE, NUM_HANDS, OCCLUDABLE_ITEMS_LAYER, ObjectDetector, ObjectsOptions, OcclusionPass, OcclusionUtils, OpenAI, OpenAIOptions, Options, PageIndicator, Pager, PagerState, Panel, PanelMesh, Physics, PhysicsOptions, PinchOnButtonAction, PlaneDetector, PlanesOptions, RIGHT, RIGHT_VIEW_ONLY_LAYER, Registry, Reticle, ReticleOptions, RotationRaycastMesh, Row, SIMULATOR_HAND_POSE_NAMES, SIMULATOR_HAND_POSE_TO_JOINTS_LEFT, SIMULATOR_HAND_POSE_TO_JOINTS_RIGHT, SOUND_PRESETS, ScreenshotSynthesizer, Script, ScriptMixin, ScriptsManager, ScrollingTroikaTextView, SetSimulatorModeEvent, ShowHandsAction, Simulator, SimulatorCamera, SimulatorControlMode, SimulatorControllerState, SimulatorControls, SimulatorDepth, SimulatorDepthMaterial, SimulatorHandPose, SimulatorHandPoseChangeRequestEvent, SimulatorHands, SimulatorInterface, SimulatorMediaDeviceInfo, SimulatorMode, SimulatorOptions, SimulatorRenderMode, SimulatorScene, SimulatorUser, SimulatorUserAction, SketchPanel, SkyboxAgent, SoundOptions, SoundSynthesizer, SpatialAudio, SpatialPanel, SpeechRecognizer, SpeechRecognizerOptions, SpeechSynthesizer, SpeechSynthesizerOptions, SplatAnchor, StreamState, TextButton, TextScrollerState, TextView, Tool, UI, UI_OVERLAY_LAYER, UP, UX, User, VIEW_DEPTH_GAP, VerticalPager, VideoFileStream, VideoStream, VideoView, View, VolumeCategory, WaitFrame, WalkTowardsPanelAction, World, WorldOptions, XRButton, XRDeviceCamera, XREffects, XRPass, XRTransitionOptions, XR_BLOCKS_ASSETS_PATH, ZERO_VECTOR3, add, ai, aspectRatios, callInitWithDependencyInjection, clamp, clampRotationToAngle, core, cropImage, extractYaw, getColorHex, getDeltaTime, getUrlParamBool, getUrlParamFloat, getUrlParamInt, getUrlParameter, getVec4ByColorString, getXrCameraLeft, getXrCameraRight, init, initScript, lerp, loadStereoImageAsTextures, loadingSpinnerManager, lookAtRotation, objectIsDescendantOf, onDesktopUserAgent, parseBase64DataURL, placeObjectAtIntersectionFacingTarget, print, rgbToDepthParams, scene, showOnlyInLeftEye, showOnlyInRightEye, showReticleOnDepthMesh, transformRgbToDepthUv, transformRgbUvToWorld, traverseUtil, uninitScript, urlParams, user, world, xrDepthMeshOptions, xrDepthMeshPhysicsOptions, xrDepthMeshVisualizationOptions, xrDeviceCameraEnvironmentContinuousOptions, xrDeviceCameraEnvironmentOptions, xrDeviceCameraUserContinuousOptions, xrDeviceCameraUserOptions };
 //# sourceMappingURL=xrblocks.js.map
