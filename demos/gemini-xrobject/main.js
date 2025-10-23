@@ -10,7 +10,7 @@ options.deviceCamera.enabled = true;
 options.deviceCamera.videoConstraints = {
   width: {ideal: 640},
   height: {ideal: 480},
-  facingMode: 'environment'
+  facingMode: 'environment',
 };
 options.reticles.enabled = false;
 options.controllers.visualizeRays = false;
@@ -35,13 +35,14 @@ options.ai.gemini.model = 'gemini-2.5-flash';
 function start() {
   const xrObjectManager = new XRObjectManager();
   const triggerManager = new TriggerManager(
-      xrObjectManager.queryObjectionDetection.bind(xrObjectManager));
+    xrObjectManager.queryObjectionDetection.bind(xrObjectManager)
+  );
   window.xrObject = xrObjectManager;
   xb.add(xrObjectManager);
   xb.add(triggerManager);
   xb.init(options);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   start();
 });

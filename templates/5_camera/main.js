@@ -11,22 +11,24 @@ export class CameraViewManager extends xb.Script {
 
   constructor() {
     super();
-    this.panel = new xb.SpatialPanel(
-        {backgroundColor: '#2b2b2baa', useDefaultPosition: true});
+    this.panel = new xb.SpatialPanel({
+      backgroundColor: '#2b2b2baa',
+      useDefaultPosition: true,
+    });
     const grid = this.panel.addGrid();
     this.videoView = grid.addRow({weight: 0.7}).addVideo();
     const txtRow = grid.addRow({weight: 0.15});
-    this.cameraLabel =
-        txtRow.addCol({weight: 1})
-            .addText({text: 'Camera', fontColor: '#ffffff', fontSize: 0.05});
+    this.cameraLabel = txtRow
+      .addCol({weight: 1})
+      .addText({text: 'Camera', fontColor: '#ffffff', fontSize: 0.05});
     const ctrlRow = grid.addRow({weight: 0.2});
     this.prevCameraButton = ctrlRow.addCol({weight: 0.5}).addIconButton({
       text: 'skip_previous',
-      fontSize: 0.5
+      fontSize: 0.5,
     });
     this.nextCameraButton = ctrlRow.addCol({weight: 0.5}).addIconButton({
       text: 'skip_next',
-      fontSize: 0.5
+      fontSize: 0.5,
     });
 
     this.prevCameraButton.onTriggered = () => this.cycleCamera_(-1);
@@ -46,7 +48,8 @@ export class CameraViewManager extends xb.Script {
       }
     });
     this.cameraLabel.setText(
-        this.cameraStream_.getCurrentDevice()?.label || 'Camera');
+      this.cameraStream_.getCurrentDevice()?.label || 'Camera'
+    );
     this.videoView.load(this.cameraStream_);
   }
 
@@ -58,14 +61,14 @@ export class CameraViewManager extends xb.Script {
     const devices = this.cameraStream_.getAvailableDevices();
     if (devices.length <= 1) return;
     const newIndex =
-        (this.cameraStream_.getCurrentDeviceIndex() + offset + devices.length) %
-        devices.length;
+      (this.cameraStream_.getCurrentDeviceIndex() + offset + devices.length) %
+      devices.length;
     await this.cameraStream_.setDeviceId(devices[newIndex].deviceId);
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  const options = new xb.Options()
+document.addEventListener('DOMContentLoaded', function () {
+  const options = new xb.Options();
   options.enableUI();
   options.enableCamera();
   xb.add(new CameraViewManager());

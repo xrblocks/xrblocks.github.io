@@ -6,7 +6,7 @@ import {TranscriptionManager} from './TranscriptionManager.js';
 
 const ASSETS_BASE_URL = 'https://cdn.jsdelivr.net/gh/xrblocks/assets@main/';
 const PROPRIETARY_ASSETS_BASE_URL =
-    'https://cdn.jsdelivr.net/gh/xrblocks/proprietary-assets@main/';
+  'https://cdn.jsdelivr.net/gh/xrblocks/proprietary-assets@main/';
 
 const DATA = [
   {
@@ -14,7 +14,7 @@ const DATA = [
       scale: {x: 4.0, y: 4.0, z: 4.0},
       path: PROPRIETARY_ASSETS_BASE_URL + 'monalisa/',
       model: 'mona_lisa_picture_frame_compressed.glb',
-      verticallyAlignObject: false
+      verticallyAlignObject: false,
     },
     prompt: '“What is she smiling about?”',
   },
@@ -25,9 +25,9 @@ const DATA = [
       position: {x: 0, y: -0.2, z: -3.0},
       path: PROPRIETARY_ASSETS_BASE_URL + 'chess/',
       model: 'chess_compressed.glb',
-      verticallyAlignObject: false
+      verticallyAlignObject: false,
     },
-    prompt: '“What\'s a good strategy for this game?”',
+    prompt: "“What's a good strategy for this game?”",
   },
   {
     model: {
@@ -36,10 +36,10 @@ const DATA = [
       position: {x: 0, y: 0.0, z: 0},
       path: PROPRIETARY_ASSETS_BASE_URL + 'vegetable_on_board/',
       model: 'vegetable_on_board_compressed.glb',
-      verticallyAlignObject: false
+      verticallyAlignObject: false,
     },
     prompt:
-        '“What is the most unexpected dish you could make with these ingredients?”',
+      '“What is the most unexpected dish you could make with these ingredients?”',
   },
   {
     model: {
@@ -48,7 +48,7 @@ const DATA = [
       scale: {x: 0.3, y: 0.3, z: 0.3},
       position: {x: 0, y: -0.6, z: 0},
       verticallyAlignObject: false,
-      horizontallyAlignObject: false
+      horizontallyAlignObject: false,
     },
     prompt: '“If this dinosaur could talk, what would it say?”',
   },
@@ -62,7 +62,7 @@ const DATA = [
     },
     modelAnimation: new EarthAnimation(),
     prompt: '“How big would I need to be to hold this in my hands?”',
-  }
+  },
 ];
 
 export class GeminiIcebreakers extends xb.Script {
@@ -83,7 +83,7 @@ export class GeminiIcebreakers extends xb.Script {
     const panel = new xb.SpatialPanel({
       backgroundColor: '#00000000',
       useDefaultPosition: false,
-      showEdge: false
+      showEdge: false,
     });
     this.add(panel);
 
@@ -93,8 +93,9 @@ export class GeminiIcebreakers extends xb.Script {
 
     const imageRow = grid.addRow({weight: 0.5});
     imageRow.addCol({weight: 0.1});
-    this.imagePager =
-        new xb.HorizontalPager({state: this.descriptionPagerState});
+    this.imagePager = new xb.HorizontalPager({
+      state: this.descriptionPagerState,
+    });
     imageRow.addCol({weight: 0.8}).add(this.imagePager);
     imageRow.addCol({weight: 0.1});
     for (let i = 0; i < DATA.length; i++) {
@@ -113,8 +114,11 @@ export class GeminiIcebreakers extends xb.Script {
     const ctrlGrid = ctrlPanel.addGrid();
     {
       const leftColumn = ctrlGrid.addCol({weight: 0.1});
-      this.backButton = leftColumn.addIconButton(
-          {text: 'arrow_back', fontSize: 0.5, paddingX: 0.2});
+      this.backButton = leftColumn.addIconButton({
+        text: 'arrow_back',
+        fontSize: 0.5,
+        paddingX: 0.2,
+      });
 
       const midColumn = ctrlGrid.addCol({weight: 0.8});
       const descRow = midColumn.addRow({weight: 0.8});
@@ -122,25 +126,36 @@ export class GeminiIcebreakers extends xb.Script {
 
       // TODO: use phong and point light to highlight gemini.
       this.add(this.descriptionPagerState);
-      this.descriptionPager = new xb.HorizontalPager(
-          {state: this.descriptionPagerState, enableRaycastOnChildren: false});
+      this.descriptionPager = new xb.HorizontalPager({
+        state: this.descriptionPagerState,
+        enableRaycastOnChildren: false,
+      });
       descRow.add(this.descriptionPager);
-      this.transcriptView = new xb.ScrollingTroikaTextView(
-          {text: '', fontSize: 0.05, textAlign: 'left'});
+      this.transcriptView = new xb.ScrollingTroikaTextView({
+        text: '',
+        fontSize: 0.05,
+        textAlign: 'left',
+      });
       for (let i = 0; i < DATA.length; i++) {
-        this.descriptionPager.children[i].add(new xb.TextView({
-          text: this.data[i].prompt,
-          fontColor: '#ffffff',
-          imageOverlay: 'images/gradient.png',
-          /** This modifier makes the gradient more towards purple. */
-          imageOffsetX: 0.2
-        }));
+        this.descriptionPager.children[i].add(
+          new xb.TextView({
+            text: this.data[i].prompt,
+            fontColor: '#ffffff',
+            imageOverlay: 'images/gradient.png',
+            /** This modifier makes the gradient more towards purple. */
+            imageOffsetX: 0.2,
+          })
+        );
       }
 
       const botRow = midColumn.addRow({weight: 0.1});
 
-      botRow.add(new xb.PageIndicator(
-          {pagerState: this.descriptionPager.state, fontColor: '#FFFFFF'}));
+      botRow.add(
+        new xb.PageIndicator({
+          pagerState: this.descriptionPager.state,
+          fontColor: '#FFFFFF',
+        })
+      );
 
       const rightColumn = ctrlGrid.addCol({weight: 0.1});
 
@@ -150,13 +165,12 @@ export class GeminiIcebreakers extends xb.Script {
         paddingX: -0.2,
       });
 
-
       this.micButton = ctrlGrid.addCol({weight: 0.1}).addIconButton({
         text: 'mic',
         fontSize: 0.8,
         paddingX: -2,
         paddingY: -1,
-        fontColor: '#fdfdfdff'
+        fontColor: '#fdfdfdff',
       });
       this.micButton.onTriggered = () => {
         this.toggleGeminiLive();
@@ -203,8 +217,9 @@ export class GeminiIcebreakers extends xb.Script {
   }
 
   reload() {
-    const roundedCurrentPage =
-        Math.round(this.descriptionPagerState.currentPage);
+    const roundedCurrentPage = Math.round(
+      this.descriptionPagerState.currentPage
+    );
     if (roundedCurrentPage != this.journeyId) {
       this.descriptionPagerState.currentPage = this.journeyId;
     }
@@ -228,8 +243,9 @@ export class GeminiIcebreakers extends xb.Script {
       this.micButtonInitialY = this.micButton.position.y;
     }
 
-    const roundedCurrentPage =
-        Math.round(this.descriptionPagerState.currentPage);
+    const roundedCurrentPage = Math.round(
+      this.descriptionPagerState.currentPage
+    );
     if (this.journeyId != roundedCurrentPage) {
       this.journeyId = roundedCurrentPage;
       this.reload();
@@ -239,12 +255,16 @@ export class GeminiIcebreakers extends xb.Script {
       model.modelAnimation?.update(deltaTime);
     }
 
-    if (this.micButtonInitialY !== null && this.micButton.visible &&
-        this.isAIRunning) {
+    if (
+      this.micButtonInitialY !== null &&
+      this.micButton.visible &&
+      this.isAIRunning
+    ) {
       const jumpHeight = 0.05;
       const jumpSpeed = 4;
-      this.micButton.position.y = this.micButtonInitialY +
-          Math.abs(Math.sin(this.time * jumpSpeed)) * jumpHeight;
+      this.micButton.position.y =
+        this.micButtonInitialY +
+        Math.abs(Math.sin(this.time * jumpSpeed)) * jumpHeight;
     } else if (this.micButtonInitialY !== null) {
       this.micButton.position.y = this.micButtonInitialY;
     }
@@ -265,7 +285,7 @@ export class GeminiIcebreakers extends xb.Script {
             this.reload();
             this.imagePager.children[i].children[0].add(model);
             data.modelAnimation?.setModel(model);
-          }
+          },
         });
         this.models[i] = model;
       }
@@ -319,7 +339,7 @@ export class GeminiIcebreakers extends xb.Script {
         onclose: (closeEvent) => {
           this.cleanup();
           this.isAIRunning = false;
-        }
+        },
       });
       xb.core.ai.startLiveSession().catch(reject);
     });
@@ -331,11 +351,13 @@ export class GeminiIcebreakers extends xb.Script {
     const content = message.serverContent;
     if (content) {
       content.inputTranscription?.text &&
-          this.transcriptionManager.handleInputTranscription(
-              content.inputTranscription.text);
+        this.transcriptionManager.handleInputTranscription(
+          content.inputTranscription.text
+        );
       content.outputTranscription?.text &&
-          this.transcriptionManager.handleOutputTranscription(
-              content.outputTranscription.text);
+        this.transcriptionManager.handleOutputTranscription(
+          content.outputTranscription.text
+        );
       content.turnComplete && this.transcriptionManager.finalizeTurn();
     }
   }
@@ -348,12 +370,13 @@ export class GeminiIcebreakers extends xb.Script {
     this.screenshotInterval = setInterval(async () => {
       const base64Image = await xb.core.screenshotSynthesizer.getScreenshot();
       if (base64Image) {
-        const base64Data = base64Image.startsWith('data:') ?
-            base64Image.split(',')[1] :
-            base64Image;
+        const base64Data = base64Image.startsWith('data:')
+          ? base64Image.split(',')[1]
+          : base64Image;
         try {
-          xb.core.ai?.sendRealtimeInput?.(
-              {video: {data: base64Data, mimeType: 'image/png'}});
+          xb.core.ai?.sendRealtimeInput?.({
+            video: {data: base64Data, mimeType: 'image/png'},
+          });
         } catch (error) {
           console.warn(error);
           this.stopGeminiLive();
@@ -361,4 +384,4 @@ export class GeminiIcebreakers extends xb.Script {
       }
     }, 1000);
   }
-};
+}

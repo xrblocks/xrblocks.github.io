@@ -21,12 +21,12 @@ export interface Shader {
 /**
  * A recursive readonly type.
  */
-export type DeepReadonly<T> = T extends ((...args: any[]) => any) ? T : T extends object ? {
+export type DeepReadonly<T> = T extends (...args: any[]) => any ? T : T extends object ? {
     readonly [P in keyof T]: DeepReadonly<T[P]>;
 } : T;
 /**
  * A recursive partial type.
  */
-export type DeepPartial<T> = T extends ((...args: any[]) => any) ? T : T extends object ? {
+export type DeepPartial<T> = T extends (...args: any[]) => any ? T : T extends object ? {
     [P in keyof T]?: DeepPartial<T[P]>;
 } : T;

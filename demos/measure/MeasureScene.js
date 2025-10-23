@@ -3,7 +3,7 @@ import * as xb from 'xrblocks';
 
 import {MeasuringTape} from './MeasuringTape.js';
 
-const palette = [0x0F9D58, 0xF4B400, 0x4285F4, 0xDB4437];
+const palette = [0x0f9d58, 0xf4b400, 0x4285f4, 0xdb4437];
 
 export class MeasureScene extends xb.Script {
   activeMeasuringTapes = new Map();
@@ -28,7 +28,7 @@ export class MeasureScene extends xb.Script {
   onSelectStart(event) {
     const controller = event.target;
     const intersections =
-        xb.core.input.intersectionsForController.get(controller);
+      xb.core.input.intersectionsForController.get(controller);
     if (intersections.length == 0) return;
     if (this.activeMeasuringTapes.has(controller)) {
       this.remove(this.activeMeasuringTapes.get(controller));
@@ -37,25 +37,29 @@ export class MeasureScene extends xb.Script {
     const color = palette[this.currentColorIndex];
     this.currentColorIndex = (this.currentColorIndex + 1) % palette.length;
     const measuringTape = new MeasuringTape(
-        closestIntersection.point, closestIntersection.point, 0.05, color);
+      closestIntersection.point,
+      closestIntersection.point,
+      0.05,
+      color
+    );
     this.add(measuringTape);
     this.activeMeasuringTapes.set(controller, measuringTape);
   }
 
   update() {
     for (const [controller, tape] of this.activeMeasuringTapes) {
-      const intersections =
-          xb.core.input.intersectionsForController.get(controller)
-              .filter(intersection => {
-                let target = intersection.object;
-                while (target) {
-                  if (target.ignoreReticleRaycast === true) {
-                    return false;
-                  }
-                  target = target.parent;
-                }
-                return true;
-              });
+      const intersections = xb.core.input.intersectionsForController
+        .get(controller)
+        .filter((intersection) => {
+          let target = intersection.object;
+          while (target) {
+            if (target.ignoreReticleRaycast === true) {
+              return false;
+            }
+            target = target.parent;
+          }
+          return true;
+        });
       if (intersections.length > 0) {
         tape.setSecondPoint(intersections[0].point);
       }

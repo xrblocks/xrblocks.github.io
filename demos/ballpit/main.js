@@ -5,8 +5,10 @@ import * as xb from 'xrblocks';
 
 import {BallPit} from './BallPit.js';
 
-const depthMeshColliderUpdateFps =
-    xb.getUrlParamFloat('depthMeshColliderUpdateFps', 5);
+const depthMeshColliderUpdateFps = xb.getUrlParamFloat(
+  'depthMeshColliderUpdateFps',
+  5
+);
 
 const options = new xb.Options();
 options.depth = new xb.DepthOptions(xb.xrDepthMeshPhysicsOptions);
@@ -15,7 +17,7 @@ options.depth.depthMesh.colliderUpdateFps = depthMeshColliderUpdateFps;
 options.xrButton = {
   ...options.xrButton,
   startText: '<i id="xrlogo"></i> LET THE FUN BEGIN',
-  endText: '<i id="xrlogo"></i> MISSION COMPLETE'
+  endText: '<i id="xrlogo"></i> MISSION COMPLETE',
 };
 options.physics.RAPIER = RAPIER;
 
@@ -25,6 +27,6 @@ async function start() {
   await xb.init(options);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   start();
 });

@@ -10,13 +10,16 @@ function easeOutQuint(x) {
 }
 
 export class TriggerManager extends xb.Script {
-  constructor(onTrigger, {
-    triggerDelay = 1000,
-    triggerCooldownDuration = 5000,
-    pulseAnimationDuration = 400,
-    visualizerColor = 0x4970ff,
-    visualizerRadius = 0.028,
-  } = {}) {
+  constructor(
+    onTrigger,
+    {
+      triggerDelay = 1000,
+      triggerCooldownDuration = 5000,
+      pulseAnimationDuration = 400,
+      visualizerColor = 0x4970ff,
+      visualizerRadius = 0.028,
+    } = {}
+  ) {
     super();
     this.onTrigger = onTrigger;
     this.triggerDelay = triggerDelay;
@@ -36,8 +39,11 @@ export class TriggerManager extends xb.Script {
     this.outerVisualizer = null;
     this.innerVisualizer = null;
 
-    this.sphereGeometry =
-        new THREE.SphereGeometry(this.visualizerRadius, 32, 32);
+    this.sphereGeometry = new THREE.SphereGeometry(
+      this.visualizerRadius,
+      32,
+      32
+    );
 
     this.outerMaterialOpacity = 0.3;
     this.outerMaterial = new THREE.MeshBasicMaterial({
@@ -123,7 +129,6 @@ export class TriggerManager extends xb.Script {
       }, this.pulseAnimationDuration);
     }, 75);
 
-
     if (this.onTrigger) {
       this.onTrigger();
     }
@@ -133,11 +138,15 @@ export class TriggerManager extends xb.Script {
     this.removeVisualizers();
     this.outerMaterial.opacity = this.outerMaterialOpacity;
     this.innerMaterial.opacity = this.innerMaterialOpacity;
-    this.outerVisualizer =
-        new THREE.Mesh(this.sphereGeometry, this.outerMaterial);
+    this.outerVisualizer = new THREE.Mesh(
+      this.sphereGeometry,
+      this.outerMaterial
+    );
     parent.add(this.outerVisualizer);
-    this.innerVisualizer =
-        new THREE.Mesh(this.sphereGeometry, this.innerMaterial);
+    this.innerVisualizer = new THREE.Mesh(
+      this.sphereGeometry,
+      this.innerMaterial
+    );
     this.innerVisualizer.scale.setScalar(0.01);
     parent.add(this.innerVisualizer);
   }
@@ -148,10 +157,12 @@ export class TriggerManager extends xb.Script {
     const currentTime = Date.now();
     if (this.isPulsing) {
       const pulseElapsed = currentTime - this.pulseStartTime;
-      const pulseProgress =
-          Math.min(pulseElapsed / this.pulseAnimationDuration, 1.0);
+      const pulseProgress = Math.min(
+        pulseElapsed / this.pulseAnimationDuration,
+        1.0
+      );
       const scaleProgress = easeOutQuint(pulseProgress);
-      const pulseScale = 1.0 + scaleProgress * 0.20;
+      const pulseScale = 1.0 + scaleProgress * 0.2;
       this.innerVisualizer.scale.setScalar(pulseScale);
       const fadeProgress = pulseProgress;
       this.innerMaterial.opacity = 0.5 * (1 - fadeProgress);

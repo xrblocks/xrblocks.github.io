@@ -14,16 +14,16 @@ export class DroneKeyboardControls extends xb.Script {
         this.downKeys.delete(event.code);
     }
     getDroneForwardForce() {
-        return Number(this.downKeys.has(xb.Keycodes.DOWN)) -
-            Number(this.downKeys.has(xb.Keycodes.UP));
+        return (Number(this.downKeys.has(xb.Keycodes.DOWN)) -
+            Number(this.downKeys.has(xb.Keycodes.UP)));
     }
     getDroneRightForce() {
-        return Number(this.downKeys.has(xb.Keycodes.RIGHT)) -
-            Number(this.downKeys.has(xb.Keycodes.LEFT));
+        return (Number(this.downKeys.has(xb.Keycodes.RIGHT)) -
+            Number(this.downKeys.has(xb.Keycodes.LEFT)));
     }
     getDroneUpForce() {
-        return Number(this.downKeys.has(xb.Keycodes.PAGE_UP)) -
-            Number(this.downKeys.has(xb.Keycodes.PAGE_DOWN));
+        return (Number(this.downKeys.has(xb.Keycodes.PAGE_UP)) -
+            Number(this.downKeys.has(xb.Keycodes.PAGE_DOWN)));
     }
 }
 //# sourceMappingURL=DroneKeyboardControls.js.map

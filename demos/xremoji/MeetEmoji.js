@@ -9,8 +9,7 @@ const LEFT_HAND_INDEX = 0;
 const RIGHT_HAND_INDEX = 1;
 
 const PROPRIETARY_ASSETS_PATH =
-    'https://cdn.jsdelivr.net/gh/xrblocks/proprietary-assets@main/';
-
+  'https://cdn.jsdelivr.net/gh/xrblocks/proprietary-assets@main/';
 
 const BALLOONS_MODELS = [
   {
@@ -19,7 +18,7 @@ const BALLOONS_MODELS = [
       rotation: {x: 0, y: 0, z: 0},
       path: PROPRIETARY_ASSETS_PATH + 'balloons/',
       model: 'scene.gltf',
-      verticallyAlignObject: true
+      verticallyAlignObject: true,
     },
     position: {x: 4, y: -1.2, z: -5},
   },
@@ -29,7 +28,7 @@ const BALLOONS_MODELS = [
       rotation: {x: 0, y: 0, z: 0},
       path: PROPRIETARY_ASSETS_PATH + 'balloons/',
       model: 'scene.gltf',
-      verticallyAlignObject: true
+      verticallyAlignObject: true,
     },
     position: {x: 0, y: -1, z: -5},
   },
@@ -39,10 +38,10 @@ const BALLOONS_MODELS = [
       rotation: {x: 0, y: 0, z: 0},
       path: PROPRIETARY_ASSETS_PATH + 'balloons/',
       model: 'scene.gltf',
-      verticallyAlignObject: true
+      verticallyAlignObject: true,
     },
     position: {x: -4, y: -1.2, z: -5},
-  }
+  },
 ];
 
 const VICTORY_MODELS = [
@@ -53,7 +52,7 @@ const VICTORY_MODELS = [
       scene_position: {x: 0, y: 0, z: 0},
       path: PROPRIETARY_ASSETS_PATH + 'Confetti/',
       model: 'scene.gltf',
-      verticallyAlignObject: true
+      verticallyAlignObject: true,
     },
     position: {x: 34, y: -15, z: 15},
   },
@@ -64,10 +63,10 @@ const VICTORY_MODELS = [
       scene_position: {x: 0, y: 0, z: 0},
       path: PROPRIETARY_ASSETS_PATH + 'Confetti/',
       model: 'scene.gltf',
-      verticallyAlignObject: true
+      verticallyAlignObject: true,
     },
     position: {x: -34, y: -15, z: 15},
-  }
+  },
 ];
 
 export class MeetEmoji extends xb.Script {
@@ -87,7 +86,7 @@ export class MeetEmoji extends xb.Script {
       const panel = new xb.SpatialPanel({
         backgroundColor: '#00000000',
         useDefaultPosition: false,
-        showEdge: false
+        showEdge: false,
       });
       panel.scale.set(panel.width, panel.height, 1);
       panel.isRoot = true;
@@ -120,7 +119,7 @@ export class MeetEmoji extends xb.Script {
         textCol.addRow({weight: 1.0}).addText({
           text: 'Give the victory or thumbs-up gestures a try!',
           fontColor: '#ffffff',
-          fontSize: 0.05
+          fontSize: 0.05,
         });
 
         // right indentation
@@ -158,8 +157,10 @@ export class MeetEmoji extends xb.Script {
       }
 
       // Stub for gesture completion handler
-      if (this.handGesture[handIndex] === 4 ||
-          this.handGesture[handIndex] === 2) {
+      if (
+        this.handGesture[handIndex] === 4 ||
+        this.handGesture[handIndex] === 2
+      ) {
         this.onGestureStopped(handIndex, this.handGesture[handIndex]);
       }
       this.handGesture[handIndex] = result;
@@ -199,7 +200,6 @@ export class MeetEmoji extends xb.Script {
    */
   onSelecting(id) {}
 
-
   async update() {
     if (this.playConfettiOnUpdate) {
       this.victoryHandler.play(3000);
@@ -215,19 +215,22 @@ export class MeetEmoji extends xb.Script {
       this.balloonsHandler.onBeforeUpdate();
     }
 
-
     // Run gesture detection 12 times per second for ~60fps
     // But an avg fps for webxr is 30-60
     if (this.frameId % 5 === 0 || false) {
       const hands = xb.core.user.hands;
       if (hands != null && hands.hands && hands.hands.length == 2) {
         this.gestureDetectionHandler.postTask(
-            hands.hands[LEFT_HAND_INDEX].joints, LEFT_HAND_INDEX);
+          hands.hands[LEFT_HAND_INDEX].joints,
+          LEFT_HAND_INDEX
+        );
         this.gestureDetectionHandler.postTask(
-            hands.hands[RIGHT_HAND_INDEX].joints, RIGHT_HAND_INDEX);
+          hands.hands[RIGHT_HAND_INDEX].joints,
+          RIGHT_HAND_INDEX
+        );
       }
     }
 
     this.frameId++;
   }
-};
+}

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {FullScreenQuad,} from 'three/addons/postprocessing/Pass.js';
+import {FullScreenQuad} from 'three/addons/postprocessing/Pass.js';
 import * as xb from 'xrblocks';
 
 import {DepthMapShader} from './depthmap.glsl.js';
@@ -20,14 +20,16 @@ export class DepthVisualizationPass extends xb.XRPass {
       uView: {value: 0},
       uIsTextureArray: {value: 0},
       // Used to interpret Quest 3 depth.
-      uDepthNear: {value: 0}
+      uDepthNear: {value: 0},
     };
-    this.depthMapQuad = new FullScreenQuad(new THREE.ShaderMaterial({
-      name: 'DepthMapShader',
-      uniforms: this.uniforms,
-      vertexShader: DepthMapShader.vertexShader,
-      fragmentShader: DepthMapShader.fragmentShader,
-    }));
+    this.depthMapQuad = new FullScreenQuad(
+      new THREE.ShaderMaterial({
+        name: 'DepthMapShader',
+        uniforms: this.uniforms,
+        vertexShader: DepthMapShader.vertexShader,
+        fragmentShader: DepthMapShader.fragmentShader,
+      })
+    );
   }
 
   setAlpha(value) {
@@ -39,8 +41,10 @@ export class DepthVisualizationPass extends xb.XRPass {
     this.depthTextures[1] = xrDepth.getTexture(1);
     this.uniforms.uRawValueToMeters.value = xrDepth.rawValueToMeters;
     if (this.depthTextures[0]) {
-      this.uniforms.uIsTextureArray.value =
-          this.depthTextures[0].isExternalTexture ? 1.0 : 0;
+      this.uniforms.uIsTextureArray.value = this.depthTextures[0]
+        .isExternalTexture
+        ? 1.0
+        : 0;
     }
   }
 

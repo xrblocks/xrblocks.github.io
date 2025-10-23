@@ -21,14 +21,16 @@ class GestureLogger extends xb.Script {
     const gestures = xb.core.gestureRecognition;
     if (!gestures) {
       console.warn(
-          '[GestureLogger] GestureRecognition is unavailable. ' +
-          'Make sure options.enableGestures() is called before xb.init().');
+        '[GestureLogger] GestureRecognition is unavailable. ' +
+          'Make sure options.enableGestures() is called before xb.init().'
+      );
       return;
     }
     this._onGestureStart = (event) => {
       const {hand, name, confidence = 0} = event.detail;
       console.log(
-          `[gesture] ${hand} hand started ${name} (${confidence.toFixed(2)})`);
+        `[gesture] ${hand} hand started ${name} (${confidence.toFixed(2)})`
+      );
     };
     this._onGestureEnd = (event) => {
       const {hand, name} = event.detail;

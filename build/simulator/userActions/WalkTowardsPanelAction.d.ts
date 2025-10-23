@@ -23,7 +23,7 @@ export declare class WalkTowardsPanelAction extends SimulatorUserAction {
     lookAtTarget(): void;
     lookTowardsTarget(): void;
     moveTowardsTarget(): void;
-    play({ simulatorUser, journeyId, waitFrame }: {
+    play({ simulatorUser, journeyId, waitFrame, }: {
         simulatorUser: SimulatorUser;
         journeyId: number;
         waitFrame: WaitFrame;

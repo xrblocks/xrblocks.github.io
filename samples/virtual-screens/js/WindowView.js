@@ -39,7 +39,8 @@ export class WindowView extends xb.VideoView {
       // Replace the standard texture lookup with textureGrad, which provides
       // direct control over the mipmap level selection.
       shader.fragmentShader = shader.fragmentShader.replace(
-          'vec4 texelColor = texture2D( map, vMapUv );', `
+        'vec4 texelColor = texture2D( map, vMapUv );',
+        `
           // Calculate the original screen-space derivatives.
           vec2 ddx = dFdx(vMapUv);
           vec2 ddy = dFdy(vMapUv);
@@ -49,7 +50,8 @@ export class WindowView extends xb.VideoView {
           // very slowly (i.e., is very close to the camera), prompting
           // it to select a higher-resolution mipmap.
           vec4 texelColor = textureGrad( map, vMapUv, ddx * sharpness, ddy * sharpness );
-          `);
+          `
+      );
     };
 
     // Dispose of the original material created by the parent and replace it
@@ -72,7 +74,8 @@ export class WindowView extends xb.VideoView {
     if (isNaN(this.rangeY) || this.rangeY <= 0) {
       this.mesh.visible = false;
       console.error(
-          '[WindowView] Invalid parent dimensions detected. Hiding view.');
+        '[WindowView] Invalid parent dimensions detected. Hiding view.'
+      );
       return;
     }
     this.mesh.visible = true;
@@ -101,7 +104,15 @@ export class WindowView extends xb.VideoView {
       const radius = aspectRatio / thetaLength;
 
       const cylinderGeometry = new THREE.CylinderGeometry(
-          radius, radius, 1, 64, 1, true, -thetaLength / 2, thetaLength);
+        radius,
+        radius,
+        1,
+        64,
+        1,
+        true,
+        -thetaLength / 2,
+        thetaLength
+      );
 
       // Translate the geometry's vertices instead of the mesh's position.
       cylinderGeometry.translate(0, 0, -radius);
@@ -156,7 +167,9 @@ export class WindowView extends xb.VideoView {
       texture.needsUpdate = true;
       this.material.needsUpdate = true;
       this.stream_.removeEventListener(
-          'statechange', this.qualitySetupCallback_);
+        'statechange',
+        this.qualitySetupCallback_
+      );
     }
   }
 
@@ -166,7 +179,9 @@ export class WindowView extends xb.VideoView {
   dispose() {
     if (this.stream_ && this.qualitySetupCallback_) {
       this.stream_.removeEventListener(
-          'statechange', this.qualitySetupCallback_);
+        'statechange',
+        this.qualitySetupCallback_
+      );
     }
     super.dispose();
   }

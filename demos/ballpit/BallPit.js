@@ -22,7 +22,7 @@ export class BallPit extends xb.Script {
       radius: kRadius,
       palette: palette,
       liveDuration: kTimeLiveMs,
-      deflateDuration: kDefalteMs
+      deflateDuration: kDefalteMs,
     });
     this.add(this.ballShooter);
     this.addLights();
@@ -49,8 +49,8 @@ export class BallPit extends xb.Script {
     const light = new THREE.DirectionalLight(0xffffff, 2);
     light.position.set(kLightX, kLightY, kLightZ);
     light.castShadow = true;
-    light.shadow.mapSize.width = 2048;   // Default is usually 1024
-    light.shadow.mapSize.height = 2048;  // Default is usually 1024
+    light.shadow.mapSize.width = 2048; // Default is usually 1024
+    light.shadow.mapSize.height = 2048; // Default is usually 1024
     this.add(light);
   }
 
@@ -70,8 +70,8 @@ export class BallPit extends xb.Script {
     const camera = cameras[0];
     // Spawn a ball slightly in front of the camera.
     const position = new THREE.Vector3(0.0, 0.0, -0.2)
-                         .applyQuaternion(camera.quaternion)
-                         .add(camera.position);
+      .applyQuaternion(camera.quaternion)
+      .add(camera.position);
     const matrix = new THREE.Matrix4();
     matrix.setPosition(position.x, position.y, position.z);
     // Convert pointer position to angle based on the camera.
@@ -90,13 +90,15 @@ export class BallPit extends xb.Script {
     if (!this.lastBallCreatedTimeForController.has(controller)) {
       this.lastBallCreatedTimeForController.set(controller, -99);
     }
-    if (controller.userData.selected &&
-        now - this.lastBallCreatedTimeForController.get(controller) >=
-            1000 / kBallsPerSecond) {
+    if (
+      controller.userData.selected &&
+      now - this.lastBallCreatedTimeForController.get(controller) >=
+        1000 / kBallsPerSecond
+    ) {
       // Place this 8 cm in front of the hands.
       const newPosition = new THREE.Vector3(0.0, 0.0, -0.08)
-                              .applyQuaternion(controller.quaternion)
-                              .add(controller.position);
+        .applyQuaternion(controller.quaternion)
+        .add(controller.position);
 
       this.velocity.set(0, 0, -5.0 * kVelocityScale);
       this.velocity.applyQuaternion(controller.quaternion);

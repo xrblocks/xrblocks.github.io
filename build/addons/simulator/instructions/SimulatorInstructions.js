@@ -13,26 +13,23 @@ import 'xrblocks';
 let SimulatorInstructions = class SimulatorInstructions extends LitElement {
     static { this.styles = css `
     :host {
-        background: #000000AA;
-        position: absolute;
-        top: 0;
-        left: 0;
-        display: flex;
-        height: 100%;
-        width: 100%;
-        justify-content: center;
-        align-items: center;
+      background: #000000aa;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      height: 100%;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
     }
   `; }
     constructor() {
         super();
         this.steps = [
-            html `
-      <xrblocks-simulator-user-instructions />`,
-            html `
-      <xrblocks-simulator-navigation-instructions />`,
-            html `
-      <xrblocks-simulator-hands-instructions />`
+            html ` <xrblocks-simulator-user-instructions />`,
+            html ` <xrblocks-simulator-navigation-instructions />`,
+            html ` <xrblocks-simulator-hands-instructions />`,
         ];
         this.customInstructions = [];
         this.step = 0;
@@ -50,9 +47,11 @@ let SimulatorInstructions = class SimulatorInstructions extends LitElement {
         this.step++;
     }
     render() {
-        return this.step < this.steps.length ?
-            this.steps[this.step] :
-            html `<xrblocks-simulator-custom-instruction .customInstruction=${this.customInstructions[this.step - this.steps.length]} />`;
+        return this.step < this.steps.length
+            ? this.steps[this.step]
+            : html `<xrblocks-simulator-custom-instruction
+          .customInstruction=${this.customInstructions[this.step - this.steps.length]}
+        />`;
     }
 };
 __decorate([

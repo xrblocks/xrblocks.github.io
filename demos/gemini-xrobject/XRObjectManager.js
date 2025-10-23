@@ -22,10 +22,11 @@ export class XRObjectManager extends xb.Script {
         thinkingConfig: {
           thinkingBudget: 0,
         },
-        systemInstruction: [{
-          text:
-              `You're an informative and helpful AI assistant specializing in identifying and describing objects within images. Your primary goal is to provide detailed yet concise answers to user questions, making a best effort to respond even if you're not entirely sure or the image quality is poor. When describing objects, strive for maximum detail without being verbose, focusing on key characteristics. Please ignore any hands or other human body parts present in the image. User queries will always be structured like this: {object: '...', question: '...'}`,
-        }],
+        systemInstruction: [
+          {
+            text: `You're an informative and helpful AI assistant specializing in identifying and describing objects within images. Your primary goal is to provide detailed yet concise answers to user questions, making a best effort to respond even if you're not entirely sure or the image quality is poor. When describing objects, strive for maximum detail without being verbose, focusing on key characteristics. Please ignore any hands or other human body parts present in the image. User queries will always be structured like this: {object: '...', question: '...'}`,
+          },
+        ],
         responseMimeType: 'application/json',
         responseSchema: {
           type: 'OBJECT',
@@ -33,8 +34,8 @@ export class XRObjectManager extends xb.Script {
           properties: {
             answer: {type: 'STRING'},
           },
-        }
-      }
+        },
+      },
     };
   }
 
@@ -45,7 +46,9 @@ export class XRObjectManager extends xb.Script {
   init() {
     if (xb.core.sound.speechRecognizer) {
       xb.core.sound.speechRecognizer.addEventListener(
-          'result', this.handleSpeechResult.bind(this));
+        'result',
+        this.handleSpeechResult.bind(this)
+      );
       xb.core.sound.speechRecognizer.addEventListener('end', () => {
         this.activeSphere?.setActive(false);
         this.activeSphere = null;
@@ -76,7 +79,7 @@ export class XRObjectManager extends xb.Script {
     // Check if the active sphere has an image to query against.
     if (!this.activeSphere.object.image) {
       const warningMsg =
-          'I don\'t have a specific image for that object, so I can\'t answer questions about it.';
+        "I don't have a specific image for that object, so I can't answer questions about it.";
       console.warn(warningMsg);
       xb.core.sound.speechSynthesizer.speak(warningMsg);
       return;
@@ -84,24 +87,26 @@ export class XRObjectManager extends xb.Script {
 
     const prompt = {
       question: transcript,
-      object: this.activeSphere.object.label
+      object: this.activeSphere.object.label,
     };
     this.queryObjectInformation(
-            JSON.stringify(prompt), this.activeSphere.object.image)
-        .then(response => {
-          try {
-            const parsedResponse = JSON.parse(response);
-            xb.core.sound.speechSynthesizer.speak(parsedResponse.answer);
-          } catch (e) {
-            console.error('Error parsing AI response JSON:', e);
-          }
-        })
-        .catch(error => {
-          const errorMsg =
-              'I\'m sorry, I had trouble processing that request. Please try again.';
-          console.error('Failed to get information about the object:', error);
-          xb.core.sound.speechSynthesizer.speak(errorMsg);
-        });
+      JSON.stringify(prompt),
+      this.activeSphere.object.image
+    )
+      .then((response) => {
+        try {
+          const parsedResponse = JSON.parse(response);
+          xb.core.sound.speechSynthesizer.speak(parsedResponse.answer);
+        } catch (e) {
+          console.error('Error parsing AI response JSON:', e);
+        }
+      })
+      .catch((error) => {
+        const errorMsg =
+          "I'm sorry, I had trouble processing that request. Please try again.";
+        console.error('Failed to get information about the object:', error);
+        xb.core.sound.speechSynthesizer.speak(errorMsg);
+      });
   }
 
   /**
@@ -111,7 +116,8 @@ export class XRObjectManager extends xb.Script {
   async queryObjectionDetection() {
     if (!xb.core.world?.objects) {
       console.error(
-          'ObjectDetector is not available. Ensure it is enabled in the options.');
+        'ObjectDetector is not available. Ensure it is enabled in the options.'
+      );
       return;
     }
 
@@ -141,17 +147,17 @@ export class XRObjectManager extends xb.Script {
     let {mimeType, strippedBase64} = xb.parseBase64DataURL(objectImageBase64);
 
     return xb.core.ai
-        .query({
-          type: 'multiPart',
-          parts: [
-            {inlineData: {mimeType: mimeType, data: strippedBase64}},
-            {text: textPrompt}
-          ]
-        })
-        .catch(error => {
-          console.error('AI query for object information failed:', error);
-          throw error;
-        });
+      .query({
+        type: 'multiPart',
+        parts: [
+          {inlineData: {mimeType: mimeType, data: strippedBase64}},
+          {text: textPrompt},
+        ],
+      })
+      .catch((error) => {
+        console.error('AI query for object information failed:', error);
+        throw error;
+      });
   }
 
   /**
@@ -160,8 +166,10 @@ export class XRObjectManager extends xb.Script {
    * @param {Event} event - The selection event from the TouchableSphere.
    */
   onSphereTouchStart(event) {
-    if (typeof event.target !== 'object' ||
-        !(event.target instanceof TouchableSphere)) {
+    if (
+      typeof event.target !== 'object' ||
+      !(event.target instanceof TouchableSphere)
+    ) {
       return;
     }
 
@@ -181,8 +189,10 @@ export class XRObjectManager extends xb.Script {
    * @param {Event} event - The selection event from the TouchableSphere.
    */
   onSphereTouchEnd(event) {
-    if (typeof event.target !== 'object' ||
-        !(event.target instanceof TouchableSphere)) {
+    if (
+      typeof event.target !== 'object' ||
+      !(event.target instanceof TouchableSphere)
+    ) {
       return;
     }
     xb.core.sound.speechRecognizer.stop();
@@ -196,12 +206,15 @@ export class XRObjectManager extends xb.Script {
    */
   createSphereWithLabel(detectedObject) {
     const touchableSphereInstance = new TouchableSphere(
-        detectedObject, this.objectSphereRadius, 'live_help');
+      detectedObject,
+      this.objectSphereRadius,
+      'live_help'
+    );
 
     touchableSphereInstance.onSelectStart = (event) =>
-        this.onSphereTouchStart(event);
+      this.onSphereTouchStart(event);
     touchableSphereInstance.onSelectEnd = (event) =>
-        this.onSphereTouchEnd(event);
+      this.onSphereTouchEnd(event);
 
     xb.add(touchableSphereInstance);
   }

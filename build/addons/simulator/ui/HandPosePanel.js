@@ -30,8 +30,8 @@ let HandPosePanel = class HandPosePanel extends LitElement {
       border: none;
       margin: 1rem 0px;
       border-radius: 5rem;
-      background:rgba(0, 0, 0, 0.5);
-      color: #FFF;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
       max-width: 100%;
       width: fit-content;
       height: 3rem;
@@ -49,7 +49,7 @@ let HandPosePanel = class HandPosePanel extends LitElement {
     }
 
     .hand-pose-button {
-      color: #FFFFFF44;
+      color: #ffffff44;
       font-size: 1.2em;
       line-height: 3rem;
       background: transparent;
@@ -59,7 +59,7 @@ let HandPosePanel = class HandPosePanel extends LitElement {
     }
 
     .hand-pose-button.selected {
-      color: #FFFFFFFF;
+      color: #ffffffff;
     }
   `; }
     update(changedProperties) {
@@ -80,11 +80,17 @@ let HandPosePanel = class HandPosePanel extends LitElement {
             const poseName = xb.SIMULATOR_HAND_POSE_NAMES[pose];
             const classes = {
                 'hand-pose-button': true,
-                'selected': this.handPose === pose,
+                selected: this.handPose === pose,
             };
             const clickCall = () => this.sendHandPoseRequest(pose);
             buttons.push(html `
-        <button class=${classMap(classes)} @click = ${clickCall} data-pose=${pose}>${poseName}</button>
+        <button
+          class=${classMap(classes)}
+          @click=${clickCall}
+          data-pose=${pose}
+        >
+          ${poseName}
+        </button>
       `);
         }
         return buttons;
@@ -98,7 +104,11 @@ let HandPosePanel = class HandPosePanel extends LitElement {
             return;
         const selectedButton = handPosePanel.querySelector(`.hand-pose-button[data-pose=${this.handPose}]`);
         if (selectedButton) {
-            selectedButton.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            selectedButton.scrollIntoView({
+                behavior: 'smooth',
+                inline: 'center',
+                block: 'nearest',
+            });
         }
     }
     render() {
@@ -107,9 +117,9 @@ let HandPosePanel = class HandPosePanel extends LitElement {
         }
         const handPoseButtons = this.getHandPoseButtons();
         return html `
-    <div class="hand-pose-panel" ${ref(this.posePanelRef)}>
-      ${handPoseButtons}
-    </div>
+      <div class="hand-pose-panel" ${ref(this.posePanelRef)}>
+        ${handPoseButtons}
+      </div>
     `;
     }
 };

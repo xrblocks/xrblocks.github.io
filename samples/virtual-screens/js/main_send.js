@@ -3,8 +3,9 @@ import {WebSocketManager} from './WebSocketManager.js';
 
 const webSocketManager = new WebSocketManager(8765);
 const streamManager = new StreamManager(webSocketManager);
-const sharedWindowsContainer =
-    document.getElementById('sharedWindowsContainer');
+const sharedWindowsContainer = document.getElementById(
+  'sharedWindowsContainer'
+);
 const selectScreenButton = document.getElementById('selectScreenButton');
 
 /**
@@ -18,7 +19,7 @@ function addStreamPreview(streamId, stream) {
 
   const wrapper = document.createElement('div');
   wrapper.className =
-      'relative bg-gray-700 rounded-lg overflow-hidden shadow-lg aspect-video';
+    'relative bg-gray-700 rounded-lg overflow-hidden shadow-lg aspect-video';
   wrapper.dataset.streamId = streamId;
 
   const video = document.createElement('video');
@@ -30,7 +31,7 @@ function addStreamPreview(streamId, stream) {
   const closeButton = document.createElement('button');
   closeButton.innerHTML = '&times;';
   closeButton.className =
-      'absolute top-2 right-2 bg-blue-600 text-white rounded-full w-7 h-7 flex items-center justify-center text-xl font-bold leading-none opacity-80 hover:opacity-100 transition-opacity duration-300';
+    'absolute top-2 right-2 bg-blue-600 text-white rounded-full w-7 h-7 flex items-center justify-center text-xl font-bold leading-none opacity-80 hover:opacity-100 transition-opacity duration-300';
   closeButton.onclick = () => {
     videoTrack.stop();
     streamManager.stopStream(streamId);
@@ -44,8 +45,10 @@ function addStreamPreview(streamId, stream) {
 
 selectScreenButton.addEventListener('click', async () => {
   try {
-    const stream = await navigator.mediaDevices.getDisplayMedia(
-        {audio: false, video: {width: {max: 2560}, height: {max: 1440}}});
+    const stream = await navigator.mediaDevices.getDisplayMedia({
+      audio: false,
+      video: {width: {max: 2560}, height: {max: 1440}},
+    });
 
     const streamId = crypto.randomUUID();
     const videoTrack = stream.getVideoTracks()[0];
@@ -58,7 +61,8 @@ selectScreenButton.addEventListener('click', async () => {
     videoTrack.onended = () => {
       streamManager.stopStream(streamId);
       const previewToRemove = sharedWindowsContainer.querySelector(
-          `[data-stream-id="${streamId}"]`);
+        `[data-stream-id="${streamId}"]`
+      );
       if (previewToRemove) {
         previewToRemove.remove();
       }

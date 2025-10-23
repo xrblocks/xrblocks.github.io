@@ -15,12 +15,14 @@ export class OcclusionScene extends xb.Script {
     this.pointer = new THREE.Vector3();
     this.depthMeshClone = new DepthMeshClone();
     this.raycaster = new THREE.Raycaster();
-    this.modelManager =
-        new ModelManager(ANIMALS_DATA, /*enableOcclusion=*/ true);
+    this.modelManager = new ModelManager(
+      ANIMALS_DATA,
+      /*enableOcclusion=*/ true
+    );
     this.modelManager.layers.enable(xb.OCCLUDABLE_ITEMS_LAYER);
     this.add(this.modelManager);
     this.instructionText =
-        'Pinch on the environment and try hiding the cat behind sofa!';
+      'Pinch on the environment and try hiding the cat behind sofa!';
     this.instructionCol = null;
   }
 
@@ -34,7 +36,7 @@ export class OcclusionScene extends xb.Script {
     const panel = new xb.SpatialPanel({
       backgroundColor: '#00000000',
       useDefaultPosition: false,
-      showEdge: false
+      showEdge: false,
     });
     panel.position.set(0, 1.6, -1.0);
     panel.isRoot = true;
@@ -58,7 +60,7 @@ export class OcclusionScene extends xb.Script {
     this.instructionCol = textCol.addRow({weight: 1.0}).addText({
       text: `${this.instructionText}`,
       fontColor: '#ffffff',
-      fontSize: 0.05
+      fontSize: 0.05,
     });
 
     gesturesRow.addCol({weight: 0.01});
@@ -75,7 +77,7 @@ export class OcclusionScene extends xb.Script {
 
   onSimulatorStarted() {
     this.instructionText =
-        'Click on the environment and try hiding the cat behind sofa!';
+      'Click on the environment and try hiding the cat behind sofa!';
     if (this.instructionCol) {
       this.instructionCol.setText(this.instructionText);
     }
@@ -86,8 +88,8 @@ export class OcclusionScene extends xb.Script {
     const light = new THREE.DirectionalLight(0xffffff, 2);
     light.position.set(kLightX, kLightY, kLightZ);
     light.castShadow = true;
-    light.shadow.mapSize.width = 2048;   // Default is usually 1024
-    light.shadow.mapSize.height = 2048;  // Default is usually 1024
+    light.shadow.mapSize.width = 2048; // Default is usually 1024
+    light.shadow.mapSize.height = 2048; // Default is usually 1024
     this.add(light);
   }
 
@@ -103,7 +105,7 @@ export class OcclusionScene extends xb.Script {
     const controller = event.target;
     if (xb.core.input.intersectionsForController.get(controller).length > 0) {
       const intersection =
-          xb.core.input.intersectionsForController.get(controller)[0];
+        xb.core.input.intersectionsForController.get(controller)[0];
       if (intersection.handleSelectRaycast) {
         intersection.handleSelectRaycast(intersection);
         return;
@@ -127,8 +129,9 @@ export class OcclusionScene extends xb.Script {
     if (cameras.length == 0) return;
     const camera = cameras[0];
     this.raycaster.setFromCamera(this.pointer, camera);
-    const intersections =
-        this.raycaster.intersectObjects(xb.core.input.reticleTargets);
+    const intersections = this.raycaster.intersectObjects(
+      xb.core.input.reticleTargets
+    );
     for (let intersection of intersections) {
       if (intersection.handleSelectRaycast) {
         intersection.handleSelectRaycast(intersection);

@@ -1,10 +1,14 @@
 import * as THREE from 'three';
 
-const noise_texture = new THREE.TextureLoader().load('screenwiper_assets/Noise.png');
+const noise_texture = new THREE.TextureLoader().load(
+  'screenwiper_assets/Noise.png'
+);
 noise_texture.wrapS = THREE.RepeatWrapping;
 noise_texture.wrapT = THREE.RepeatWrapping;
 
-const color_map = new THREE.TextureLoader().load('screenwiper_assets/ColorMap.png');
+const color_map = new THREE.TextureLoader().load(
+  'screenwiper_assets/ColorMap.png'
+);
 color_map.wrapS = THREE.RepeatWrapping;
 
 export const ScreenWiperShader = {
@@ -24,8 +28,12 @@ export const ScreenWiperShader = {
     uPulseSpeed: {value: 4.0},
     uPulseAmount: {value: 0.025},
     uHoleColor: {
-      value:
-          new THREE.Vector4(49.0 / 255, 103.0 / 255, 154.0 / 255, 64.0 / 255),
+      value: new THREE.Vector4(
+        49.0 / 255,
+        103.0 / 255,
+        154.0 / 255,
+        64.0 / 255
+      ),
     },
   },
 

@@ -8,7 +8,7 @@ export class GeminiLiveWebInterface {
       responseModalities: [Modality.AUDIO],
       speechConfig: {voiceConfig: {prebuiltVoiceConfig: {voiceName: 'Aoede'}}},
       outputAudioTranscription: {},
-      inputAudioTranscription: {}
+      inputAudioTranscription: {},
     };
 
     // Session and state management
@@ -81,8 +81,8 @@ export class GeminiLiveWebInterface {
           channelCount: 1,
           echoCancellation: true,
           noiseSuppression: true,
-          autoGainControl: true
-        }
+          autoGainControl: true,
+        },
       });
       return true;
     } catch (error) {
@@ -155,12 +155,14 @@ export class GeminiLiveWebInterface {
       if (message.serverContent) {
         if (message.serverContent.inputTranscription) {
           this.handleInputTranscription(
-              message.serverContent.inputTranscription);
+            message.serverContent.inputTranscription
+          );
         }
 
         if (message.serverContent.outputTranscription) {
           this.handleOutputTranscription(
-              message.serverContent.outputTranscription);
+            message.serverContent.outputTranscription
+          );
         }
 
         if (message.serverContent.turnComplete) {
@@ -185,7 +187,7 @@ export class GeminiLiveWebInterface {
           text: this.currentInputText,
           id: this.currentInputId,
           isPartial: true,
-          action: 'create'
+          action: 'create',
         });
       } else {
         this.onTranscription({
@@ -193,7 +195,7 @@ export class GeminiLiveWebInterface {
           text: this.currentInputText,
           id: this.currentInputId,
           isPartial: true,
-          action: 'update'
+          action: 'update',
         });
       }
     }
@@ -211,7 +213,7 @@ export class GeminiLiveWebInterface {
           text: this.currentOutputText,
           id: this.currentOutputId,
           isPartial: true,
-          action: 'create'
+          action: 'create',
         });
       } else {
         this.onTranscription({
@@ -219,7 +221,7 @@ export class GeminiLiveWebInterface {
           text: this.currentOutputText,
           id: this.currentOutputId,
           isPartial: true,
-          action: 'update'
+          action: 'update',
         });
       }
     }
@@ -233,7 +235,7 @@ export class GeminiLiveWebInterface {
           text: this.currentInputText.trim(),
           id: this.currentInputId,
           isPartial: false,
-          action: 'finalize'
+          action: 'finalize',
         });
       }
 
@@ -241,7 +243,7 @@ export class GeminiLiveWebInterface {
         type: 'input',
         text: this.currentInputText.trim(),
         timestamp: new Date(),
-        id: this.currentInputId
+        id: this.currentInputId,
       });
     }
 
@@ -252,7 +254,7 @@ export class GeminiLiveWebInterface {
           text: this.currentOutputText.trim(),
           id: this.currentOutputId,
           isPartial: false,
-          action: 'finalize'
+          action: 'finalize',
         });
       }
 
@@ -260,7 +262,7 @@ export class GeminiLiveWebInterface {
         type: 'output',
         text: this.currentOutputText.trim(),
         timestamp: new Date(),
-        id: this.currentOutputId
+        id: this.currentOutputId,
       });
     }
 
@@ -299,15 +301,15 @@ export class GeminiLiveWebInterface {
         }
       }
 
-      this.mediaStreamSource =
-          this.audioContext.createMediaStreamSource(this.mediaStream);
+      this.mediaStreamSource = this.audioContext.createMediaStreamSource(
+        this.mediaStream
+      );
 
       // Create audio worklet for processing
       await this.createAudioWorklet();
 
       this.isRecording = true;
       console.log('✅ Audio recording started');
-
     } catch (error) {
       console.error('❌ Failed to start audio recording:', error);
       if (this.onError) this.onError(error);
@@ -328,13 +330,14 @@ export class GeminiLiveWebInterface {
       const int16Array = new Int16Array(inputData.length);
       for (let i = 0; i < inputData.length; i++) {
         const sample = Math.max(-1, Math.min(1, inputData[i]));
-        int16Array[i] = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
+        int16Array[i] = sample < 0 ? sample * 0x8000 : sample * 0x7fff;
       }
 
       const base64Audio = this.arrayBufferToBase64(int16Array.buffer);
       try {
-        this.session.sendRealtimeInput(
-            {audio: {data: base64Audio, mimeType: 'audio/pcm;rate=16000'}});
+        this.session.sendRealtimeInput({
+          audio: {data: base64Audio, mimeType: 'audio/pcm;rate=16000'},
+        });
       } catch (error) {
         console.error('❌ Error sending audio:', error);
       }
@@ -365,8 +368,11 @@ export class GeminiLiveWebInterface {
   async playAudioChunk(audioData) {
     try {
       const arrayBuffer = this.base64ToArrayBuffer(audioData);
-      const audioBuffer =
-          this.audioContext.createBuffer(1, arrayBuffer.byteLength / 2, 24000);
+      const audioBuffer = this.audioContext.createBuffer(
+        1,
+        arrayBuffer.byteLength / 2,
+        24000
+      );
       const channelData = audioBuffer.getChannelData(0);
       const int16View = new Int16Array(arrayBuffer);
       for (let i = 0; i < int16View.length; i++) {
@@ -378,7 +384,6 @@ export class GeminiLiveWebInterface {
       if (!this.isPlayingAudio) {
         this.playNextAudioBuffer();
       }
-
     } catch (error) {
       console.error('❌ Error playing audio chunk:', error);
     }
@@ -418,9 +423,10 @@ export class GeminiLiveWebInterface {
         try {
           if (this.isGeminiSpeaking) return;
 
-          if (this.displayVideo &&
-              this.displayVideo.readyState ===
-                  this.displayVideo.HAVE_ENOUGH_DATA) {
+          if (
+            this.displayVideo &&
+            this.displayVideo.readyState === this.displayVideo.HAVE_ENOUGH_DATA
+          ) {
             await this.captureFromPersistentStream();
           } else {
             console.warn('⚠️ Display video not ready, using canvas fallback');
@@ -432,10 +438,13 @@ export class GeminiLiveWebInterface {
       };
 
       await captureScreenshot();
-      this.screenshotInterval =
-          setInterval(captureScreenshot, this.screenshotIntervalMs);
-      console.log(`✅ Screen capture started with ${
-          this.screenshotIntervalMs}ms interval`);
+      this.screenshotInterval = setInterval(
+        captureScreenshot,
+        this.screenshotIntervalMs
+      );
+      console.log(
+        `✅ Screen capture started with ${this.screenshotIntervalMs}ms interval`
+      );
     } catch (error) {
       console.error('❌ Failed to start screen capture:', error);
       if (this.onError) this.onError(error);
@@ -447,17 +456,18 @@ export class GeminiLiveWebInterface {
       if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
         console.log('📸 Requesting screen capture permission...');
         console.log(
-            '📸 Please select "Entire Screen" or a specific application for best results');
+          '📸 Please select "Entire Screen" or a specific application for best results'
+        );
 
         this.displayStream = await navigator.mediaDevices.getDisplayMedia({
           video: {
             width: {ideal: 1920, max: 1920},
             height: {ideal: 1080, max: 1080},
-            frameRate: {ideal: 5, max: 10}
+            frameRate: {ideal: 5, max: 10},
           },
           audio: false,
           // Request entire screen or application sharing
-          displaySurface: 'monitor'
+          displaySurface: 'monitor',
         });
 
         // Create video element to display the stream
@@ -490,8 +500,11 @@ export class GeminiLiveWebInterface {
         await new Promise((resolve) => {
           this.displayVideo.onloadedmetadata = () => {
             console.log('📸 Video metadata loaded:');
-            console.log(`   - Resolution: ${this.displayVideo.videoWidth}x${
-                this.displayVideo.videoHeight}`);
+            console.log(
+              `   - Resolution: ${this.displayVideo.videoWidth}x${
+                this.displayVideo.videoHeight
+              }`
+            );
             console.log(`   - Ready state: ${this.displayVideo.readyState}`);
             console.log(`   - Current time: ${this.displayVideo.currentTime}`);
             resolve();
@@ -532,8 +545,10 @@ export class GeminiLiveWebInterface {
         return;
       }
 
-      if (this.displayVideo.videoWidth === 0 ||
-          this.displayVideo.videoHeight === 0) {
+      if (
+        this.displayVideo.videoWidth === 0 ||
+        this.displayVideo.videoHeight === 0
+      ) {
         console.warn('⚠️ Video has no dimensions, skipping capture');
         return;
       }
@@ -554,7 +569,11 @@ export class GeminiLiveWebInterface {
 
       // Check if the canvas actually has content (not just black)
       const imageData = ctx.getImageData(
-          0, 0, Math.min(100, canvas.width), Math.min(100, canvas.height));
+        0,
+        0,
+        Math.min(100, canvas.width),
+        Math.min(100, canvas.height)
+      );
       const data = imageData.data;
       let hasContent = false;
       for (let i = 0; i < data.length; i += 4) {
@@ -568,25 +587,29 @@ export class GeminiLiveWebInterface {
         console.warn('⚠️ Captured frame appears to be black/empty');
       }
 
-      canvas.toBlob((blob) => {
-        if (!blob) {
-          console.error('❌ Failed to create blob from canvas');
-          return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = () => {
-          const base64 = reader.result.split(',')[1];
-          if (this.session && base64) {
-            this.session.sendRealtimeInput(
-                {video: {data: base64, mimeType: 'image/jpeg'}});
-            // console.log(`📸 Screenshot sent to Gemini Live (${
-            //     base64.length} bytes) - ${canvas.width}x${canvas.height}`);
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            console.error('❌ Failed to create blob from canvas');
+            return;
           }
-        };
-        reader.readAsDataURL(blob);
-      }, 'image/jpeg', 0.8);
 
+          const reader = new FileReader();
+          reader.onload = () => {
+            const base64 = reader.result.split(',')[1];
+            if (this.session && base64) {
+              this.session.sendRealtimeInput({
+                video: {data: base64, mimeType: 'image/jpeg'},
+              });
+              // console.log(`📸 Screenshot sent to Gemini Live (${
+              //     base64.length} bytes) - ${canvas.width}x${canvas.height}`);
+            }
+          };
+          reader.readAsDataURL(blob);
+        },
+        'image/jpeg',
+        0.8
+      );
     } catch (error) {
       console.error('❌ Error capturing from persistent stream:', error);
       throw error;
@@ -610,18 +633,23 @@ export class GeminiLiveWebInterface {
       ctx.font = '16px Arial';
       ctx.fillText('Page content capture (fallback method)', 20, 50);
       ctx.fillText(`Timestamp: ${new Date().toISOString()}`, 20, 80);
-      canvas.toBlob((blob) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const base64 = reader.result.split(',')[1];
-          if (this.session) {
-            this.session.sendRealtimeInput(
-                {video: {data: base64, mimeType: 'image/jpeg'}});
-            console.log(`📸 Fallback screenshot sent to Gemini Live`);
-          }
-        };
-        reader.readAsDataURL(blob);
-      }, 'image/jpeg', 0.8);
+      canvas.toBlob(
+        (blob) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            const base64 = reader.result.split(',')[1];
+            if (this.session) {
+              this.session.sendRealtimeInput({
+                video: {data: base64, mimeType: 'image/jpeg'},
+              });
+              console.log(`📸 Fallback screenshot sent to Gemini Live`);
+            }
+          };
+          reader.readAsDataURL(blob);
+        },
+        'image/jpeg',
+        0.8
+      );
     } catch (error) {
       console.error('❌ Canvas capture failed:', error);
       throw error;
@@ -636,7 +664,7 @@ export class GeminiLiveWebInterface {
       this.screenshotInterval = null;
     }
     if (this.displayStream) {
-      this.displayStream.getTracks().forEach(track => track.stop());
+      this.displayStream.getTracks().forEach((track) => track.stop());
       this.displayStream = null;
     }
     if (this.displayVideo) {
@@ -656,7 +684,7 @@ export class GeminiLiveWebInterface {
     this.isRecording = false;
 
     if (this.mediaStream) {
-      this.mediaStream.getTracks().forEach(track => track.stop());
+      this.mediaStream.getTracks().forEach((track) => track.stop());
       this.mediaStream = null;
     }
 
@@ -739,8 +767,10 @@ export class GeminiLiveWebInterface {
     if (audioData) {
       console.log('Sending audio data with text:', audioData.inlineData);
       this.session.sendRealtimeInput({
-        audio:
-            {data: audioData.inlineData.data, mimeType: 'audio/pcm;rate=16000'}
+        audio: {
+          data: audioData.inlineData.data,
+          mimeType: 'audio/pcm;rate=16000',
+        },
       });
     }
   }
@@ -789,8 +819,10 @@ export class GeminiLiveWebInterface {
 
     // --- 4. Return the new inlineData object ---
     return {
-      inlineData:
-          {data: newBase64String, mimeType: 'audio/L16;codec=pcm;rate=16000'}
+      inlineData: {
+        data: newBase64String,
+        mimeType: 'audio/L16;codec=pcm;rate=16000',
+      },
     };
   }
 

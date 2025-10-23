@@ -8,7 +8,7 @@ options.depth.depthMesh.updateFullResolutionGeometry = true;
 options.xrButton = {
     ...options.xrButton,
     startText: '<i id="xrlogo"></i> LET THE FUN BEGIN',
-    endText: '<i id="xrlogo"></i> MISSION COMPLETE'
+    endText: '<i id="xrlogo"></i> MISSION COMPLETE',
 };
 options.physics.RAPIER = RAPIER;
 document.addEventListener('DOMContentLoaded', async function () {

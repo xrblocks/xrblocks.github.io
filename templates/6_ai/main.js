@@ -17,6 +17,6 @@ function start() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   start();
 });

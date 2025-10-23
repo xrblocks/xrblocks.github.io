@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 
-
 export const ClearShader = {
   name: 'ClearShader',
 
@@ -10,8 +9,7 @@ export const ClearShader = {
 
   uniforms: {
     uClearColor: {
-      value:
-          new THREE.Vector4(1.0, 1.0, 1.0, 1.0),
+      value: new THREE.Vector4(1.0, 1.0, 1.0, 1.0),
     },
   },
 

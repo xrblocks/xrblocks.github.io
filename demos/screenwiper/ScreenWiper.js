@@ -11,7 +11,7 @@ const clearpass = new ShaderPass(ClearShader);
 clearpass.renderToScreen = false;
 
 export class ScreenWiper extends THREE.Mesh {
-  activeControllers = []
+  activeControllers = [];
 
   constructor() {
     const NATIVE_RESOLUTION = 1024;
@@ -37,11 +37,11 @@ export class ScreenWiper extends THREE.Mesh {
     this.shaderpass = new ShaderPass(AlphaShader);
     this.controllerActiveUniforms = [
       this.shaderpass.material.uniforms.uLeftWiperActive,
-      this.shaderpass.material.uniforms.uRightWiperActive
+      this.shaderpass.material.uniforms.uRightWiperActive,
     ];
     this.controllerCartesianCoordinateUniforms = [
       this.shaderpass.material.uniforms.uLeftHandCartesianCoordinate,
-      this.shaderpass.material.uniforms.uRightHandCartesianCoordinate
+      this.shaderpass.material.uniforms.uRightHandCartesianCoordinate,
     ];
     this.worldPosition = new THREE.Vector3();
     this.starttime = Date.now();
@@ -78,10 +78,10 @@ export class ScreenWiper extends THREE.Mesh {
         raycaster.setFromXRController(controller);
         const intersects = raycaster.intersectObject(this);
         if (intersects.length > 0) {
-          this.controllerCartesianCoordinateUniforms[i]
-              .value.copy(intersects[0].point)
-              .sub(this.worldPosition)
-              .normalize();
+          this.controllerCartesianCoordinateUniforms[i].value
+            .copy(intersects[0].point)
+            .sub(this.worldPosition)
+            .normalize();
         }
       } else {
         this.controllerActiveUniforms[i].value = false;
@@ -91,7 +91,11 @@ export class ScreenWiper extends THREE.Mesh {
     const elapsedTime = (Date.now() - this.starttime) / 1000;
     if (this.material.uniforms.uTime) {
       this.material.uniforms.uTime.value.set(
-          elapsedTime / 20, elapsedTime, elapsedTime * 2, elapsedTime * 3);
+        elapsedTime / 20,
+        elapsedTime,
+        elapsedTime * 2,
+        elapsedTime * 3
+      );
     }
 
     // Remember renderer state.
@@ -100,8 +104,10 @@ export class ScreenWiper extends THREE.Mesh {
 
     // Render to offscreen buffer.
     renderer.xr.enabled = false;
-    [this.renderTargetA, this.renderTargetB] =
-        [this.renderTargetB, this.renderTargetA];
+    [this.renderTargetA, this.renderTargetB] = [
+      this.renderTargetB,
+      this.renderTargetA,
+    ];
     this.shaderpass.renderToScreen = false;
     this.shaderpass.render(renderer, this.renderTargetB, this.renderTargetA);
     this.material.uniforms.uMask.value = this.renderTargetB.texture;
@@ -130,7 +136,8 @@ export class ScreenWiper extends THREE.Mesh {
   }
 
   startTransition(passthrough) {
-    this.shaderpass.material.uniforms.uReturnSpeed.value =
-        passthrough ? -0.005 : 0.005;
+    this.shaderpass.material.uniforms.uReturnSpeed.value = passthrough
+      ? -0.005
+      : 0.005;
   }
 }

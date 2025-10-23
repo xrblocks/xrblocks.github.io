@@ -5,9 +5,7 @@
     "rootDir": "src",
     "sourceMap": true,
     "paths": {
-      "rapier3d": [
-        "../node_modules/@dimforge/rapier3d-simd-compat/rapier"
-      ],
+      "rapier3d": ["../node_modules/@dimforge/rapier3d-simd-compat/rapier"]
     }
   },
   "include": ["src/**/*.ts"] // Files to include for this project

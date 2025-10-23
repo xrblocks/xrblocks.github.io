@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 
-
 const kMaxAnimationFrames = 15;
 const kAnimationSpeed = 2.0;
 const DEBUG_SINGLE = false;
@@ -45,7 +44,10 @@ export class RainParticles extends THREE.Object3D {
 
       // Initializes an InstancedMesh with the defined geometry and material.
       this.raindropMesh = new THREE.InstancedMesh(
-          raindropGeometry, raindropMaterial, this.particleCount);
+        raindropGeometry,
+        raindropMaterial,
+        this.particleCount
+      );
 
       // Populates the particle mesh with initial positions and properties.
       this.initializeParticles();
@@ -53,13 +55,17 @@ export class RainParticles extends THREE.Object3D {
       // Adds instanced attributes for weight and visibility to control raindrop
       // animation and rendering.
       this.raindropMesh.geometry.setAttribute(
-          'aWeight',
-          new THREE.InstancedBufferAttribute(this.particleWeights, 1)
-              .setUsage(THREE.DynamicDrawUsage));
+        'aWeight',
+        new THREE.InstancedBufferAttribute(this.particleWeights, 1).setUsage(
+          THREE.DynamicDrawUsage
+        )
+      );
       this.raindropMesh.geometry.setAttribute(
-          'aVisibility',
-          new THREE.InstancedBufferAttribute(this.particleVisibility, 1)
-              .setUsage(THREE.DynamicDrawUsage));
+        'aVisibility',
+        new THREE.InstancedBufferAttribute(this.particleVisibility, 1).setUsage(
+          THREE.DynamicDrawUsage
+        )
+      );
 
       // Flags the instance matrix for an initial update and adds the raindrop
       // mesh to the scene.
@@ -177,9 +183,10 @@ export class RainParticles extends THREE.Object3D {
     for (let i = 0; i < this.particleCount; i++) {
       // Assigns random initial position within the defined range.
       dummy.position.set(
-          Math.random() * this.RANGE * 2 - this.RANGE,
-          Math.random() * this.RANGE * 2,
-          Math.random() * this.RANGE * 2 - this.RANGE);
+        Math.random() * this.RANGE * 2 - this.RANGE,
+        Math.random() * this.RANGE * 2,
+        Math.random() * this.RANGE * 2 - this.RANGE
+      );
 
       if (DEBUG_SINGLE) {
         dummy.position.set(0, 1.2, -1);
@@ -208,32 +215,36 @@ export class RainParticles extends THREE.Object3D {
 
     const dummy = new THREE.Object3D();
     const particleWeightsAttribute =
-        this.raindropMesh.geometry.attributes.aWeight;
+      this.raindropMesh.geometry.attributes.aWeight;
     const particleVisibilityAttribute =
-        this.raindropMesh.geometry.attributes.aVisibility;
+      this.raindropMesh.geometry.attributes.aVisibility;
     // const nextDummy = new THREE.Object3D();
 
     // Compute the camera's rotation excluding Y-axis rotation (yaw)
-    const cameraEuler =
-        new THREE.Euler().setFromQuaternion(camera.quaternion, 'YXZ');
+    const cameraEuler = new THREE.Euler().setFromQuaternion(
+      camera.quaternion,
+      'YXZ'
+    );
     const cameraEulerNoYaw = new THREE.Euler(
-        cameraEuler.x,  // pitch
-        0,              // yaw
-        cameraEuler.z,  // roll
-        'YXZ');
-    const cameraRotationMatrix =
-        new THREE.Matrix4().makeRotationFromEuler(cameraEulerNoYaw);
+      cameraEuler.x, // pitch
+      0, // yaw
+      cameraEuler.z, // roll
+      'YXZ'
+    );
+    const cameraRotationMatrix = new THREE.Matrix4().makeRotationFromEuler(
+      cameraEulerNoYaw
+    );
     const inverseCameraRotationMatrix = cameraRotationMatrix.clone().invert();
 
     // Update the uniform with the inverse rotation matrix
     this.raindropMesh.material.uniforms.uCameraRotationMatrix.value.copy(
-        inverseCameraRotationMatrix);
+      inverseCameraRotationMatrix
+    );
 
     for (let i = 0; i < this.raindropMesh.count; ++i) {
       // Gets the current transformation matrix of the particle instance.
       this.raindropMesh.getMatrixAt(i, dummy.matrix);
       dummy.matrix.decompose(dummy.position, dummy.quaternion, dummy.scale);
-
 
       // Proceeds the raindrop.
       if (this.particleWeights[i] < 0.5) {
@@ -248,9 +259,13 @@ export class RainParticles extends THREE.Object3D {
       //     screenPos.y >= -1 && screenPos.y <= 1 && screenPos.z >= 0 &&
       //     screenPos.z <= 1;
 
-      const isWithinFoV = screenPos.x >= -0.8 && screenPos.x <= 0.6 &&
-          screenPos.y >= -1.0 && screenPos.y <= 1.0 && screenPos.z >= 0 &&
-          screenPos.z <= 1;
+      const isWithinFoV =
+        screenPos.x >= -0.8 &&
+        screenPos.x <= 0.6 &&
+        screenPos.y >= -1.0 &&
+        screenPos.y <= 1.0 &&
+        screenPos.z >= 0 &&
+        screenPos.z <= 1;
 
       let isOccluded = false;
       let maxVisibility = 1.0;
@@ -259,12 +274,15 @@ export class RainParticles extends THREE.Object3D {
       const isHigh = dummy.position.y > 2.0;
 
       if (isWithinFoV) {
-        const depth =
-            xrDepth.getDepth((screenPos.x + 1) / 2, (screenPos.y + 1) / 2);
+        const depth = xrDepth.getDepth(
+          (screenPos.x + 1) / 2,
+          (screenPos.y + 1) / 2
+        );
 
         // Transform the point to camera space.
-        const pointInCameraSpace =
-            dummy.position.clone().applyMatrix4(camera.matrixWorldInverse);
+        const pointInCameraSpace = dummy.position
+          .clone()
+          .applyMatrix4(camera.matrixWorldInverse);
 
         // The z-coordinate in camera space is the perpendicular distance to the
         // camera plane
@@ -276,8 +294,12 @@ export class RainParticles extends THREE.Object3D {
         //     'occluded: ' + isOccluded, 'isWithinFoV: ' + isWithinFoV, depth,
         //     distanceToCameraPlane);
 
-        if (this.particleWeights[i] == 0 && this.particleVisibility[i] > 0.5 &&
-            isOccluded && !isHigh) {
+        if (
+          this.particleWeights[i] == 0 &&
+          this.particleVisibility[i] > 0.5 &&
+          isOccluded &&
+          !isHigh
+        ) {
           this.particleWeights[i] = 1;
 
           if (depth < 0.3) {
@@ -296,10 +318,10 @@ export class RainParticles extends THREE.Object3D {
         //     depth, distanceToCameraPlane, pointInCameraSpace.z,
         //     dummy.position);
 
-        this.particleVisibility[i] = (isOccluded && !isHigh) ?
-            clamp(0.6 - deltaDepth, 0.0, 0.6) :
-            maxVisibility;
-
+        this.particleVisibility[i] =
+          isOccluded && !isHigh
+            ? clamp(0.6 - deltaDepth, 0.0, 0.6)
+            : maxVisibility;
       } else {
         this.particleVisibility[i] = 0.0;
       }
@@ -312,13 +334,12 @@ export class RainParticles extends THREE.Object3D {
         }
 
         this.particleVisibility[i] =
-            (isOccluded && !isHigh) ? 0.0 : maxVisibility;
+          isOccluded && !isHigh ? 0.0 : maxVisibility;
       }
 
       if (this.particleWeights[i] > 0) {
         this.particleWeights[i] += 1;
       }
-
 
       // Global minimum test.
       if (depthMesh.minDepth < 0.1) {
@@ -368,9 +389,7 @@ export class RainParticles extends THREE.Object3D {
       //   this.particleVisibility[i] = 0.0;
       // }
 
-
       // this.particleVisibility[i] = 1.0;
-
 
       // if (this.particleWeights[i] == 0) {
       //   dummy.scale.set(1, 1, 1);
@@ -395,7 +414,8 @@ export class RainParticles extends THREE.Object3D {
     particleWeightsAttribute.needsUpdate = true;
     particleVisibilityAttribute.needsUpdate = true;
     this.raindropMesh.material.uniforms.uCameraPosition.value.copy(
-        camera.position);
+      camera.position
+    );
   }
 
   /**
@@ -419,7 +439,9 @@ export class RainParticles extends THREE.Object3D {
       u = u * 0.8 + 0.1;
       v = v * 0.8 + 0.1;
       this.raycaster.setFromCamera(
-          {x: u * 2.0 - 1.0, y: v * 2.0 - 1.0}, camera);
+        {x: u * 2.0 - 1.0, y: v * 2.0 - 1.0},
+        camera
+      );
       const intersections = this.raycaster.intersectObject(depthMesh);
       if (intersections.length > 0) {
         vertex = intersections[0].point;
@@ -439,7 +461,7 @@ export class RainParticles extends THREE.Object3D {
       vertex = {
         x: radius * Math.cos(theta),
         z: radius * Math.sin(theta),
-        y: 4.0
+        y: 4.0,
       };
     } else {
       // if (half < 0.5) {

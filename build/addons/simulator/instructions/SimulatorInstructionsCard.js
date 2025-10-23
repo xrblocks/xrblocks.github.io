@@ -5,75 +5,75 @@ import { SimulatorInstructionsNextEvent, SimulatorInstructionsCloseEvent } from 
 
 let SimulatorInstructionsCard = class SimulatorInstructionsCard extends LitElement {
     static { this.styles = css `
-      :host {
-          position: relative;
-          box-sizing: border-box;
-          background: #FFFFFF;
-          display: flex;
-          max-height: 100%;
-          overflow-y: auto;
-          height: 40rem;
-          width: min-content;
-          min-width: 30rem;
-          border-radius: 1.6rem;
-          color: #000000;
-          padding: 1.5rem;
-          flex-direction: column;
-      }
+    :host {
+      position: relative;
+      box-sizing: border-box;
+      background: #ffffff;
+      display: flex;
+      max-height: 100%;
+      overflow-y: auto;
+      height: 40rem;
+      width: min-content;
+      min-width: 30rem;
+      border-radius: 1.6rem;
+      color: #000000;
+      padding: 1.5rem;
+      flex-direction: column;
+    }
 
-      h1 {
-          margin-top: 0px;
-          font-size: 1.375rem;
-      }
+    h1 {
+      margin-top: 0px;
+      font-size: 1.375rem;
+    }
 
-      h2 {
-          margin-top: 0px;
-          margin-bottom: 0px;
-          font-size: 1.125rem;
-      }
+    h2 {
+      margin-top: 0px;
+      margin-bottom: 0px;
+      font-size: 1.125rem;
+    }
 
-      ul {
-          margin-top: 0px;
-          margin-bottom: 0px;
-      }
+    ul {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
 
-      .image-div {
-          margin-top: 0.5rem;
-          margin-bottom: 0.5rem;
-      }
+    .image-div {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
 
-      .description-div {
-          flex-grow: 1;
-      }
+    .description-div {
+      flex-grow: 1;
+    }
 
-      .close-button {
-          position: absolute;
-          right: 1.3rem;
-          top: 1.3rem;
-      }
+    .close-button {
+      position: absolute;
+      right: 1.3rem;
+      top: 1.3rem;
+    }
 
-      button {
-          align-self: flex-end;
-          width: min-content;
-          height: min-content;
-          font-size: 0.75rem;
-          background: rgb(48, 40, 34);
-          color: white;
-          border-radius: 1rem;
-          padding: 0.5rem 0.7rem;
-          border: none;
-      }
+    button {
+      align-self: flex-end;
+      width: min-content;
+      height: min-content;
+      font-size: 0.75rem;
+      background: rgb(48, 40, 34);
+      color: white;
+      border-radius: 1rem;
+      padding: 0.5rem 0.7rem;
+      border: none;
+    }
 
-      video {
-          max-width: 100%;
-          aspect-ratio: 16/9;
-      }
+    video {
+      max-width: 100%;
+      aspect-ratio: 16/9;
+    }
 
-      p {
-          margin-top: 0px;
-          margin-bottom: 0px;
-      }
-    `; }
+    p {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+  `; }
     continueButtonClicked() {
         this.dispatchEvent(new SimulatorInstructionsNextEvent());
     }
@@ -81,9 +81,7 @@ let SimulatorInstructionsCard = class SimulatorInstructionsCard extends LitEleme
         this.dispatchEvent(new SimulatorInstructionsCloseEvent());
     }
     getHeaderContents() {
-        return html `
-            <h1>Welcome to XR Blocks!</h1>
-        `;
+        return html ` <h1>Welcome to XR Blocks!</h1> `;
     }
     getImageContents() {
         return html ``;
@@ -93,18 +91,14 @@ let SimulatorInstructionsCard = class SimulatorInstructionsCard extends LitEleme
     }
     render() {
         return html `
-        <button class="close-button" @click=${this.closeButtonClicked}>X</button>
-        <div class="header-div">
-          ${this.getHeaderContents()}
-        </div>
-        <div class="image-div">
-          ${this.getImageContents()}
-        </div>
-        <div class="description-div">
-          ${this.getDescriptionContents()}
-        </div>
-        <button type="button" @click=${this.continueButtonClicked}>Continue</button>
-      `;
+      <button class="close-button" @click=${this.closeButtonClicked}>X</button>
+      <div class="header-div">${this.getHeaderContents()}</div>
+      <div class="image-div">${this.getImageContents()}</div>
+      <div class="description-div">${this.getDescriptionContents()}</div>
+      <button type="button" @click=${this.continueButtonClicked}>
+        Continue
+      </button>
+    `;
     }
 };
 SimulatorInstructionsCard = __decorate([

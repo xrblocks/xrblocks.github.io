@@ -2,7 +2,7 @@ import 'xrblocks/addons/simulator/SimulatorAddons.js';
 
 import * as xb from 'xrblocks';
 
-import {GameRps} from './GameRps.js'
+import {GameRps} from './GameRps.js';
 
 const options = new xb.Options();
 options.reticles.enabled = true;
@@ -18,8 +18,8 @@ async function start() {
   await xb.init(options);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(function() {
+document.addEventListener('DOMContentLoaded', function () {
+  setTimeout(function () {
     start();
   }, 200);
 });

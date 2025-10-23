@@ -15,8 +15,11 @@ export class GeminiQueryManager extends xb.Script {
   }
 
   createPanel() {
-    this.panel = new xb.SpatialPanel(
-        {width: 2.5, height: 1.5, backgroundColor: '#1a1a1abb'});
+    this.panel = new xb.SpatialPanel({
+      width: 2.5,
+      height: 1.5,
+      backgroundColor: '#1a1a1abb',
+    });
     this.panel.position.set(0, 1.6, -2);
     this.add(this.panel);
 
@@ -24,8 +27,10 @@ export class GeminiQueryManager extends xb.Script {
 
     // Response area
     const responseRow = grid.addRow({weight: 0.8});
-    this.responseDisplay =
-        new xb.ScrollingTroikaTextView({text: '', fontSize: 0.04});
+    this.responseDisplay = new xb.ScrollingTroikaTextView({
+      text: '',
+      fontSize: 0.04,
+    });
     responseRow.add(this.responseDisplay);
 
     const buttonRow = grid.addRow({weight: 0.2});
@@ -79,10 +84,9 @@ export class GeminiQueryManager extends xb.Script {
     const question = 'What do you see in this image?';
     const image = {
       inlineData: {
-        data:
-            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
-        mimeType: 'image/png'
-      }
+        data: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+        mimeType: 'image/png',
+      },
     };
     const parts = [image, {text: question}];
     const displayText = `💬 You: ${question}\n📸 [Sample image sent]\n\n`;

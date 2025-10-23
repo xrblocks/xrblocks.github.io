@@ -20,7 +20,7 @@ export declare class SimulatorControlMode {
     /**
      * Initialize the simulator control mode.
      */
-    init({ camera, input, timer }: {
+    init({ camera, input, timer, }: {
         camera: THREE.Camera;
         input: Input;
         timer: THREE.Timer;

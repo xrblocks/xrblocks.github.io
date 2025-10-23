@@ -39,7 +39,7 @@ export declare class ObjectDetector extends Script {
      * Initializes the ObjectDetector.
      * @override
      */
-    init({ options, ai, aiOptions, deviceCamera, depth, camera }: {
+    init({ options, ai, aiOptions, deviceCamera, depth, camera, }: {
         options: WorldOptions;
         ai: AI;
         aiOptions: AIOptions;

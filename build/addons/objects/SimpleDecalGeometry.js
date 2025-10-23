@@ -24,8 +24,7 @@ class SimpleDecalGeometry extends THREE.BufferGeometry {
         projectorMatrix.makeRotationFromQuaternion(orientation);
         projectorMatrix.setPosition(position);
         projectorMatrix.scale(scale);
-        projectorMatrix
-            .invert(); // Inverts the matrix for projection calculations.
+        projectorMatrix.invert(); // Inverts the matrix for projection calculations.
         // Accesses the vertices, UVs, and indices from the geometry attributes.
         const vertices = this.attributes.position.array;
         const uvs = this.attributes.uv.array;
@@ -46,15 +45,20 @@ class SimpleDecalGeometry extends THREE.BufferGeometry {
             uvs[2 * i] = vector4.x + 0.5;
             uvs[2 * i + 1] = vector4.y + 0.5;
             // Checks if the vertex is within the -0.5 to 0.5 range in all dimensions.
-            vertexBounded[i] = Number(vector4.x >= -0.5 && vector4.x <= 0.5 && vector4.y >= -0.5 &&
-                vector4.y <= 0.5 && vector4.z >= -0.5 && vector4.z <= 0.5);
+            vertexBounded[i] = Number(vector4.x >= -0.5 &&
+                vector4.x <= 0.5 &&
+                vector4.y >= -0.5 &&
+                vector4.y <= 0.5 &&
+                vector4.z >= -0.5 &&
+                vector4.z <= 0.5);
         }
         // Creates a list of indices that correspond to bounded vertices only.
         const goodIndices = [];
         for (let i = 0; i < indices.length / 3; ++i) {
             // Adds the triangle indices if any of its vertices are inside the
             // bounding box.
-            if (vertexBounded[indices[3 * i]] || vertexBounded[indices[3 * i + 1]] ||
+            if (vertexBounded[indices[3 * i]] ||
+                vertexBounded[indices[3 * i + 1]] ||
                 vertexBounded[indices[3 * i + 2]]) {
                 goodIndices.push(indices[3 * i]);
                 goodIndices.push(indices[3 * i + 1]);

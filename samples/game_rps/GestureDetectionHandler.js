@@ -1,6 +1,6 @@
 // LiteRt
-import { loadLiteRt, setWebGpuDevice } from '@litertjs/core';
-import { runWithTfjsTensors } from '@litertjs/tfjs-interop';
+import {loadLiteRt, setWebGpuDevice} from '@litertjs/core';
+import {runWithTfjsTensors} from '@litertjs/tfjs-interop';
 // TensorflowJS + WebGpu backend
 import * as tf from '@tensorflow/tfjs';
 import {WebGPUBackend} from '@tensorflow/tfjs-backend-webgpu';
@@ -10,29 +10,62 @@ import {WebGPUBackend} from '@tensorflow/tfjs-backend-webgpu';
 //
 const HAND_JOINT_COUNT = 25;
 const HAND_JOINT_IDX_CONNECTION_MAP = [
-  [1, 2],   [2, 3],   [3, 4],              // Thumb has 3 bones
-  [5, 6],   [6, 7],   [7, 8],   [8, 9],    // Index finger has 4 bones
-  [10, 11], [11, 12], [12, 13], [13, 14],  // Middle finger has 4 bones
-  [15, 16], [16, 17], [17, 18], [18, 19],  // Ring finger has 4 bones
-  [20, 21], [21, 22], [22, 23], [23, 24],  // Little finger has 4 bones
+  [1, 2],
+  [2, 3],
+  [3, 4], // Thumb has 3 bones
+  [5, 6],
+  [6, 7],
+  [7, 8],
+  [8, 9], // Index finger has 4 bones
+  [10, 11],
+  [11, 12],
+  [12, 13],
+  [13, 14], // Middle finger has 4 bones
+  [15, 16],
+  [16, 17],
+  [17, 18],
+  [18, 19], // Ring finger has 4 bones
+  [20, 21],
+  [21, 22],
+  [22, 23],
+  [23, 24], // Little finger has 4 bones
 ];
 
 const HAND_BONE_IDX_CONNECTION_MAP = [
-  [0, 1], [1, 2],                // Thumb has 2 angles
-  [3, 4], [4, 5], [5, 6],        // Index finger has 3 angles
-  [7, 8], [8, 9], [9, 10],       // Middle finger has 3 angles
-  [11, 12], [12, 13], [13, 14],  // Ring finger has 3 angles
-  [15, 16], [16, 17], [17, 18],  // Little finger has 3 angles
+  [0, 1],
+  [1, 2], // Thumb has 2 angles
+  [3, 4],
+  [4, 5],
+  [5, 6], // Index finger has 3 angles
+  [7, 8],
+  [8, 9],
+  [9, 10], // Middle finger has 3 angles
+  [11, 12],
+  [12, 13],
+  [13, 14], // Ring finger has 3 angles
+  [15, 16],
+  [16, 17],
+  [17, 18], // Little finger has 3 angles
 ];
 
 const GESTURE_LABELS = [
-  'OTHER', 'FIST', 'THUMB UP', 'POINT', 'VICTORY', 'ROCK', 'SHAKA',
-  'GESTURE_LABEL_MAX_ENUM'
+  'OTHER',
+  'FIST',
+  'THUMB UP',
+  'POINT',
+  'VICTORY',
+  'ROCK',
+  'SHAKA',
+  'GESTURE_LABEL_MAX_ENUM',
 ];
 
 const GESTURE_RETURN_LABELS = [
-  'OTHER', 'FIST', 'VICTORY', 'PAPER', 'THUMB_UP',
-  'GESTURE_RETURN_LABELS_MAX_ENUM'
+  'OTHER',
+  'FIST',
+  'VICTORY',
+  'PAPER',
+  'THUMB_UP',
+  'GESTURE_RETURN_LABELS_MAX_ENUM',
 ];
 
 const GESTURE_RETURN_LABELS_MAX_ENUM = 5;
@@ -95,12 +128,12 @@ class LatestTaskQueue {
     if (this.latestTask) {
       this.isProcessing = true;
       const taskToProcess = this.latestTask;
-      this.latestTask = null;  // Clear the reference immediately
+      this.latestTask = null; // Clear the reference immediately
 
       // Execute the task asynchronously using setTimeout (or queueMicrotask)
       setTimeout(async () => {
         try {
-          await taskToProcess();  // If the task is async
+          await taskToProcess(); // If the task is async
         } catch (error) {
           console.error('Error processing latest task:', error);
         } finally {
@@ -109,10 +142,9 @@ class LatestTaskQueue {
             this.processLatestTask();
           }
         }
-      }, 0);  // Delay of 0ms puts it in the event queue
+      }, 0); // Delay of 0ms puts it in the event queue
     }
   }
-
 
   getSize() {
     return this.latestTask === null ? 0 : 1;
@@ -159,9 +191,9 @@ export class GestureDetectionHandler {
       // Initialize LiteRT.js's WASM files
       const wasmPath = 'https://unpkg.com/@litertjs/core/wasm/';
       const liteRt = await loadLiteRt(wasmPath);
-            
+
       // Make LiteRt use the same GPU device as TFJS (for tensor conversion)
-      const backend = tf.backend();  // as WebGPUBackend;
+      const backend = tf.backend(); // as WebGPUBackend;
       setWebGpuDevice(backend.device);
 
       // Load model via LiteRt
@@ -198,10 +230,10 @@ export class GestureDetectionHandler {
     // Calculate bone vectors
     const boneVectors = [];
     HAND_JOINT_IDX_CONNECTION_MAP.forEach(([joint1, joint2]) => {
-      const boneVector =
-          jointPositionsReshaped.slice([joint2, 0], [1, 3])
-              .sub(jointPositionsReshaped.slice([joint1, 0], [1, 3]))
-              .squeeze();
+      const boneVector = jointPositionsReshaped
+        .slice([joint2, 0], [1, 3])
+        .sub(jointPositionsReshaped.slice([joint1, 0], [1, 3]))
+        .squeeze();
       const norm = boneVector.norm();
       const normalizedBoneVector = boneVector.div(norm);
       boneVectors.push(normalizedBoneVector);
@@ -225,8 +257,9 @@ export class GestureDetectionHandler {
     }
 
     try {
-      const tensor =
-          this.calculateRelativeHandBoneAngles(tf.tensor1d(handJoints));
+      const tensor = this.calculateRelativeHandBoneAngles(
+        tf.tensor1d(handJoints)
+      );
 
       //
       // Detect paper gesture for ~3 seconds only
@@ -236,8 +269,11 @@ export class GestureDetectionHandler {
         return 3;
       }
 
-      let tensorReshaped =
-          tensor.reshape([1, HAND_BONE_IDX_CONNECTION_MAP.length, 1]);
+      let tensorReshaped = tensor.reshape([
+        1,
+        HAND_BONE_IDX_CONNECTION_MAP.length,
+        1,
+      ]);
       var result = -1;
 
       result = runWithTfjsTensors(this.model, tensorReshaped);
@@ -255,8 +291,10 @@ export class GestureDetectionHandler {
 
         // No need to detect thumb up for a play mode
         if (idx === 2) {
-          if (this.enablePaperDetection ||
-              !this.isThumbUp(handJoints, 2, 3, 4)) {
+          if (
+            this.enablePaperDetection ||
+            !this.isThumbUp(handJoints, 2, 3, 4)
+          ) {
             result = 0;
           }
         }
@@ -316,7 +354,7 @@ export class GestureDetectionHandler {
     };
 
     // Calculate the angle between the two vectors using the dot product
-    const dotProduct = (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
+    const dotProduct = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 
     // Calculate the magnitudes (lengths) of the vectors
     const magnitudeV1 = Math.sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
@@ -324,17 +362,14 @@ export class GestureDetectionHandler {
 
     // Avoid division by zero if either vector has zero length
     if (magnitudeV1 === 0 || magnitudeV2 === 0) {
-      return false;  // Cannot determine angle if segments have zero length
+      return false; // Cannot determine angle if segments have zero length
     }
 
     // Calculate the cosine of the angle
     const cosAngle = dotProduct / (magnitudeV1 * magnitudeV2);
 
     // Get the angle in radians
-    const angleRadians = Math.acos(Math.max(
-        -1,
-        Math.min(
-            1, cosAngle)));  // Clamp to handle potential floating-point errors
+    const angleRadians = Math.acos(Math.max(-1, Math.min(1, cosAngle))); // Clamp to handle potential floating-point errors
 
     // Convert the angle to degrees
     const angleDegrees = angleRadians * (180 / Math.PI);
@@ -342,8 +377,8 @@ export class GestureDetectionHandler {
     // Define a threshold angle for what we consider "thumb up".
     // This value might need adjustment based on your specific application and
     // data.
-    const thumbUpThreshold = 90;  // Example: If the angle is greater than 90
-                                  // degrees, it's considered "up"
+    const thumbUpThreshold = 90; // Example: If the angle is greater than 90
+    // degrees, it's considered "up"
 
     // In a typical "thumb up" gesture, the angle between the base-knuckle
     // segment and the knuckle-tip segment would be relatively straight or even
@@ -375,38 +410,50 @@ export class GestureDetectionHandler {
     // Helper to check if a finger's segments are sufficiently straight
     // All angle values for the segments should be above the threshold
     const areSegmentsStraight = (...angleIndices) => {
-      return angleIndices.every(idx => angles[idx] > STRAIGHT_FINGER_THRESHOLD);
+      return angleIndices.every(
+        (idx) => angles[idx] > STRAIGHT_FINGER_THRESHOLD
+      );
     };
 
     // Check straightness for each finger based on its segment angles
     const isThumbStraight = areSegmentsStraight(
-        ANGLE_INDICES.THUMB_SEGMENT_ANGLE_1,
-        ANGLE_INDICES.THUMB_SEGMENT_ANGLE_2);
+      ANGLE_INDICES.THUMB_SEGMENT_ANGLE_1,
+      ANGLE_INDICES.THUMB_SEGMENT_ANGLE_2
+    );
 
     const isIndexStraight = areSegmentsStraight(
-        ANGLE_INDICES.INDEX_SEGMENT_ANGLE_1,
-        ANGLE_INDICES.INDEX_SEGMENT_ANGLE_2,
-        ANGLE_INDICES.INDEX_SEGMENT_ANGLE_3);
+      ANGLE_INDICES.INDEX_SEGMENT_ANGLE_1,
+      ANGLE_INDICES.INDEX_SEGMENT_ANGLE_2,
+      ANGLE_INDICES.INDEX_SEGMENT_ANGLE_3
+    );
 
     const isMiddleStraight = areSegmentsStraight(
-        ANGLE_INDICES.MIDDLE_SEGMENT_ANGLE_1,
-        ANGLE_INDICES.MIDDLE_SEGMENT_ANGLE_2,
-        ANGLE_INDICES.MIDDLE_SEGMENT_ANGLE_3);
+      ANGLE_INDICES.MIDDLE_SEGMENT_ANGLE_1,
+      ANGLE_INDICES.MIDDLE_SEGMENT_ANGLE_2,
+      ANGLE_INDICES.MIDDLE_SEGMENT_ANGLE_3
+    );
 
     const isRingStraight = areSegmentsStraight(
-        ANGLE_INDICES.RING_SEGMENT_ANGLE_1, ANGLE_INDICES.RING_SEGMENT_ANGLE_2,
-        ANGLE_INDICES.RING_SEGMENT_ANGLE_3);
+      ANGLE_INDICES.RING_SEGMENT_ANGLE_1,
+      ANGLE_INDICES.RING_SEGMENT_ANGLE_2,
+      ANGLE_INDICES.RING_SEGMENT_ANGLE_3
+    );
 
     const isPinkyStraight = areSegmentsStraight(
-        ANGLE_INDICES.PINKY_SEGMENT_ANGLE_1,
-        ANGLE_INDICES.PINKY_SEGMENT_ANGLE_2,
-        ANGLE_INDICES.PINKY_SEGMENT_ANGLE_3);
+      ANGLE_INDICES.PINKY_SEGMENT_ANGLE_1,
+      ANGLE_INDICES.PINKY_SEGMENT_ANGLE_2,
+      ANGLE_INDICES.PINKY_SEGMENT_ANGLE_3
+    );
 
     // For a "paper" gesture, all fingers (including the thumb) should be
     // straight. As discussed, explicit thumb abduction isn't provided by your
     // current angle map, so we focus on overall finger extension.
-    const isPaper = isThumbStraight && isIndexStraight && isMiddleStraight &&
-        isRingStraight && isPinkyStraight;
+    const isPaper =
+      isThumbStraight &&
+      isIndexStraight &&
+      isMiddleStraight &&
+      isRingStraight &&
+      isPinkyStraight;
 
     return isPaper;
   }
@@ -464,7 +511,7 @@ export class GestureDetectionHandler {
     };
 
     // Calculate the angle between the two vectors using the dot product
-    const dotProduct = (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
+    const dotProduct = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 
     // Calculate the magnitudes (lengths) of the vectors
     const magnitudeV1 = Math.sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
@@ -472,17 +519,14 @@ export class GestureDetectionHandler {
 
     // Avoid division by zero if either vector has zero length
     if (magnitudeV1 === 0 || magnitudeV2 === 0) {
-      return false;  // Cannot determine angle if segments have zero length
+      return false; // Cannot determine angle if segments have zero length
     }
 
     // Calculate the cosine of the angle
     const cosAngle = dotProduct / (magnitudeV1 * magnitudeV2);
 
     // Get the angle in radians
-    const angleRadians = Math.acos(Math.max(
-        -1,
-        Math.min(
-            1, cosAngle)));  // Clamp to handle potential floating-point errors
+    const angleRadians = Math.acos(Math.max(-1, Math.min(1, cosAngle))); // Clamp to handle potential floating-point errors
 
     // Convert the angle to degrees
     const angleDegrees = angleRadians * (180 / Math.PI);
@@ -490,8 +534,8 @@ export class GestureDetectionHandler {
     // Define a threshold angle for what we consider "thumb up".
     // This value might need adjustment based on your specific application and
     // data.
-    const thumbUpThreshold = 90;  // Example: If the angle is greater than 90
-                                  // degrees, it's considered "up"
+    const thumbUpThreshold = 90; // Example: If the angle is greater than 90
+    // degrees, it's considered "up"
 
     // In a typical "thumb up" gesture, the angle between the base-knuckle
     // segment and the knuckle-tip segment would be relatively straight or even
@@ -500,7 +544,6 @@ export class GestureDetectionHandler {
 
     return angleDegrees > thumbUpThreshold;
   }
-
 
   isThumbUpSimple(data, p1, p2) {
     // Assuming p1 is the base of the thumb and p2 is the tip.
@@ -514,7 +557,8 @@ export class GestureDetectionHandler {
 
     // Calculate the magnitude of the vector
     const magnitude = Math.sqrt(
-        vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
+      vector.x * vector.x + vector.y * vector.y + vector.z * vector.z
+    );
 
     // If the magnitude is very small, it's likely not a significant gesture
     if (magnitude < 0.001) {
@@ -533,8 +577,10 @@ export class GestureDetectionHandler {
 
     // Calculate the dot product between the normalized thumb vector and the up
     // vector
-    const dotProduct = (normalizedVector.x * upVector.x) +
-        (normalizedVector.y * upVector.y) + (normalizedVector.z * upVector.z);
+    const dotProduct =
+      normalizedVector.x * upVector.x +
+      normalizedVector.y * upVector.y +
+      normalizedVector.z * upVector.z;
 
     // The dot product of two normalized vectors is equal to the cosine of the
     // angle between them. An angle of 45 degrees has a cosine of approximately
@@ -542,7 +588,7 @@ export class GestureDetectionHandler {
     // degrees of the vertical "up" direction. This means the cosine of the
     // angle should be greater than or equal to cos(45 degrees).
 
-    const cos45Degrees = Math.cos(45 * Math.PI / 180);  // Approximately 0.707
+    const cos45Degrees = Math.cos((45 * Math.PI) / 180); // Approximately 0.707
 
     return dotProduct >= cos45Degrees;
   }

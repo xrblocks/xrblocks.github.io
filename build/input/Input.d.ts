@@ -36,7 +36,7 @@ export declare class Input {
      * Initializes an instance with XR controllers, grips, hands, raycaster, and
      * default options. Only called by Core.
      */
-    init({ scene, options, renderer }: {
+    init({ scene, options, renderer, }: {
         scene: THREE.Scene;
         options: Options;
         renderer: THREE.WebGLRenderer;

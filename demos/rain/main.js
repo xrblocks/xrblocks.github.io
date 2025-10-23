@@ -4,8 +4,10 @@ import * as xb from 'xrblocks';
 
 import {RainScene} from './RainScene.js';
 
-const depthMeshColliderUpdateFps =
-    xb.getUrlParamFloat('depthMeshColliderUpdateFps', 30);
+const depthMeshColliderUpdateFps = xb.getUrlParamFloat(
+  'depthMeshColliderUpdateFps',
+  30
+);
 
 const options = new xb.Options();
 options.reticles.enabled = false;
@@ -21,6 +23,6 @@ async function start() {
   await xb.init(options);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   start();
 });

@@ -20,12 +20,16 @@ export class TranscriptionManager {
 
   finalizeTurn() {
     if (this.currentInputText.trim()) {
-      this.conversationHistory.push(
-          {speaker: 'You', text: this.currentInputText.trim()});
+      this.conversationHistory.push({
+        speaker: 'You',
+        text: this.currentInputText.trim(),
+      });
     }
     if (this.currentOutputText.trim()) {
-      this.conversationHistory.push(
-          {speaker: 'AI', text: this.currentOutputText.trim()});
+      this.conversationHistory.push({
+        speaker: 'AI',
+        text: this.currentOutputText.trim(),
+      });
     }
     this.currentInputText = '';
     this.currentOutputText = '';
@@ -69,4 +73,3 @@ export class TranscriptionManager {
     this.responseDisplay?.setText(text);
   }
 }
-

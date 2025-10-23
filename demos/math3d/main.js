@@ -1,8 +1,8 @@
 import * as xb from 'xrblocks';
 
-import {Math3D} from './Math3D.js'
+import {Math3D} from './Math3D.js';
 
-const options = new xb.Options()
+const options = new xb.Options();
 options.reticles.enabled = true;
 options.visualizeRays = true;
 
@@ -11,6 +11,6 @@ function start() {
   xb.init(options);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   start();
 });

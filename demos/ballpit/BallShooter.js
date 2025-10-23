@@ -67,17 +67,17 @@ export class BallShooter extends xb.Script {
     RAPIER,
     blendedWorld,
     colliderActiveEvents = 0,
-    continuousCollisionDetection = false
+    continuousCollisionDetection = false,
   }) {
     for (let i = 0; i < this.spheres.length; ++i) {
       const position = this.spheres[i].position;
       const desc = RAPIER.RigidBodyDesc.dynamic()
-                       .setTranslation(...position)
-                       .setCcdEnabled(continuousCollisionDetection);
+        .setTranslation(...position)
+        .setCcdEnabled(continuousCollisionDetection);
       const body = blendedWorld.createRigidBody(desc);
-      const shape =
-          RAPIER.ColliderDesc.ball(this.spheres[i].geometry.parameters.radius)
-              .setActiveEvents(colliderActiveEvents);
+      const shape = RAPIER.ColliderDesc.ball(
+        this.spheres[i].geometry.parameters.radius
+      ).setActiveEvents(colliderActiveEvents);
       const collider = blendedWorld.createCollider(shape, body);
       this.colliderHandleToIndex.set(collider.handle, i);
       this.rigidBodies.push(body);
@@ -92,7 +92,10 @@ export class BallShooter extends xb.Script {
    * @param {number} now Time when the ball is spawned.
    */
   spawnBallAt(
-      position, velocity = new THREE.Vector3(), now = performance.now()) {
+    position,
+    velocity = new THREE.Vector3(),
+    now = performance.now()
+  ) {
     const ball = this.spheres[this.nextBall];
     ball.position.copy(position);
     ball.scale.setScalar(1.0);
@@ -119,36 +122,47 @@ export class BallShooter extends xb.Script {
         const position = sphere.position.copy(body.translation());
         // If the ball falls behind the depth then adjust the spawnTime to begin
         // expiring the ball.
-        const viewSpacePosition =
-            this.viewSpacePosition.copy(position).applyMatrix4(
-                camera.matrixWorldInverse);
-        const clipSpacePosition = this.clipSpacePosition.copy(viewSpacePosition)
-                                      .applyMatrix4(camera.projectionMatrix);
-        const ballIsInView = -1.0 <= clipSpacePosition.x &&
-            clipSpacePosition.x <= 1.0 && -1.0 <= clipSpacePosition.y &&
-            clipSpacePosition.y <= 1.0;
+        const viewSpacePosition = this.viewSpacePosition
+          .copy(position)
+          .applyMatrix4(camera.matrixWorldInverse);
+        const clipSpacePosition = this.clipSpacePosition
+          .copy(viewSpacePosition)
+          .applyMatrix4(camera.projectionMatrix);
+        const ballIsInView =
+          -1.0 <= clipSpacePosition.x &&
+          clipSpacePosition.x <= 1.0 &&
+          -1.0 <= clipSpacePosition.y &&
+          clipSpacePosition.y <= 1.0;
         if (ballIsInView) {
           const projectedPosition =
-              xb.core.depth.getProjectedDepthViewPositionFromWorldPosition(
-                  position, this.projectedPosition);
-          const distanceBehindDepth =
-              Math.max(projectedPosition.z - viewSpacePosition.z, 0.0);
+            xb.core.depth.getProjectedDepthViewPositionFromWorldPosition(
+              position,
+              this.projectedPosition
+            );
+          const distanceBehindDepth = Math.max(
+            projectedPosition.z - viewSpacePosition.z,
+            0.0
+          );
           if (distanceBehindDepth > this.distanceThreshold) {
             const deflateAmount = Math.max(
-                (distanceBehindDepth - this.distanceThreshold) /
-                    this.distanceFadeout,
-                1.0);
+              (distanceBehindDepth - this.distanceThreshold) /
+                this.distanceFadeout,
+              1.0
+            );
             spawnTime = Math.min(
-                spawnTime,
-                now - this.liveDuration - this.deflateDuration * deflateAmount);
+              spawnTime,
+              now - this.liveDuration - this.deflateDuration * deflateAmount
+            );
           }
         }
 
         // Compute the visibility if the ball has lived too long.
         if (now - spawnTime > this.liveDuration) {
           const timeSinceDeflateStarted = now - spawnTime - this.liveDuration;
-          const deflateAmount =
-              Math.min(1, timeSinceDeflateStarted / this.deflateDuration);
+          const deflateAmount = Math.min(
+            1,
+            timeSinceDeflateStarted / this.deflateDuration
+          );
           ballVisibility = 1.0 - deflateAmount;
         }
 

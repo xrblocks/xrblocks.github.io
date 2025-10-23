@@ -22,7 +22,7 @@ class GeminiManager extends xb.Script {
         this.xrDeviceCamera = xb.core.deviceCamera;
         this.ai = xb.core.ai;
     }
-    async startGeminiLive({ liveParams } = {}) {
+    async startGeminiLive({ liveParams, } = {}) {
         if (this.isAIRunning || !this.ai) {
             console.warn('AI already running or not available');
             return;
@@ -67,8 +67,8 @@ class GeminiManager extends xb.Script {
                 sampleRate: 16000,
                 channelCount: 1,
                 echoCancellation: true,
-                noiseSuppression: true
-            }
+                noiseSuppression: true,
+            },
         });
         const audioTracks = this.audioStream.getAudioTracks();
         if (audioTracks.length === 0) {
@@ -76,10 +76,8 @@ class GeminiManager extends xb.Script {
         }
         this.audioContext = new AudioContext({ sampleRate: 16000 });
         await this.audioContext.audioWorklet.addModule('./AudioCaptureProcessor.js');
-        this.sourceNode =
-            this.audioContext.createMediaStreamSource(this.audioStream);
-        this.processorNode =
-            new AudioWorkletNode(this.audioContext, 'audio-capture-processor');
+        this.sourceNode = this.audioContext.createMediaStreamSource(this.audioStream);
+        this.processorNode = new AudioWorkletNode(this.audioContext, 'audio-capture-processor');
         this.processorNode.port.onmessage = (event) => {
             if (event.data.type === 'audioData' && this.isAIRunning) {
                 this.sendAudioData(event.data.data);
@@ -103,7 +101,7 @@ class GeminiManager extends xb.Script {
                 },
                 onclose: () => {
                     this.isAIRunning = false;
-                }
+                },
             });
             this.ai.startLiveSession(params).catch(reject);
         });
@@ -126,9 +124,9 @@ class GeminiManager extends xb.Script {
             });
             if (typeof base64Image == 'string') {
                 // Strip the data URL prefix if present
-                const base64Data = base64Image.startsWith('data:') ?
-                    base64Image.split(',')[1] :
-                    base64Image;
+                const base64Data = base64Image.startsWith('data:')
+                    ? base64Image.split(',')[1]
+                    : base64Image;
                 this.sendVideoFrame(base64Data);
             }
         }
@@ -223,7 +221,7 @@ class GeminiManager extends xb.Script {
             this.audioContext = null;
         }
         if (this.audioStream) {
-            this.audioStream.getTracks().forEach(track => track.stop());
+            this.audioStream.getTracks().forEach((track) => track.stop());
             this.audioStream = null;
         }
     }
@@ -232,16 +230,17 @@ class GeminiManager extends xb.Script {
             this.playAudioChunk(message.data);
         }
         for (const functionCall of message.toolCall?.functionCalls ?? []) {
-            const tool = this.tools.find(tool => tool.name == functionCall.name);
+            const tool = this.tools.find((tool) => tool.name == functionCall.name);
             if (tool) {
                 const exec = tool.execute(functionCall.args);
-                exec.then(result => {
+                exec
+                    .then((result) => {
                     this.ai.sendToolResponse({
                         functionResponses: {
                             id: functionCall.id,
                             name: functionCall.name,
-                            response: { 'output': result }
-                        }
+                            response: { output: result },
+                        },
                     });
                 })
                     .catch((error) => console.error('Tool error:', error));

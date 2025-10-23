@@ -27,7 +27,7 @@ export declare class PlaneDetector extends Script {
     /**
      * Initializes the PlaneDetector.
      */
-    init({ options, renderer }: {
+    init({ options, renderer, }: {
         options: WorldOptions;
         renderer: THREE.WebGLRenderer;
     }): void;

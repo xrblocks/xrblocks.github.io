@@ -2,11 +2,13 @@ import {Parser} from 'expr-eval';
 import * as THREE from 'three';
 import {ParametricGeometry} from 'three/addons/geometries/ParametricGeometry.js';
 import * as xb from 'xrblocks';
-import {Keyboard} from 'xrblocks/addons/virtualkeyboard/Keyboard.js'
+import {Keyboard} from 'xrblocks/addons/virtualkeyboard/Keyboard.js';
 
-const MATH_OBJECTS = [{
-  functionText: 'x^2 - y^2',
-}];
+const MATH_OBJECTS = [
+  {
+    functionText: 'x^2 - y^2',
+  },
+];
 
 export class Math3D extends xb.Script {
   constructor() {
@@ -22,18 +24,20 @@ export class Math3D extends xb.Script {
     const panel = new xb.SpatialPanel({
       backgroundColor: '#00000000',
       useDefaultPosition: false,
-      showEdge: false
+      showEdge: false,
     });
     panel.isRoot = true;
     this.add(panel);
 
-    this.descriptionPagerState =
-        new xb.PagerState({pages: this.mathObjects.length});
+    this.descriptionPagerState = new xb.PagerState({
+      pages: this.mathObjects.length,
+    });
     const grid = panel.addGrid();
 
     const imageRow = grid.addRow({weight: 1.0});
-    this.imagePager =
-        new xb.HorizontalPager({state: this.descriptionPagerState});
+    this.imagePager = new xb.HorizontalPager({
+      state: this.descriptionPagerState,
+    });
     imageRow.addCol({weight: 1.0}).add(this.imagePager);
     const meshAxes = this.createCoordinateGridAxes();
     for (let i = 0; i < this.mathObjects.length; i++) {
@@ -53,18 +57,22 @@ export class Math3D extends xb.Script {
       const descRow = midColumn.addRow({weight: 0.8});
 
       this.add(this.descriptionPagerState);
-      this.descriptionPager = new xb.HorizontalPager(
-          {state: this.descriptionPagerState, enableRaycastOnChildren: false});
+      this.descriptionPager = new xb.HorizontalPager({
+        state: this.descriptionPagerState,
+        enableRaycastOnChildren: false,
+      });
       descRow.add(this.descriptionPager);
 
       for (let i = 0; i < this.mathObjects.length; i++) {
         const initialFunction = this.mathObjects[i].functionText;
-        this.functionDisplay = this.descriptionPager.children[i].add(new xb.TextButton({
-          text: initialFunction,
-          fontColor: '#ffffff',
-          fontSize: 0.06,
-          backgroundColor: '#00000000'  // Make background transparent
-        }));
+        this.functionDisplay = this.descriptionPager.children[i].add(
+          new xb.TextButton({
+            text: initialFunction,
+            fontColor: '#ffffff',
+            fontSize: 0.06,
+            backgroundColor: '#00000000', // Make background transparent
+          })
+        );
       }
     }
 
@@ -92,7 +100,7 @@ export class Math3D extends xb.Script {
 
     this.keyboard.onEnterPressed = (newFunctionText) => {
       this.mathObjects[this.descriptionPagerState.currentPage].functionText =
-          newFunctionText;
+        newFunctionText;
       this.updateGraph(newFunctionText);
     };
 
@@ -125,32 +133,34 @@ export class Math3D extends xb.Script {
     }
   }
 
-
   createCoordinateGridAxes(gridLength = 0.25) {
     const gridVectors = [
       {
         startVector: new THREE.Vector3(gridLength, 0, 0),
         endVector: new THREE.Vector3(-gridLength, 0, 0),
-        color: 0xff0000
+        color: 0xff0000,
       },
       {
         startVector: new THREE.Vector3(0, gridLength, 0),
         endVector: new THREE.Vector3(0, -gridLength, 0),
-        color: 0x0000ff
+        color: 0x0000ff,
       },
       {
         startVector: new THREE.Vector3(0, 0, gridLength),
         endVector: new THREE.Vector3(0, 0, -gridLength),
-        color: 0x00ff00
+        color: 0x00ff00,
       },
     ];
 
     var axes = [];
     for (let i = 0; i < gridVectors.length; i++) {
-      var axisGeometry = new THREE.BufferGeometry().setFromPoints(
-          [gridVectors[i].startVector, gridVectors[i].endVector]);
-      var axisMaterial =
-          new THREE.LineBasicMaterial({color: gridVectors[i].color});
+      var axisGeometry = new THREE.BufferGeometry().setFromPoints([
+        gridVectors[i].startVector,
+        gridVectors[i].endVector,
+      ]);
+      var axisMaterial = new THREE.LineBasicMaterial({
+        color: gridVectors[i].color,
+      });
       var axisLine = new THREE.Line(axisGeometry, axisMaterial);
       axes.push(axisLine);
     }
@@ -158,10 +168,14 @@ export class Math3D extends xb.Script {
   }
 
   createParametricMesh(zFunctionText) {
-    var xMin = -5, xMax = 5, xRange = xMax - xMin;
-    var yMin = -5, yMax = 5, yRange = yMax - yMin;
+    var xMin = -5,
+      xMax = 5,
+      xRange = xMax - xMin;
+    var yMin = -5,
+      yMax = 5,
+      yRange = yMax - yMin;
     var zFunction = Parser.parse(zFunctionText).toJSFunction(['x', 'y']);
-    var parametricFunction = function(x, y, target) {
+    var parametricFunction = function (x, y, target) {
       var x = xRange * x + xMin;
       var y = yRange * y + yMin;
       var z = zFunction(x, y);
@@ -169,19 +183,26 @@ export class Math3D extends xb.Script {
       target.set(x, y, z);
     };
 
-    const slices = 25;  // Number of segments along the 'u' direction
-    const stacks = 25;  // Number of segments along the 'v' direction
-    var graphGeometry =
-        new ParametricGeometry(parametricFunction, slices, stacks, true);
+    const slices = 25; // Number of segments along the 'u' direction
+    const stacks = 25; // Number of segments along the 'v' direction
+    var graphGeometry = new ParametricGeometry(
+      parametricFunction,
+      slices,
+      stacks,
+      true
+    );
     // Rotate 90 degrees around X so that the Z axis points upwards.
     graphGeometry.rotateX(-Math.PI / 2);
     graphGeometry.scale(0.025, 0.025, 0.025);
     const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load('images/gradient.png')
-    const material = new THREE.MeshBasicMaterial(
-        {map: texture, transparent: true, side: THREE.DoubleSide});
+    const texture = textureLoader.load('images/gradient.png');
+    const material = new THREE.MeshBasicMaterial({
+      map: texture,
+      transparent: true,
+      side: THREE.DoubleSide,
+    });
     material.opacity = 0.75;
     const mesh = new THREE.Mesh(graphGeometry, material);
     return mesh;
   }
-};
+}

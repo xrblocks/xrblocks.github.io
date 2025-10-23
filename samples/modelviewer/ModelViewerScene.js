@@ -7,7 +7,7 @@ const kLightZ = xb.getUrlParamFloat('lightZ', -10);
 
 const ASSETS_BASE_URL = 'https://cdn.jsdelivr.net/gh/xrblocks/assets@main/';
 const PROPRIETARY_ASSETS_BASE_URL =
-    'https://cdn.jsdelivr.net/gh/xrblocks/proprietary-assets@main/';
+  'https://cdn.jsdelivr.net/gh/xrblocks/proprietary-assets@main/';
 
 export class ModelViewerScene extends xb.Script {
   constructor() {
@@ -35,9 +35,12 @@ export class ModelViewerScene extends xb.Script {
 
   createModelFromObject() {
     const model = new xb.ModelViewer({});
-    model.add(new THREE.Mesh(
+    model.add(
+      new THREE.Mesh(
         new THREE.CylinderGeometry(0.15, 0.15, 0.4),
-        new THREE.MeshPhongMaterial({color: 0xdb5461})));
+        new THREE.MeshPhongMaterial({color: 0xdb5461})
+      )
+    );
     model.setupBoundingBox();
     model.setupRaycastCylinder();
     model.setupPlatform();
@@ -54,7 +57,7 @@ export class ModelViewerScene extends xb.Script {
         path: PROPRIETARY_ASSETS_BASE_URL,
         model: 'chess/chess_compressed.glb',
       },
-      renderer: xb.core.renderer
+      renderer: xb.core.renderer,
     });
     model.position.set(0, 0.78, -1.1);
   }
@@ -92,7 +95,7 @@ export class ModelViewerScene extends xb.Script {
       backgroundColor: '#00000000',
       width: 0.5,
       height: 0.25,
-      useDefaultPosition: false
+      useDefaultPosition: false,
     });
     panel.isRoot = true;
     this.add(panel);
@@ -110,7 +113,7 @@ export class ModelViewerScene extends xb.Script {
         model: 'earth/Earth_1_12756.glb',
       },
       setupPlatform: false,
-      renderer: xb.core.renderer
+      renderer: xb.core.renderer,
     });
   }
 }

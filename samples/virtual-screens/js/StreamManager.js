@@ -17,7 +17,8 @@ export class StreamManager {
 
     // Bind `this` to ensure the methods have the correct context when called.
     this.webSocketManager.setRequestHandler(
-        this.handleServerRequest.bind(this));
+      this.handleServerRequest.bind(this)
+    );
     this.webSocketManager.setBinaryHandler(this.onStreamData.bind(this));
   }
 
@@ -143,13 +144,17 @@ export class StreamManager {
           }
 
           // This cropRect is used on all subsequent frames for this stream.
-          streamState.cropRect =
-              {x: rect.x, y: rect.y, width: codedWidth, height: codedHeight};
+          streamState.cropRect = {
+            x: rect.x,
+            y: rect.y,
+            width: codedWidth,
+            height: codedHeight,
+          };
 
           encoder = new VideoEncoder({
             output: (chunk) => this._outputHandler(chunk, streamId),
             error: (e) =>
-                console.error(`VideoEncoder error for stream ${streamId}:`, e),
+              console.error(`VideoEncoder error for stream ${streamId}:`, e),
           });
 
           await encoder.configure({
@@ -161,9 +166,10 @@ export class StreamManager {
           });
 
           // Now that the true dimensions are known, notify the server.
-          await this.request(
-              'start_stream',
-              [streamId, {width: codedWidth, height: codedHeight}]);
+          await this.request('start_stream', [
+            streamId,
+            {width: codedWidth, height: codedHeight},
+          ]);
           streamState.encoder = encoder;
         }
 
@@ -180,7 +186,7 @@ export class StreamManager {
         frame.close();
         frameToEncode.close();
       } catch (e) {
-        break;  // Loop will terminate if reader is cancelled.
+        break; // Loop will terminate if reader is cancelled.
       }
     }
   }
@@ -212,7 +218,6 @@ export class StreamManager {
     chunk.copyTo(new Uint8Array(buffer, offset));
     this.webSocketManager.sendBinary(buffer);
   }
-
 
   /**
    * Called via RPC from the server to request a key frame.
@@ -300,7 +305,8 @@ export class StreamManager {
       const streamIdLength = view.getUint8(0);
       let offset = 1;
       const streamId = new TextDecoder().decode(
-          new Uint8Array(data, offset, streamIdLength));
+        new Uint8Array(data, offset, streamIdLength)
+      );
       offset += streamIdLength;
       const frameType = view.getUint8(offset);
       offset += 1;
@@ -353,7 +359,7 @@ export class StreamManager {
         frame.close();
       },
       error: (e) =>
-          console.error(`VideoDecoder error for stream ${streamId}:`, e),
+        console.error(`VideoDecoder error for stream ${streamId}:`, e),
     });
 
     streamState.decoder.configure({

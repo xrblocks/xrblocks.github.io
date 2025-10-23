@@ -74,5 +74,5 @@ export const DepthMapShader = {
       TurboColormap(clamp(real_depth / 8.0, 0.0, 1.0)), 1.0);
     gl_FragColor = mix(diffuse, depth_visualization, uAlpha);
   }
-`
+`,
 };

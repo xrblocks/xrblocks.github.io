@@ -1,20 +1,20 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
 export const AlphaShader = {
-  name: "AlphaShader",
+  name: 'AlphaShader',
 
   defines: {
     DEG_TO_RAD: 3.14159265359 / 180.0,
   },
 
   uniforms: {
-    tDiffuse: { value: null },
-    uWiperDegrees: { value: 10.0 },
-    uLeftWiperActive: { value: false },
-    uLeftHandCartesianCoordinate: { value: new THREE.Vector3(0.0, -1.0, 0.0) },
-    uRightWiperActive: { value: false },
-    uRightHandCartesianCoordinate: { value: new THREE.Vector3(0.0, -1.0, 0.0) },
-    uReturnSpeed: { value: 0.005 },
+    tDiffuse: {value: null},
+    uWiperDegrees: {value: 10.0},
+    uLeftWiperActive: {value: false},
+    uLeftHandCartesianCoordinate: {value: new THREE.Vector3(0.0, -1.0, 0.0)},
+    uRightWiperActive: {value: false},
+    uRightHandCartesianCoordinate: {value: new THREE.Vector3(0.0, -1.0, 0.0)},
+    uReturnSpeed: {value: 0.005},
   },
 
   vertexShader: /* glsl */ `

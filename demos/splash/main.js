@@ -5,8 +5,10 @@ import * as xb from 'xrblocks';
 
 import {SplashScript} from './SplashScript.js';
 
-const depthMeshColliderUpdateFps =
-    xb.getUrlParamFloat('depthMeshColliderUpdateFps', 30);
+const depthMeshColliderUpdateFps = xb.getUrlParamFloat(
+  'depthMeshColliderUpdateFps',
+  30
+);
 const splashScript = new SplashScript();
 
 let options = new xb.Options();
@@ -15,7 +17,7 @@ options.depth.depthMesh.colliderUpdateFps = depthMeshColliderUpdateFps;
 options.xrButton = {
   ...options.xrButton,
   startText: '<i id="xrlogo"></i> MAKE A MESS',
-  endText: '<i id="xrlogo"></i> MISSION COMPLETE'
+  endText: '<i id="xrlogo"></i> MISSION COMPLETE',
 };
 options.physics.RAPIER = RAPIER;
 options.physics.useEventQueue = true;
@@ -26,6 +28,6 @@ async function start() {
   await xb.init(options);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   start();
 });

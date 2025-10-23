@@ -18,9 +18,11 @@ async function start() {
   xb.add(occlusion);
 
   window.addEventListener(
-      'pointerdown', occlusion.onPointerDown.bind(occlusion));
+    'pointerdown',
+    occlusion.onPointerDown.bind(occlusion)
+  );
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   start();
 });

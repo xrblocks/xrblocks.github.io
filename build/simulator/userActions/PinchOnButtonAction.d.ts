@@ -18,7 +18,7 @@ export declare class PinchOnButtonAction extends SimulatorUserAction {
     private timer;
     private input;
     constructor(target: THREE.Object3D);
-    init({ simulator, camera, timer, input }: {
+    init({ simulator, camera, timer, input, }: {
         simulator: Simulator;
         camera: THREE.Camera;
         timer: THREE.Timer;
@@ -27,7 +27,7 @@ export declare class PinchOnButtonAction extends SimulatorUserAction {
     controllerIsPointingAtButton(controls: SimulatorControls, camera: THREE.Camera): boolean;
     rotateControllerTowardsButton(controls: SimulatorControls, camera: THREE.Camera, deltaTime: number): void;
     pinchController(): void;
-    play({ simulatorUser, journeyId, waitFrame }: {
+    play({ simulatorUser, journeyId, waitFrame, }: {
         simulatorUser: SimulatorUser;
         journeyId: number;
         waitFrame: WaitFrame;

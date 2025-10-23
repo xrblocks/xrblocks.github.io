@@ -27,7 +27,7 @@ export declare class ScrollingTroikaTextView extends View {
     private textView;
     private onTextSyncCompleteBound;
     private currentText;
-    constructor({ text, textAlign, scrollerState, fontSize }?: ScrollingTroikaTextViewOptions);
+    constructor({ text, textAlign, scrollerState, fontSize, }?: ScrollingTroikaTextViewOptions);
     update(): void;
     addText(text: string): void;
     setText(text: string): void;

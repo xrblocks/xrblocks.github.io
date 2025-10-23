@@ -26,7 +26,7 @@ export declare class GeminiManager extends xb.Script<GeminiManagerEventMap> {
     tools: xb.Tool[];
     constructor();
     init(): void;
-    startGeminiLive({ liveParams }?: {
+    startGeminiLive({ liveParams, }?: {
         liveParams?: xb.GeminiStartLiveSessionParams;
     }): Promise<void>;
     stopGeminiLive(): Promise<void>;

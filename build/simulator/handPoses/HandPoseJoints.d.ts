@@ -1,5 +1,5 @@
-export type SimulatorHandPoseJoints = ({
+export type SimulatorHandPoseJoints = {
     t: number[];
     r: number[];
     s?: number[];
-})[];
+}[];

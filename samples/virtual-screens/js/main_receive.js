@@ -17,13 +17,12 @@ export class WindowReceiver extends xb.Script {
     this.sharedWindows = new Map();
     this.panels = [];
     this.screenDistance = -0.4;
-    this.screenHeight = 0.4;  // Fixed height (width defined relative to this)
+    this.screenHeight = 0.4; // Fixed height (width defined relative to this)
     this.screenCurvature = 0.2;
     this.curveScreens = true;
     this.layerOffset = new THREE.Vector3(0.1, 0.1, 0.1);
-    this.frameBufferScaleFactor =
-        1.0;  // Increase to improve rendering quality at the cost of
-              // performance (default 1.0 for normal rendering)
+    this.frameBufferScaleFactor = 1.0; // Increase to improve rendering quality at the cost of
+    // performance (default 1.0 for normal rendering)
 
     // Variables for tracking simulator behavior
     this.simulatorRunning = false;
@@ -31,8 +30,9 @@ export class WindowReceiver extends xb.Script {
   }
 
   init() {
-    const isLocalhost = window.location.hostname === 'localhost' ||
-        window.location.hostname === '127.0.0.1';
+    const isLocalhost =
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1';
 
     if (isLocalhost) {
       this.webSocketManager = new WebSocketManager(8765);
@@ -40,9 +40,10 @@ export class WindowReceiver extends xb.Script {
 
       // Set up callbacks to handle new and ended streams.
       this.streamManager.startReceiving(
-          (streamId, mediaStream, streamInfo) =>
-              this.onNewStream(streamId, mediaStream, streamInfo),
-          (streamId) => this.onStreamEnded(streamId));
+        (streamId, mediaStream, streamInfo) =>
+          this.onNewStream(streamId, mediaStream, streamInfo),
+        (streamId) => this.onStreamEnded(streamId)
+      );
     } else {
       console.log('Not running on localhost, WebSocket connection disabled.');
       // Create a dummy manager to prevent errors.
@@ -78,7 +79,8 @@ export class WindowReceiver extends xb.Script {
     }
 
     console.log(
-        `New stream received: ${streamId} with resolution ${width}x${height}.`);
+      `New stream received: ${streamId} with resolution ${width}x${height}.`
+    );
 
     // Calculate panel width based on fixed height to maintain aspect ratio.
     const aspectRatio = width / height;
@@ -93,8 +95,9 @@ export class WindowReceiver extends xb.Script {
     if (this.panels.length > 0) {
       // If panels already exist, layer the new one relative to the last one.
       const lastPanel = this.panels[this.panels.length - 1];
-      const rotatedOffset =
-          this.layerOffset.clone().applyQuaternion(lastPanel.quaternion);
+      const rotatedOffset = this.layerOffset
+        .clone()
+        .applyQuaternion(lastPanel.quaternion);
       position = lastPanel.position.clone().add(rotatedOffset);
       rotation = lastPanel.quaternion.clone();
     } else {
@@ -117,8 +120,10 @@ export class WindowReceiver extends xb.Script {
       panel.quaternion.copy(rotation);
     }
 
-    const videoView = new WindowView(
-        {isCurved: this.curveScreens, curvature: this.screenCurvature});
+    const videoView = new WindowView({
+      isCurved: this.curveScreens,
+      curvature: this.screenCurvature,
+    });
     panel.add(videoView);
     videoView.load(windowStream);
 
@@ -136,7 +141,8 @@ export class WindowReceiver extends xb.Script {
    */
   async _manageLocalStreamCreation() {
     let addAnother = window.confirm(
-        'This sample requires a server to run on localhost, which cannot be found. Would you like to share a local screen for simulation?');
+      'This sample requires a server to run on localhost, which cannot be found. Would you like to share a local screen for simulation?'
+    );
 
     while (addAnother) {
       const success = await this._addLocalStream();
@@ -191,7 +197,7 @@ export class WindowReceiver extends xb.Script {
     console.log(`Cleaning up stream: ${streamId}`);
     const {panel, stream} = this.sharedWindows.get(streamId);
     this.sharedWindows.delete(streamId);
-    this.panels = this.panels.filter(p => p !== panel);
+    this.panels = this.panels.filter((p) => p !== panel);
 
     panel.fadeOut(1, () => {
       this.remove(panel);
@@ -216,7 +222,7 @@ export class WindowReceiver extends xb.Script {
 /**
  * Initializes the XR Blocks application.
  */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const options = new xb.Options();
   options.enableUI();
 

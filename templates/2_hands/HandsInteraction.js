@@ -12,9 +12,12 @@ export class HandsInteraction extends xb.Script {
     this._handToObject = null;
 
     // Add a cylinder to touch and grab.
-    this.originalColor = new THREE.Color(0xFBBC05);
-    const geometry =
-        new THREE.CylinderGeometry(0.1, 0.1, 0.2, 32).translate(0, 1.45, -0.4);
+    this.originalColor = new THREE.Color(0xfbbc05);
+    const geometry = new THREE.CylinderGeometry(0.1, 0.1, 0.2, 32).translate(
+      0,
+      1.45,
+      -0.4
+    );
     const material = new THREE.MeshPhongMaterial({color: this.originalColor});
     this.target = new THREE.Mesh(geometry, material);
     this.add(this.target);
@@ -28,13 +31,13 @@ export class HandsInteraction extends xb.Script {
 
   _updateColor() {
     if (this.leftHandTouching && this.rightHandTouching) {
-      this.target.material.color.setHex(0xDB4437);  // Red
+      this.target.material.color.setHex(0xdb4437); // Red
     } else if (this.leftHandTouching) {
-      this.target.material.color.setHex(0x34A853);  // Green
+      this.target.material.color.setHex(0x34a853); // Green
     } else if (this.rightHandTouching) {
-      this.target.material.color.setHex(0x4285F4);  // Blue
+      this.target.material.color.setHex(0x4285f4); // Blue
     } else {
-      this.target.material.color.copy(this.originalColor);  // Yellow
+      this.target.material.color.copy(this.originalColor); // Yellow
     }
   }
 
@@ -87,9 +90,9 @@ export class HandsInteraction extends xb.Script {
     const O = new THREE.Matrix4().multiplyMatrices(H, this._handToObject);
     const parent = this.target.parent;
     if (parent) parent.updateMatrixWorld(true);
-    const parentInv = parent ?
-        new THREE.Matrix4().copy(parent.matrixWorld).invert() :
-        new THREE.Matrix4().identity();
+    const parentInv = parent
+      ? new THREE.Matrix4().copy(parent.matrixWorld).invert()
+      : new THREE.Matrix4().identity();
 
     const Olocal = new THREE.Matrix4().multiplyMatrices(parentInv, O);
     const pos = new THREE.Vector3();

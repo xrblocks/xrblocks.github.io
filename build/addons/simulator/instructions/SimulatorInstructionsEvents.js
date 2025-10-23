@@ -7,7 +7,10 @@ class SimulatorInstructionsNextEvent extends Event {
 class SimulatorInstructionsCloseEvent extends Event {
     static { this.type = 'simulatorInstructionsCloseEvent'; }
     constructor() {
-        super(SimulatorInstructionsCloseEvent.type, { bubbles: true, composed: true });
+        super(SimulatorInstructionsCloseEvent.type, {
+            bubbles: true,
+            composed: true,
+        });
     }
 }
 

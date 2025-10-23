@@ -46,7 +46,7 @@ export declare class World extends Script {
      * Initializes the world-sensing modules based on the provided configuration.
      * This method is called automatically by the XRCore.
      */
-    init({ options, camera }: {
+    init({ options, camera, }: {
         options: WorldOptions;
         camera: THREE.Camera;
     }): Promise<void>;

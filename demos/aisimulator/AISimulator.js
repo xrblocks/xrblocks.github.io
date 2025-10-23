@@ -80,10 +80,14 @@ export class AISimulator extends xb.Script {
             console.log('scene loaded');
             model.position.copy(data.position);
             model.rotation.set(
-                data.rotation.x, data.rotation.y, data.rotation.z, 'YXZ');
+              data.rotation.x,
+              data.rotation.y,
+              data.rotation.z,
+              'YXZ'
+            );
             this.add(model);
           },
-          addOcclusionToShader: true
+          addOcclusionToShader: true,
         });
         this.models[i] = model;
       }
@@ -91,19 +95,22 @@ export class AISimulator extends xb.Script {
   }
 
   onTriggerRandomQuestion() {
-    const geminiLivePanel =
-        document.querySelector('xrblocks-simulator-geminilive');
-    if (geminiLivePanel && geminiLivePanel.geminiLive &&
-        geminiLivePanel.geminiLive.isConnected()) {
+    const geminiLivePanel = document.querySelector(
+      'xrblocks-simulator-geminilive'
+    );
+    if (
+      geminiLivePanel &&
+      geminiLivePanel.geminiLive &&
+      geminiLivePanel.geminiLive.isConnected()
+    ) {
       const randomIndex = Math.floor(Math.random() * this.data.length);
       const randomPrompt = this.data[randomIndex].prompt;
 
       const geminiLive = geminiLivePanel.geminiLive;
-      geminiLivePanel.responseText +=
-          `\n> Synthesizing speech for: ${randomPrompt}...\n`;
+      geminiLivePanel.responseText += `\n> Synthesizing speech for: ${randomPrompt}...\n`;
       geminiLive.generateSpeech(randomPrompt).then((resampledData) => {
         geminiLive.sendAudio(resampledData);
       });
     }
   }
-};
+}

@@ -43,15 +43,18 @@ class VolumetricCloud extends THREE.Object3D {
                 for (let x = 0; x < this.size; x++) {
                     // Calculates the density based on the distance from the center.
                     const d = 1.0 -
-                        vector.set(x, y, z)
+                        vector
+                            .set(x, y, z)
                             .subScalar(this.size / 2)
                             .divideScalar(this.size)
                             .length();
                     // Populates the data array with density influenced by noise.
-                    data[i] = (this.size +
-                        this.size *
-                            perlin.noise(x * this.cloudScale / 1.5, y * this.cloudScale, z * this.cloudScale / 1.5)) *
-                        d * d;
+                    data[i] =
+                        (this.size +
+                            this.size *
+                                perlin.noise((x * this.cloudScale) / 1.5, y * this.cloudScale, (z * this.cloudScale) / 1.5)) *
+                            d *
+                            d;
                     i++;
                 }
             }

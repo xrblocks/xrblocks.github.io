@@ -23,16 +23,13 @@ export class RainScene extends xb.Script {
 
     this.rainSound = new THREE.Audio(this.listener);
     const audioLoader = new THREE.AudioLoader();
-    audioLoader.load(
-      ASSETS_PATH + 'demos/rain/rain.opus',
-      (buffer) => {
-        this.rainSound.setBuffer(buffer);
-        this.rainSound.setLoop(true); // Loop the sound for continuous rain
-        this.rainSound.setVolume(0.5); // Set a comfortable volume
-        this.rainSound.play(); // Start playback
-        console.log('Rain audio loaded and playing.');
-      },
-    );
+    audioLoader.load(ASSETS_PATH + 'demos/rain/rain.opus', (buffer) => {
+      this.rainSound.setBuffer(buffer);
+      this.rainSound.setLoop(true); // Loop the sound for continuous rain
+      this.rainSound.setVolume(0.5); // Set a comfortable volume
+      this.rainSound.play(); // Start playback
+      console.log('Rain audio loaded and playing.');
+    });
 
     const startButton = document.getElementById('startButton');
     if (startButton) {
@@ -45,12 +42,12 @@ export class RainScene extends xb.Script {
 
   startAudio() {
     if (this.listener.context.state === 'suspended') {
-        this.listener.context.resume();
+      this.listener.context.resume();
     }
-    
+
     if (this.rainSound.buffer) {
-        this.rainSound.play(); 
-        console.log('Rain audio started by user gesture.');
+      this.rainSound.play();
+      console.log('Rain audio started by user gesture.');
     }
   }
 

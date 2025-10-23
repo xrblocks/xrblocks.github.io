@@ -35,7 +35,7 @@ export declare class XRTransition extends MeshScript<THREE.SphereGeometry, THREE
     private targetAlpha;
     private defaultBackgroundColor;
     constructor();
-    init({ renderer, camera, timer, scene, options }: {
+    init({ renderer, camera, timer, scene, options, }: {
         renderer: THREE.WebGLRenderer;
         camera: THREE.Camera;
         timer: THREE.Timer;

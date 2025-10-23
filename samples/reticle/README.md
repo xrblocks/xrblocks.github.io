@@ -39,14 +39,13 @@ class ReticleScript extends Script {
     const billboard = this.billboards.children[id];
 
     billboard.updateText(
-        `Distance: ${intersections[0].distance.toFixed(2)} m\n` +
-        `Height: ${reticleHeight.toFixed(2)} m`);
+      `Distance: ${intersections[0].distance.toFixed(2)} m\n` +
+        `Height: ${reticleHeight.toFixed(2)} m`
+    );
   }
 
   onSelectEnd(event) {
     billboard.visible = false;
   }
-};
-
+}
 ```
-

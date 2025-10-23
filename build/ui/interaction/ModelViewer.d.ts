@@ -70,7 +70,7 @@ export declare class ModelViewer extends Script implements Draggable {
         receiveShadow?: boolean | undefined;
         raycastToChildren?: boolean | undefined;
     });
-    init({ camera, depth, scene, renderer }: {
+    init({ camera, depth, scene, renderer, }: {
         camera: THREE.Camera;
         depth: Depth;
         scene: THREE.Scene;
@@ -84,7 +84,7 @@ export declare class ModelViewer extends Script implements Draggable {
         setupRaycastBox?: boolean;
         setupPlatform?: boolean;
     }): Promise<void | SplatAnchor>;
-    loadGLTFModel({ data, onSceneLoaded, platformMargin, setupRaycastCylinder, setupRaycastBox, setupPlatform, renderer, addOcclusionToShader }: {
+    loadGLTFModel({ data, onSceneLoaded, platformMargin, setupRaycastCylinder, setupRaycastBox, setupPlatform, renderer, addOcclusionToShader, }: {
         data: GLTFData;
         onSceneLoaded?: (scene: THREE.Object3D) => void;
         platformMargin?: THREE.Vector2;

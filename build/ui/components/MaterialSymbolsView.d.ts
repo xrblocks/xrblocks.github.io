@@ -34,7 +34,7 @@ export declare class MaterialSymbolsView extends View {
      * Construct a Material Symbol view.
      * @param options - Options for the icon.
      */
-    constructor({ icon, iconWeight, iconStyle, iconScale, iconColor }: MaterialSymbolsViewOptions);
+    constructor({ icon, iconWeight, iconStyle, iconScale, iconColor, }: MaterialSymbolsViewOptions);
     init(): Promise<void>;
     /**
      * Updates the icon displayed by loading the appropriate SVG from the Material

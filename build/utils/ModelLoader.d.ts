@@ -34,7 +34,7 @@ export declare class ModelLoader {
      * @returns A promise that resolves with the loaded model data (e.g., a glTF
      *     scene or a SplatMesh).
      */
-    load({ path, url, renderer, onProgress }: ModelLoaderLoadOptions): Promise<GLTF | import("@sparkjsdev/spark").SplatMesh | null>;
+    load({ path, url, renderer, onProgress, }: ModelLoaderLoadOptions): Promise<GLTF | import("@sparkjsdev/spark").SplatMesh | null>;
     /**
      * Loads a 3DGS model (.ply, .spz, .splat, .ksplat).
      * @param url - The URL of the model file.

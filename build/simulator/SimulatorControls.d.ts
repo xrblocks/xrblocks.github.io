@@ -38,7 +38,7 @@ export declare class SimulatorControls {
     /**
      * Initialize the simulator controls.
      */
-    init({ camera, input, timer, renderer, simulatorOptions }: {
+    init({ camera, input, timer, renderer, simulatorOptions, }: {
         camera: THREE.Camera;
         input: Input;
         timer: THREE.Timer;

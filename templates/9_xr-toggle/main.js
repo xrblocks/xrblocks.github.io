@@ -9,12 +9,23 @@ class MainScript extends xb.Script {
   init() {
     this.add(new THREE.HemisphereLight(0xffffff, 0x666666, /*intensity=*/ 3));
 
-    const geometry = new THREE.CylinderGeometry(.2, .2, .4, /*segments=*/ 32);
-    const material = new THREE.MeshPhongMaterial(
-        {color: 0xffffff, transparent: true, opacity: 0.8});
+    const geometry = new THREE.CylinderGeometry(
+      0.2,
+      0.2,
+      0.4,
+      /*segments=*/ 32
+    );
+    const material = new THREE.MeshPhongMaterial({
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.8,
+    });
     this.cylinder = new THREE.Mesh(geometry, material);
     this.cylinder.position.set(
-        0, xb.core.user.height - 0.5, -xb.core.user.objectDistance);
+      0,
+      xb.core.user.height - 0.5,
+      -xb.core.user.objectDistance
+    );
     this.add(this.cylinder);
   }
 
@@ -35,9 +46,9 @@ class MainScript extends xb.Script {
       xb.core.transition.toAR();
     }
   }
-};
+}
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const options = new xb.Options().enableXRTransitions();
   xb.add(new MainScript());
   xb.init(options);

@@ -24,7 +24,7 @@ export declare class CoreSound extends Script {
     audioListener: AudioListener;
     audioPlayer: AudioPlayer;
     options: SoundOptions;
-    init({ camera, soundOptions }: {
+    init({ camera, soundOptions, }: {
         camera: THREE.Camera;
         soundOptions: SoundOptions;
     }): void;

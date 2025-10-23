@@ -3,7 +3,10 @@ import 'xrblocks/addons/simulator/ui/GeminiLiveApiKeyInput.js';
 
 import {css, html, LitElement} from 'lit';
 import {createRef, ref} from 'lit/directives/ref.js';
-import {ApiKeyEnteredEvent, MicButtonPressedEvent} from 'xrblocks/addons/simulator/ui/GeminiLiveEvents.js';
+import {
+  ApiKeyEnteredEvent,
+  MicButtonPressedEvent,
+} from 'xrblocks/addons/simulator/ui/GeminiLiveEvents.js';
 
 import {GeminiLiveWebInterface} from './GeminiLiveWebInterface.js';
 
@@ -14,63 +17,63 @@ export class GeminiLivePanel extends LitElement {
   };
   static styles = css`
     :host {
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        width: 60rem;
-        -webkit-transform: translateX(-50%);
-        transform: translateX(-50%)
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 60rem;
+      -webkit-transform: translateX(-50%);
+      transform: translateX(-50%);
     }
 
     .control-panel {
-        width: 30rem;
-        height: 3rem;
-        display: flex;
-        margin: 1rem auto;
-        column-gap: 1rem;
+      width: 30rem;
+      height: 3rem;
+      display: flex;
+      margin: 1rem auto;
+      column-gap: 1rem;
     }
 
     .text-input {
-        flex-grow: 1;
-        border-radius: 3rem;
-        height: 100%;
-        background: #00000088;
-        border: none;
-        color: white;
-        padding: 0rem 1rem;
+      flex-grow: 1;
+      border-radius: 3rem;
+      height: 100%;
+      background: #00000088;
+      border: none;
+      color: white;
+      padding: 0rem 1rem;
     }
 
     .material-symbols-outlined {
-        font-variation-settings:
+      font-variation-settings:
         'FILL' 0,
         'wght' 400,
         'GRAD' 0,
-        'opsz' 24
+        'opsz' 24;
     }
 
     .response-panel-wrapper {
-        display: flex;
-        flex-direction: row;
-        background: #00000088;
-        border-radius: 1rem;
-        margin: 1rem auto;
-        padding: 1rem;
-        width: 50rem;
-        border: 1px solid #333;
-        box-sizing: border-box;
+      display: flex;
+      flex-direction: row;
+      background: #00000088;
+      border-radius: 1rem;
+      margin: 1rem auto;
+      padding: 1rem;
+      width: 50rem;
+      border: 1px solid #333;
+      box-sizing: border-box;
     }
 
     .response-panel {
-        flex-grow: 1;
-        padding: 1rem;
-        height: 6rem;
-        color: white;
-        font-family: monospace;
-        font-size: 0.9rem;
-        line-height: 1.4;
-        overflow-y: auto;
-        white-space: pre-wrap;
-        word-wrap: break-word;
+      flex-grow: 1;
+      padding: 1rem;
+      height: 6rem;
+      color: white;
+      font-family: monospace;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
     }
 
     .response-panel::-webkit-scrollbar {
@@ -88,7 +91,9 @@ export class GeminiLivePanel extends LitElement {
     this.apiKey = '';
     this.apiKeyInputElement = null;
     this.addEventListener(
-        MicButtonPressedEvent.type, this.onMicButtonClicked.bind(this));
+      MicButtonPressedEvent.type,
+      this.onMicButtonClicked.bind(this)
+    );
     this.geminiLive = null;
 
     // For tracking partial transcriptions
@@ -106,8 +111,9 @@ export class GeminiLivePanel extends LitElement {
       console.log('apiKeyInputElement already exists');
       return;
     }
-    this.apiKeyInputElement =
-        document.createElement('xrblocks-simulator-geminilive-apikeyinput');
+    this.apiKeyInputElement = document.createElement(
+      'xrblocks-simulator-geminilive-apikeyinput'
+    );
     this.apiKeyInputElement.addEventListener(ApiKeyEnteredEvent.type, (e) => {
       console.log('Received key:', e.apiKey);
       this.apiKey = e.apiKey;
@@ -136,11 +142,12 @@ export class GeminiLivePanel extends LitElement {
         onTranscription: (data) => this.handleTranscription(data),
       });
 
-      this.geminiLive.setScreenCaptureInterval(3000);  // Set to 3 seconds
+      this.geminiLive.setScreenCaptureInterval(3000); // Set to 3 seconds
       const initialized = await this.geminiLive.initialize();
       if (!initialized) {
         console.error(
-            'Failed to initialize. Please ensure microphone permissions are granted.');
+          'Failed to initialize. Please ensure microphone permissions are granted.'
+        );
         return;
       }
       await this.geminiLive.startSession();
@@ -198,14 +205,16 @@ export class GeminiLivePanel extends LitElement {
     this.updateComplete.then(() => {
       if (this.responsePanelRef.value) {
         this.responsePanelRef.value.scrollTop =
-            this.responsePanelRef.value.scrollHeight;
+          this.responsePanelRef.value.scrollHeight;
       }
     });
   }
 
   firstUpdated() {
     this.textInputRef.value.addEventListener(
-        'keydown', this.textInputKeyDown.bind(this));
+      'keydown',
+      this.textInputKeyDown.bind(this)
+    );
     if (this.apiKey) {
       this.onMicButtonClicked();
     }
@@ -234,17 +243,22 @@ export class GeminiLivePanel extends LitElement {
 
   render() {
     return html`
-        <div class="response-panel-wrapper">
-            <p class="response-panel" ${ref(this.responsePanelRef)}>${
-        this.responseText}</p>
-        </div>
-        <div class="control-panel">
-            <xrblocks-simulator-geminilive-micbutton
-                ?micRecording=${this.micRecording}
-            ></xrblocks-simulator-geminilive-micbutton>
-            <input type="text" class="text-input" placeholder="Ask Gemini" ${
-        ref(this.textInputRef)}>
-        </div>
+      <div class="response-panel-wrapper">
+        <p class="response-panel" ${ref(this.responsePanelRef)}>
+          ${this.responseText}
+        </p>
+      </div>
+      <div class="control-panel">
+        <xrblocks-simulator-geminilive-micbutton
+          ?micRecording=${this.micRecording}
+        ></xrblocks-simulator-geminilive-micbutton>
+        <input
+          type="text"
+          class="text-input"
+          placeholder="Ask Gemini"
+          ${ref(this.textInputRef)}
+        />
+      </div>
     `;
   }
 }

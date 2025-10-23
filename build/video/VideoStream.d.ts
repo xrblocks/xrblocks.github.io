@@ -75,7 +75,7 @@ export declare class VideoStream<T extends VideoStreamDetails = VideoStreamDetai
      * @param options - The options for the snapshot.
      * @returns The captured data.
      */
-    getSnapshot({ width, height, outputFormat, mimeType, quality }?: VideoStreamGetSnapshotOptions): string | THREE.Texture | ImageData | null;
+    getSnapshot({ width, height, outputFormat, mimeType, quality, }?: VideoStreamGetSnapshotOptions): string | THREE.Texture | ImageData | null;
     /**
      * Stops the current video stream tracks.
      */

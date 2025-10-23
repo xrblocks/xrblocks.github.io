@@ -3,15 +3,15 @@ import './GeminiLivePanel.js';
 
 import * as xb from 'xrblocks';
 
-import {AISimulator} from './AISimulator.js'
+import {AISimulator} from './AISimulator.js';
 
 const options = new xb.Options();
 options.enableGeminiLive();
 options.depth.enabled = true;
 options.depth.depthTexture.enabled = true;
-options.depth.occlusion.enabled = true
+options.depth.occlusion.enabled = true;
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   xb.add(new AISimulator());
   xb.init(options);
 });

@@ -13,7 +13,6 @@ const kBallsPerSecond = xb.getUrlParamFloat('ballsPerSecond', 10);
 const kVelocityScale = xb.getUrlParamInt('velocityScale', 1.0);
 const kBallRadius = xb.getUrlParamFloat('ballRadius', 0.04);
 
-
 export class SplashScript extends xb.Script {
   constructor() {
     super();
@@ -46,22 +45,27 @@ export class SplashScript extends xb.Script {
       RAPIER: xrPhysics.RAPIER,
       blendedWorld: xrPhysics.blendedWorld,
       colliderActiveEvents: xrPhysics.RAPIER.ActiveEvents.CONTACT_FORCE_EVENTS,
-      continuousCollisionDetection: true
+      continuousCollisionDetection: true,
     });
   }
 
   generateDecalAtIntersection(intersection) {
-    const paintball =
-        new PaintSplash(this.listener, palette.getRandomLiteGColor());
+    const paintball = new PaintSplash(
+      this.listener,
+      palette.getRandomLiteGColor()
+    );
 
     const scaleMultiplier = 0.4;
 
     if (xb.core.depth.depthData.length > 0) {
-      xb.core.depth.depthMesh.updateFullResolutionGeometry(xb.core.depth.depthData[0]);
+      xb.core.depth.depthMesh.updateFullResolutionGeometry(
+        xb.core.depth.depthData[0]
+      );
     }
     paintball.splatFromIntersection(
-        intersection, /*scale=*/
-        xb.lerp(scaleMultiplier * 0.3, scaleMultiplier * 0.5, Math.random()));
+      intersection /*scale=*/,
+      xb.lerp(scaleMultiplier * 0.3, scaleMultiplier * 0.5, Math.random())
+    );
     this.add(paintball);
     this.paintballs.push(paintball);
   }
@@ -69,17 +73,30 @@ export class SplashScript extends xb.Script {
   generateDecalFromCollision(position, direction, color) {
     const paintball = new PaintSplash(this.listener, color);
     const orientation = new THREE.Quaternion().setFromUnitVectors(
-        new THREE.Vector3(0.0, 0.0, -1.0), direction);
+      new THREE.Vector3(0.0, 0.0, -1.0),
+      direction
+    );
     const scaleMultiplier = 0.4;
-    const scale =
-        xb.lerp(scaleMultiplier * 0.3, scaleMultiplier * 0.5, Math.random());
+    const scale = xb.lerp(
+      scaleMultiplier * 0.3,
+      scaleMultiplier * 0.5,
+      Math.random()
+    );
     if (xb.core.depth.cpuDepthData.length > 0) {
-      xb.core.depth.depthMesh.updateFullResolutionGeometry(xb.core.depth.cpuDepthData[0]);
+      xb.core.depth.depthMesh.updateFullResolutionGeometry(
+        xb.core.depth.cpuDepthData[0]
+      );
     } else if (xb.core.depth.gpuDepthData.length > 0) {
-      xb.core.depth.depthMesh.updateFullResolutionGeometry(xb.core.depth.depthMesh.convertGPUToGPU(xb.core.depth.gpuDepthData[0]));
+      xb.core.depth.depthMesh.updateFullResolutionGeometry(
+        xb.core.depth.depthMesh.convertGPUToGPU(xb.core.depth.gpuDepthData[0])
+      );
     }
     paintball.splatOnMesh(
-        xb.core.depth.depthMesh, position, orientation, scale);
+      xb.core.depth.depthMesh,
+      position,
+      orientation,
+      scale
+    );
     this.add(paintball);
     this.paintballs.push(paintball);
   }
@@ -90,14 +107,17 @@ export class SplashScript extends xb.Script {
     if (!this.lastBallTime.has(controller)) {
       this.lastBallTime.set(controller, -99);
     }
-    if (controller.userData.selected &&
-        now - this.lastBallTime.get(controller) >= 1000 / kBallsPerSecond) {
+    if (
+      controller.userData.selected &&
+      now - this.lastBallTime.get(controller) >= 1000 / kBallsPerSecond
+    ) {
       // Place this 10 cm in front of the controller.
       const newPosition = new THREE.Vector3(0.0, 0.0, -0.1)
-                              .applyQuaternion(controller.quaternion)
-                              .add(controller.position);
-      this.velocity.set(0, 0, -5.0 * kVelocityScale)
-          .applyQuaternion(controller.quaternion);
+        .applyQuaternion(controller.quaternion)
+        .add(controller.position);
+      this.velocity
+        .set(0, 0, -5.0 * kVelocityScale)
+        .applyQuaternion(controller.quaternion);
       this.ballShooter.spawnBallAt(newPosition, this.velocity);
       this.lastBallTime.set(controller, now);
     }
@@ -117,29 +137,38 @@ export class SplashScript extends xb.Script {
     const contactPoint = new THREE.Vector3();
     const forceDirection = new THREE.Vector3();
     const ballShooter = this.ballShooter;
-    this.physics.eventQueue.drainContactForceEvents(event => {
+    this.physics.eventQueue.drainContactForceEvents((event) => {
       const handle1 = event.collider1();
       const handle2 = event.collider2();
       const depthMeshCollider =
-          xb.core.depth.depthMesh.getColliderFromHandle(handle1) ||
-          xb.core.depth.depthMesh.getColliderFromHandle(handle2);
-      const ballIndex = ballShooter.getIndexForColliderHandle(handle1) ||
-          ballShooter.getIndexForColliderHandle(handle2);
+        xb.core.depth.depthMesh.getColliderFromHandle(handle1) ||
+        xb.core.depth.depthMesh.getColliderFromHandle(handle2);
+      const ballIndex =
+        ballShooter.getIndexForColliderHandle(handle1) ||
+        ballShooter.getIndexForColliderHandle(handle2);
       let generatedDecal = false;
-      if (depthMeshCollider && ballIndex != null &&
-          ballShooter.isBallActive(ballIndex)) {
+      if (
+        depthMeshCollider &&
+        ballIndex != null &&
+        ballShooter.isBallActive(ballIndex)
+      ) {
         const ball = ballShooter.spheres[ballIndex];
         this.physics.blendedWorld.contactPair(
-            depthMeshCollider, ballShooter.colliders[ballIndex],
-            (manifold, flipped) => {
-              if (!generatedDecal && manifold.numSolverContacts() > 0) {
-                contactPoint.copy(manifold.solverContactPoint(0));
-                forceDirection.copy(event.maxForceDirection());
-                this.generateDecalFromCollision(
-                    contactPoint, forceDirection, ball.material.color);
-                generatedDecal = true;
-              }
-            });
+          depthMeshCollider,
+          ballShooter.colliders[ballIndex],
+          (manifold, flipped) => {
+            if (!generatedDecal && manifold.numSolverContacts() > 0) {
+              contactPoint.copy(manifold.solverContactPoint(0));
+              forceDirection.copy(event.maxForceDirection());
+              this.generateDecalFromCollision(
+                contactPoint,
+                forceDirection,
+                ball.material.color
+              );
+              generatedDecal = true;
+            }
+          }
+        );
         ballShooter.removeBall(ballIndex);
       }
     });
@@ -152,8 +181,8 @@ export class SplashScript extends xb.Script {
     const light = new THREE.DirectionalLight(0xffffff, 2);
     light.position.set(kLightX, kLightY, kLightZ);
     light.castShadow = true;
-    light.shadow.mapSize.width = 2048;   // Default is usually 1024
-    light.shadow.mapSize.height = 2048;  // Default is usually 1024
+    light.shadow.mapSize.width = 2048; // Default is usually 1024
+    light.shadow.mapSize.height = 2048; // Default is usually 1024
     this.add(light);
   }
 

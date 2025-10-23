@@ -29,20 +29,22 @@ export class WindowStream extends xb.VideoStream {
     // Must wait for the video metadata to load to get the stream's dimensions.
     this.video_.onloadedmetadata = () => {
       this.handleVideoStreamLoadedMetadata(
-          () => {
-            // Once metadata is loaded, the stream is ready to be displayed.
-            this.setState_(
-                xb.StreamState.STREAMING, {aspectRatio: this.aspectRatio});
-          },
-          (error) => {
-            console.error(
-                'WindowStream: Failed to load video metadata.', error);
-            this.setState_(xb.StreamState.ERROR, {error});
-          },
-          true);  // Allow one retry.
+        () => {
+          // Once metadata is loaded, the stream is ready to be displayed.
+          this.setState_(xb.StreamState.STREAMING, {
+            aspectRatio: this.aspectRatio,
+          });
+        },
+        (error) => {
+          console.error('WindowStream: Failed to load video metadata.', error);
+          this.setState_(xb.StreamState.ERROR, {error});
+        },
+        true
+      ); // Allow one retry.
     };
 
-    this.video_.play().catch(
-        (e) => console.warn('WindowStream: Autoplay was prevented.', e));
+    this.video_
+      .play()
+      .catch((e) => console.warn('WindowStream: Autoplay was prevented.', e));
   }
 }

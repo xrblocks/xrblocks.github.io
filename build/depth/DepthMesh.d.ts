@@ -43,7 +43,7 @@ export declare class DepthMesh extends MeshScript {
     /**
      * Initialize the depth mesh.
      */
-    init({ camera, renderer }: {
+    init({ camera, renderer, }: {
         camera: THREE.Camera;
         renderer: THREE.WebGLRenderer;
     }): void;

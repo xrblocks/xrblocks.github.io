@@ -10,15 +10,14 @@ let CustomInstruction = class CustomInstruction extends SimulatorInstructionsCar
         return html `${this.customInstruction.header}`;
     }
     getImageContents() {
-        return this.customInstruction.videoSrc ? html `
-      <video playsinline autoplay muted loop>
-          <source
-            src=${this.customInstruction.videoSrc}
-            type="video/webm">
-          Your browser does not support the video tag.
-      </video>
-    ` :
-            html ``;
+        return this.customInstruction.videoSrc
+            ? html `
+          <video playsinline autoplay muted loop>
+            <source src=${this.customInstruction.videoSrc} type="video/webm" />
+            Your browser does not support the video tag.
+          </video>
+        `
+            : html ``;
     }
     getDescriptionContents() {
         return html `${this.customInstruction.description}`;

@@ -34,7 +34,8 @@ export class GeminiManager extends xb.Script {
     } catch (error) {
       console.error('Failed to start AI session:', error);
       this.transcription?.addText(
-          'Error: Failed to start AI session - ' + error.message);
+        'Error: Failed to start AI session - ' + error.message
+      );
       this.cleanup();
       this.isAIRunning = false;
       this.updateButtonState();
@@ -63,19 +64,25 @@ export class GeminiManager extends xb.Script {
           this.updateButtonState();
           this.transcription?.clear();
           this.transcription?.setText(closeEvent.reason || this.defaultText);
-        }
+        },
       });
       this.ai.startLiveSession().catch(reject);
     });
   }
 
   createTextDisplay() {
-    this.textPanel = new xb.SpatialPanel(
-        {width: 3, height: 1.5, backgroundColor: '#1a1a1abb'});
+    this.textPanel = new xb.SpatialPanel({
+      width: 3,
+      height: 1.5,
+      backgroundColor: '#1a1a1abb',
+    });
     const grid = this.textPanel.addGrid();
 
-    const responseDisplay = new xb.ScrollingTroikaTextView(
-        {text: this.defaultText, fontSize: 0.03, textAlign: 'left'});
+    const responseDisplay = new xb.ScrollingTroikaTextView({
+      text: this.defaultText,
+      fontSize: 0.03,
+      textAlign: 'left',
+    });
     grid.addRow({weight: 0.7}).add(responseDisplay);
     this.transcription = new TranscriptionManager(responseDisplay);
 
@@ -97,26 +104,32 @@ export class GeminiManager extends xb.Script {
     const content = message.serverContent;
     if (content) {
       content.inputTranscription?.text &&
-          this.transcription.handleInputTranscription(
-              content.inputTranscription.text);
+        this.transcription.handleInputTranscription(
+          content.inputTranscription.text
+        );
       content.outputTranscription?.text &&
-          this.transcription.handleOutputTranscription(
-              content.outputTranscription.text);
+        this.transcription.handleOutputTranscription(
+          content.outputTranscription.text
+        );
       content.turnComplete && this.transcription.finalizeTurn();
     }
   }
 
   startScreenshotCapture() {
     this.screenshotInterval = setInterval(() => {
-      const base64Image = this.xrDeviceCamera?.getSnapshot(
-          {outputFormat: 'base64', mimeType: 'image/jpeg', quality: 1});
+      const base64Image = this.xrDeviceCamera?.getSnapshot({
+        outputFormat: 'base64',
+        mimeType: 'image/jpeg',
+        quality: 1,
+      });
       if (base64Image) {
-        const base64Data = base64Image.startsWith('data:') ?
-            base64Image.split(',')[1] :
-            base64Image;
+        const base64Data = base64Image.startsWith('data:')
+          ? base64Image.split(',')[1]
+          : base64Image;
         try {
-          this.ai?.sendRealtimeInput?.(
-              {video: {data: base64Data, mimeType: 'image/jpeg'}});
+          this.ai?.sendRealtimeInput?.({
+            video: {data: base64Data, mimeType: 'image/jpeg'},
+          });
         } catch (error) {
           console.warn(error);
           this.stopGeminiLive();

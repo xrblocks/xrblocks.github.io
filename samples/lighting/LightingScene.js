@@ -9,8 +9,10 @@ export class LightingScene extends xb.Script {
     super();
     this.pointer = new THREE.Vector3();
     this.raycaster = new THREE.Raycaster();
-    this.modelManager =
-        new ModelManager(ANIMALS_DATA, /*enableOcclusion=*/ true);
+    this.modelManager = new ModelManager(
+      ANIMALS_DATA,
+      /*enableOcclusion=*/ true
+    );
     this.modelManager.layers.enable(xb.OCCLUDABLE_ITEMS_LAYER);
     this.add(this.modelManager);
   }
@@ -29,7 +31,7 @@ export class LightingScene extends xb.Script {
     const controller = event.target;
     if (xb.core.input.intersectionsForController.get(controller).length > 0) {
       const intersection =
-          xb.core.input.intersectionsForController.get(controller)[0];
+        xb.core.input.intersectionsForController.get(controller)[0];
       if (intersection.handleSelectRaycast) {
         intersection.handleSelectRaycast(intersection);
         return;
@@ -52,8 +54,9 @@ export class LightingScene extends xb.Script {
     if (cameras.length == 0) return;
     const camera = cameras[0];
     this.raycaster.setFromCamera(this.pointer, camera);
-    const intersections =
-        this.raycaster.intersectObjects(xb.core.input.reticleTargets);
+    const intersections = this.raycaster.intersectObjects(
+      xb.core.input.reticleTargets
+    );
     for (let intersection of intersections) {
       if (intersection.handleSelectRaycast) {
         intersection.handleSelectRaycast(intersection);

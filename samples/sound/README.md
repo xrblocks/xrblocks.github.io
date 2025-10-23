@@ -20,8 +20,8 @@ This sample demonstrates the XR Blocks sound system with voice recording, spatia
 ## Technical Highlights
 
 The sample showcases:
+
 - `xb.core.sound.startRecording()` / `stopRecording()` for audio capture
 - `THREE.PositionalAudio` for true 3D spatial sound
 - `xb.core.sound.setMasterVolume()` for volume control
 - Dynamic UI updates with `xb.SpatialPanel`
-

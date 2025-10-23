@@ -11,8 +11,11 @@ options.enableAI();
 options.enableCamera();
 options.deviceCamera = new xb.DeviceCameraOptions({
   enabled: true,
-  videoConstraints:
-      {width: {ideal: 1280}, height: {ideal: 720}, facingMode: 'environment'}
+  videoConstraints: {
+    width: {ideal: 1280},
+    height: {ideal: 720},
+    facingMode: 'environment',
+  },
 });
 
 async function requestAudioPermission() {
@@ -22,15 +25,16 @@ async function requestAudioPermission() {
         sampleRate: 16000,
         channelCount: 1,
         echoCancellation: true,
-        noiseSuppression: true
-      }
+        noiseSuppression: true,
+      },
     });
-    stream.getTracks().forEach(track => track.stop());
+    stream.getTracks().forEach((track) => track.stop());
     return stream;
   } catch (error) {
     console.error('Audio permission denied or not available:', error);
     alert(
-        'Audio permission is required for Gemini Live AI features. Please enable microphone access and refresh the page.');
+      'Audio permission is required for Gemini Live AI features. Please enable microphone access and refresh the page.'
+    );
     return null;
   }
 }
@@ -45,6 +49,6 @@ async function start() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   start();
 });

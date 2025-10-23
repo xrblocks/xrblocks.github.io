@@ -8,14 +8,27 @@ import * as THREE from 'three';
 import * as xb from 'xrblocks';
 
 const GESTURE_LABELS = [
-  'OTHER', 'FIST', 'THUMB UP', 'THUMB DOWN', 'POINT', 'VICTORY', 'ROCK',
-  'SHAKA', 'GESTURE_LABEL_MAX_ENUM'
+  'OTHER',
+  'FIST',
+  'THUMB UP',
+  'THUMB DOWN',
+  'POINT',
+  'VICTORY',
+  'ROCK',
+  'SHAKA',
+  'GESTURE_LABEL_MAX_ENUM',
 ];
 
 const GESTURE_IMAGES = [
-  'images/empty.png', 'images/fist.png', 'images/thumb.png',
-  'images/thumb_down.png', 'images/point.png', 'images/victory.png',
-  'images/rock.png', 'images/shaka.png', 'images/error.png'
+  'images/empty.png',
+  'images/fist.png',
+  'images/thumb.png',
+  'images/thumb_down.png',
+  'images/point.png',
+  'images/victory.png',
+  'images/rock.png',
+  'images/shaka.png',
+  'images/error.png',
 ];
 
 const LEFT_HAND_INDEX = 0;
@@ -48,11 +61,11 @@ export class CustomGestureDemo extends xb.Script {
       leftHandRow.addCol({weight: 0.4});
       this.leftHandImage = leftHandRow.addCol({weight: 0.2}).addImage({
         src: GESTURE_IMAGES[0],
-        scaleFactor: 0.3
+        scaleFactor: 0.3,
       });
       this.leftHandLabel = leftCol.addRow({weight: 0.5}).addText({
         text: 'Loading...',
-        fontColor: '#ffffff'
+        fontColor: '#ffffff',
       });
       const rightCol = dataRow.addCol({weight: 0.5});
       const rightHandRow = rightCol.addRow({weight: 0.5});
@@ -61,11 +74,11 @@ export class CustomGestureDemo extends xb.Script {
       // Image
       this.rightHandImage = rightHandRow.addCol({weight: 0.2}).addImage({
         src: GESTURE_IMAGES[0],
-        scaleFactor: 0.3
+        scaleFactor: 0.3,
       });
       this.rightHandLabel = rightCol.addRow({weight: 0.4}).addText({
         text: 'Loading...',
-        fontColor: '#ffffff'
+        fontColor: '#ffffff',
       });
 
       // Indentation
@@ -85,26 +98,34 @@ export class CustomGestureDemo extends xb.Script {
         midColumn.addRow({weight: 0.1});
         midColumn.addRow({weight: 0.2}).addText({
           text: 'Perform one of these gestures',
-          fontColor: '#ffffff'
+          fontColor: '#ffffff',
         });
-        midColumn.addRow({weight: 0.2})
-            .addText({text: '(either hand):', fontColor: '#ffffff'});
+        midColumn
+          .addRow({weight: 0.2})
+          .addText({text: '(either hand):', fontColor: '#ffffff'});
         const gesturesRow = midColumn.addRow({weight: 0.5});
         gesturesRow.addCol({weight: 0.1});
-        gesturesRow.addCol({weight: 0.1})
-            .addImage({src: 'images/fist.png', scaleFactor: 0.3});
-        gesturesRow.addCol({weight: 0.1})
-            .addImage({src: 'images/thumb.png', scaleFactor: 0.3});
-        gesturesRow.addCol({weight: 0.1})
-            .addImage({src: 'images/thumb_down.png', scaleFactor: 0.3});
-        gesturesRow.addCol({weight: 0.1})
-            .addImage({src: 'images/point.png', scaleFactor: 0.3});
-        gesturesRow.addCol({weight: 0.1})
-            .addImage({src: 'images/victory.png', scaleFactor: 0.3});
-        gesturesRow.addCol({weight: 0.1})
-            .addImage({src: 'images/rock.png', scaleFactor: 0.3});
-        gesturesRow.addCol({weight: 0.1})
-            .addImage({src: 'images/shaka.png', scaleFactor: 0.3});
+        gesturesRow
+          .addCol({weight: 0.1})
+          .addImage({src: 'images/fist.png', scaleFactor: 0.3});
+        gesturesRow
+          .addCol({weight: 0.1})
+          .addImage({src: 'images/thumb.png', scaleFactor: 0.3});
+        gesturesRow
+          .addCol({weight: 0.1})
+          .addImage({src: 'images/thumb_down.png', scaleFactor: 0.3});
+        gesturesRow
+          .addCol({weight: 0.1})
+          .addImage({src: 'images/point.png', scaleFactor: 0.3});
+        gesturesRow
+          .addCol({weight: 0.1})
+          .addImage({src: 'images/victory.png', scaleFactor: 0.3});
+        gesturesRow
+          .addCol({weight: 0.1})
+          .addImage({src: 'images/rock.png', scaleFactor: 0.3});
+        gesturesRow
+          .addCol({weight: 0.1})
+          .addImage({src: 'images/shaka.png', scaleFactor: 0.3});
 
         // Vertical alignment on the description text element
         const botRow = midColumn.addRow({weight: 0.1});
@@ -188,10 +209,10 @@ export class CustomGestureDemo extends xb.Script {
     // Calculate bone vectors
     const boneVectors = [];
     xb.HAND_JOINT_IDX_CONNECTION_MAP.forEach(([joint1, joint2]) => {
-      const boneVector =
-          jointPositionsReshaped.slice([joint2, 0], [1, 3])
-              .sub(jointPositionsReshaped.slice([joint1, 0], [1, 3]))
-              .squeeze();
+      const boneVector = jointPositionsReshaped
+        .slice([joint2, 0], [1, 3])
+        .sub(jointPositionsReshaped.slice([joint1, 0], [1, 3]))
+        .squeeze();
       const norm = boneVector.norm();
       const normalizedBoneVector = boneVector.div(norm);
       boneVectors.push(normalizedBoneVector);
@@ -215,11 +236,15 @@ export class CustomGestureDemo extends xb.Script {
     }
 
     try {
-      const tensor =
-          this.calculateRelativeHandBoneAngles(tf.tensor1d(handJoints));
+      const tensor = this.calculateRelativeHandBoneAngles(
+        tf.tensor1d(handJoints)
+      );
 
-      let tensorReshaped =
-          tensor.reshape([1, xb.HAND_BONE_IDX_CONNECTION_MAP.length, 1]);
+      let tensorReshaped = tensor.reshape([
+        1,
+        xb.HAND_BONE_IDX_CONNECTION_MAP.length,
+        1,
+      ]);
       var result = -1;
 
       result = runWithTfjsTensors(this.model, tensorReshaped);
@@ -264,15 +289,16 @@ export class CustomGestureDemo extends xb.Script {
 
   #shiftIndexIfNeeded(joints, result) {
     // no need to shift before thumb which is 2
-    result += (result > 2) ? 1 : 0;
+    result += result > 2 ? 1 : 0;
     // check thumb direction
     if (result === 2) {
       // console.log(joints["thumb-phalanx-distal"], joints["thumb-tip"]);
       let tmp = this.isThumbUpOrDown(
-          joints['thumb-phalanx-distal'].position,
-          joints['thumb-tip'].position);
+        joints['thumb-phalanx-distal'].position,
+        joints['thumb-tip'].position
+      );
       // 1 -up; -1 down; 0 - other
-      result = (tmp === 0) ? 0 : ((tmp < 0) ? result + 1 : result);
+      result = tmp === 0 ? 0 : tmp < 0 ? result + 1 : result;
     }
     return result;
   }
@@ -293,8 +319,10 @@ export class CustomGestureDemo extends xb.Script {
         // Right hand.
         const rightJoints = hands.hands[RIGHT_HAND_INDEX].joints;
         let rightHandResult = await this.#detectHandGestures(rightJoints);
-        rightHandResult =
-            this.#shiftIndexIfNeeded(rightJoints, rightHandResult);
+        rightHandResult = this.#shiftIndexIfNeeded(
+          rightJoints,
+          rightHandResult
+        );
 
         // Update image and label.
         this.rightHandImage.load(GESTURE_IMAGES[rightHandResult]);
@@ -316,11 +344,12 @@ export class CustomGestureDemo extends xb.Script {
 
     // Calculate the magnitude of the vector.
     const magnitude = Math.sqrt(
-        vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
+      vector.x * vector.x + vector.y * vector.y + vector.z * vector.z
+    );
 
     // If the magnitude is very small, it's likely not a significant gesture
     if (magnitude < 0.001) {
-      return 0;  // Otherwise
+      return 0; // Otherwise
     }
 
     // Normalize the vector to get its direction.
@@ -336,7 +365,7 @@ export class CustomGestureDemo extends xb.Script {
     const downVector = {x: 0, y: -1, z: 0};
 
     // Angle threshold (cosine) for "up" (within 45 degrees of vertical)
-    const cosUpThreshold = Math.cos(45 * Math.PI / 180);  // Approximately 0.707
+    const cosUpThreshold = Math.cos((45 * Math.PI) / 180); // Approximately 0.707
 
     // Angle threshold (cosine) for "down" (within 45 degrees of negative
     // vertical) We need the dot product with the *down* vector to be >= cos(45
@@ -344,21 +373,24 @@ export class CustomGestureDemo extends xb.Script {
     const dotDownThreshold = cosUpThreshold;
 
     // Calculates the dot product with the "up" vector.
-    const dotUp = (normalizedVector.x * upVector.x) +
-        (normalizedVector.y * upVector.y) + (normalizedVector.z * upVector.z);
+    const dotUp =
+      normalizedVector.x * upVector.x +
+      normalizedVector.y * upVector.y +
+      normalizedVector.z * upVector.z;
 
     // Calculates the dot product with the "down" vector (negate the y component
     // of normalized vector).
-    const dotDown = (normalizedVector.x * downVector.x) +
-        (normalizedVector.y * downVector.y) +
-        (normalizedVector.z * downVector.z);
+    const dotDown =
+      normalizedVector.x * downVector.x +
+      normalizedVector.y * downVector.y +
+      normalizedVector.z * downVector.z;
 
     if (dotUp >= cosUpThreshold) {
-      return 1;  // Thumb up
+      return 1; // Thumb up
     } else if (dotDown >= dotDownThreshold) {
-      return -1;  // Thumb down
+      return -1; // Thumb down
     } else {
-      return 0;  // Otherwise
+      return 0; // Otherwise
     }
   }
-};
+}

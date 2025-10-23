@@ -3,7 +3,7 @@ import 'xrblocks/addons/simulator/SimulatorAddons.js';
 
 import * as xb from 'xrblocks';
 
-import {HandsInteraction} from './HandsInteraction.js'
+import {HandsInteraction} from './HandsInteraction.js';
 
 const options = new xb.Options();
 options.enableReticles();
@@ -23,6 +23,6 @@ function start() {
   xb.init(options);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   start();
 });

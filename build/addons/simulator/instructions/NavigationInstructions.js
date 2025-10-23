@@ -11,10 +11,8 @@ let NavigationInstructions = class NavigationInstructions extends SimulatorInstr
     getImageContents() {
         return html `
       <video playsinline autoplay muted loop>
-          <source
-            src=${SIMULATOR_NAVIGATION_VIDEO_PATH}
-            type="video/webm">
-          Your browser does not support the video tag.
+        <source src=${SIMULATOR_NAVIGATION_VIDEO_PATH} type="video/webm" />
+        Your browser does not support the video tag.
       </video>
     `;
     }
@@ -22,13 +20,16 @@ let NavigationInstructions = class NavigationInstructions extends SimulatorInstr
         return html `
       <h2>Navigation Mode</h2>
       <p>
-        Press <strong>Left Shift</strong> to toggle Navigation Mode.
-        In this mode, virtual hands appear and the mouse controls the camera view.
+        Press <strong>Left Shift</strong> to toggle Navigation Mode. In this
+        mode, virtual hands appear and the mouse controls the camera view.
       </p>
       <ul>
-          <li><strong>Move Forward/Backward/Sideways:</strong> Use the W, A, S, D keys.</li>
-          <li><strong>Move Up/Down:</strong> Use the Q and E keys.</li>
-          <li><strong>Rotate Camera:</strong> Click and drag the mouse.</li>
+        <li>
+          <strong>Move Forward/Backward/Sideways:</strong> Use the W, A, S, D
+          keys.
+        </li>
+        <li><strong>Move Up/Down:</strong> Use the Q and E keys.</li>
+        <li><strong>Rotate Camera:</strong> Click and drag the mouse.</li>
       </ul>
     `;
     }

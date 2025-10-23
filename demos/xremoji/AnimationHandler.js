@@ -60,21 +60,28 @@ class AnimationItemView {
 
     // Position
     console.log(
-        'Position:', model.position.x.toFixed(2), model.position.y.toFixed(2),
-        model.position.z.toFixed(2));
+      'Position:',
+      model.position.x.toFixed(2),
+      model.position.y.toFixed(2),
+      model.position.z.toFixed(2)
+    );
 
     // Scale
     console.log(
-        'Scale:', model.scale.x.toFixed(5), model.scale.y.toFixed(5),
-        model.scale.z.toFixed(5));
+      'Scale:',
+      model.scale.x.toFixed(5),
+      model.scale.y.toFixed(5),
+      model.scale.z.toFixed(5)
+    );
 
     // Size (Bounding Box)
     const boundingBox = new THREE.Box3().setFromObject(model);
     const size = new THREE.Vector3();
     boundingBox.getSize(size);
     console.log(
-        'Size (Width x Height x Depth):',
-        `${size.x.toFixed(2)} x ${size.y.toFixed(2)} x ${size.z.toFixed(2)}`);
+      'Size (Width x Height x Depth):',
+      `${size.x.toFixed(2)} x ${size.y.toFixed(2)} x ${size.z.toFixed(2)}`
+    );
 
     console.log('------------------------------------------');
   }
@@ -137,8 +144,12 @@ export class AnimationHandler {
         model.visible = false;
         model.startAnimationOnLoad = false;
 
-        const animationItem =
-            new AnimationItemView(options, objectView, model, this.isDebug);
+        const animationItem = new AnimationItemView(
+          options,
+          objectView,
+          model,
+          this.isDebug
+        );
         this.animationViews.push(animationItem);
 
         // Load model
@@ -150,7 +161,7 @@ export class AnimationHandler {
           setupPlatform: false,
           onSceneLoaded: (scene) => {
             animationItem.onSceneReady(data[i], scene);
-          }
+          },
         });
         // Make a scene hierarchy
         objectView.add(model);

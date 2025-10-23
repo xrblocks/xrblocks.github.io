@@ -23,7 +23,7 @@ export declare class XRDeviceCamera extends VideoStream<XRDeviceCameraDetails> {
     /**
      * @param options - The configuration options.
      */
-    constructor({ videoConstraints, willCaptureFrequently }?: Partial<DeviceCameraOptions>);
+    constructor({ videoConstraints, willCaptureFrequently, }?: Partial<DeviceCameraOptions>);
     /**
      * Retrieves the list of available video input devices.
      * @returns A promise that resolves with an

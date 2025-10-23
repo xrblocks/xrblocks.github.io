@@ -1,53 +1,77 @@
 import * as THREE from 'three';
 import * as xb from 'xrblocks';
 
-import {GestureDetectionHandler} from './GestureDetectionHandler.js'
+import {GestureDetectionHandler} from './GestureDetectionHandler.js';
 
 const LEFT_HAND_INDEX = 0;
 const RIGHT_HAND_INDEX = 1;
 
-
 const countdownImages = [
-  'images/start1.webp', 'images/start2.webp', 'images/start3.webp',
-  'images/startGo.webp'
+  'images/start1.webp',
+  'images/start2.webp',
+  'images/start3.webp',
+  'images/startGo.webp',
 ];
 
 const rpsLeftImages = [
-  'images/gestureUnknown.webp', 'images/gestureFistLeft.webp',
-  'images/gestureScissorsLeft.webp', 'images/gesturePaperLeft.webp'
+  'images/gestureUnknown.webp',
+  'images/gestureFistLeft.webp',
+  'images/gestureScissorsLeft.webp',
+  'images/gesturePaperLeft.webp',
 ];
 
 const rpsRightImages = [
-  'images/gestureUnknown.webp', 'images/gestureFistRight.webp',
-  'images/gestureScissorsRight.webp', 'images/gesturePaperRight.webp'
+  'images/gestureUnknown.webp',
+  'images/gestureFistRight.webp',
+  'images/gestureScissorsRight.webp',
+  'images/gesturePaperRight.webp',
 ];
 
 const resultImages = [
-  'images/resultTie.webp', 'images/resultWin.webp', 'images/resultLose.webp'
+  'images/resultTie.webp',
+  'images/resultWin.webp',
+  'images/resultLose.webp',
 ];
 
 const gameOutcomePhrases = [
   // Phrases for a draw
   [
-    'A draw!', 'We\'ve matched.', 'Great minds think alike.',
-    'It\'s a stalemate.', 'We\'re even.', 'Neither of us wins this time.',
-    'Looks like we\'re in sync.', 'We\'ll have to go again.',
-    'A perfect match.', 'It\'s a tie.'
+    'A draw!',
+    "We've matched.",
+    'Great minds think alike.',
+    "It's a stalemate.",
+    "We're even.",
+    'Neither of us wins this time.',
+    "Looks like we're in sync.",
+    "We'll have to go again.",
+    'A perfect match.',
+    "It's a tie.",
   ],
   // Phrases for a Gemeni lose
   [
-    'You got me.', 'Nicely done, you win.', 'Ah, you were one step ahead.',
-    'The victory is yours.', 'I\'ll have to get you next time.',
-    'You\'ve defeated me.', 'I couldn\'t beat that.',
-    'Well played, you earned it.', 'You read my mind.', 'The point goes to you.'
+    'You got me.',
+    'Nicely done, you win.',
+    'Ah, you were one step ahead.',
+    'The victory is yours.',
+    "I'll have to get you next time.",
+    "You've defeated me.",
+    "I couldn't beat that.",
+    'Well played, you earned it.',
+    'You read my mind.',
+    'The point goes to you.',
   ],
   // Phrases for a Gemini victory
   [
-    'Victory is mine!', 'I got you that time.', 'Looks like I came out on top.',
-    'I\'ll take that win.', 'Another one for my column.',
-    'You\'ve been bested.', 'I predicted your move perfectly.',
-    'That\'s how it\'s done.', 'I have the winning strategy.',
-    'The round goes to me.'
+    'Victory is mine!',
+    'I got you that time.',
+    'Looks like I came out on top.',
+    "I'll take that win.",
+    'Another one for my column.',
+    "You've been bested.",
+    'I predicted your move perfectly.',
+    "That's how it's done.",
+    'I have the winning strategy.',
+    'The round goes to me.',
   ],
 ];
 
@@ -67,7 +91,7 @@ export class GameRps extends xb.Script {
       const panel = new xb.SpatialPanel({
         backgroundColor: '#00000000',
         useDefaultPosition: false,
-        showEdge: false
+        showEdge: false,
       });
       panel.scale.set(panel.width, panel.height, 1);
       panel.isRoot = true;
@@ -78,7 +102,7 @@ export class GameRps extends xb.Script {
       this.startImageRow = grid.addRow({weight: 0.4});
       this.startImageRow.addCol({weight: 0.3});
       this.startImage = this.startImageRow.addCol({weight: 0.4}).addImage({
-        src: 'images/startStart.webp'
+        src: 'images/startStart.webp',
       });
       this.startImageRow.addCol({weight: 0.3});
 
@@ -89,14 +113,14 @@ export class GameRps extends xb.Script {
         this.playImageRow = grid.addRow({weight: 0.2});
         this.playImageRow.addCol({weight: 0.2});
         this.imageGesture1 = this.playImageRow.addCol({weight: 0.2}).addImage({
-          src: 'images/gestureEmpty.webp'
+          src: 'images/gestureEmpty.webp',
         });
         // VS text
         this.playImageRow.addCol({weight: 0.2}).addImage({
-          src: 'images/resultVS.webp'
+          src: 'images/resultVS.webp',
         });
         this.imageGesture2 = this.playImageRow.addCol({weight: 0.2}).addImage({
-          src: 'images/gestureEmpty.webp'
+          src: 'images/gestureEmpty.webp',
         });
         this.playImageRow.addCol({weight: 0.3});
         this.playImageRow.hide();
@@ -104,7 +128,7 @@ export class GameRps extends xb.Script {
         this.resultImageRow = grid.addRow({weight: 0.2});
         this.resultImageRow.addCol({weight: 0.4});
         this.resultImage = this.resultImageRow.addCol({weight: 0.2}).addImage({
-          src: 'images/gestureEmpty.webp'
+          src: 'images/gestureEmpty.webp',
         });
         this.resultImageRow.hide();
       }
@@ -132,12 +156,12 @@ export class GameRps extends xb.Script {
         this.textField1 = textCol.addRow({weight: 1.0}).addText({
           text: 'Do you want to play rock-paper-scissors with me?',
           fontColor: '#ffffff',
-          fontSize: 0.045
+          fontSize: 0.045,
         });
         this.textField2 = textCol.addRow({weight: 1.0}).addText({
           text: 'Do do a thumbs-up gesture to get started!',
           fontColor: '#ffffff',
-          fontSize: 0.045
+          fontSize: 0.045,
         });
 
         // right indentation
@@ -162,10 +186,10 @@ export class GameRps extends xb.Script {
     // state for 1-2-3-GO
     this.state = 0;
     // delay for 1-2-3-GO
-    this.delayMs = (this.isDebug ? 400 : 800);
+    this.delayMs = this.isDebug ? 400 : 800;
     // Wait for 2.5 sec to enable game restart
-    this.gameRestartTimeout = (this.isDebug ? 1000 : 2500);
-    this.gameGestureDetectionTimeout = (this.isDebug ? 900 : 2500);
+    this.gameRestartTimeout = this.isDebug ? 1000 : 2500;
+    this.gameGestureDetectionTimeout = this.isDebug ? 900 : 2500;
 
     // The gesture detection start time
     this.gestureStartTime = 0;
@@ -184,7 +208,7 @@ export class GameRps extends xb.Script {
     if (this.state < countdownImages.length) {
       // Load and display the current image
       this.startImage.load(countdownImages[this.state]);
-      this.state++;  // Move to the next image for the next call
+      this.state++; // Move to the next image for the next call
 
       // Schedule the next image display after the delay
       setTimeout(this.displayNextImage, this.delayMs);
@@ -215,7 +239,7 @@ export class GameRps extends xb.Script {
   displayGameSummary(idx) {
     let result = 2;
     if (idx == 0) {
-      this.textField1.setText('I didn\'t catch what you threw! Let\'s retry!');
+      this.textField1.setText("I didn't catch what you threw! Let's retry!");
       this.textField2.setText('Do a thumbs-up gesture when you are ready!');
     } else {
       let result = this.getRPSOutcome(this.randomGesture, idx);
@@ -246,7 +270,7 @@ export class GameRps extends xb.Script {
   getRPSOutcome(playerChoice, opponentChoice) {
     // Check for a tie
     if (playerChoice === opponentChoice) {
-      return 0;  // Match (Tie)
+      return 0; // Match (Tie)
     }
 
     // Determine win/lose based on the classic rules
@@ -255,13 +279,13 @@ export class GameRps extends xb.Script {
     // Paper (2) beats Rock (1)
     // Scissors (3) beats Paper (2)
     if (
-        (playerChoice === 1 && opponentChoice === 3) ||  // Rock vs Scissors
-        (playerChoice === 2 && opponentChoice === 1) ||  // Paper vs Rock
-        (playerChoice === 3 && opponentChoice === 2)     // Scissors vs Paper
+      (playerChoice === 1 && opponentChoice === 3) || // Rock vs Scissors
+      (playerChoice === 2 && opponentChoice === 1) || // Paper vs Rock
+      (playerChoice === 3 && opponentChoice === 2) // Scissors vs Paper
     ) {
-      return 1;  // Win
+      return 1; // Win
     } else {
-      return 2;  // Lose (all other cases are losses)
+      return 2; // Lose (all other cases are losses)
     }
   }
 
@@ -307,12 +331,13 @@ export class GameRps extends xb.Script {
     if (delta > this.gameGestureDetectionTimeout) {
       this.gestureStartTime = 0;
       this.detectFinalGestures();
-
     } else {
       let len = this.handRpsStates[handIndex].length;
-      if (len == 0 ||
-          (this.handGesture[handIndex][len - 1] &&
-           this.handGesture[handIndex][len - 1].gesture !== result)) {
+      if (
+        len == 0 ||
+        (this.handGesture[handIndex][len - 1] &&
+          this.handGesture[handIndex][len - 1].gesture !== result)
+      ) {
         // Save gesture-duration for each hand
         this.handRpsStates[handIndex].push({gesture: result, delta: delta});
         this.handGesture[handIndex] = result;
@@ -324,8 +349,9 @@ export class GameRps extends xb.Script {
     // TODO: we can check both hands values
     // this.leftHandGesture =
     // this.detectRPSGesture(this.handRpsStates[LEFT_HAND_INDEX]);
-    this.rightHandGesture =
-        this.detectRPSGesture(this.handRpsStates[RIGHT_HAND_INDEX]);
+    this.rightHandGesture = this.detectRPSGesture(
+      this.handRpsStates[RIGHT_HAND_INDEX]
+    );
 
     this.displayGameSummary(this.rightHandGesture);
 
@@ -347,16 +373,15 @@ export class GameRps extends xb.Script {
       // Gesture must be stable for 300ms
       stabilityDurationMs: 300,
       // Skip first gesture, if it is changed in 300ms
-      initialRockIgnoreDurationMs:
-          300,  // Ignore initial rock for 300ms (not directly used in this
-                // solution, but kept for context)
+      initialRockIgnoreDurationMs: 300, // Ignore initial rock for 300ms (not directly used in this
+      // solution, but kept for context)
       // gesture detection period
-      maxDetectionWindowMs: this.gameGestureDetectionTimeout
+      maxDetectionWindowMs: this.gameGestureDetectionTimeout,
     };
     const {maxDetectionWindowMs} = {...defaultOptions, ...options};
 
     if (!handRpsStates || handRpsStates.length === 0) {
-      return 0;  // Other
+      return 0; // Other
     }
 
     // Ensure data is sorted by delta
@@ -367,10 +392,10 @@ export class GameRps extends xb.Script {
     const secondPhaseStartMs = maxDetectionWindowMs * (2 / 5);
 
     let rockStartedInFirstPhase = false;
-    const gestureDurations = new Map();  // Stores {gesture: totalDurationMs}
+    const gestureDurations = new Map(); // Stores {gesture: totalDurationMs}
 
     let prevDelta = 0;
-    let prevGesture = 0;  // Initialize with 0 to handle the very first gesture
+    let prevGesture = 0; // Initialize with 0 to handle the very first gesture
 
     for (let i = 0; i < handRpsStates.length; i++) {
       const {gesture, delta} = handRpsStates[i];
@@ -384,10 +409,12 @@ export class GameRps extends xb.Script {
       const duration = delta - prevDelta;
 
       // Accumulate duration for the previous gesture
-      if (prevGesture !== 0 && prevGesture > 0 &&
-          prevGesture < 4) {  // Only consider valid RPS gestures
+      if (prevGesture !== 0 && prevGesture > 0 && prevGesture < 4) {
+        // Only consider valid RPS gestures
         gestureDurations.set(
-            prevGesture, (gestureDurations.get(prevGesture) || 0) + duration);
+          prevGesture,
+          (gestureDurations.get(prevGesture) || 0) + duration
+        );
       }
 
       // Check if gesture '1' (rock) started in the first phase
@@ -401,12 +428,17 @@ export class GameRps extends xb.Script {
 
     // Handle the duration of the very last segment up to maxDetectionWindowMs
     // if it extends beyond the last recorded delta
-    if (prevDelta < maxDetectionWindowMs && prevGesture !== 0 &&
-        prevGesture > 0 && prevGesture < 4) {
+    if (
+      prevDelta < maxDetectionWindowMs &&
+      prevGesture !== 0 &&
+      prevGesture > 0 &&
+      prevGesture < 4
+    ) {
       const remainingDuration = maxDetectionWindowMs - prevDelta;
       gestureDurations.set(
-          prevGesture,
-          (gestureDurations.get(prevGesture) || 0) + remainingDuration);
+        prevGesture,
+        (gestureDurations.get(prevGesture) || 0) + remainingDuration
+      );
     }
 
     let longestGesture = 0;
@@ -434,65 +466,69 @@ export class GameRps extends xb.Script {
     // Let's re-calculate durations based on the effective window for clarity
     const filteredGestureDurations = new Map();
     let currentWindowPrevDelta = effectiveStartTime;
-    let currentWindowPrevGesture =
-        0;  // To track the gesture at the start of the effective window
+    let currentWindowPrevGesture = 0; // To track the gesture at the start of the effective window
 
     // Find the gesture at the effectiveStartTime
     for (let i = 0; i < handRpsStates.length; i++) {
       const {gesture, delta} = handRpsStates[i];
       if (delta >= effectiveStartTime) {
-        currentWindowPrevGesture =
-            prevGesture;  // The gesture *before* reaching effectiveStartTime
+        currentWindowPrevGesture = prevGesture; // The gesture *before* reaching effectiveStartTime
         if (i > 0) {
           currentWindowPrevGesture = handRpsStates[i - 1].gesture;
         } else {
-          currentWindowPrevGesture =
-              gesture;  // If the very first delta is already within the
-                        // effective window
+          currentWindowPrevGesture = gesture; // If the very first delta is already within the
+          // effective window
         }
         break;
       }
-      prevGesture =
-          gesture;  // Keep track of the last gesture before effectiveStartTime
+      prevGesture = gesture; // Keep track of the last gesture before effectiveStartTime
     }
-
 
     for (let i = 0; i < handRpsStates.length; i++) {
       const {gesture, delta} = handRpsStates[i];
 
       if (delta < effectiveStartTime) {
-        currentWindowPrevDelta = delta;  // Continue updating prevDelta until we
-                                         // hit the effectiveStartTime
-        currentWindowPrevGesture = gesture;  // Update currentWindowPrevGesture
+        currentWindowPrevDelta = delta; // Continue updating prevDelta until we
+        // hit the effectiveStartTime
+        currentWindowPrevGesture = gesture; // Update currentWindowPrevGesture
         continue;
       }
 
       if (delta > effectiveEndTime) {
         // Calculate duration for the segment up to effectiveEndTime
         const duration = Math.max(
-            0,
-            effectiveEndTime -
-                Math.max(currentWindowPrevDelta, effectiveStartTime));
-        if (currentWindowPrevGesture !== 0 && currentWindowPrevGesture > 0 &&
-            currentWindowPrevGesture < 4) {
+          0,
+          effectiveEndTime -
+            Math.max(currentWindowPrevDelta, effectiveStartTime)
+        );
+        if (
+          currentWindowPrevGesture !== 0 &&
+          currentWindowPrevGesture > 0 &&
+          currentWindowPrevGesture < 4
+        ) {
           filteredGestureDurations.set(
-              currentWindowPrevGesture,
-              (filteredGestureDurations.get(currentWindowPrevGesture) || 0) +
-                  duration);
+            currentWindowPrevGesture,
+            (filteredGestureDurations.get(currentWindowPrevGesture) || 0) +
+              duration
+          );
         }
-        break;  // We are past the effective end time
+        break; // We are past the effective end time
       }
 
       const segmentStart = Math.max(currentWindowPrevDelta, effectiveStartTime);
       const segmentEnd = delta;
       const duration = segmentEnd - segmentStart;
 
-      if (currentWindowPrevGesture !== 0 && currentWindowPrevGesture > 0 &&
-          currentWindowPrevGesture < 4) {
+      if (
+        currentWindowPrevGesture !== 0 &&
+        currentWindowPrevGesture > 0 &&
+        currentWindowPrevGesture < 4
+      ) {
         filteredGestureDurations.set(
-            currentWindowPrevGesture,
-            (filteredGestureDurations.get(currentWindowPrevGesture) || 0) +
-                duration);
+          currentWindowPrevGesture,
+          (filteredGestureDurations.get(currentWindowPrevGesture) || 0) +
+            duration
+        );
       }
 
       currentWindowPrevDelta = delta;
@@ -501,17 +537,20 @@ export class GameRps extends xb.Script {
 
     // Handle the remaining duration if the last recorded delta is before
     // effectiveEndTime
-    if (currentWindowPrevDelta < effectiveEndTime &&
-        currentWindowPrevGesture !== 0 && currentWindowPrevGesture > 0 &&
-        currentWindowPrevGesture < 4) {
-      const remainingDuration = effectiveEndTime -
-          Math.max(currentWindowPrevDelta, effectiveStartTime);
+    if (
+      currentWindowPrevDelta < effectiveEndTime &&
+      currentWindowPrevGesture !== 0 &&
+      currentWindowPrevGesture > 0 &&
+      currentWindowPrevGesture < 4
+    ) {
+      const remainingDuration =
+        effectiveEndTime - Math.max(currentWindowPrevDelta, effectiveStartTime);
       filteredGestureDurations.set(
-          currentWindowPrevGesture,
-          (filteredGestureDurations.get(currentWindowPrevGesture) || 0) +
-              remainingDuration);
+        currentWindowPrevGesture,
+        (filteredGestureDurations.get(currentWindowPrevGesture) || 0) +
+          remainingDuration
+      );
     }
-
 
     for (const [gesture, duration] of filteredGestureDurations.entries()) {
       if (gesture !== 0 && duration >= minRequiredDuration) {
@@ -555,7 +594,6 @@ export class GameRps extends xb.Script {
    */
   onSelecting(id) {}
 
-
   async update() {
     //
     // Run gesture detection 12 times per second for ~60fps
@@ -565,9 +603,13 @@ export class GameRps extends xb.Script {
       const hands = xb.core.user.hands;
       if (hands.isValid()) {
         this.gestureDetectionHandler.postTask(
-            hands.hands[LEFT_HAND_INDEX].joints, LEFT_HAND_INDEX);
+          hands.hands[LEFT_HAND_INDEX].joints,
+          LEFT_HAND_INDEX
+        );
         this.gestureDetectionHandler.postTask(
-            hands.hands[RIGHT_HAND_INDEX].joints, RIGHT_HAND_INDEX);
+          hands.hands[RIGHT_HAND_INDEX].joints,
+          RIGHT_HAND_INDEX
+        );
       }
     }
 
@@ -584,11 +626,12 @@ export class GameRps extends xb.Script {
   getRandomPhrase(categoryIndex) {
     if (categoryIndex < 0 || categoryIndex >= gameOutcomePhrases.length) {
       console.error(
-          'Invalid category index provided. Please use 0 for victory, 1 for loss, or 2 for draw.');
+        'Invalid category index provided. Please use 0 for victory, 1 for loss, or 2 for draw.'
+      );
       return null;
     }
     const phrasesArray = gameOutcomePhrases[categoryIndex];
     const randomIndex = Math.floor(Math.random() * phrasesArray.length);
     return phrasesArray[randomIndex];
   }
-};
+}

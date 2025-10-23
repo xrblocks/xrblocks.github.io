@@ -18,7 +18,7 @@ export class UIManager extends xb.Script {
     const question = grid.addRow({weight: 0.7}).addText({
       text: 'Welcome to UI Playground! Is it your first time here?',
       fontColor: '#ffffff',
-      fontSize: 0.08
+      fontSize: 0.08,
     });
     this.question = question;
 
@@ -27,8 +27,9 @@ export class UIManager extends xb.Script {
 
     // The `text` field defines the icon of the button from Material Icons in
     // https://fonts.google.com/icons
-    const yesButton = ctrlRow.addCol({weight: 0.5})
-                          .addIconButton({text: 'check_circle', fontSize: 0.5});
+    const yesButton = ctrlRow
+      .addCol({weight: 0.5})
+      .addIconButton({text: 'check_circle', fontSize: 0.5});
 
     // onTriggered defines unified behavior for `onSelected`, `onClicked`,
     // `onPinched`, `onTouched` for buttons.
@@ -36,8 +37,9 @@ export class UIManager extends xb.Script {
       this._onYes();
     };
 
-    const noButton = ctrlRow.addCol({weight: 0.5})
-                         .addIconButton({text: 'cancel', fontSize: 0.5});
+    const noButton = ctrlRow
+      .addCol({weight: 0.5})
+      .addIconButton({text: 'cancel', fontSize: 0.5});
 
     noButton.onTriggered = () => {
       this._onNo();
@@ -51,4 +53,4 @@ export class UIManager extends xb.Script {
   _onNo() {
     console.log('no');
   }
-};
+}

@@ -33,7 +33,7 @@ class MainScript extends xb.Script {
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const options = new xb.Options();
 
   // AI is required for the object detection backend. Please set your

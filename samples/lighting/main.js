@@ -10,7 +10,7 @@ options.depth.depthMesh.enabled = true;
 options.depth.depthTexture.enabled = true;
 options.depth.depthMesh.updateFullResolutionGeometry = true;
 options.depth.depthMesh.renderShadow = true;
-options.depth.depthMesh.shadowOpacity = 0.6
+options.depth.depthMesh.shadowOpacity = 0.6;
 options.depth.occlusion.enabled = true;
 
 // Set up lighting options.
@@ -24,15 +24,17 @@ options.lighting.useDynamicSoftShadow = false;
 options.xrButton = {
   ...options.xrButton,
   startText: '<i id="xrlogo"></i> BRING IT TO LIFE',
-  endText: '<i id="xrlogo"></i> MISSION COMPLETE'
+  endText: '<i id="xrlogo"></i> MISSION COMPLETE',
 };
 async function start() {
   const lightingScene = new LightingScene();
   await xb.init(options);
   xb.add(lightingScene);
   window.addEventListener(
-      'pointerdown', lightingScene.onPointerDown.bind(lightingScene));
+    'pointerdown',
+    lightingScene.onPointerDown.bind(lightingScene)
+  );
 }
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   start();
 });

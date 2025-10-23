@@ -3,10 +3,13 @@ import {xrDepthMeshOptions} from 'xrblocks';
 
 export class DepthMeshClone extends THREE.Mesh {
   constructor() {
-    super(new THREE.PlaneGeometry(), new THREE.ShadowMaterial({
-      opacity: xrDepthMeshOptions.depthMesh.shadowOpacity,
-      depthWrite: false
-    }));
+    super(
+      new THREE.PlaneGeometry(),
+      new THREE.ShadowMaterial({
+        opacity: xrDepthMeshOptions.depthMesh.shadowOpacity,
+        depthWrite: false,
+      })
+    );
     this.receiveShadow = true;
   }
 

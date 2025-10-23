@@ -15,7 +15,7 @@ class TextBillboard extends THREE.Object3D {
         this.text = text;
         this.font = font;
         this.textMaterial =
-            material ?? new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+            material ?? new THREE.MeshBasicMaterial({ color: 0xffffff });
         if (!font) {
             new FontLoader().load(DEFAULT_FONT_PATH, (font) => {
                 this.font = font;

@@ -10,23 +10,11 @@ class XRPalette {
      */
     constructor() {
         this.fullGColors_ = [
-            0x174EA6,
-            0xA50E0E,
-            0xE37400,
-            0x0D652D,
-            0x4285F4,
-            0xEA4335,
-            0xFBBC04,
-            0x34A853,
-            0xD2E3FC,
-            0xFAD2CF,
-            0xFEEFC3,
-            0xCEEAD6,
-            0xF1F3F4,
-            0x9AA0A6,
+            0x174ea6, 0xa50e0e, 0xe37400, 0x0d652d, 0x4285f4, 0xea4335, 0xfbbc04,
+            0x34a853, 0xd2e3fc, 0xfad2cf, 0xfeefc3, 0xceead6, 0xf1f3f4, 0x9aa0a6,
             0x202124,
         ];
-        this.liteGColors_ = [0xEA4335, 0x4285F4, 0x34AB53, 0xFBBC04];
+        this.liteGColors_ = [0xea4335, 0x4285f4, 0x34ab53, 0xfbbc04];
         this.lastRandomColor_ = null;
         if (XRPalette.instance) {
             return XRPalette.instance;

@@ -14,8 +14,8 @@ Real-time AI conversation with camera and audio streaming in XR.
 This is only for demonstration and prototyping purposes:
 
 1. Add your Gemini API key apending like `<website-domain>/templates/7_ai_live/?key=AIxxxxxxxxxxxxxxxx`,
-or put it in a JSON file `keys.json` with
-`{"gemini": {"apiKey": "AIxxxxxxxxxxxxxxxx"}}`
+   or put it in a JSON file `keys.json` with
+   `{"gemini": {"apiKey": "AIxxxxxxxxxxxxxxxx"}}`
 
 2. Open in browser and click the text button to start
 

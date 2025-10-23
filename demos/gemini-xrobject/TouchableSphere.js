@@ -19,11 +19,13 @@ class TouchableSphere extends xb.MeshScript {
    * @todo Adapt and integrate with sdk/ui.
    */
   constructor(detectedObject, radius = 0.2, iconName = 'help') {
-    const inactiveColor =
-        new THREE.Color(0xd1e2ff);  // Cannot access 'this' before super()
+    const inactiveColor = new THREE.Color(0xd1e2ff); // Cannot access 'this' before super()
     const geometry = new THREE.SphereGeometry(radius, 32, 16);
-    const material = new THREE.MeshBasicMaterial(
-        {color: inactiveColor, transparent: true, opacity: 0.9});
+    const material = new THREE.MeshBasicMaterial({
+      color: inactiveColor,
+      transparent: true,
+      opacity: 0.9,
+    });
     super(geometry, material);
     this.inactiveColor = inactiveColor;
     this.activeColor = new THREE.Color(0x4970ff);
@@ -31,7 +33,7 @@ class TouchableSphere extends xb.MeshScript {
     this.textFontSize = 0.05;
     this.textAnchorX = 'center';
     this.textAnchorY = 'bottom';
-    this.textOffsetY = 0.01;  // Offset above the sphere
+    this.textOffsetY = 0.01; // Offset above the sphere
     this.touchDistanceThreshold = radius * 2;
     this.sphereRadius = radius;
     this.labelText = detectedObject.label;
@@ -40,10 +42,10 @@ class TouchableSphere extends xb.MeshScript {
     this.position.copy(detectedObject.position);
 
     this.iconFont =
-        'https://fonts.gstatic.com/s/materialicons/v143/flUhRq6tzZclQEJ-Vdg-IuiaDsNa.woff';
+      'https://fonts.gstatic.com/s/materialicons/v143/flUhRq6tzZclQEJ-Vdg-IuiaDsNa.woff';
     this.iconName = iconName;
     this.iconFontSize =
-        this.sphereRadius * TouchableSphere.ICON_SIZE_MULTIPLIER;
+      this.sphereRadius * TouchableSphere.ICON_SIZE_MULTIPLIER;
     this.iconColor = new THREE.Color(0xffffff);
     this.iconMesh = null;
     this.raycaster = null;
@@ -68,7 +70,7 @@ class TouchableSphere extends xb.MeshScript {
     // Position the label above the sphere
     this.textLabel.position.set(0, this.sphereRadius + this.textOffsetY, 0);
 
-    this.add(this.textLabel);  // Add label as a child of the sphere
+    this.add(this.textLabel); // Add label as a child of the sphere
     this.textLabel.sync();
 
     // Create and configure the icon
@@ -79,9 +81,8 @@ class TouchableSphere extends xb.MeshScript {
     this.iconMesh.color = this.iconColor;
     this.iconMesh.anchorX = 'center';
     this.iconMesh.anchorY = 'middle';
-    this.iconMesh.material.depthTest = false;  // Keep icon visible
-    this.iconMesh.renderOrder =
-        this.renderOrder + 1;  // Render icon on top of sphere
+    this.iconMesh.material.depthTest = false; // Keep icon visible
+    this.iconMesh.renderOrder = this.renderOrder + 1; // Render icon on top of sphere
 
     // Position the icon at the center of the sphere
     this.iconMesh.position.set(0, 0, 0);
@@ -93,8 +94,12 @@ class TouchableSphere extends xb.MeshScript {
   }
 
   update() {
-    if (!this.material || !xb.core.user || !this.textLabel ||
-        !xb.core?.camera) {
+    if (
+      !this.material ||
+      !xb.core.user ||
+      !this.textLabel ||
+      !xb.core?.camera
+    ) {
       return;
     }
     if ((xb.core.user.controllers && !this.raycaster) || !this.iconMesh) {
@@ -102,19 +107,18 @@ class TouchableSphere extends xb.MeshScript {
     }
 
     let isTouchedThisFrame = false;
-    let touchInitiator = null;  // Will hold the controller or hand info
+    let touchInitiator = null; // Will hold the controller or hand info
 
     // Check for controller touch (ray-based)
     for (const controller of xb.core.user.controllers) {
       if (controller && controller.visible) {
         this.raycaster.setFromXRController(controller);
-        const intersections = this.raycaster.intersectObject(
-            this, false);  // 'this' is the sphere mesh
+        const intersections = this.raycaster.intersectObject(this, false); // 'this' is the sphere mesh
 
         if (intersections.length > 0) {
           isTouchedThisFrame = true;
           touchInitiator = controller;
-          break;  // Stop checking other controllers if one is touching
+          break; // Stop checking other controllers if one is touching
         }
       }
     }
@@ -122,8 +126,7 @@ class TouchableSphere extends xb.MeshScript {
     // Check for hand touch if XRHands is enabled and available
     if (xb.core.user.hands && !isTouchedThisFrame) {
       const sphereWorldPosition = new THREE.Vector3();
-      this.getWorldPosition(
-          sphereWorldPosition);  // Get sphere's current world position
+      this.getWorldPosition(sphereWorldPosition); // Get sphere's current world position
 
       const handednessToCheck = [HANDEDNESS.LEFT, HANDEDNESS.RIGHT];
       for (const handSide of handednessToCheck) {
@@ -135,12 +138,14 @@ class TouchableSphere extends xb.MeshScript {
           indexTip.getWorldPosition(jointWorldPosition);
 
           const distanceToJoint =
-              sphereWorldPosition.distanceTo(jointWorldPosition);
-          if (distanceToJoint <=
-              this.sphereRadius + this.touchDistanceThreshold) {
+            sphereWorldPosition.distanceTo(jointWorldPosition);
+          if (
+            distanceToJoint <=
+            this.sphereRadius + this.touchDistanceThreshold
+          ) {
             isTouchedThisFrame = true;
             touchInitiator = {type: 'hand', side: handSide, joint: indexTip};
-            break;  // Stop checking other hand/joints if one is touching
+            break; // Stop checking other hand/joints if one is touching
           }
         }
       }
@@ -153,7 +158,7 @@ class TouchableSphere extends xb.MeshScript {
     if (isTouchedThisFrame && !this.wasTouchedLastFrame) {
       this.material.color.set(this.activeColor);
       this.onSelectStart(selectEvent);
-      this.onSelect(selectEvent);  // Called on the frame touch starts
+      this.onSelect(selectEvent); // Called on the frame touch starts
     } else if (!isTouchedThisFrame && this.wasTouchedLastFrame) {
       this.material.color.set(this.inactiveColor);
       this.onSelectEnd(selectEvent);

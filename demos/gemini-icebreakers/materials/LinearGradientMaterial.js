@@ -51,7 +51,7 @@ export class LinearGradientMaterial extends THREE.ShaderMaterial {
         } else {
           gl_FragColor = mix(thirdQuarterColor, endColor, smoothstep(0.75, 1.0, rotatedUV.x));
         }
-      }`
+      }`,
     };
     super(options);
   }

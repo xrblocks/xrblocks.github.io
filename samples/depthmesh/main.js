@@ -14,20 +14,22 @@ class DepthMeshVisualizer extends xb.Script {
 
   init() {
     xb.core.depth.depthMesh.material.uniforms.uOpacity.value =
-        this.depthMeshAlphaSlider.startingValue;
+      this.depthMeshAlphaSlider.startingValue;
   }
 
   onSelectStart(event) {
     this.currentSliderController = event.target;
     this.depthMeshAlphaSlider.setInitialPoseFromController(
-        this.currentSliderController);
+      this.currentSliderController
+    );
   }
 
   onSelectEnd(event) {
     const controller = event.target;
     if (this.currentSliderController == controller) {
       this.depthMeshAlphaSlider.updateValue(
-          this.depthMeshAlphaSlider.getValueFromController(controller));
+        this.depthMeshAlphaSlider.getValueFromController(controller)
+      );
     }
     this.currentSliderController = null;
   }
@@ -35,16 +37,17 @@ class DepthMeshVisualizer extends xb.Script {
   update() {
     if (this.currentSliderController) {
       const opacity = this.depthMeshAlphaSlider.getValueFromController(
-          this.currentSliderController);
+        this.currentSliderController
+      );
       xb.core.depth.depthMesh.material.uniforms.uOpacity.value = opacity;
       console.log('opacity:' + opacity);
     }
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const options = new xb.Options();
   options.depth = new xb.DepthOptions(xb.xrDepthMeshVisualizationOptions);
   xb.add(new DepthMeshVisualizer());
-  xb.init(options)
+  xb.init(options);
 });

@@ -6,20 +6,21 @@ const ASSETS_PATH = 'https://cdn.jsdelivr.net/gh/xrblocks/assets@main/';
 // Duration of fade out in ms.
 const kFadeoutMs = 2000;
 const textureLoader = new THREE.TextureLoader();
-const decalDiffuse =
-    textureLoader.load('./paintball_assets/decal-diffuse1.webp');
-decalDiffuse.colorSpace =
-    THREE
-        .SRGBColorSpace;  // Sets the color space for the decal diffuse texture.
+const decalDiffuse = textureLoader.load(
+  './paintball_assets/decal-diffuse1.webp'
+);
+decalDiffuse.colorSpace = THREE.SRGBColorSpace; // Sets the color space for the decal diffuse texture.
 const decalNormal = textureLoader.load('./paintball_assets/decal-normal1.webp');
 
-let paintshotAudioBuffer;  // Declares a variable to hold the audio buffer for
-                           // the paint shot sound.
+let paintshotAudioBuffer; // Declares a variable to hold the audio buffer for
+// the paint shot sound.
 const audioLoader = new THREE.AudioLoader();
-audioLoader.load(ASSETS_PATH + 'musicLibrary/PaintOneShot1.opus', function(buffer) {
-  paintshotAudioBuffer =
-      buffer;  // Loads the paint shot audio and assigns it to the buffer.
-});
+audioLoader.load(
+  ASSETS_PATH + 'musicLibrary/PaintOneShot1.opus',
+  function (buffer) {
+    paintshotAudioBuffer = buffer; // Loads the paint shot audio and assigns it to the buffer.
+  }
+);
 
 /**
  * PaintSplash class represents a 3D object for the paintball decal, including
@@ -36,7 +37,7 @@ export class PaintSplash extends THREE.Object3D {
     if (listener != null) {
       this.sound = new THREE.PositionalAudio(listener);
     }
-    this.color = color;  // Sets the paintball color.
+    this.color = color; // Sets the paintball color.
     this.enableSound = true;
     this.splashList = [];
   }
@@ -49,34 +50,37 @@ export class PaintSplash extends THREE.Object3D {
    */
   splatFromIntersection(intersection, scale) {
     const objectRotation = new THREE.Quaternion();
-    intersection.object.getWorldQuaternion(
-        objectRotation);  // Gets the world quaternion for rotation.
+    intersection.object.getWorldQuaternion(objectRotation); // Gets the world quaternion for rotation.
 
     // Clones and rotates the intersection normal to align it with the mesh's
     // orientation.
     const normal = intersection.normal.clone().applyQuaternion(objectRotation);
 
-    const originalNormal =
-        new THREE.Vector3(0, 0, 1);  // The original normal to face.
-    const angle = originalNormal.angleTo(
-        normal);  // Calculates the angle between the normals.
+    const originalNormal = new THREE.Vector3(0, 0, 1); // The original normal to face.
+    const angle = originalNormal.angleTo(normal); // Calculates the angle between the normals.
 
     // Rotates the original normal by the cross product and normalizes it.
     originalNormal.cross(normal).normalize();
 
     // Applies a random rotation to the splat around the normal.
     const randomRotation = new THREE.Quaternion().setFromAxisAngle(
-        normal, Math.random() * Math.PI * 2);
+      normal,
+      Math.random() * Math.PI * 2
+    );
 
     // Rotates the splat to face the surface normal with a random rotation.
     const rotateFacingNormal = new THREE.Quaternion()
-                                   .setFromAxisAngle(originalNormal, angle)
-                                   .premultiply(randomRotation);
+      .setFromAxisAngle(originalNormal, angle)
+      .premultiply(randomRotation);
 
     // Projects the splat onto the mesh at the given position, orientation, and
     // scale.
     this.splatOnMesh(
-        intersection.object, intersection.point, rotateFacingNormal, scale);
+      intersection.object,
+      intersection.point,
+      rotateFacingNormal,
+      scale
+    );
   }
 
   /**
@@ -103,7 +107,7 @@ export class PaintSplash extends THREE.Object3D {
       polygonOffsetFactor: 0,
       alphaTest: 0.5,
       opacity: 1.0,
-      side: THREE.FrontSide
+      side: THREE.FrontSide,
     });
 
     // Creates a scale vector for the decal geometry.
@@ -111,10 +115,13 @@ export class PaintSplash extends THREE.Object3D {
 
     // Generates a custom geometry for the decal using the SimpleDecalGeometry
     // class.
-    const geometry =
-        new SimpleDecalGeometry(mesh, position, orientation, scaleVector3);
-    geometry
-        .computeVertexNormals();  // Computes vertex normals for proper shading.
+    const geometry = new SimpleDecalGeometry(
+      mesh,
+      position,
+      orientation,
+      scaleVector3
+    );
+    geometry.computeVertexNormals(); // Computes vertex normals for proper shading.
 
     // Creates a mesh for the decal and adds it to the scene.
     this.decalMesh = new THREE.Mesh(geometry, material);
@@ -123,8 +130,11 @@ export class PaintSplash extends THREE.Object3D {
 
     // Plays the paint shot sound if the audio buffer is loaded and sound is
     // enabled.
-    if (this.enableSound && this.sound != null &&
-        paintshotAudioBuffer != null) {
+    if (
+      this.enableSound &&
+      this.sound != null &&
+      paintshotAudioBuffer != null
+    ) {
       this.sound.setBuffer(paintshotAudioBuffer);
       this.sound.setRefDistance(10);
       this.sound.play();
@@ -142,16 +152,13 @@ export class PaintSplash extends THREE.Object3D {
 
         // Check if it's time to start fading out the mesh (after 2 seconds)
         if (timeElapsed > kFadeoutMs) {
-          const timeSinceFadeStart =
-              timeElapsed - kFadeoutMs;  // Time since the start of fade
+          const timeSinceFadeStart = timeElapsed - kFadeoutMs; // Time since the start of fade
 
           // If within the fade duration, update opacity
           if (timeSinceFadeStart <= kFadeoutMs) {
-            const newOpacity = 1.0 - (timeSinceFadeStart / kFadeoutMs);
-            child.material.opacity =
-                Math.max(0.0, newOpacity);  // Ensure opacity doesn't go below 0
-            child.material.transparent =
-                true;  // Ensure transparency is enabled
+            const newOpacity = 1.0 - timeSinceFadeStart / kFadeoutMs;
+            child.material.opacity = Math.max(0.0, newOpacity); // Ensure opacity doesn't go below 0
+            child.material.transparent = true; // Ensure transparency is enabled
           } else {
             // If the fade duration has passed, remove the mesh from the scene
             this.remove(child);
@@ -167,8 +174,8 @@ export class PaintSplash extends THREE.Object3D {
    */
   dispose() {
     if (this.decalMesh) {
-      this.decalMesh.geometry.dispose();  // Disposes of the geometry.
-      this.decalMesh.material.dispose();  // Disposes of the material.
+      this.decalMesh.geometry.dispose(); // Disposes of the geometry.
+      this.decalMesh.material.dispose(); // Disposes of the material.
     }
   }
 }

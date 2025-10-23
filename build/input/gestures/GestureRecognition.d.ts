@@ -28,7 +28,7 @@ export declare class GestureRecognition extends Script<GestureRecognitionEventMa
     private detectors;
     private activeProvider;
     private providerWarned;
-    init({ options, user, input }: {
+    init({ options, user, input, }: {
         options: GestureRecognitionOptions;
         user: User;
         input: Input;
