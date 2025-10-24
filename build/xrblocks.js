@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.2.0
- * @commitid edf046b
- * @builddate 2025-10-24T17:09:34.045Z
+ * @commitid 4c50340
+ * @builddate 2025-10-24T18:27:46.188Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -4111,10 +4111,10 @@ class ScreenshotSynthesizer {
      * Requests a screenshot from the scene as a DataURL.
      * @param overlayOnCamera - If true, overlays the image on a camera image
      *     without any projection or aspect ratio correction.
-     * @returns Promise which returns the screenshot.
+     * @returns Promise which returns the screenshot as a data uri.
      */
     async getScreenshot(overlayOnCamera = false) {
-        return await new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             this.pendingScreenshotRequests.push(new PendingScreenshotRequest(resolve, reject, overlayOnCamera));
         });
     }

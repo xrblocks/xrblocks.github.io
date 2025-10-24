@@ -20,7 +20,7 @@ export declare class ScreenshotSynthesizer {
      * Requests a screenshot from the scene as a DataURL.
      * @param overlayOnCamera - If true, overlays the image on a camera image
      *     without any projection or aspect ratio correction.
-     * @returns Promise which returns the screenshot.
+     * @returns Promise which returns the screenshot as a data uri.
      */
-    getScreenshot(overlayOnCamera?: boolean): Promise<unknown>;
+    getScreenshot(overlayOnCamera?: boolean): Promise<string>;
 }
