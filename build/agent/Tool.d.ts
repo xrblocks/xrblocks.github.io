@@ -1,4 +1,4 @@
-import type * as GoogleGenAITypes from '@google/genai';
+import * as GoogleGenAITypes from '@google/genai';
 export interface ToolCall {
     name: string;
     args: unknown;
@@ -30,6 +30,7 @@ export type ToolOptions = {
     parameters?: ToolSchema;
     /** A callback to execute when the tool is triggered */
     onTriggered?: (args: unknown) => unknown | Promise<unknown>;
+    behavior?: 'BLOCKING' | 'NON_BLOCKING' | GoogleGenAITypes.Behavior;
 };
 /**
  * A base class for tools that the agent can use.
@@ -39,6 +40,7 @@ export declare class Tool {
     description?: string;
     parameters?: ToolSchema;
     onTriggered?: (args: unknown) => unknown;
+    behavior?: 'BLOCKING' | 'NON_BLOCKING';
     /**
      * @param options - The options for the tool.
      */

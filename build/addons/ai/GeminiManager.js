@@ -1,4 +1,5 @@
 import * as xb from 'xrblocks';
+import { AUDIO_CAPTURE_PROCESSOR_CODE } from './AudioCaptureProcessorCode.js';
 
 class GeminiManager extends xb.Script {
     constructor() {
@@ -22,7 +23,7 @@ class GeminiManager extends xb.Script {
         this.xrDeviceCamera = xb.core.deviceCamera;
         this.ai = xb.core.ai;
     }
-    async startGeminiLive({ liveParams, } = {}) {
+    async startGeminiLive({ liveParams, model, } = {}) {
         if (this.isAIRunning || !this.ai) {
             console.warn('AI already running or not available');
             return;
@@ -34,7 +35,7 @@ class GeminiManager extends xb.Script {
         }
         try {
             await this.setupAudioCapture();
-            await this.startLiveAI(liveParams);
+            await this.startLiveAI(liveParams, model);
             this.startScreenshotCapture();
             this.isAIRunning = true;
         }
@@ -75,7 +76,11 @@ class GeminiManager extends xb.Script {
             throw new Error('No audio tracks found.');
         }
         this.audioContext = new AudioContext({ sampleRate: 16000 });
-        await this.audioContext.audioWorklet.addModule('./AudioCaptureProcessor.js');
+        const blob = new Blob([AUDIO_CAPTURE_PROCESSOR_CODE], {
+            type: 'text/javascript',
+        });
+        const blobUrl = URL.createObjectURL(blob);
+        await this.audioContext.audioWorklet.addModule(blobUrl);
         this.sourceNode = this.audioContext.createMediaStreamSource(this.audioStream);
         this.processorNode = new AudioWorkletNode(this.audioContext, 'audio-capture-processor');
         this.processorNode.port.onmessage = (event) => {
@@ -86,7 +91,7 @@ class GeminiManager extends xb.Script {
         this.sourceNode.connect(this.processorNode);
         this.processorNode.connect(this.audioContext.destination);
     }
-    async startLiveAI(params) {
+    async startLiveAI(params, model) {
         return new Promise((resolve, reject) => {
             this.ai.setLiveCallbacks({
                 onopen: () => {
@@ -103,7 +108,7 @@ class GeminiManager extends xb.Script {
                     this.isAIRunning = false;
                 },
             });
-            this.ai.startLiveSession(params).catch(reject);
+            this.ai.startLiveSession(params, model).catch(reject);
         });
     }
     startScreenshotCapture(intervalMs = 1000) {
@@ -239,7 +244,11 @@ class GeminiManager extends xb.Script {
                         functionResponses: {
                             id: functionCall.id,
                             name: functionCall.name,
-                            response: { output: result },
+                            response: {
+                                output: result.data,
+                                error: result.error,
+                                ...result.metadata,
+                            },
                         },
                     });
                 })
