@@ -29,7 +29,7 @@ export declare class Gemini extends BaseAIModel {
     init(): Promise<void>;
     isAvailable(): boolean;
     isLiveAvailable(): false | typeof GoogleGenAITypes.Modality | undefined;
-    startLiveSession(params?: GeminiStartLiveSessionParams): Promise<GoogleGenAITypes.Session>;
+    startLiveSession(params?: GeminiStartLiveSessionParams, model?: string): Promise<GoogleGenAITypes.Session>;
     stopLiveSession(): Promise<void>;
     setLiveCallbacks(callbacks: GoogleGenAITypes.LiveCallbacks): void;
     sendToolResponse(response: GoogleGenAITypes.LiveSendToolResponseParameters): void;

@@ -60,7 +60,7 @@ export declare class AI extends Script {
     query(input: {
         prompt: string;
     }, tools?: never[]): Promise<GeminiResponse | string | null>;
-    startLiveSession(config?: GeminiStartLiveSessionParams): Promise<GoogleGenAITypes.Session>;
+    startLiveSession(config?: GeminiStartLiveSessionParams, model?: string): Promise<GoogleGenAITypes.Session>;
     stopLiveSession(): Promise<void>;
     setLiveCallbacks(callbacks: GoogleGenAITypes.LiveCallbacks): Promise<void>;
     sendToolResponse(response: GoogleGenAITypes.LiveSendToolResponseParameters): void;

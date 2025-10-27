@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.2.0
- * @commitid f2d4e47
- * @builddate 2025-10-27T05:02:30.676Z
+ * @commitid 0cb2fd3
+ * @builddate 2025-10-27T21:18:27.584Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -1200,7 +1200,7 @@ class Gemini extends BaseAIModel {
     isLiveAvailable() {
         return this.isAvailable() && EndSensitivity && StartSensitivity && Modality;
     }
-    async startLiveSession(params = {}) {
+    async startLiveSession(params = {}, model = 'gemini-2.5-flash-native-audio-preview-09-2025') {
         if (!this.isLiveAvailable()) {
             throw new Error('Live API not available. Make sure @google/genai module is loaded.');
         }
@@ -1261,7 +1261,7 @@ class Gemini extends BaseAIModel {
         };
         try {
             const connectParams = {
-                model: 'gemini-2.5-flash-preview-native-audio-dialog',
+                model: model,
                 callbacks: callbacks,
                 config: defaultConfig,
             };
@@ -1618,7 +1618,7 @@ class AI extends Script {
         }
         return await this.model.query(input, tools);
     }
-    async startLiveSession(config = {}) {
+    async startLiveSession(config = {}, model) {
         if (!this.model) {
             throw new Error('AI model is not initialized.');
         }
@@ -1627,7 +1627,7 @@ class AI extends Script {
         }
         this.lock = true;
         try {
-            const session = await this.model.startLiveSession(config);
+            const session = await this.model.startLiveSession(config, model);
             return session;
         }
         catch (error) {
