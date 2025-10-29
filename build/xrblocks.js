@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.2.0
- * @commitid f1e5ab4
- * @builddate 2025-10-27T21:20:39.527Z
+ * @commitid 93fabb0
+ * @builddate 2025-10-29T23:37:38.352Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -6939,10 +6939,10 @@ class Lighting {
                 dirLight.shadow.camera.near = 0.3;
                 dirLight.shadow.camera.far = 50.0;
                 const cameraFrustrumRadius = 4.0;
-                dirLight.shadow.camera.left = -4;
+                dirLight.shadow.camera.left = -cameraFrustrumRadius;
                 dirLight.shadow.camera.right = cameraFrustrumRadius;
                 dirLight.shadow.camera.top = cameraFrustrumRadius;
-                dirLight.shadow.camera.bottom = -4;
+                dirLight.shadow.camera.bottom = -cameraFrustrumRadius;
                 dirLight.shadow.blurSamples = 25;
                 dirLight.shadow.radius = 5.0;
                 dirLight.shadow.bias = 0.0;
@@ -10007,7 +10007,7 @@ class Simulator extends Script {
         rightCamera.layers.disableAll();
         rightCamera.layers.enable(0);
         rightCamera.layers.enable(2);
-        leftCamera.position.set(-0.063 / 2, 0, 0);
+        leftCamera.position.set(-AVERAGE_IPD_METERS / 2, 0, 0);
         rightCamera.position.set(AVERAGE_IPD_METERS / 2, 0, 0);
         leftCamera.updateWorldMatrix(true, false);
         rightCamera.updateWorldMatrix(true, false);
@@ -15051,7 +15051,7 @@ class WalkTowardsPanelAction extends SimulatorUserAction {
         cameraToTargetVector.copy(targetWorldPosition).sub(camera.position);
         closeToTargetPosition
             .copy(targetWorldPosition)
-            .addScaledVector(cameraToTargetVector, -0.1);
+            .addScaledVector(cameraToTargetVector, -NEAR_TARGET_THRESHOLD);
         const cameraToCloseToTarget = closeToTargetPosition.sub(camera.position);
         const movementDistance = clamp(cameraToCloseToTarget.length(), 0, MOVEMENT_SPEED_METERS_PER_SECOND * deltaTime);
         camera.position.addScaledVector(cameraToCloseToTarget, movementDistance / cameraToCloseToTarget.length());
