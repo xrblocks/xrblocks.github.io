@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.2.0
- * @commitid 93fabb0
- * @builddate 2025-10-29T23:37:38.352Z
+ * @commitid 043ea67
+ * @builddate 2025-10-30T16:17:20.510Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -396,7 +396,7 @@ class SkyboxAgent extends Agent {
             parts: [{ text: this.contextBuilder.instruction }],
         };
         await this.ai.startLiveSession({
-            tools: functionDeclarations,
+            tools: [{ functionDeclarations }],
             systemInstruction: systemInstruction,
         });
         this.sessionState.isActive = true;
@@ -1218,18 +1218,8 @@ class Gemini extends BaseAIModel {
             },
             outputAudioTranscription: {},
             inputAudioTranscription: {},
+            ...params,
         };
-        if (params.tools && params.tools.length > 0) {
-            defaultConfig.tools = [{ functionDeclarations: params.tools }];
-        }
-        if (params.systemInstruction) {
-            if (typeof params.systemInstruction === 'string') {
-                defaultConfig.systemInstruction = createUserContent(params.systemInstruction);
-            }
-            else {
-                defaultConfig.systemInstruction = params.systemInstruction;
-            }
-        }
         const callbacks = {
             onopen: () => {
                 this.isLiveMode = true;

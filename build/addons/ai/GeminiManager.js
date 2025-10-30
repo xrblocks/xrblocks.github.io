@@ -30,9 +30,9 @@ class GeminiManager extends xb.Script {
         }
         liveParams = liveParams || {};
         liveParams.tools = liveParams.tools || [];
-        for (const tool of this.tools) {
-            liveParams.tools.push(tool.toJSON());
-        }
+        liveParams.tools.push({
+            functionDeclarations: this.tools.map((tool) => tool.toJSON()),
+        });
         try {
             await this.setupAudioCapture();
             await this.startLiveAI(liveParams, model);
