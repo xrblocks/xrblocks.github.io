@@ -16,7 +16,7 @@ export declare const core: Core;
  * scene.add(myObject);
  * ```
  */
-export declare const scene: THREE.Scene;
+export declare const scene: THREE.Scene<THREE.Object3DEventMap>;
 /**
  * A direct alias to the `User` instance, which represents the user in the XR
  * scene and manages inputs like controllers and hands.
@@ -43,7 +43,7 @@ export declare const ai: import("./xrblocks").AI;
  * @param object - The object(s) to add.
  * @see {@link three#Object3D.add}
  */
-export declare function add(...object: THREE.Object3D[]): THREE.Scene;
+export declare function add(...object: THREE.Object3D[]): THREE.Scene<THREE.Object3DEventMap>;
 /**
  * A shortcut for `core.init()`. Initializes the XR Blocks system and starts
  * the render loop. This is the main entry point for any application.

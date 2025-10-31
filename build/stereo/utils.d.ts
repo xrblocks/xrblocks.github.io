@@ -20,4 +20,4 @@ export declare function showOnlyInRightEye<T extends THREE.Object3D>(obj: T): T;
  * @returns A promise that resolves to an array containing the left and right
  *     eye textures.
  */
-export declare function loadStereoImageAsTextures(url: string): Promise<THREE.Texture[]>;
+export declare function loadStereoImageAsTextures(url: string): Promise<THREE.Texture<unknown>[]>;

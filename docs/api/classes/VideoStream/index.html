@@ -19,7 +19,7 @@
 <link rel="icon" href="/docs/img/web-app-manifest-512x512.png" sizes="512x512" type="image/png">
 <link rel="manifest" href="/docs/img/site.webmanifest">
 <meta name="algolia-site-verification" content="C7A25C1609F793C8"><link rel="stylesheet" href="/docs/assets/css/styles.727fbdee.css">
-<script src="/docs/assets/js/runtime~main.94171b52.js" defer="defer"></script>
+<script src="/docs/assets/js/runtime~main.410b2022.js" defer="defer"></script>
 <script src="/docs/assets/js/main.b9086829.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -134,7 +134,7 @@ the underlying <video> element, streaming state, and snapshot logic.</video></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="getsnapshot">getSnapshot()<a href="#getsnapshot" class="hash-link" aria-label="Direct link to getSnapshot()" title="Direct link to getSnapshot()" translate="no">​</a></h3>
 <blockquote>
-<p><strong>getSnapshot</strong>(<code>options</code>): <code>null</code> | <code>string</code> | <a href="https://threejs.org/docs/#api/en/textures/Texture" target="_blank" rel="noopener noreferrer"><code>Texture</code></a> | <a href="https://developer.mozilla.org/docs/Web/API/ImageData" target="_blank" rel="noopener noreferrer"><code>ImageData</code></a></p>
+<p><strong>getSnapshot</strong>(<code>options</code>): <code>null</code> | <code>string</code> | <a href="https://threejs.org/docs/#api/en/textures/Texture" target="_blank" rel="noopener noreferrer"><code>Texture</code></a>&lt;<code>unknown</code>&gt; | <a href="https://developer.mozilla.org/docs/Web/API/ImageData" target="_blank" rel="noopener noreferrer"><code>ImageData</code></a></p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/video/VideoStream.ts#L140" target="_blank" rel="noopener noreferrer">src/video/VideoStream.ts:140</a></p>
 <p>Captures the current video frame.</p>
@@ -143,7 +143,7 @@ the underlying <video> element, streaming state, and snapshot logic.</video></p>
 <p><a href="/docs/api/type-aliases/VideoStreamGetSnapshotOptions/"><code>VideoStreamGetSnapshotOptions</code></a> = <code>{}</code></p>
 <p>The options for the snapshot.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-2">Returns<a href="#returns-2" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
-<p><code>null</code> | <code>string</code> | <a href="https://threejs.org/docs/#api/en/textures/Texture" target="_blank" rel="noopener noreferrer"><code>Texture</code></a> | <a href="https://developer.mozilla.org/docs/Web/API/ImageData" target="_blank" rel="noopener noreferrer"><code>ImageData</code></a></p>
+<p><code>null</code> | <code>string</code> | <a href="https://threejs.org/docs/#api/en/textures/Texture" target="_blank" rel="noopener noreferrer"><code>Texture</code></a>&lt;<code>unknown</code>&gt; | <a href="https://developer.mozilla.org/docs/Web/API/ImageData" target="_blank" rel="noopener noreferrer"><code>ImageData</code></a></p>
 <p>The captured data.</p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="handlevideostreamloadedmetadata">handleVideoStreamLoadedMetadata()<a href="#handlevideostreamloadedmetadata" class="hash-link" aria-label="Direct link to handleVideoStreamLoadedMetadata()" title="Direct link to handleVideoStreamLoadedMetadata()" translate="no">​</a></h3>

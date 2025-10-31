@@ -50,7 +50,7 @@ export declare class Core {
     /** The main camera for rendering. */
     camera: THREE.PerspectiveCamera;
     /** The root scene graph for all objects. */
-    scene: THREE.Scene;
+    scene: THREE.Scene<THREE.Object3DEventMap>;
     /** Represents the user in the XR scene. */
     user: User;
     /** Manages all UI elements. */
