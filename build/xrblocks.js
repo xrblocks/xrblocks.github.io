@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.2.0
- * @commitid fafb24c
- * @builddate 2025-10-31T20:00:50.662Z
+ * @commitid 7a43ac6
+ * @builddate 2025-10-31T20:19:55.445Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -3960,10 +3960,6 @@ class ScreenshotSynthesizer {
         if (this.pendingScreenshotRequests.length == 0) {
             return;
         }
-        const renderTarget = renderer.getRenderTarget();
-        if (renderTarget == null) {
-            throw new Error('Expecting render target');
-        }
         const haveVirtualOnlyRequests = this.pendingScreenshotRequests.every((request) => !request.overlayOnCamera);
         if (haveVirtualOnlyRequests) {
             this.createVirtualImageDataURL(renderer, renderSceneFn).then((virtualImageDataUrl) => {
@@ -4043,10 +4039,17 @@ class ScreenshotSynthesizer {
         }
         const mainRenderTarget = renderer.getRenderTarget();
         const isRenderingStereo = renderer.xr.isPresenting && renderer.xr.getCamera().cameras.length == 2;
+        const mainRenderTargetSize = new THREE.Vector2();
+        if (mainRenderTarget) {
+            mainRenderTargetSize.set(mainRenderTarget.width, mainRenderTarget.height);
+        }
+        else {
+            renderer.getSize(mainRenderTargetSize);
+        }
         const mainRenderTargetSingleViewWidth = isRenderingStereo
-            ? mainRenderTarget.width / 2
-            : mainRenderTarget.width;
-        const scaledHeight = Math.round(mainRenderTarget.height *
+            ? mainRenderTargetSize.x / 2
+            : mainRenderTargetSize.y;
+        const scaledHeight = Math.round(mainRenderTargetSize.y *
             (this.renderTargetWidth / mainRenderTargetSingleViewWidth));
         if (!this.virtualRealRenderTarget ||
             this.virtualRealRenderTarget.height != scaledHeight) {
