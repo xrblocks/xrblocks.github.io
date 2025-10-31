@@ -9,6 +9,7 @@ class GeminiManager extends xb.Script {
         this.audioContext = null;
         this.sourceNode = null;
         this.processorNode = null;
+        this.queuedSourceNodes = new Set();
         // AI state
         this.isAIRunning = false;
         // Audio playback setup
@@ -199,12 +200,24 @@ class GeminiManager extends xb.Script {
             source.buffer = audioBuffer;
             source.connect(this.audioContext.destination);
             source.onended = () => {
+                source.disconnect();
+                this.queuedSourceNodes.delete(source);
                 this.scheduleAudioBuffers();
             };
             const startTime = Math.max(this.nextAudioStartTime, this.audioContext.currentTime);
             source.start(startTime);
+            this.queuedSourceNodes.add(source);
             this.nextAudioStartTime = startTime + audioBuffer.duration;
         }
+    }
+    stopPlayingAudio() {
+        this.audioQueue = [];
+        this.nextAudioStartTime = 0;
+        for (const source of this.queuedSourceNodes) {
+            source.stop();
+            source.disconnect();
+        }
+        this.queuedSourceNodes.clear();
     }
     cleanup() {
         if (this.screenshotInterval) {
@@ -267,6 +280,10 @@ class GeminiManager extends xb.Script {
                 if (text) {
                     this.dispatchEvent({ type: 'outputTranscription', message: text });
                 }
+            }
+            if (message.serverContent.interrupted) {
+                this.stopPlayingAudio();
+                this.dispatchEvent({ type: 'interrupted' });
             }
             if (message.serverContent.turnComplete) {
                 this.dispatchEvent({ type: 'turnComplete' });

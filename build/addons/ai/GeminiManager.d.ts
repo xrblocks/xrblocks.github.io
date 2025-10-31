@@ -9,6 +9,7 @@ export interface GeminiManagerEventMap extends THREE.Object3DEventMap {
         message: string;
     };
     turnComplete: object;
+    interrupted: object;
 }
 export declare class GeminiManager extends xb.Script<GeminiManagerEventMap> {
     xrDeviceCamera?: xb.XRDeviceCamera;
@@ -17,6 +18,7 @@ export declare class GeminiManager extends xb.Script<GeminiManagerEventMap> {
     audioContext: AudioContext | null;
     sourceNode: MediaStreamAudioSourceNode | null;
     processorNode: AudioWorkletNode | null;
+    queuedSourceNodes: Set<AudioScheduledSourceNode>;
     isAIRunning: boolean;
     audioQueue: AudioBuffer[];
     nextAudioStartTime: number;
@@ -40,6 +42,7 @@ export declare class GeminiManager extends xb.Script<GeminiManagerEventMap> {
     initializeAudioContext(): Promise<void>;
     playAudioChunk(audioData: string): Promise<void>;
     scheduleAudioBuffers(): void;
+    stopPlayingAudio(): void;
     cleanup(): void;
     handleAIMessage(message: GoogleGenAITypes.LiveServerMessage): void;
     arrayBufferToBase64(buffer: ArrayBuffer): string;
