@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { Script } from '../../core/Script';
 import { Depth } from '../../depth/Depth';
 import { Draggable, DragMode, HasDraggingMode } from '../../ux/DragManager';
+import { Registry } from '../../core/components/Registry';
 export interface GLTFData {
     model: string;
     path: string;
@@ -38,6 +39,7 @@ export declare class ModelViewer extends Script implements Draggable {
         depth: typeof Depth;
         scene: typeof THREE.Scene;
         renderer: typeof THREE.WebGLRenderer;
+        registry: typeof Registry;
     };
     draggable: boolean;
     rotatable: boolean;
@@ -65,16 +67,18 @@ export declare class ModelViewer extends Script implements Draggable {
     private platform?;
     private controlBar?;
     private rotationRaycastMesh?;
+    private registry?;
     constructor({ castShadow, receiveShadow, raycastToChildren, }: {
         castShadow?: boolean | undefined;
         receiveShadow?: boolean | undefined;
         raycastToChildren?: boolean | undefined;
     });
-    init({ camera, depth, scene, renderer, }: {
+    init({ camera, depth, scene, renderer, registry, }: {
         camera: THREE.Camera;
         depth: Depth;
         scene: THREE.Scene;
         renderer: THREE.WebGLRenderer;
+        registry: Registry;
     }): Promise<void>;
     loadSplatModel({ data, onSceneLoaded, platformMargin, setupRaycastCylinder, setupRaycastBox, setupPlatform, }: {
         data: SplatData;

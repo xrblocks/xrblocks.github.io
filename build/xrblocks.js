@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.2.0
- * @commitid b480b74
- * @builddate 2025-10-30T22:46:20.286Z
+ * @commitid a876652
+ * @builddate 2025-10-31T10:32:59.567Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -7189,9 +7189,8 @@ class SimulatorOptions {
         this.stereo = {
             enabled: false,
         };
-        // Whether to render the main scene to a render texture or directly to the
-        // canvas.
-        // This is a temporary option until we figure out why splats look faded.
+        // Whether to render the main scene to a render texture before rendering the simulator scene
+        // or directly to the canvas after rendering the simulator scene.
         this.renderToRenderTexture = true;
         // Blending mode when rendering the virtual scene.
         this.blendingMode = 'normal';
@@ -9900,6 +9899,13 @@ class SimulatorUser extends Script {
     }
 }
 
+// Object which just holds the spark renderer so other classes don't need to import spark.
+class SparkRendererHolder {
+    constructor(renderer) {
+        this.renderer = renderer;
+    }
+}
+
 class Simulator extends Script {
     static { this.dependencies = {
         simulatorOptions: SimulatorOptions,
@@ -9974,6 +9980,7 @@ class Simulator extends Script {
         this.renderer = renderer;
         this.mainCamera = camera;
         this.mainScene = scene;
+        this.registry = registry;
         this.initialized = true;
     }
     simulatorUpdate() {
@@ -10037,6 +10044,11 @@ class Simulator extends Script {
             this.virtualSceneRenderTarget = new THREE.WebGLRenderTarget(this.renderer.domElement.width, this.renderer.domElement.height, { stencilBuffer: stencilEnabled });
             this.virtualSceneFullScreenQuad.material.map = this.virtualSceneRenderTarget.texture;
         }
+        this.sparkRenderer =
+            this.sparkRenderer || this.registry.get(SparkRendererHolder)?.renderer;
+        if (this.sparkRenderer) {
+            this.sparkRenderer.defaultView.encodeLinear = true;
+        }
         this.renderer.setRenderTarget(this.virtualSceneRenderTarget);
         this.renderer.clear();
         this.renderMainScene(this.getRenderCamera());
@@ -10058,6 +10070,9 @@ class Simulator extends Script {
         }
     }
     renderSimulatorSceneToCanvas(camera) {
+        if (this.sparkRenderer) {
+            this.sparkRenderer.defaultView.encodeLinear = false;
+        }
         this.renderer.setRenderTarget(null);
         this.renderer.render(this.simulatorScene, camera);
         this.renderer.clearDepth();
@@ -16111,6 +16126,7 @@ class ModelViewer extends Script {
         depth: Depth,
         scene: THREE.Scene,
         renderer: THREE.WebGLRenderer,
+        registry: Registry,
     }; }
     constructor({ castShadow = true, receiveShadow = true, raycastToChildren = false, }) {
         super();
@@ -16131,11 +16147,12 @@ class ModelViewer extends Script {
         this.receiveShadow = receiveShadow;
         this.raycastToChildren = raycastToChildren;
     }
-    async init({ camera, depth, scene, renderer, }) {
+    async init({ camera, depth, scene, renderer, registry, }) {
         this.camera = camera;
         this.depth = depth;
         this.scene = scene;
         this.renderer = renderer;
+        this.registry = registry;
         for (const shader of this.occludableShaders) {
             this.depth.occludableShaders.add(shader);
         }
@@ -16501,7 +16518,12 @@ class ModelViewer extends Script {
             sparkRendererExists ||= child instanceof SparkRenderer;
         });
         if (!sparkRendererExists) {
-            this.scene.add(new SparkRenderer({ renderer: this.renderer, maxStdDev: Math.sqrt(5) }));
+            const sparkRenderer = new SparkRenderer({
+                renderer: this.renderer,
+                maxStdDev: Math.sqrt(5),
+            });
+            this.registry.register(new SparkRendererHolder(sparkRenderer));
+            this.scene.add(sparkRenderer);
         }
     }
 }
