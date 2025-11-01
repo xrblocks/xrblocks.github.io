@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.2.0
- * @commitid 10b8a63
- * @builddate 2025-10-31T23:17:12.217Z
+ * @commitid 7d2d598
+ * @builddate 2025-11-01T19:08:12.022Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -16173,6 +16173,7 @@ class ModelViewer extends Script {
         this.splatMesh = splatMesh;
         splatMesh.raycast = () => { };
         this.splatAnchor = new SplatAnchor();
+        this.splatAnchor.add(splatMesh);
         if (data.scale) {
             this.splatAnchor.scale.copy(data.scale);
         }
@@ -16183,10 +16184,7 @@ class ModelViewer extends Script {
             this.splatAnchor.position.copy(data.position);
         }
         this.add(this.splatAnchor);
-        if (this.scene) {
-            await this.createSparkRendererIfNeeded();
-            this.scene.add(this.splatMesh);
-        }
+        await this.createSparkRendererIfNeeded();
         await this.setupBoundingBox(data.verticallyAlignObject !== false, data.horizontallyAlignObject !== false);
         if (setupRaycastCylinder) {
             this.setupRaycastCylinder();
@@ -16371,11 +16369,6 @@ class ModelViewer extends Script {
         this.add(this.platform);
     }
     update() {
-        if (this.splatMesh && this.splatAnchor) {
-            // Synchronize the splat mesh's transform with its anchor
-            this.updateMatrixWorld(true);
-            this.splatAnchor.matrixWorld.decompose(this.splatMesh.position, this.splatMesh.quaternion, this.splatMesh.scale);
-        }
         const delta = this.clock.getDelta();
         if (this.animationMixer) {
             this.animationMixer.update(delta);
