@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.2.0
- * @commitid 7d2d598
- * @builddate 2025-11-01T19:08:12.022Z
+ * @commitid e019665
+ * @builddate 2025-11-02T00:06:19.618Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -1891,7 +1891,7 @@ const xrDeviceCameraUserContinuousOptions = deepFreeze(new DeviceCameraOptions({
 }));
 
 function onDesktopUserAgent() {
-    return !/Mobi|Linux|Android|iPhone/i.test(navigator.userAgent);
+    return !/Mobi|Android|iPhone/i.test(navigator.userAgent);
 }
 
 const DepthMeshTexturedShader = {
