@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.2.0
- * @commitid e019665
- * @builddate 2025-11-02T00:06:19.618Z
+ * @commitid f8d1a43
+ * @builddate 2025-11-03T18:10:13.198Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
