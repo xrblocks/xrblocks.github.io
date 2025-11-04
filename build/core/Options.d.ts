@@ -105,9 +105,7 @@ export declare class Options {
         invalidText: string;
         startSimulatorText: string;
         enableSimulator: boolean;
-        showSimulatorButtonOnMobile: boolean;
-        autostartSimulatorOnDesktop: boolean;
-        autostartSimulator: boolean;
+        alwaysAutostartSimulator: boolean;
     };
     /**
      * Constructs the Options object by merging default values with provided

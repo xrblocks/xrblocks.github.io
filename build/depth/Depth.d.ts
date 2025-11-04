@@ -57,7 +57,7 @@ export declare class Depth {
     updateCPUDepthData(depthData: XRCPUDepthInformation, view_id?: number): void;
     updateGPUDepthData(depthData: XRWebGLDepthInformation, view_id?: number): void;
     getTexture(view_id: number): THREE.DataTexture | THREE.ExternalTexture | undefined;
-    update(frame: XRFrame): void;
+    update(frame?: XRFrame): void;
     updateLocalDepth(frame: XRFrame): void;
     renderOcclusionPass(): void;
     debugLog(): void;
