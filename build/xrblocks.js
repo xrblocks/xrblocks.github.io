@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.3.1
- * @commitid 8945d46
- * @builddate 2025-11-04T06:31:34.558Z
+ * @commitid 1881210
+ * @builddate 2025-11-05T03:36:22.525Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -4394,7 +4394,7 @@ class WebXRSessionManager extends THREE.EventDispatcher {
 const XRBUTTON_WRAPPER_ID = 'XRButtonWrapper';
 const XRBUTTON_CLASS = 'XRButton';
 class XRButton {
-    constructor(sessionManager, startText = 'ENTER XR', endText = 'END XR', invalidText = 'XR NOT SUPPORTED', startSimulatorText = 'START SIMULATOR', enableSimulator = false, startSimulator = () => { }) {
+    constructor(sessionManager, startText = 'ENTER XR', endText = 'END XR', invalidText = 'XR NOT SUPPORTED', startSimulatorText = 'START SIMULATOR', showEnterSimulatorButton = false, startSimulator = () => { }) {
         this.sessionManager = sessionManager;
         this.startText = startText;
         this.endText = endText;
@@ -4406,7 +4406,7 @@ class XRButton {
         this.xrButtonElement = document.createElement('button');
         this.domElement.id = XRBUTTON_WRAPPER_ID;
         this.createXRButtonElement();
-        if (enableSimulator) {
+        if (showEnterSimulatorButton) {
             this.createSimulatorButton();
         }
         this.sessionManager.addEventListener(WebXRSessionEventType.UNSUPPORTED, this.showXRNotSupported.bind(this));
@@ -7414,6 +7414,7 @@ class Options {
          * Whether to use post-processing effects.
          */
         this.usePostprocessing = false;
+        this.enableSimulator = true;
         /**
          * Configuration for the XR session button.
          */
@@ -7423,7 +7424,7 @@ class Options {
             endText: 'Exit XR',
             invalidText: 'XR Not Supported',
             startSimulatorText: 'Enter Simulator',
-            enableSimulator: true,
+            showEnterSimulatorButton: false,
             // Whether to autostart the simulator even if WebXR is available.
             alwaysAutostartSimulator: false,
         };
@@ -14589,11 +14590,11 @@ class Core {
         // Sets up xrButton.
         let shouldAutostartSimulator = this.options.xrButton.alwaysAutostartSimulator;
         if (!shouldAutostartSimulator && options.xrButton.enabled) {
-            this.xrButton = new XRButton(this.webXRSessionManager, options.xrButton?.startText, options.xrButton?.endText, options.xrButton?.invalidText, options.xrButton?.startSimulatorText, options.xrButton?.enableSimulator, this.startSimulator.bind(this));
+            this.xrButton = new XRButton(this.webXRSessionManager, options.xrButton?.startText, options.xrButton?.endText, options.xrButton?.invalidText, options.xrButton?.startSimulatorText, options.xrButton?.showEnterSimulatorButton, this.startSimulator.bind(this));
             document.body.appendChild(this.xrButton.domElement);
         }
         this.webXRSessionManager.addEventListener(WebXRSessionEventType.UNSUPPORTED, () => {
-            if (this.options.xrButton.enableSimulator) {
+            if (this.options.enableSimulator) {
                 this.xrButton?.domElement.remove();
                 shouldAutostartSimulator = true;
             }

@@ -9,7 +9,7 @@ export declare class XRButton {
     domElement: HTMLDivElement;
     simulatorButtonElement: HTMLButtonElement;
     xrButtonElement: HTMLButtonElement;
-    constructor(sessionManager: WebXRSessionManager, startText?: string, endText?: string, invalidText?: string, startSimulatorText?: string, enableSimulator?: boolean, startSimulator?: () => void);
+    constructor(sessionManager: WebXRSessionManager, startText?: string, endText?: string, invalidText?: string, startSimulatorText?: string, showEnterSimulatorButton?: boolean, startSimulator?: () => void);
     private createSimulatorButton;
     private createXRButtonElement;
     private onSessionReady;

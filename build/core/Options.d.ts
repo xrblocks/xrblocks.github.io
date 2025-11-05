@@ -95,6 +95,7 @@ export declare class Options {
      * Whether to use post-processing effects.
      */
     usePostprocessing: boolean;
+    enableSimulator: boolean;
     /**
      * Configuration for the XR session button.
      */
@@ -104,7 +105,7 @@ export declare class Options {
         endText: string;
         invalidText: string;
         startSimulatorText: string;
-        enableSimulator: boolean;
+        showEnterSimulatorButton: boolean;
         alwaysAutostartSimulator: boolean;
     };
     /**
