@@ -69,7 +69,7 @@ export class Math3D extends xb.Script {
           new xb.TextButton({
             text: initialFunction,
             fontColor: '#ffffff',
-            fontSize: 0.06,
+            fontSize: 0.2,
             backgroundColor: '#00000000', // Make background transparent
           })
         );
@@ -193,7 +193,7 @@ export class Math3D extends xb.Script {
     );
     // Rotate 90 degrees around X so that the Z axis points upwards.
     graphGeometry.rotateX(-Math.PI / 2);
-    graphGeometry.scale(0.025, 0.025, 0.025);
+    graphGeometry.scale(0.015, 0.015, 0.015);
     const textureLoader = new THREE.TextureLoader();
     const texture = textureLoader.load('images/gradient.png');
     const material = new THREE.MeshBasicMaterial({
