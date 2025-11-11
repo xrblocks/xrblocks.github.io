@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.3.1
- * @commitid 79891c5
- * @builddate 2025-11-06T23:10:51.504Z
+ * @commitid e0f8c08
+ * @builddate 2025-11-11T22:59:18.278Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -3208,9 +3208,9 @@ class Depth {
     update(frame) {
         if (!this.options.enabled)
             return;
-        if (!frame)
-            return;
-        this.updateLocalDepth(frame);
+        if (frame) {
+            this.updateLocalDepth(frame);
+        }
         if (this.options.occlusion.enabled) {
             this.renderOcclusionPass();
         }
