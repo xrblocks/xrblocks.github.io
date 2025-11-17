@@ -34,6 +34,7 @@ export declare class WebXRSessionManager extends THREE.EventDispatcher<WebXRSess
     private sessionOptions?;
     private onSessionEndedBound;
     private xrModeSupported?;
+    private waitingForXRSession;
     constructor(renderer: THREE.WebGLRenderer, sessionInit: XRSessionInit, mode: XRSessionMode);
     /**
      * Checks for WebXR support and availability of the requested session mode.
