@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.3.1
- * @commitid fbc5e5a
- * @builddate 2025-11-17T21:45:44.514Z
+ * @commitid c0e7265
+ * @builddate 2025-11-18T18:10:28.082Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -4354,15 +4354,13 @@ class WebXRSessionManager extends THREE.EventDispatcher {
         else if (this.waitingForXRSession) {
             throw new Error('Waiting for session to start');
         }
-        try {
-            this.waitingForXRSession = true;
-            navigator
-                .xr.requestSession(this.mode, this.sessionOptions)
-                .then(this.onSessionStartedInternal.bind(this));
-        }
-        finally {
+        this.waitingForXRSession = true;
+        navigator
+            .xr.requestSession(this.mode, this.sessionOptions)
+            .finally(() => {
             this.waitingForXRSession = false;
-        }
+        })
+            .then(this.onSessionStartedInternal.bind(this));
     }
     /**
      * Ends the WebXR session.
