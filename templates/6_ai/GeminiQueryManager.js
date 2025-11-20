@@ -65,7 +65,7 @@ export class GeminiQueryManager extends xb.Script {
         type: 'multiPart',
         parts: parts,
       });
-      this.responseDisplay.addText(`🤖 AI: ${response}\n\n`);
+      this.responseDisplay.addText(`🤖 AI: ${response.text}\n\n`);
     } catch (error) {
       this.responseDisplay.addText(`❌ Error: ${error.message}\n\n`);
     }
