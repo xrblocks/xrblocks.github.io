@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.3.1
- * @commitid c0e7265
- * @builddate 2025-11-18T18:10:28.082Z
+ * @commitid 978eded
+ * @builddate 2025-11-20T17:35:46.394Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -10268,6 +10268,7 @@ class AudioListener extends Script {
     }
 }
 
+const DEFAULT_SCHEDULE_AHEAD_TIME = 1.0;
 class AudioPlayer extends Script {
     constructor(options = {}) {
         super();
@@ -10276,6 +10277,7 @@ class AudioPlayer extends Script {
         this.nextStartTime = 0;
         this.volume = 1.0;
         this.category = 'speech';
+        this.scheduleAheadTime = DEFAULT_SCHEDULE_AHEAD_TIME;
         this.options = { sampleRate: 24000, channelCount: 1, ...options };
         if (options.category) {
             this.category = options.category;
@@ -10340,9 +10342,9 @@ class AudioPlayer extends Script {
         this.scheduleAudioBuffers();
     }
     scheduleAudioBuffers() {
-        const SCHEDULE_AHEAD_TIME = 0.2;
         while (this.audioQueue.length > 0 &&
-            this.nextStartTime <= this.audioContext.currentTime + SCHEDULE_AHEAD_TIME) {
+            this.nextStartTime <=
+                this.audioContext.currentTime + this.scheduleAheadTime) {
             const audioBuffer = this.audioQueue.shift();
             const currentTime = this.audioContext.currentTime;
             const startTime = Math.max(this.nextStartTime, currentTime);

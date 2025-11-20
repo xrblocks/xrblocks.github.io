@@ -26,6 +26,7 @@ export declare class GeminiManager extends xb.Script<GeminiManagerEventMap> {
     currentInputText: string;
     currentOutputText: string;
     tools: xb.Tool[];
+    scheduleAheadTime: number;
     constructor();
     init(): void;
     startGeminiLive({ liveParams, model, }?: {

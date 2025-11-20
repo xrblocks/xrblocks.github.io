@@ -14,6 +14,7 @@ export declare class AudioPlayer extends Script {
     private categoryVolumes?;
     private volume;
     private category;
+    scheduleAheadTime: number;
     constructor(options?: AudioPlayerOptions);
     /**
      * Sets the CategoryVolumes instance for this player to respect

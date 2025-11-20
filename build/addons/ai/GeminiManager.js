@@ -1,6 +1,7 @@
 import * as xb from 'xrblocks';
 import { AUDIO_CAPTURE_PROCESSOR_CODE } from './AudioCaptureProcessorCode.js';
 
+const DEFAULT_SCHEDULE_AHEAD_TIME = 1.0;
 class GeminiManager extends xb.Script {
     constructor() {
         super();
@@ -19,6 +20,7 @@ class GeminiManager extends xb.Script {
         this.currentInputText = '';
         this.currentOutputText = '';
         this.tools = [];
+        this.scheduleAheadTime = DEFAULT_SCHEDULE_AHEAD_TIME;
     }
     init() {
         this.xrDeviceCamera = xb.core.deviceCamera;
@@ -191,10 +193,9 @@ class GeminiManager extends xb.Script {
         }
     }
     scheduleAudioBuffers() {
-        const SCHEDULE_AHEAD_TIME = 0.2;
         while (this.audioQueue.length > 0 &&
             this.nextAudioStartTime <=
-                this.audioContext.currentTime + SCHEDULE_AHEAD_TIME) {
+                this.audioContext.currentTime + this.scheduleAheadTime) {
             const audioBuffer = this.audioQueue.shift();
             const source = this.audioContext.createBufferSource();
             source.buffer = audioBuffer;
