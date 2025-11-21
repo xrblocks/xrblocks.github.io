@@ -28,6 +28,7 @@ export declare class DepthOptions {
         enabled: boolean;
     };
     useFloat32: boolean;
+    depthTypeRequest: XRDepthType[];
     constructor(options?: DeepReadonly<DeepPartial<DepthOptions>>);
 }
 export declare const xrDepthMeshOptions: {
@@ -58,6 +59,7 @@ export declare const xrDepthMeshOptions: {
         readonly enabled: boolean;
     };
     readonly useFloat32: boolean;
+    readonly depthTypeRequest: readonly XRDepthType[];
 };
 export declare const xrDepthMeshVisualizationOptions: {
     readonly debugging: boolean;
@@ -87,6 +89,7 @@ export declare const xrDepthMeshVisualizationOptions: {
         readonly enabled: boolean;
     };
     readonly useFloat32: boolean;
+    readonly depthTypeRequest: readonly XRDepthType[];
 };
 export declare const xrDepthMeshPhysicsOptions: {
     readonly debugging: boolean;
@@ -116,4 +119,5 @@ export declare const xrDepthMeshPhysicsOptions: {
         readonly enabled: boolean;
     };
     readonly useFloat32: boolean;
+    readonly depthTypeRequest: readonly XRDepthType[];
 };
