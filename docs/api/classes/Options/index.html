@@ -19,7 +19,7 @@
 <link rel="icon" href="/docs/img/web-app-manifest-512x512.png" sizes="512x512" type="image/png">
 <link rel="manifest" href="/docs/img/site.webmanifest">
 <meta name="algolia-site-verification" content="C7A25C1609F793C8"><link rel="stylesheet" href="/docs/assets/css/styles.727fbdee.css">
-<script src="/docs/assets/js/runtime~main.1f6878a8.js" defer="defer"></script>
+<script src="/docs/assets/js/runtime~main.bf696d85.js" defer="defer"></script>
 <script src="/docs/assets/js/main.0f610b8f.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -202,8 +202,6 @@ selection. *</p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="enablecamera">enableCamera?<a href="#enablecamera" class="hash-link" aria-label="Direct link to enableCamera?" title="Direct link to enableCamera?" translate="no">​</a></h6>
 <p>(<code>facingMode</code>) =&gt; <code>Options</code></p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="enabledepth">enableDepth?<a href="#enabledepth" class="hash-link" aria-label="Direct link to enableDepth?" title="Direct link to enableDepth?" translate="no">​</a></h6>
-<p>() =&gt; <code>Options</code></p>
-<h6 class="anchor anchorWithStickyNavbar_LWe7" id="enablegeminilive">enableGeminiLive?<a href="#enablegeminilive" class="hash-link" aria-label="Direct link to enableGeminiLive?" title="Direct link to enableGeminiLive?" translate="no">​</a></h6>
 <p>() =&gt; <code>Options</code></p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="enablegestures">enableGestures?<a href="#enablegestures" class="hash-link" aria-label="Direct link to enableGestures?" title="Direct link to enableGestures?" translate="no">​</a></h6>
 <p>() =&gt; <code>Options</code></p>
@@ -392,14 +390,18 @@ simulation step manually.</p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="reticlesenabled">reticles.enabled?<a href="#reticlesenabled" class="hash-link" aria-label="Direct link to reticles.enabled?" title="Direct link to reticles.enabled?" translate="no">​</a></h6>
 <p><code>boolean</code> = <code>true</code></p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="simulator">simulator?<a href="#simulator" class="hash-link" aria-label="Direct link to simulator?" title="Direct link to simulator?" translate="no">​</a></h6>
-<p>{ <code>blendingMode?</code>: <code>&quot;normal&quot;</code> | <code>&quot;screen&quot;</code>; <code>defaultHand?</code>: <a href="/docs/api/enumerations/Handedness/"><code>Handedness</code></a>; <code>defaultMode?</code>: <a href="/docs/api/enumerations/SimulatorMode/"><code>SimulatorMode</code></a>; <code>geminilive?</code>: <code>boolean</code>; <code>handPosePanel?</code>: { <code>element?</code>: <code>string</code>; <code>enabled?</code>: <code>boolean</code>; }; <code>initialCameraPosition?</code>: { <code>x?</code>: <code>number</code>; <code>y?</code>: <code>number</code>; <code>z?</code>: <code>number</code>; }; <code>initialScenePosition?</code>: { <code>x?</code>: <code>number</code>; <code>y?</code>: <code>number</code>; <code>z?</code>: <code>number</code>; }; <code>instructions?</code>: { <code>customInstructions?</code>: readonly (<code>undefined</code> | { <code>description?</code>: ... | ... | ...; <code>header?</code>: ... | ... | ...; <code>videoSrc?</code>: ... | ...; })[]; <code>element?</code>: <code>string</code>; <code>enabled?</code>: <code>boolean</code>; }; <code>modeIndicator?</code>: { <code>element?</code>: <code>string</code>; <code>enabled?</code>: <code>boolean</code>; }; <code>renderToRenderTexture?</code>: <code>boolean</code>; <code>scenePath?</code>: <code>string</code>; <code>stereo?</code>: { <code>enabled?</code>: <code>boolean</code>; }; } = <code>...</code></p>
+<p>{ <code>blendingMode?</code>: <code>&quot;normal&quot;</code> | <code>&quot;screen&quot;</code>; <code>defaultHand?</code>: <a href="/docs/api/enumerations/Handedness/"><code>Handedness</code></a>; <code>defaultMode?</code>: <a href="/docs/api/enumerations/SimulatorMode/"><code>SimulatorMode</code></a>; <code>geminiLivePanel?</code>: { <code>element?</code>: <code>string</code>; <code>enabled?</code>: <code>boolean</code>; }; <code>handPosePanel?</code>: { <code>element?</code>: <code>string</code>; <code>enabled?</code>: <code>boolean</code>; }; <code>initialCameraPosition?</code>: { <code>x?</code>: <code>number</code>; <code>y?</code>: <code>number</code>; <code>z?</code>: <code>number</code>; }; <code>initialScenePosition?</code>: { <code>x?</code>: <code>number</code>; <code>y?</code>: <code>number</code>; <code>z?</code>: <code>number</code>; }; <code>instructions?</code>: { <code>customInstructions?</code>: readonly (<code>undefined</code> | { <code>description?</code>: ... | ... | ...; <code>header?</code>: ... | ... | ...; <code>videoSrc?</code>: ... | ...; })[]; <code>element?</code>: <code>string</code>; <code>enabled?</code>: <code>boolean</code>; }; <code>modeIndicator?</code>: { <code>element?</code>: <code>string</code>; <code>enabled?</code>: <code>boolean</code>; }; <code>renderToRenderTexture?</code>: <code>boolean</code>; <code>scenePath?</code>: <code>string</code>; <code>stereo?</code>: { <code>enabled?</code>: <code>boolean</code>; }; } = <code>...</code></p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="simulatorblendingmode">simulator.blendingMode?<a href="#simulatorblendingmode" class="hash-link" aria-label="Direct link to simulator.blendingMode?" title="Direct link to simulator.blendingMode?" translate="no">​</a></h6>
 <p><code>&quot;normal&quot;</code> | <code>&quot;screen&quot;</code> = <code>&#x27;normal&#x27;</code></p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="simulatordefaulthand">simulator.defaultHand?<a href="#simulatordefaulthand" class="hash-link" aria-label="Direct link to simulator.defaultHand?" title="Direct link to simulator.defaultHand?" translate="no">​</a></h6>
 <p><a href="/docs/api/enumerations/Handedness/"><code>Handedness</code></a> = <code>Handedness.LEFT</code></p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="simulatordefaultmode">simulator.defaultMode?<a href="#simulatordefaultmode" class="hash-link" aria-label="Direct link to simulator.defaultMode?" title="Direct link to simulator.defaultMode?" translate="no">​</a></h6>
 <p><a href="/docs/api/enumerations/SimulatorMode/"><code>SimulatorMode</code></a> = <code>SimulatorMode.USER</code></p>
-<h6 class="anchor anchorWithStickyNavbar_LWe7" id="simulatorgeminilive">simulator.geminilive?<a href="#simulatorgeminilive" class="hash-link" aria-label="Direct link to simulator.geminilive?" title="Direct link to simulator.geminilive?" translate="no">​</a></h6>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="simulatorgeminilivepanel">simulator.geminiLivePanel?<a href="#simulatorgeminilivepanel" class="hash-link" aria-label="Direct link to simulator.geminiLivePanel?" title="Direct link to simulator.geminiLivePanel?" translate="no">​</a></h6>
+<p>{ <code>element?</code>: <code>string</code>; <code>enabled?</code>: <code>boolean</code>; } = <code>...</code></p>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="simulatorgeminilivepanelelement">simulator.geminiLivePanel.element?<a href="#simulatorgeminilivepanelelement" class="hash-link" aria-label="Direct link to simulator.geminiLivePanel.element?" title="Direct link to simulator.geminiLivePanel.element?" translate="no">​</a></h6>
+<p><code>string</code> = <code>&#x27;xrblocks-simulator-geminilive&#x27;</code></p>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="simulatorgeminilivepanelenabled">simulator.geminiLivePanel.enabled?<a href="#simulatorgeminilivepanelenabled" class="hash-link" aria-label="Direct link to simulator.geminiLivePanel.enabled?" title="Direct link to simulator.geminiLivePanel.enabled?" translate="no">​</a></h6>
 <p><code>boolean</code> = <code>false</code></p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="simulatorhandposepanel">simulator.handPosePanel?<a href="#simulatorhandposepanel" class="hash-link" aria-label="Direct link to simulator.handPosePanel?" title="Direct link to simulator.handPosePanel?" translate="no">​</a></h6>
 <p>{ <code>element?</code>: <code>string</code>; <code>enabled?</code>: <code>boolean</code>; } = <code>...</code></p>
@@ -778,7 +780,7 @@ occlusions.</p>
 <blockquote>
 <p><strong>enableAI</strong>(): <code>Options</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Options.ts#L252" target="_blank" rel="noopener noreferrer">src/core/Options.ts:252</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Options.ts#L243" target="_blank" rel="noopener noreferrer">src/core/Options.ts:243</a></p>
 <p>Enables a standard set of AI features, including Gemini Live.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-1">Returns<a href="#returns-1" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>Options</code></p>
@@ -809,23 +811,13 @@ occlusions.</p>
 <p><code>Options</code></p>
 <p>The instance for chaining.</p>
 <hr>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="enablegeminilive">enableGeminiLive()<a href="#enablegeminilive" class="hash-link" aria-label="Direct link to enableGeminiLive()" title="Direct link to enableGeminiLive()" translate="no">​</a></h3>
-<blockquote>
-<p><strong>enableGeminiLive</strong>(): <code>Options</code></p>
-</blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Options.ts#L243" target="_blank" rel="noopener noreferrer">src/core/Options.ts:243</a></p>
-<p>Enables the Gemini Live feature.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-4">Returns<a href="#returns-4" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
-<p><code>Options</code></p>
-<p>The instance for chaining.</p>
-<hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="enablegestures">enableGestures()<a href="#enablegestures" class="hash-link" aria-label="Direct link to enableGestures()" title="Direct link to enableGestures()" translate="no">​</a></h3>
 <blockquote>
 <p><strong>enableGestures</strong>(): <code>Options</code></p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Options.ts#L224" target="_blank" rel="noopener noreferrer">src/core/Options.ts:224</a></p>
 <p>Enables the gesture recognition block and ensures hands are available.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-5">Returns<a href="#returns-5" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-4">Returns<a href="#returns-4" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>Options</code></p>
 <p>The instance for chaining.</p>
 <hr>
@@ -835,7 +827,7 @@ occlusions.</p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Options.ts#L234" target="_blank" rel="noopener noreferrer">src/core/Options.ts:234</a></p>
 <p>Enables the visualization of rays for hand tracking.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-6">Returns<a href="#returns-6" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-5">Returns<a href="#returns-5" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>Options</code></p>
 <p>The instance for chaining.</p>
 <hr>
@@ -845,7 +837,7 @@ occlusions.</p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Options.ts#L215" target="_blank" rel="noopener noreferrer">src/core/Options.ts:215</a></p>
 <p>Enables hand tracking.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-7">Returns<a href="#returns-7" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-6">Returns<a href="#returns-6" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>Options</code></p>
 <p>The instance for chaining.</p>
 <hr>
@@ -855,7 +847,7 @@ occlusions.</p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Options.ts#L189" target="_blank" rel="noopener noreferrer">src/core/Options.ts:189</a></p>
 <p>Enables object detection.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-8">Returns<a href="#returns-8" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-7">Returns<a href="#returns-7" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>Options</code></p>
 <p>The instance for chaining.</p>
 <hr>
@@ -865,7 +857,7 @@ occlusions.</p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Options.ts#L180" target="_blank" rel="noopener noreferrer">src/core/Options.ts:180</a></p>
 <p>Enables plane detection.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-9">Returns<a href="#returns-9" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-8">Returns<a href="#returns-8" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>Options</code></p>
 <p>The instance for chaining.</p>
 <hr>
@@ -875,7 +867,7 @@ occlusions.</p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Options.ts#L162" target="_blank" rel="noopener noreferrer">src/core/Options.ts:162</a></p>
 <p>Enables reticles for visualizing targets of hand rays in WebXR.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-10">Returns<a href="#returns-10" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-9">Returns<a href="#returns-9" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>Options</code></p>
 <p>The instance for chaining.</p>
 <hr>
@@ -885,7 +877,7 @@ occlusions.</p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Options.ts#L152" target="_blank" rel="noopener noreferrer">src/core/Options.ts:152</a></p>
 <p>Enables a standard set of options for a UI-focused experience.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-11">Returns<a href="#returns-11" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-10">Returns<a href="#returns-10" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>Options</code></p>
 <p>The instance for chaining.</p>
 <hr>
@@ -893,10 +885,10 @@ occlusions.</p>
 <blockquote>
 <p><strong>enableXRTransitions</strong>(): <code>Options</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Options.ts#L263" target="_blank" rel="noopener noreferrer">src/core/Options.ts:263</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Options.ts#L254" target="_blank" rel="noopener noreferrer">src/core/Options.ts:254</a></p>
 <p>Enables the XR transition component for toggling VR.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-12">Returns<a href="#returns-12" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-11">Returns<a href="#returns-11" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>Options</code></p>
-<p>The instance for chaining.</p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/api/classes/OpenAIOptions/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">OpenAIOptions</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/api/classes/PageIndicator/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">PageIndicator</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#constructors" class="table-of-contents__link toc-highlight">Constructors</a><ul><li><a href="#constructor" class="table-of-contents__link toc-highlight">Constructor</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#ai" class="table-of-contents__link toc-highlight">ai</a></li><li><a href="#antialias" class="table-of-contents__link toc-highlight">antialias</a></li><li><a href="#camera" class="table-of-contents__link toc-highlight">camera</a></li><li><a href="#canvas" class="table-of-contents__link toc-highlight">canvas?</a></li><li><a href="#controllers" class="table-of-contents__link toc-highlight">controllers</a></li><li><a href="#debugging" class="table-of-contents__link toc-highlight">debugging</a></li><li><a href="#depth" class="table-of-contents__link toc-highlight">depth</a></li><li><a href="#devicecamera" class="table-of-contents__link toc-highlight">deviceCamera</a></li><li><a href="#enablesimulator" class="table-of-contents__link toc-highlight">enableSimulator</a></li><li><a href="#gestures" class="table-of-contents__link toc-highlight">gestures</a></li><li><a href="#hands" class="table-of-contents__link toc-highlight">hands</a></li><li><a href="#lighting" class="table-of-contents__link toc-highlight">lighting</a></li><li><a href="#logarithmicdepthbuffer" class="table-of-contents__link toc-highlight">logarithmicDepthBuffer</a></li><li><a href="#permissions" class="table-of-contents__link toc-highlight">permissions</a></li><li><a href="#physics" class="table-of-contents__link toc-highlight">physics</a></li><li><a href="#referencespacetype" class="table-of-contents__link toc-highlight">referenceSpaceType</a></li><li><a href="#reticles" class="table-of-contents__link toc-highlight">reticles</a></li><li><a href="#simulator" class="table-of-contents__link toc-highlight">simulator</a></li><li><a href="#sound" class="table-of-contents__link toc-highlight">sound</a></li><li><a href="#stencil" class="table-of-contents__link toc-highlight">stencil</a></li><li><a href="#transition" class="table-of-contents__link toc-highlight">transition</a></li><li><a href="#usepostprocessing" class="table-of-contents__link toc-highlight">usePostprocessing</a></li><li><a href="#webxrrequiredfeatures" class="table-of-contents__link toc-highlight">webxrRequiredFeatures</a></li><li><a href="#world" class="table-of-contents__link toc-highlight">world</a></li><li><a href="#xrbutton" class="table-of-contents__link toc-highlight">xrButton</a></li></ul></li><li><a href="#methods" class="table-of-contents__link toc-highlight">Methods</a><ul><li><a href="#enableai" class="table-of-contents__link toc-highlight">enableAI()</a></li><li><a href="#enablecamera" class="table-of-contents__link toc-highlight">enableCamera()</a></li><li><a href="#enabledepth" class="table-of-contents__link toc-highlight">enableDepth()</a></li><li><a href="#enablegeminilive" class="table-of-contents__link toc-highlight">enableGeminiLive()</a></li><li><a href="#enablegestures" class="table-of-contents__link toc-highlight">enableGestures()</a></li><li><a href="#enablehandrays" class="table-of-contents__link toc-highlight">enableHandRays()</a></li><li><a href="#enablehands" class="table-of-contents__link toc-highlight">enableHands()</a></li><li><a href="#enableobjectdetection" class="table-of-contents__link toc-highlight">enableObjectDetection()</a></li><li><a href="#enableplanedetection" class="table-of-contents__link toc-highlight">enablePlaneDetection()</a></li><li><a href="#enablereticles" class="table-of-contents__link toc-highlight">enableReticles()</a></li><li><a href="#enableui" class="table-of-contents__link toc-highlight">enableUI()</a></li><li><a href="#enablexrtransitions" class="table-of-contents__link toc-highlight">enableXRTransitions()</a></li></ul></li></ul></div></div></div></div></main></div></div></div></div>
+<p>The instance for chaining.</p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/api/classes/OpenAIOptions/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">OpenAIOptions</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/api/classes/PageIndicator/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">PageIndicator</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#constructors" class="table-of-contents__link toc-highlight">Constructors</a><ul><li><a href="#constructor" class="table-of-contents__link toc-highlight">Constructor</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#ai" class="table-of-contents__link toc-highlight">ai</a></li><li><a href="#antialias" class="table-of-contents__link toc-highlight">antialias</a></li><li><a href="#camera" class="table-of-contents__link toc-highlight">camera</a></li><li><a href="#canvas" class="table-of-contents__link toc-highlight">canvas?</a></li><li><a href="#controllers" class="table-of-contents__link toc-highlight">controllers</a></li><li><a href="#debugging" class="table-of-contents__link toc-highlight">debugging</a></li><li><a href="#depth" class="table-of-contents__link toc-highlight">depth</a></li><li><a href="#devicecamera" class="table-of-contents__link toc-highlight">deviceCamera</a></li><li><a href="#enablesimulator" class="table-of-contents__link toc-highlight">enableSimulator</a></li><li><a href="#gestures" class="table-of-contents__link toc-highlight">gestures</a></li><li><a href="#hands" class="table-of-contents__link toc-highlight">hands</a></li><li><a href="#lighting" class="table-of-contents__link toc-highlight">lighting</a></li><li><a href="#logarithmicdepthbuffer" class="table-of-contents__link toc-highlight">logarithmicDepthBuffer</a></li><li><a href="#permissions" class="table-of-contents__link toc-highlight">permissions</a></li><li><a href="#physics" class="table-of-contents__link toc-highlight">physics</a></li><li><a href="#referencespacetype" class="table-of-contents__link toc-highlight">referenceSpaceType</a></li><li><a href="#reticles" class="table-of-contents__link toc-highlight">reticles</a></li><li><a href="#simulator" class="table-of-contents__link toc-highlight">simulator</a></li><li><a href="#sound" class="table-of-contents__link toc-highlight">sound</a></li><li><a href="#stencil" class="table-of-contents__link toc-highlight">stencil</a></li><li><a href="#transition" class="table-of-contents__link toc-highlight">transition</a></li><li><a href="#usepostprocessing" class="table-of-contents__link toc-highlight">usePostprocessing</a></li><li><a href="#webxrrequiredfeatures" class="table-of-contents__link toc-highlight">webxrRequiredFeatures</a></li><li><a href="#world" class="table-of-contents__link toc-highlight">world</a></li><li><a href="#xrbutton" class="table-of-contents__link toc-highlight">xrButton</a></li></ul></li><li><a href="#methods" class="table-of-contents__link toc-highlight">Methods</a><ul><li><a href="#enableai" class="table-of-contents__link toc-highlight">enableAI()</a></li><li><a href="#enablecamera" class="table-of-contents__link toc-highlight">enableCamera()</a></li><li><a href="#enabledepth" class="table-of-contents__link toc-highlight">enableDepth()</a></li><li><a href="#enablegestures" class="table-of-contents__link toc-highlight">enableGestures()</a></li><li><a href="#enablehandrays" class="table-of-contents__link toc-highlight">enableHandRays()</a></li><li><a href="#enablehands" class="table-of-contents__link toc-highlight">enableHands()</a></li><li><a href="#enableobjectdetection" class="table-of-contents__link toc-highlight">enableObjectDetection()</a></li><li><a href="#enableplanedetection" class="table-of-contents__link toc-highlight">enablePlaneDetection()</a></li><li><a href="#enablereticles" class="table-of-contents__link toc-highlight">enableReticles()</a></li><li><a href="#enableui" class="table-of-contents__link toc-highlight">enableUI()</a></li><li><a href="#enablexrtransitions" class="table-of-contents__link toc-highlight">enableXRTransitions()</a></li></ul></li></ul></div></div></div></div></main></div></div></div></div>
 </body>
 </html>

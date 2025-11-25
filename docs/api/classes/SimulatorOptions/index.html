@@ -19,7 +19,7 @@
 <link rel="icon" href="/docs/img/web-app-manifest-512x512.png" sizes="512x512" type="image/png">
 <link rel="manifest" href="/docs/img/site.webmanifest">
 <meta name="algolia-site-verification" content="C7A25C1609F793C8"><link rel="stylesheet" href="/docs/assets/css/styles.727fbdee.css">
-<script src="/docs/assets/js/runtime~main.1f6878a8.js" defer="defer"></script>
+<script src="/docs/assets/js/runtime~main.bf696d85.js" defer="defer"></script>
 <script src="/docs/assets/js/main.0f610b8f.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -33,7 +33,7 @@
 <blockquote>
 <p><strong>new SimulatorOptions</strong>(<code>options?</code>): <code>SimulatorOptions</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L56" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorOptions.ts:56</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L59" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorOptions.ts:59</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters">Parameters<a href="#parameters" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="options">options?<a href="#options" class="hash-link" aria-label="Direct link to options?" title="Direct link to options?" translate="no">​</a></h5>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="blendingmode">blendingMode?<a href="#blendingmode" class="hash-link" aria-label="Direct link to blendingMode?" title="Direct link to blendingMode?" translate="no">​</a></h6>
@@ -42,7 +42,11 @@
 <p><a href="/docs/api/enumerations/Handedness/"><code>Handedness</code></a> = <code>Handedness.LEFT</code></p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="defaultmode">defaultMode?<a href="#defaultmode" class="hash-link" aria-label="Direct link to defaultMode?" title="Direct link to defaultMode?" translate="no">​</a></h6>
 <p><a href="/docs/api/enumerations/SimulatorMode/"><code>SimulatorMode</code></a> = <code>SimulatorMode.USER</code></p>
-<h6 class="anchor anchorWithStickyNavbar_LWe7" id="geminilive">geminilive?<a href="#geminilive" class="hash-link" aria-label="Direct link to geminilive?" title="Direct link to geminilive?" translate="no">​</a></h6>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="geminilivepanel">geminiLivePanel?<a href="#geminilivepanel" class="hash-link" aria-label="Direct link to geminiLivePanel?" title="Direct link to geminiLivePanel?" translate="no">​</a></h6>
+<p>{ <code>element?</code>: <code>string</code>; <code>enabled?</code>: <code>boolean</code>; } = <code>...</code></p>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="geminilivepanelelement">geminiLivePanel.element?<a href="#geminilivepanelelement" class="hash-link" aria-label="Direct link to geminiLivePanel.element?" title="Direct link to geminiLivePanel.element?" translate="no">​</a></h6>
+<p><code>string</code> = <code>&#x27;xrblocks-simulator-geminilive&#x27;</code></p>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="geminilivepanelenabled">geminiLivePanel.enabled?<a href="#geminilivepanelenabled" class="hash-link" aria-label="Direct link to geminiLivePanel.enabled?" title="Direct link to geminiLivePanel.enabled?" translate="no">​</a></h6>
 <p><code>boolean</code> = <code>false</code></p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="handposepanel">handPosePanel?<a href="#handposepanel" class="hash-link" aria-label="Direct link to handPosePanel?" title="Direct link to handPosePanel?" translate="no">​</a></h6>
 <p>{ <code>element?</code>: <code>string</code>; <code>enabled?</code>: <code>boolean</code>; } = <code>...</code></p>
@@ -95,7 +99,7 @@
 <blockquote>
 <p><strong>blendingMode</strong>: <code>&quot;normal&quot;</code> | <code>&quot;screen&quot;</code> = <code>&#x27;normal&#x27;</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L54" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorOptions.ts:54</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L57" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorOptions.ts:57</a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="defaulthand">defaultHand<a href="#defaulthand" class="hash-link" aria-label="Direct link to defaultHand" title="Direct link to defaultHand" translate="no">​</a></h3>
 <blockquote>
@@ -109,22 +113,30 @@
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L31" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorOptions.ts:31</a></p>
 <hr>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="geminilive">geminilive<a href="#geminilive" class="hash-link" aria-label="Direct link to geminilive" title="Direct link to geminilive" translate="no">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="geminilivepanel">geminiLivePanel<a href="#geminilivepanel" class="hash-link" aria-label="Direct link to geminiLivePanel" title="Direct link to geminiLivePanel" translate="no">​</a></h3>
 <blockquote>
-<p><strong>geminilive</strong>: <code>boolean</code> = <code>false</code></p>
+<p><strong>geminiLivePanel</strong>: <code>object</code></p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L46" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorOptions.ts:46</a></p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="element">element<a href="#element" class="hash-link" aria-label="Direct link to element" title="Direct link to element" translate="no">​</a></h4>
+<blockquote>
+<p><strong>element</strong>: <code>string</code> = <code>&#x27;xrblocks-simulator-geminilive&#x27;</code></p>
+</blockquote>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="enabled">enabled<a href="#enabled" class="hash-link" aria-label="Direct link to enabled" title="Direct link to enabled" translate="no">​</a></h4>
+<blockquote>
+<p><strong>enabled</strong>: <code>boolean</code> = <code>false</code></p>
+</blockquote>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="handposepanel">handPosePanel<a href="#handposepanel" class="hash-link" aria-label="Direct link to handPosePanel" title="Direct link to handPosePanel" translate="no">​</a></h3>
 <blockquote>
 <p><strong>handPosePanel</strong>: <code>object</code></p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L42" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorOptions.ts:42</a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="element">element<a href="#element" class="hash-link" aria-label="Direct link to element" title="Direct link to element" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="element-1">element<a href="#element-1" class="hash-link" aria-label="Direct link to element" title="Direct link to element" translate="no">​</a></h4>
 <blockquote>
 <p><strong>element</strong>: <code>string</code> = <code>&#x27;xrblocks-simulator-hand-pose-panel&#x27;</code></p>
 </blockquote>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="enabled">enabled<a href="#enabled" class="hash-link" aria-label="Direct link to enabled" title="Direct link to enabled" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="enabled-1">enabled<a href="#enabled-1" class="hash-link" aria-label="Direct link to enabled" title="Direct link to enabled" translate="no">​</a></h4>
 <blockquote>
 <p><strong>enabled</strong>: <code>boolean</code> = <code>true</code></p>
 </blockquote>
@@ -174,11 +186,11 @@
 <blockquote>
 <p><strong>customInstructions</strong>: <a href="/docs/api/interfaces/SimulatorCustomInstruction/"><code>SimulatorCustomInstruction</code></a>[]</p>
 </blockquote>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="element-1">element<a href="#element-1" class="hash-link" aria-label="Direct link to element" title="Direct link to element" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="element-2">element<a href="#element-2" class="hash-link" aria-label="Direct link to element" title="Direct link to element" translate="no">​</a></h4>
 <blockquote>
 <p><strong>element</strong>: <code>string</code> = <code>&#x27;xrblocks-simulator-instructions&#x27;</code></p>
 </blockquote>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="enabled-1">enabled<a href="#enabled-1" class="hash-link" aria-label="Direct link to enabled" title="Direct link to enabled" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="enabled-2">enabled<a href="#enabled-2" class="hash-link" aria-label="Direct link to enabled" title="Direct link to enabled" translate="no">​</a></h4>
 <blockquote>
 <p><strong>enabled</strong>: <code>boolean</code> = <code>true</code></p>
 </blockquote>
@@ -188,11 +200,11 @@
 <p><strong>modeIndicator</strong>: <code>object</code></p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L33" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorOptions.ts:33</a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="element-2">element<a href="#element-2" class="hash-link" aria-label="Direct link to element" title="Direct link to element" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="element-3">element<a href="#element-3" class="hash-link" aria-label="Direct link to element" title="Direct link to element" translate="no">​</a></h4>
 <blockquote>
 <p><strong>element</strong>: <code>string</code> = <code>&#x27;xrblocks-simulator-mode-indicator&#x27;</code></p>
 </blockquote>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="enabled-2">enabled<a href="#enabled-2" class="hash-link" aria-label="Direct link to enabled" title="Direct link to enabled" translate="no">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="enabled-3">enabled<a href="#enabled-3" class="hash-link" aria-label="Direct link to enabled" title="Direct link to enabled" translate="no">​</a></h4>
 <blockquote>
 <p><strong>enabled</strong>: <code>boolean</code> = <code>true</code></p>
 </blockquote>
@@ -201,7 +213,7 @@
 <blockquote>
 <p><strong>renderToRenderTexture</strong>: <code>boolean</code> = <code>true</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L52" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorOptions.ts:52</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L55" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorOptions.ts:55</a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="scenepath">scenePath<a href="#scenepath" class="hash-link" aria-label="Direct link to scenePath" title="Direct link to scenePath" translate="no">​</a></h3>
 <blockquote>
@@ -213,10 +225,10 @@
 <blockquote>
 <p><strong>stereo</strong>: <code>object</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L47" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorOptions.ts:47</a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="enabled-3">enabled<a href="#enabled-3" class="hash-link" aria-label="Direct link to enabled" title="Direct link to enabled" translate="no">​</a></h4>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L50" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorOptions.ts:50</a></p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="enabled-4">enabled<a href="#enabled-4" class="hash-link" aria-label="Direct link to enabled" title="Direct link to enabled" translate="no">​</a></h4>
 <blockquote>
 <p><strong>enabled</strong>: <code>boolean</code> = <code>false</code></p>
-</blockquote></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/api/classes/SimulatorMediaDeviceInfo/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">SimulatorMediaDeviceInfo</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/api/classes/SimulatorScene/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">SimulatorScene</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#constructors" class="table-of-contents__link toc-highlight">Constructors</a><ul><li><a href="#constructor" class="table-of-contents__link toc-highlight">Constructor</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#blendingmode" class="table-of-contents__link toc-highlight">blendingMode</a></li><li><a href="#defaulthand" class="table-of-contents__link toc-highlight">defaultHand</a></li><li><a href="#defaultmode" class="table-of-contents__link toc-highlight">defaultMode</a></li><li><a href="#geminilive" class="table-of-contents__link toc-highlight">geminilive</a></li><li><a href="#handposepanel" class="table-of-contents__link toc-highlight">handPosePanel</a></li><li><a href="#initialcameraposition" class="table-of-contents__link toc-highlight">initialCameraPosition</a></li><li><a href="#initialsceneposition" class="table-of-contents__link toc-highlight">initialScenePosition</a></li><li><a href="#instructions" class="table-of-contents__link toc-highlight">instructions</a></li><li><a href="#modeindicator" class="table-of-contents__link toc-highlight">modeIndicator</a></li><li><a href="#rendertorendertexture" class="table-of-contents__link toc-highlight">renderToRenderTexture</a></li><li><a href="#scenepath" class="table-of-contents__link toc-highlight">scenePath</a></li><li><a href="#stereo" class="table-of-contents__link toc-highlight">stereo</a></li></ul></li></ul></div></div></div></div></main></div></div></div></div>
+</blockquote></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/api/classes/SimulatorMediaDeviceInfo/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">SimulatorMediaDeviceInfo</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/api/classes/SimulatorScene/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">SimulatorScene</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#constructors" class="table-of-contents__link toc-highlight">Constructors</a><ul><li><a href="#constructor" class="table-of-contents__link toc-highlight">Constructor</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#blendingmode" class="table-of-contents__link toc-highlight">blendingMode</a></li><li><a href="#defaulthand" class="table-of-contents__link toc-highlight">defaultHand</a></li><li><a href="#defaultmode" class="table-of-contents__link toc-highlight">defaultMode</a></li><li><a href="#geminilivepanel" class="table-of-contents__link toc-highlight">geminiLivePanel</a></li><li><a href="#handposepanel" class="table-of-contents__link toc-highlight">handPosePanel</a></li><li><a href="#initialcameraposition" class="table-of-contents__link toc-highlight">initialCameraPosition</a></li><li><a href="#initialsceneposition" class="table-of-contents__link toc-highlight">initialScenePosition</a></li><li><a href="#instructions" class="table-of-contents__link toc-highlight">instructions</a></li><li><a href="#modeindicator" class="table-of-contents__link toc-highlight">modeIndicator</a></li><li><a href="#rendertorendertexture" class="table-of-contents__link toc-highlight">renderToRenderTexture</a></li><li><a href="#scenepath" class="table-of-contents__link toc-highlight">scenePath</a></li><li><a href="#stereo" class="table-of-contents__link toc-highlight">stereo</a></li></ul></li></ul></div></div></div></div></main></div></div></div></div>
 </body>
 </html>

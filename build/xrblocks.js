@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.4.0
- * @commitid ed66f39
- * @builddate 2025-11-25T20:50:52.907Z
+ * @commitid e83aae5
+ * @builddate 2025-11-25T20:54:12.139Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -7205,7 +7205,10 @@ class SimulatorOptions {
             enabled: true,
             element: 'xrblocks-simulator-hand-pose-panel',
         };
-        this.geminilive = false;
+        this.geminiLivePanel = {
+            enabled: false,
+            element: 'xrblocks-simulator-geminilive',
+        };
         this.stereo = {
             enabled: false,
         };
@@ -7541,14 +7544,6 @@ class Options {
      */
     enableHandRays() {
         this.controllers.visualizeRays = true;
-        return this;
-    }
-    /**
-     * Enables the Gemini Live feature.
-     * @returns The instance for chaining.
-     */
-    enableGeminiLive() {
-        this.simulator.geminilive = true;
         return this;
     }
     /**
@@ -9812,8 +9807,8 @@ class SimulatorInterface {
         }
     }
     showGeminiLivePanel(simulatorOptions) {
-        if (simulatorOptions.geminilive) {
-            const element = document.createElement('xrblocks-simulator-geminilive');
+        if (simulatorOptions.geminiLivePanel.enabled) {
+            const element = document.createElement(simulatorOptions.geminiLivePanel.element);
             document.body.appendChild(element);
             this.elements.push(element);
         }

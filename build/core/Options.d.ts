@@ -170,11 +170,6 @@ export declare class Options {
      */
     enableHandRays(): this;
     /**
-     * Enables the Gemini Live feature.
-     * @returns The instance for chaining.
-     */
-    enableGeminiLive(): this;
-    /**
      * Enables a standard set of AI features, including Gemini Live.
      * @returns The instance for chaining.
      */

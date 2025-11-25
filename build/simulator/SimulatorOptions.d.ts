@@ -43,7 +43,10 @@ export declare class SimulatorOptions {
         enabled: boolean;
         element: string;
     };
-    geminilive: boolean;
+    geminiLivePanel: {
+        enabled: boolean;
+        element: string;
+    };
     stereo: {
         enabled: boolean;
     };
