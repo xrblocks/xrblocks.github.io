@@ -109,6 +109,14 @@ export declare class Options {
         alwaysAutostartSimulator: boolean;
     };
     /**
+     * Which permissions to request before entering the XR session.
+     */
+    permissions: {
+        geolocation: boolean;
+        camera: boolean;
+        microphone: boolean;
+    };
+    /**
      * Constructs the Options object by merging default values with provided
      * custom options.
      * @param options - A custom options object to override the defaults.

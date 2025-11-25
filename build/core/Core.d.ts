@@ -21,6 +21,7 @@ import { XREffects } from './components/XREffects';
 import { XRTransition } from './components/XRTransition';
 import { Options } from './Options';
 import { User } from './User';
+import { PermissionsManager } from './components/PermissionsManager';
 /**
  * Core is the central engine of the XR Blocks framework, acting as a
  * singleton manager for all XR subsystems. Its primary goal is to abstract
@@ -84,6 +85,7 @@ export declare class Core {
     scriptsManager: ScriptsManager;
     renderSceneOverride?: (renderer: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera) => void;
     webXRSessionManager?: WebXRSessionManager;
+    permissionsManager: PermissionsManager;
     /**
      * Core is a singleton manager that manages all XR "blocks".
      * It initializes core components and abstractions like the scene, camera,
