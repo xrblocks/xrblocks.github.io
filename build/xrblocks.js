@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.4.0
- * @commitid 46ea09c
- * @builddate 2025-12-02T02:25:16.497Z
+ * @commitid a351b94
+ * @builddate 2025-12-02T02:32:44.143Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -2409,6 +2409,7 @@ class DepthOptions {
         this.occlusion = { enabled: false };
         this.useFloat32 = true;
         this.depthTypeRequest = ['raw'];
+        this.matchDepthView = true;
         deepMerge(this, options);
     }
 }
@@ -14798,6 +14799,7 @@ class Core {
                     this.options.depth.useFloat32 ? 'float32' : 'luminance-alpha',
                 ],
                 depthTypeRequest: options.depth.depthTypeRequest,
+                matchDepthView: options.depth.matchDepthView,
             };
             this.depth.init(this.camera, options.depth, this.renderer, this.registry, this.scene);
         }
