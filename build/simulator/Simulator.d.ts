@@ -42,6 +42,8 @@ export declare class Simulator extends Script {
     effects?: XREffects;
     virtualSceneRenderTarget?: THREE.WebGLRenderTarget;
     virtualSceneFullScreenQuad?: FullScreenQuad;
+    backgroundVideoQuad?: FullScreenQuad;
+    videoElement?: HTMLVideoElement;
     camera?: SimulatorCamera;
     options: SimulatorOptions;
     renderer: THREE.WebGLRenderer;

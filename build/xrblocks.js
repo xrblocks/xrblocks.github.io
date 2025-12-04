@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.4.0
- * @commitid 9f170cc
- * @builddate 2025-12-03T00:34:51.951Z
+ * @commitid 2a14b00
+ * @builddate 2025-12-04T00:43:31.467Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -7190,6 +7190,7 @@ class SimulatorOptions {
     constructor(options) {
         this.initialCameraPosition = { x: 0, y: 1.5, z: 0 };
         this.scenePath = XR_BLOCKS_ASSETS_PATH + 'simulator/scenes/XREmulatorsceneV5_livingRoom.glb';
+        this.videoPath = undefined;
         this.initialScenePosition = { x: -1.6, y: 0.3, z: 0 };
         this.defaultMode = SimulatorMode.USER;
         this.defaultHand = Handedness.LEFT;
@@ -9853,6 +9854,9 @@ class SimulatorScene extends THREE.Scene {
     }
     async init(simulatorOptions) {
         this.addLights();
+        if (simulatorOptions.videoPath) {
+            return;
+        }
         if (simulatorOptions.scenePath) {
             await this.loadGLTF(simulatorOptions.scenePath, new THREE.Vector3(simulatorOptions.initialScenePosition.x, simulatorOptions.initialScenePosition.y, simulatorOptions.initialScenePosition.z));
         }
@@ -9990,6 +9994,21 @@ class Simulator extends Script {
         if (this.options.stereo.enabled) {
             this.setupStereoCameras(camera);
         }
+        if (this.options.videoPath) {
+            this.videoElement = document.createElement('video');
+            this.videoElement.src = this.options.videoPath;
+            this.videoElement.loop = true;
+            this.videoElement.muted = true;
+            this.videoElement.play().catch((e) => {
+                console.error(`Simulator: Failed to play video at ${this.options.videoPath}`, e);
+            });
+            this.videoElement.addEventListener('error', () => {
+                console.error(`Simulator: Error loading video at ${this.options.videoPath}`, this.videoElement?.error);
+            });
+            const videoTexture = new THREE.VideoTexture(this.videoElement);
+            videoTexture.colorSpace = THREE.SRGBColorSpace;
+            this.backgroundVideoQuad = new FullScreenQuad(new THREE.MeshBasicMaterial({ map: videoTexture }));
+        }
         this.virtualSceneRenderTarget = new THREE.WebGLRenderTarget(renderer.domElement.width, renderer.domElement.height, { stencilBuffer: options.stencil });
         const virtualSceneMaterial = new THREE.MeshBasicMaterial({
             map: this.virtualSceneRenderTarget.texture,
@@ -10099,6 +10118,9 @@ class Simulator extends Script {
             this.sparkRenderer.defaultView.encodeLinear = false;
         }
         this.renderer.setRenderTarget(null);
+        if (this.backgroundVideoQuad) {
+            this.backgroundVideoQuad.render(this.renderer);
+        }
         this.renderer.render(this.simulatorScene, camera);
         this.renderer.clearDepth();
     }
