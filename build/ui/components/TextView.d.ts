@@ -140,7 +140,7 @@ export declare class TextView extends View<TextViewEventMap> {
      */
     protected _initializeText(): void;
     protected syncTextObj(): void;
-    protected setTextColor(color: number): void;
+    protected setTextColor(color: number | string): void;
     /**
      * Disposes of resources used by the TextView, such as event listeners.
      */

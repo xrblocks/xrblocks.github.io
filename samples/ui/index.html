@@ -435,13 +435,24 @@
 
           const canvasTexture = new THREE.CanvasTexture(canvas);
           canvasTexture.needsUpdate = true;
-
-          const chartArea = chartGrid.addRow({weight: 0.85});
+          const chartCol = chartGrid.addCol();
+          chartCol.addRow({weight: 0.15});
+          const chartArea = chartCol.addRow({weight: 0.85});
           const chartMesh = new THREE.Mesh(
             new THREE.PlaneGeometry(1, 1),
             new THREE.MeshBasicMaterial({map: canvasTexture})
           );
           chartArea.add(chartMesh);
+
+          const tmpRow = chartGrid.addCol();
+          tmpRow.addRow({weight: 0.3});
+          const okButton = tmpRow.addRow().addTextButton({
+            text: 'OK',
+            backgroundColor: '#22aa33',
+            opacity: 0.5,
+            fontColor: '#66ccff',
+            fontSizeDp: 50,
+          });
         }
 
         init() {

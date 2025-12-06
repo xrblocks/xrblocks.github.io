@@ -9,6 +9,8 @@ export type TextButtonOptions = TextViewOptions & {
     maxWidth?: number;
     radius?: number;
     boxSize?: number;
+    hoverColor?: string | number;
+    selectedFontColor?: string | number;
 };
 export declare class TextButton extends TextView {
     /** Default description of this view in Three.js DevTools. */
