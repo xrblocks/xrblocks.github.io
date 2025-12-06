@@ -19,8 +19,8 @@
 <link rel="icon" href="/docs/img/web-app-manifest-512x512.png" sizes="512x512" type="image/png">
 <link rel="manifest" href="/docs/img/site.webmanifest">
 <meta name="algolia-site-verification" content="C7A25C1609F793C8"><link rel="stylesheet" href="/docs/assets/css/styles.727fbdee.css">
-<script src="/docs/assets/js/runtime~main.920238d3.js" defer="defer"></script>
-<script src="/docs/assets/js/main.0f610b8f.js" defer="defer"></script>
+<script src="/docs/assets/js/runtime~main.6a86ca18.js" defer="defer"></script>
+<script src="/docs/assets/js/main.7bb259c2.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg style="display: none;"><defs>
@@ -189,13 +189,40 @@ If not defined, a new element will be added to document body.</p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="depthusefloat32">depth.useFloat32?<a href="#depthusefloat32" class="hash-link" aria-label="Direct link to depth.useFloat32?" title="Direct link to depth.useFloat32?" translate="no">​</a></h6>
 <p><code>boolean</code> = <code>true</code></p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="devicecamera">deviceCamera?<a href="#devicecamera" class="hash-link" aria-label="Direct link to deviceCamera?" title="Direct link to deviceCamera?" translate="no">​</a></h6>
-<p>{ <code>enabled?</code>: <code>boolean</code>; <code>videoConstraints?</code>: { }; <code>willCaptureFrequently?</code>: <code>boolean</code>; } = <code>...</code></p>
+<p>{ <code>enabled?</code>: <code>boolean</code>; <code>rgbToDepthParams?</code>: { <code>k1?</code>: <code>number</code>; <code>k2?</code>: <code>number</code>; <code>k3?</code>: <code>number</code>; <code>p1?</code>: <code>number</code>; <code>p2?</code>: <code>number</code>; <code>scale?</code>: <code>number</code>; <code>scaleX?</code>: <code>number</code>; <code>scaleY?</code>: <code>number</code>; <code>translateU?</code>: <code>number</code>; <code>translateV?</code>: <code>number</code>; <code>xc?</code>: <code>number</code>; <code>yc?</code>: <code>number</code>; }; <code>videoConstraints?</code>: { }; <code>willCaptureFrequently?</code>: <code>boolean</code>; } = <code>...</code></p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="devicecameraenabled">deviceCamera.enabled?<a href="#devicecameraenabled" class="hash-link" aria-label="Direct link to deviceCamera.enabled?" title="Direct link to deviceCamera.enabled?" translate="no">​</a></h6>
 <p><code>boolean</code> = <code>false</code></p>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="devicecamerargbtodepthparams">deviceCamera.rgbToDepthParams?<a href="#devicecamerargbtodepthparams" class="hash-link" aria-label="Direct link to deviceCamera.rgbToDepthParams?" title="Direct link to deviceCamera.rgbToDepthParams?" translate="no">​</a></h6>
+<p>{ <code>k1?</code>: <code>number</code>; <code>k2?</code>: <code>number</code>; <code>k3?</code>: <code>number</code>; <code>p1?</code>: <code>number</code>; <code>p2?</code>: <code>number</code>; <code>scale?</code>: <code>number</code>; <code>scaleX?</code>: <code>number</code>; <code>scaleY?</code>: <code>number</code>; <code>translateU?</code>: <code>number</code>; <code>translateV?</code>: <code>number</code>; <code>xc?</code>: <code>number</code>; <code>yc?</code>: <code>number</code>; } = <code>...</code></p>
+<p>Parameters for RGB to depth UV mapping given different aspect ratios.</p>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="devicecamerargbtodepthparamsk1">deviceCamera.rgbToDepthParams.k1?<a href="#devicecamerargbtodepthparamsk1" class="hash-link" aria-label="Direct link to deviceCamera.rgbToDepthParams.k1?" title="Direct link to deviceCamera.rgbToDepthParams.k1?" translate="no">​</a></h6>
+<p><code>number</code></p>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="devicecamerargbtodepthparamsk2">deviceCamera.rgbToDepthParams.k2?<a href="#devicecamerargbtodepthparamsk2" class="hash-link" aria-label="Direct link to deviceCamera.rgbToDepthParams.k2?" title="Direct link to deviceCamera.rgbToDepthParams.k2?" translate="no">​</a></h6>
+<p><code>number</code></p>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="devicecamerargbtodepthparamsk3">deviceCamera.rgbToDepthParams.k3?<a href="#devicecamerargbtodepthparamsk3" class="hash-link" aria-label="Direct link to deviceCamera.rgbToDepthParams.k3?" title="Direct link to deviceCamera.rgbToDepthParams.k3?" translate="no">​</a></h6>
+<p><code>number</code></p>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="devicecamerargbtodepthparamsp1">deviceCamera.rgbToDepthParams.p1?<a href="#devicecamerargbtodepthparamsp1" class="hash-link" aria-label="Direct link to deviceCamera.rgbToDepthParams.p1?" title="Direct link to deviceCamera.rgbToDepthParams.p1?" translate="no">​</a></h6>
+<p><code>number</code></p>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="devicecamerargbtodepthparamsp2">deviceCamera.rgbToDepthParams.p2?<a href="#devicecamerargbtodepthparamsp2" class="hash-link" aria-label="Direct link to deviceCamera.rgbToDepthParams.p2?" title="Direct link to deviceCamera.rgbToDepthParams.p2?" translate="no">​</a></h6>
+<p><code>number</code></p>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="devicecamerargbtodepthparamsscale">deviceCamera.rgbToDepthParams.scale?<a href="#devicecamerargbtodepthparamsscale" class="hash-link" aria-label="Direct link to deviceCamera.rgbToDepthParams.scale?" title="Direct link to deviceCamera.rgbToDepthParams.scale?" translate="no">​</a></h6>
+<p><code>number</code></p>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="devicecamerargbtodepthparamsscalex">deviceCamera.rgbToDepthParams.scaleX?<a href="#devicecamerargbtodepthparamsscalex" class="hash-link" aria-label="Direct link to deviceCamera.rgbToDepthParams.scaleX?" title="Direct link to deviceCamera.rgbToDepthParams.scaleX?" translate="no">​</a></h6>
+<p><code>number</code></p>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="devicecamerargbtodepthparamsscaley">deviceCamera.rgbToDepthParams.scaleY?<a href="#devicecamerargbtodepthparamsscaley" class="hash-link" aria-label="Direct link to deviceCamera.rgbToDepthParams.scaleY?" title="Direct link to deviceCamera.rgbToDepthParams.scaleY?" translate="no">​</a></h6>
+<p><code>number</code></p>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="devicecamerargbtodepthparamstranslateu">deviceCamera.rgbToDepthParams.translateU?<a href="#devicecamerargbtodepthparamstranslateu" class="hash-link" aria-label="Direct link to deviceCamera.rgbToDepthParams.translateU?" title="Direct link to deviceCamera.rgbToDepthParams.translateU?" translate="no">​</a></h6>
+<p><code>number</code></p>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="devicecamerargbtodepthparamstranslatev">deviceCamera.rgbToDepthParams.translateV?<a href="#devicecamerargbtodepthparamstranslatev" class="hash-link" aria-label="Direct link to deviceCamera.rgbToDepthParams.translateV?" title="Direct link to deviceCamera.rgbToDepthParams.translateV?" translate="no">​</a></h6>
+<p><code>number</code></p>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="devicecamerargbtodepthparamsxc">deviceCamera.rgbToDepthParams.xc?<a href="#devicecamerargbtodepthparamsxc" class="hash-link" aria-label="Direct link to deviceCamera.rgbToDepthParams.xc?" title="Direct link to deviceCamera.rgbToDepthParams.xc?" translate="no">​</a></h6>
+<p><code>number</code></p>
+<h6 class="anchor anchorWithStickyNavbar_LWe7" id="devicecamerargbtodepthparamsyc">deviceCamera.rgbToDepthParams.yc?<a href="#devicecamerargbtodepthparamsyc" class="hash-link" aria-label="Direct link to deviceCamera.rgbToDepthParams.yc?" title="Direct link to deviceCamera.rgbToDepthParams.yc?" translate="no">​</a></h6>
+<p><code>number</code></p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="devicecameravideoconstraints">deviceCamera.videoConstraints?<a href="#devicecameravideoconstraints" class="hash-link" aria-label="Direct link to deviceCamera.videoConstraints?" title="Direct link to deviceCamera.videoConstraints?" translate="no">​</a></h6>
 <p>{ }</p>
 <p>Constraints for <code>getUserMedia</code>. This will guide the initial camera
-selection. *</p>
+selection.</p>
 <h6 class="anchor anchorWithStickyNavbar_LWe7" id="devicecamerawillcapturefrequently">deviceCamera.willCaptureFrequently?<a href="#devicecamerawillcapturefrequently" class="hash-link" aria-label="Direct link to deviceCamera.willCaptureFrequently?" title="Direct link to deviceCamera.willCaptureFrequently?" translate="no">​</a></h6>
 <p><code>boolean</code> = <code>false</code></p>
 <p>Hint for performance optimization on frequent captures.</p>

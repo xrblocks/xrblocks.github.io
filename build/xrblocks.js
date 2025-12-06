@@ -14,9 +14,9 @@
  * limitations under the License.
  *
  * @file xrblocks.js
- * @version v0.4.0
- * @commitid 2a14b00
- * @builddate 2025-12-04T01:20:46.659Z
+ * @version v0.5.0
+ * @commitid 6ca1ebb
+ * @builddate 2025-12-06T05:08:42.825Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -1849,6 +1849,27 @@ function deepMerge(obj1, obj2) {
     }
 }
 
+/**
+ * Default parameters for rgb to depth projection.
+ * For RGB and depth, 4:3 and 1:1, respectively.
+ */
+const DEFAULT_RGB_TO_DEPTH_PARAMS = {
+    scale: 1,
+    scaleX: 0.75,
+    scaleY: 0.63,
+    translateU: 0.2,
+    translateV: -0.02,
+    k1: -0.046,
+    k2: 0,
+    k3: 0,
+    p1: 0,
+    p2: 0,
+    xc: 0,
+    yc: 0,
+};
+/**
+ * Configuration options for the device camera.
+ */
 class DeviceCameraOptions {
     constructor(options) {
         this.enabled = false;
@@ -1856,10 +1877,14 @@ class DeviceCameraOptions {
          * Hint for performance optimization on frequent captures.
          */
         this.willCaptureFrequently = false;
+        /**
+         * Parameters for RGB to depth UV mapping given different aspect ratios.
+         */
+        this.rgbToDepthParams = { ...DEFAULT_RGB_TO_DEPTH_PARAMS };
         deepMerge(this, options);
     }
 }
-// Base configuration for all common capture settings
+// Base configuration for all common capture settings.
 const baseCaptureOptions = {
     enabled: true,
     videoConstraints: {
@@ -3317,24 +3342,6 @@ const aspectRatios = {
     RGB: 4 / 3,
 };
 /**
- * Parameters for RGB to depth UV mapping (manually calibrated for aspect
- * ratios. For RGB and depth, 4:3 and 1:1, respectively.
- */
-const rgbToDepthParams = {
-    scale: 1,
-    scaleX: 0.75,
-    scaleY: 0.63,
-    translateU: 0.2,
-    translateV: -0.02,
-    k1: -0.046,
-    k2: 0,
-    k3: 0,
-    p1: 0,
-    p2: 0,
-    xc: 0,
-    yc: 0,
-};
-/**
  * Maps a UV coordinate from a RGB space to a destination depth space,
  * applying Brown-Conrady distortion and affine transformations based on
  * aspect ratios. If the simulator camera is used, no transformation is applied.
@@ -3368,42 +3375,40 @@ function transformRgbToDepthUv(rgbUv, xrDeviceCamera) {
         console.error('Invalid aspect ratios provided.');
         return null;
     }
-    // Determine the relative scaling required to fit the overlay within the base
+    const params = xrDeviceCamera?.rgbToDepthParams ?? DEFAULT_RGB_TO_DEPTH_PARAMS;
+    // Determine the relative scaling required to fit the overlay within the base.
     let relativeScaleX, relativeScaleY;
     if (aspectRatios.depth > aspectRatios.RGB) {
-        // Base is wider than overlay ("letterboxing")
+        // Base is wider than overlay ("letterboxing").
         relativeScaleY = 1.0;
         relativeScaleX = aspectRatios.RGB / aspectRatios.depth;
     }
     else {
-        // Base is narrower than overlay ("pillarboxing")
+        // Base is narrower than overlay ("pillarboxing").
         relativeScaleX = 1.0;
         relativeScaleY = aspectRatios.depth / aspectRatios.RGB;
     }
-    // Convert input source UV [0, 1] to a normalized coordinate space [-0.5, 0.5]
+    // Convert input source UV [0, 1] to normalized coordinates in [-0.5, 0.5].
     const u_norm = rgbUv.u - 0.5;
     const v_norm = rgbUv.v - 0.5;
-    // Apply the FORWARD Brown-Conrady distortion model
-    const u_centered = u_norm - rgbToDepthParams.xc;
-    const v_centered = v_norm - rgbToDepthParams.yc;
+    // Apply the FORWARD Brown-Conrady distortion model.
+    const u_centered = u_norm - params.xc;
+    const v_centered = v_norm - params.yc;
     const r2 = u_centered * u_centered + v_centered * v_centered;
-    const radial = 1 +
-        rgbToDepthParams.k1 * r2 +
-        rgbToDepthParams.k2 * r2 * r2 +
-        rgbToDepthParams.k3 * r2 * r2 * r2;
-    const tanX = 2 * rgbToDepthParams.p1 * u_centered * v_centered +
-        rgbToDepthParams.p2 * (r2 + 2 * u_centered * u_centered);
-    const tanY = rgbToDepthParams.p1 * (r2 + 2 * v_centered * v_centered) +
-        2 * rgbToDepthParams.p2 * u_centered * v_centered;
-    const u_distorted = u_centered * radial + tanX + rgbToDepthParams.xc;
-    const v_distorted = v_centered * radial + tanY + rgbToDepthParams.yc;
-    // Apply initial aspect ratio scaling and translation
-    const u_fitted = u_distorted * relativeScaleX + rgbToDepthParams.translateU;
-    const v_fitted = v_distorted * relativeScaleY + rgbToDepthParams.translateV;
-    // Apply the final user-controlled scaling (zoom and stretch)
-    const finalNormX = u_fitted * rgbToDepthParams.scale * rgbToDepthParams.scaleX;
-    const finalNormY = v_fitted * rgbToDepthParams.scale * rgbToDepthParams.scaleY;
-    // Convert the final normalized coordinate back to a UV coordinate [0, 1]
+    const radial = 1 + params.k1 * r2 + params.k2 * r2 * r2 + params.k3 * r2 * r2 * r2;
+    const tanX = 2 * params.p1 * u_centered * v_centered +
+        params.p2 * (r2 + 2 * u_centered * u_centered);
+    const tanY = params.p1 * (r2 + 2 * v_centered * v_centered) +
+        2 * params.p2 * u_centered * v_centered;
+    const u_distorted = u_centered * radial + tanX + params.xc;
+    const v_distorted = v_centered * radial + tanY + params.yc;
+    // Apply initial aspect ratio scaling and translation.
+    const u_fitted = u_distorted * relativeScaleX + params.translateU;
+    const v_fitted = v_distorted * relativeScaleY + params.translateV;
+    // Apply the final user-controlled scaling (zoom and stretch).
+    const finalNormX = u_fitted * params.scale * params.scaleX;
+    const finalNormY = v_fitted * params.scale * params.scaleY;
+    // Convert the final normalized coordinate back to a UV coordinate [0, 1].
     const finalU = finalNormX + 0.5;
     const finalV = finalNormY + 0.5;
     return { u: finalU, v: 1.0 - finalV };
@@ -3667,12 +3672,13 @@ class XRDeviceCamera extends VideoStream {
     /**
      * @param options - The configuration options.
      */
-    constructor({ videoConstraints = { facingMode: 'environment' }, willCaptureFrequently = false, } = {}) {
+    constructor({ videoConstraints = { facingMode: 'environment' }, willCaptureFrequently = false, rgbToDepthParams = DEFAULT_RGB_TO_DEPTH_PARAMS, } = {}) {
         super({ willCaptureFrequently });
         this.isInitializing_ = false;
         this.availableDevices_ = [];
         this.currentDeviceIndex_ = -1;
         this.videoConstraints_ = { ...videoConstraints };
+        this.rgbToDepthParams = rgbToDepthParams;
     }
     /**
      * Retrieves the list of available video input devices.
@@ -3724,7 +3730,7 @@ class XRDeviceCamera extends VideoStream {
             return;
         this.isInitializing_ = true;
         this.setState_(StreamState.INITIALIZING);
-        // Reset state for the new stream
+        // Reset state for the new stream.
         this.currentTrackSettings_ = undefined;
         this.currentDeviceIndex_ = -1;
         try {
@@ -3758,7 +3764,7 @@ class XRDeviceCamera extends VideoStream {
             if (!videoTracks.length) {
                 throw new Error('MediaStream has no video tracks.');
             }
-            // After the stream is active, we can get the ID of the track
+            // After the stream is active, we can get the track ID.
             const activeTrack = videoTracks[0];
             this.currentTrackSettings_ = activeTrack.getSettings();
             console.debug('Active track settings:', this.currentTrackSettings_);
@@ -3768,10 +3774,10 @@ class XRDeviceCamera extends VideoStream {
             else {
                 console.warn('Stream started without deviceId as it was unavailable');
             }
-            this.stop_(); // Stop any previous stream before starting new one
+            this.stop_(); // Stop any previous stream before starting new one.
             this.stream_ = stream;
             this.video_.srcObject = stream;
-            this.video_.src = ''; // Required for some browsers to reset the src
+            this.video_.src = ''; // Required for some browsers to reset the src.
             await new Promise((resolve, reject) => {
                 this.video_.onloadedmetadata = () => {
                     this.handleVideoStreamLoadedMetadata(resolve, reject, true);
@@ -3783,7 +3789,7 @@ class XRDeviceCamera extends VideoStream {
                 };
                 this.video_.play();
             });
-            // Once the stream is loaded and dimensions are known, set the final state
+            // Once stream is loaded and dimensions are known, set the final state.
             const details = {
                 width: this.width,
                 height: this.height,
@@ -3805,7 +3811,7 @@ class XRDeviceCamera extends VideoStream {
     /**
      * Sets the active camera by its device ID. Removes potentially conflicting
      * constraints such as facingMode.
-     * @param deviceId - Device id.
+     * @param deviceId - Device ID
      */
     async setDeviceId(deviceId) {
         const newIndex = this.availableDevices_.findIndex((device) => device.deviceId === deviceId);
@@ -13887,6 +13893,7 @@ class ObjectDetector extends Script {
             }
             if (this.options.objects.showDebugVisualizations) {
                 this._visualizeBoundingBoxesOnImage(base64Image, parsedResponse);
+                this._visualizeDepthMap(cachedDepthArray);
             }
             const detectionPromises = parsedResponse.map(async (item) => {
                 const { ymin, xmin, ymax, xmax, objectName, ...additionalData } = item || {};
@@ -13935,7 +13942,7 @@ class ObjectDetector extends Script {
      * Retrieves a list of currently detected objects.
      *
      * @param label - The semantic label to filter by (e.g., 'chair'). If null,
-     *     all objects are returned.
+     * all objects are returned.
      * @returns An array of `Object` instances.
      */
     get(label = null) {
@@ -13972,8 +13979,7 @@ class ObjectDetector extends Script {
      * Draws the detected bounding boxes on the input image and triggers a
      * download for debugging.
      * @param base64Image - The base64 encoded input image.
-     * @param detections - The array of detected objects from the
-     * AI response.
+     * @param detections - The array of detected objects from the AI response.
      */
     _visualizeBoundingBoxesOnImage(base64Image, detections) {
         const img = new Image();
@@ -14021,6 +14027,71 @@ class ObjectDetector extends Script {
             link.click();
         };
         img.src = base64Image;
+    }
+    /**
+     * Generates a visual representation of the depth map, normalized to 0-1 range,
+     * and triggers a download for debugging.
+     * @param depthArray - The raw depth data array.
+     */
+    _visualizeDepthMap(depthArray) {
+        const width = this.depth.width;
+        const height = this.depth.height;
+        if (!width || !height || depthArray.length === 0) {
+            console.warn('Cannot visualize depth map: missing dimensions or data.');
+            return;
+        }
+        // 1. Find Min/Max for normalization (ignoring 0/invalid depth).
+        let min = Infinity;
+        let max = -Infinity;
+        for (let i = 0; i < depthArray.length; ++i) {
+            const val = depthArray[i];
+            if (val > 0) {
+                if (val < min)
+                    min = val;
+                if (val > max)
+                    max = val;
+            }
+        }
+        // Handle edge case where no valid depth exists.
+        if (min === Infinity) {
+            min = 0;
+            max = 1;
+        }
+        if (min === max) {
+            max = min + 1; // Avoid divide by zero
+        }
+        // 2. Create Canvas.
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        const imageData = ctx.createImageData(width, height);
+        const data = imageData.data;
+        // 3. Fill Pixels.
+        for (let i = 0; i < depthArray.length; ++i) {
+            const raw = depthArray[i];
+            // Normalize to 0-1.
+            // Typically 0 means invalid/sky in some depth APIs, so we keep it black.
+            // Otherwise, map [min, max] to [0, 1].
+            const normalized = raw === 0 ? 0 : (raw - min) / (max - min);
+            const byteVal = Math.floor(normalized * 255);
+            const stride = i * 4;
+            data[stride] = byteVal; // R
+            data[stride + 1] = byteVal; // G
+            data[stride + 2] = byteVal; // B
+            data[stride + 3] = 255; // Alpha
+        }
+        ctx.putImageData(imageData, 0, 0);
+        // 4. Download.
+        const timestamp = new Date()
+            .toISOString()
+            .slice(0, 19)
+            .replace('T', '_')
+            .replace(/:/g, '-');
+        const link = document.createElement('a');
+        link.download = `depth_debug_${timestamp}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
     }
     /**
      * Creates a simple debug visualization for an object based on its position
@@ -17086,5 +17157,5 @@ class VideoFileStream extends VideoStream {
     }
 }
 
-export { AI, AIOptions, AVERAGE_IPD_METERS, ActiveControllers, Agent, AnimatableNumber, AudioListener, AudioPlayer, BACK, BackgroundMusic, CategoryVolumes, Col, Core, CoreSound, DEFAULT_DEVICE_CAMERA_HEIGHT, DEFAULT_DEVICE_CAMERA_WIDTH, DOWN, Depth, DepthMesh, DepthMeshOptions, DepthOptions, DepthTextures, DetectedObject, DetectedPlane, DeviceCameraOptions, DragManager, DragMode, ExitButton, FORWARD, FreestandingSlider, GazeController, Gemini, GeminiOptions, GenerateSkyboxTool, GestureRecognition, GestureRecognitionOptions, GetWeatherTool, Grid, HAND_BONE_IDX_CONNECTION_MAP, HAND_JOINT_COUNT, HAND_JOINT_IDX_CONNECTION_MAP, HAND_JOINT_NAMES, Handedness, Hands, HandsOptions, HorizontalPager, IconButton, IconView, ImageView, Input, InputOptions, Keycodes, LEFT, LEFT_VIEW_ONLY_LAYER, LabelView, Lighting, LightingOptions, LoadingSpinnerManager, MaterialSymbolsView, MeshScript, ModelLoader, ModelViewer, MouseController, NEXT_SIMULATOR_MODE, NUM_HANDS, OCCLUDABLE_ITEMS_LAYER, ObjectDetector, ObjectsOptions, OcclusionPass, OcclusionUtils, OpenAI, OpenAIOptions, Options, PageIndicator, Pager, PagerState, Panel, PanelMesh, Physics, PhysicsOptions, PinchOnButtonAction, PlaneDetector, PlanesOptions, RIGHT, RIGHT_VIEW_ONLY_LAYER, Registry, Reticle, ReticleOptions, RotationRaycastMesh, Row, SIMULATOR_HAND_POSE_NAMES, SIMULATOR_HAND_POSE_TO_JOINTS_LEFT, SIMULATOR_HAND_POSE_TO_JOINTS_RIGHT, SOUND_PRESETS, ScreenshotSynthesizer, Script, ScriptMixin, ScriptsManager, ScrollingTroikaTextView, SetSimulatorModeEvent, ShowHandsAction, Simulator, SimulatorCamera, SimulatorControlMode, SimulatorControllerState, SimulatorControls, SimulatorDepth, SimulatorDepthMaterial, SimulatorHandPose, SimulatorHandPoseChangeRequestEvent, SimulatorHands, SimulatorInterface, SimulatorMediaDeviceInfo, SimulatorMode, SimulatorOptions, SimulatorRenderMode, SimulatorScene, SimulatorUser, SimulatorUserAction, SketchPanel, SkyboxAgent, SoundOptions, SoundSynthesizer, SpatialAudio, SpatialPanel, SpeechRecognizer, SpeechRecognizerOptions, SpeechSynthesizer, SpeechSynthesizerOptions, SplatAnchor, StreamState, TextButton, TextScrollerState, TextView, Tool, UI, UI_OVERLAY_LAYER, UP, UX, User, VIEW_DEPTH_GAP, VerticalPager, VideoFileStream, VideoStream, VideoView, View, VolumeCategory, WaitFrame, WalkTowardsPanelAction, World, WorldOptions, XRButton, XRDeviceCamera, XREffects, XRPass, XRTransitionOptions, XR_BLOCKS_ASSETS_PATH, ZERO_VECTOR3, add, ai, aspectRatios, callInitWithDependencyInjection, clamp, clampRotationToAngle, core, cropImage, extractYaw, getColorHex, getDeltaTime, getUrlParamBool, getUrlParamFloat, getUrlParamInt, getUrlParameter, getVec4ByColorString, getXrCameraLeft, getXrCameraRight, init, initScript, lerp, loadStereoImageAsTextures, loadingSpinnerManager, lookAtRotation, objectIsDescendantOf, parseBase64DataURL, placeObjectAtIntersectionFacingTarget, print, rgbToDepthParams, scene, showOnlyInLeftEye, showOnlyInRightEye, showReticleOnDepthMesh, transformRgbToDepthUv, transformRgbUvToWorld, traverseUtil, uninitScript, urlParams, user, world, xrDepthMeshOptions, xrDepthMeshPhysicsOptions, xrDepthMeshVisualizationOptions, xrDeviceCameraEnvironmentContinuousOptions, xrDeviceCameraEnvironmentOptions, xrDeviceCameraUserContinuousOptions, xrDeviceCameraUserOptions };
+export { AI, AIOptions, AVERAGE_IPD_METERS, ActiveControllers, Agent, AnimatableNumber, AudioListener, AudioPlayer, BACK, BackgroundMusic, CategoryVolumes, Col, Core, CoreSound, DEFAULT_DEVICE_CAMERA_HEIGHT, DEFAULT_DEVICE_CAMERA_WIDTH, DEFAULT_RGB_TO_DEPTH_PARAMS, DOWN, Depth, DepthMesh, DepthMeshOptions, DepthOptions, DepthTextures, DetectedObject, DetectedPlane, DeviceCameraOptions, DragManager, DragMode, ExitButton, FORWARD, FreestandingSlider, GazeController, Gemini, GeminiOptions, GenerateSkyboxTool, GestureRecognition, GestureRecognitionOptions, GetWeatherTool, Grid, HAND_BONE_IDX_CONNECTION_MAP, HAND_JOINT_COUNT, HAND_JOINT_IDX_CONNECTION_MAP, HAND_JOINT_NAMES, Handedness, Hands, HandsOptions, HorizontalPager, IconButton, IconView, ImageView, Input, InputOptions, Keycodes, LEFT, LEFT_VIEW_ONLY_LAYER, LabelView, Lighting, LightingOptions, LoadingSpinnerManager, MaterialSymbolsView, MeshScript, ModelLoader, ModelViewer, MouseController, NEXT_SIMULATOR_MODE, NUM_HANDS, OCCLUDABLE_ITEMS_LAYER, ObjectDetector, ObjectsOptions, OcclusionPass, OcclusionUtils, OpenAI, OpenAIOptions, Options, PageIndicator, Pager, PagerState, Panel, PanelMesh, Physics, PhysicsOptions, PinchOnButtonAction, PlaneDetector, PlanesOptions, RIGHT, RIGHT_VIEW_ONLY_LAYER, Registry, Reticle, ReticleOptions, RotationRaycastMesh, Row, SIMULATOR_HAND_POSE_NAMES, SIMULATOR_HAND_POSE_TO_JOINTS_LEFT, SIMULATOR_HAND_POSE_TO_JOINTS_RIGHT, SOUND_PRESETS, ScreenshotSynthesizer, Script, ScriptMixin, ScriptsManager, ScrollingTroikaTextView, SetSimulatorModeEvent, ShowHandsAction, Simulator, SimulatorCamera, SimulatorControlMode, SimulatorControllerState, SimulatorControls, SimulatorDepth, SimulatorDepthMaterial, SimulatorHandPose, SimulatorHandPoseChangeRequestEvent, SimulatorHands, SimulatorInterface, SimulatorMediaDeviceInfo, SimulatorMode, SimulatorOptions, SimulatorRenderMode, SimulatorScene, SimulatorUser, SimulatorUserAction, SketchPanel, SkyboxAgent, SoundOptions, SoundSynthesizer, SpatialAudio, SpatialPanel, SpeechRecognizer, SpeechRecognizerOptions, SpeechSynthesizer, SpeechSynthesizerOptions, SplatAnchor, StreamState, TextButton, TextScrollerState, TextView, Tool, UI, UI_OVERLAY_LAYER, UP, UX, User, VIEW_DEPTH_GAP, VerticalPager, VideoFileStream, VideoStream, VideoView, View, VolumeCategory, WaitFrame, WalkTowardsPanelAction, World, WorldOptions, XRButton, XRDeviceCamera, XREffects, XRPass, XRTransitionOptions, XR_BLOCKS_ASSETS_PATH, ZERO_VECTOR3, add, ai, aspectRatios, callInitWithDependencyInjection, clamp, clampRotationToAngle, core, cropImage, extractYaw, getColorHex, getDeltaTime, getUrlParamBool, getUrlParamFloat, getUrlParamInt, getUrlParameter, getVec4ByColorString, getXrCameraLeft, getXrCameraRight, init, initScript, lerp, loadStereoImageAsTextures, loadingSpinnerManager, lookAtRotation, objectIsDescendantOf, parseBase64DataURL, placeObjectAtIntersectionFacingTarget, print, scene, showOnlyInLeftEye, showOnlyInRightEye, showReticleOnDepthMesh, transformRgbToDepthUv, transformRgbUvToWorld, traverseUtil, uninitScript, urlParams, user, world, xrDepthMeshOptions, xrDepthMeshPhysicsOptions, xrDepthMeshVisualizationOptions, xrDeviceCameraEnvironmentContinuousOptions, xrDeviceCameraEnvironmentOptions, xrDeviceCameraUserContinuousOptions, xrDeviceCameraUserOptions };
 //# sourceMappingURL=xrblocks.js.map

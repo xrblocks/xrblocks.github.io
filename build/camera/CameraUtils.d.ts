@@ -6,24 +6,6 @@ export declare const aspectRatios: {
     RGB: number;
 };
 /**
- * Parameters for RGB to depth UV mapping (manually calibrated for aspect
- * ratios. For RGB and depth, 4:3 and 1:1, respectively.
- */
-export declare const rgbToDepthParams: {
-    scale: number;
-    scaleX: number;
-    scaleY: number;
-    translateU: number;
-    translateV: number;
-    k1: number;
-    k2: number;
-    k3: number;
-    p1: number;
-    p2: number;
-    xc: number;
-    yc: number;
-};
-/**
  * Maps a UV coordinate from a RGB space to a destination depth space,
  * applying Brown-Conrady distortion and affine transformations based on
  * aspect ratios. If the simulator camera is used, no transformation is applied.

@@ -61,7 +61,7 @@ export declare class ObjectDetector extends Script {
      * Retrieves a list of currently detected objects.
      *
      * @param label - The semantic label to filter by (e.g., 'chair'). If null,
-     *     all objects are returned.
+     * all objects are returned.
      * @returns An array of `Object` instances.
      */
     get(label?: null): DetectedObject[];
@@ -79,10 +79,15 @@ export declare class ObjectDetector extends Script {
      * Draws the detected bounding boxes on the input image and triggers a
      * download for debugging.
      * @param base64Image - The base64 encoded input image.
-     * @param detections - The array of detected objects from the
-     * AI response.
+     * @param detections - The array of detected objects from the AI response.
      */
     private _visualizeBoundingBoxesOnImage;
+    /**
+     * Generates a visual representation of the depth map, normalized to 0-1 range,
+     * and triggers a download for debugging.
+     * @param depthArray - The raw depth data array.
+     */
+    private _visualizeDepthMap;
     /**
      * Creates a simple debug visualization for an object based on its position
      * (center of its 2D detection bounding box).

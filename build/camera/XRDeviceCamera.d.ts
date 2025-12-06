@@ -1,7 +1,7 @@
 import { SimulatorCamera } from '../simulator/SimulatorCamera';
 import { SimulatorMediaDeviceInfo } from '../simulator/SimulatorMediaDeviceInfo';
 import { VideoStream, VideoStreamDetails } from '../video/VideoStream';
-import { DeviceCameraOptions } from './CameraOptions';
+import { DeviceCameraOptions, RgbToDepthParams } from './CameraOptions';
 export type MediaOrSimulatorMediaDeviceInfo = MediaDeviceInfo | SimulatorMediaDeviceInfo;
 type XRDeviceCameraDetails = VideoStreamDetails & {
     width?: number;
@@ -15,6 +15,7 @@ type XRDeviceCameraDetails = VideoStreamDetails & {
  */
 export declare class XRDeviceCamera extends VideoStream<XRDeviceCameraDetails> {
     simulatorCamera?: SimulatorCamera;
+    rgbToDepthParams: RgbToDepthParams;
     protected videoConstraints_: MediaTrackConstraints;
     private isInitializing_;
     private availableDevices_;
@@ -23,7 +24,7 @@ export declare class XRDeviceCamera extends VideoStream<XRDeviceCameraDetails> {
     /**
      * @param options - The configuration options.
      */
-    constructor({ videoConstraints, willCaptureFrequently, }?: Partial<DeviceCameraOptions>);
+    constructor({ videoConstraints, willCaptureFrequently, rgbToDepthParams, }?: Partial<DeviceCameraOptions>);
     /**
      * Retrieves the list of available video input devices.
      * @returns A promise that resolves with an
@@ -43,7 +44,7 @@ export declare class XRDeviceCamera extends VideoStream<XRDeviceCameraDetails> {
     /**
      * Sets the active camera by its device ID. Removes potentially conflicting
      * constraints such as facingMode.
-     * @param deviceId - Device id.
+     * @param deviceId - Device ID
      */
     setDeviceId(deviceId: string): Promise<void>;
     /**
