@@ -76,7 +76,7 @@ export declare class AI extends Script {
      * In XR mode, show a 3D UI to instruct users to get an API key.
      */
     triggerKeyPopup(): void;
-    generate(prompt: string | string[], type?: 'image', systemInstruction?: string, model?: string): Promise<string | void | undefined>;
+    generate(prompt: string | string[], type?: 'image', systemInstruction?: string, model?: undefined): Promise<string | void | undefined>;
     /**
      * Create a sample keys.json file structure for reference
      * @returns Sample keys.json structure

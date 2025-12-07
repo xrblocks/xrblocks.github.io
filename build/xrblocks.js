@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.5.1
- * @commitid 896d66f
- * @builddate 2025-12-06T06:18:18.578Z
+ * @commitid a322eff
+ * @builddate 2025-12-07T05:51:38.382Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -286,7 +286,7 @@ class GenerateSkyboxTool extends Tool {
     async execute(args) {
         try {
             const image = await this.ai.generate('Generate a 360 equirectangular skybox image for the prompt of:' +
-                args.prompt, 'image', 'Generate a 360 equirectangular skybox image for the prompt', 'gemini-2.5-flash-image-preview');
+                args.prompt, 'image', 'Generate a 360 equirectangular skybox image for the prompt');
             if (image) {
                 console.log('Applying texture...');
                 this.scene.background = new THREE.TextureLoader().load(image);
@@ -1365,7 +1365,7 @@ class Gemini extends BaseAIModel {
         }
         return { text: response.text || null };
     }
-    async generate(prompt, type = 'image', systemInstruction = 'Generate an image', model = 'gemini-2.5-flash-image-preview') {
+    async generate(prompt, type = 'image', systemInstruction = 'Generate an image', model = 'gemini-2.5-flash-image') {
         if (!this.isAvailable())
             return;
         let contents;
@@ -1674,7 +1674,7 @@ class AI extends Script {
      * In XR mode, show a 3D UI to instruct users to get an API key.
      */
     triggerKeyPopup() { }
-    async generate(prompt, type = 'image', systemInstruction = 'Generate an image', model = 'gemini-2.5-flash-image-preview') {
+    async generate(prompt, type = 'image', systemInstruction = 'Generate an image', model = undefined) {
         return this.model.generate(prompt, type, systemInstruction, model);
     }
     /**
