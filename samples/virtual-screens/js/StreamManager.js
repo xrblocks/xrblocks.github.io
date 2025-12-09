@@ -63,6 +63,7 @@ export class StreamManager {
    */
   async shareStream(streamId, stream, displaySurface) {
     const videoTrack = stream.getVideoTracks()[0];
+    // eslint-disable-next-line no-undef
     const trackProcessor = new MediaStreamTrackProcessor({track: videoTrack});
     const reader = trackProcessor.readable.getReader();
 
@@ -105,6 +106,7 @@ export class StreamManager {
    * @param {MediaStreamVideoTrack} videoTrack The video track being streamed.
    * @private
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async processFrames(streamId, videoTrack) {
     const streamState = this.streams.get(streamId);
     if (!streamState) return;
@@ -119,7 +121,7 @@ export class StreamManager {
 
         // On the first frame, configure the encoder with the right dimensions.
         if (!encoder) {
-          const trackSettings = videoTrack.getSettings();
+          // const trackSettings = videoTrack.getSettings();
           let rect = {
             x: 0,
             y: 0,
@@ -151,6 +153,7 @@ export class StreamManager {
             height: codedHeight,
           };
 
+          // eslint-disable-next-line no-undef
           encoder = new VideoEncoder({
             output: (chunk) => this._outputHandler(chunk, streamId),
             error: (e) =>
@@ -185,7 +188,7 @@ export class StreamManager {
 
         frame.close();
         frameToEncode.close();
-      } catch (e) {
+      } catch {
         break; // Loop will terminate if reader is cancelled.
       }
     }
@@ -314,6 +317,7 @@ export class StreamManager {
       const streamState = this.streams.get(streamId);
       if (!streamState) return;
 
+      // eslint-disable-next-line no-undef
       const chunk = new EncodedVideoChunk({
         type: frameType === 0 ? 'key' : 'delta',
         timestamp: performance.now(),
@@ -353,6 +357,7 @@ export class StreamManager {
     canvas.height = streamInfo.height;
     const ctx = canvas.getContext('2d');
 
+    // eslint-disable-next-line no-undef
     streamState.decoder = new VideoDecoder({
       output: (frame) => {
         ctx.drawImage(frame, 0, 0);

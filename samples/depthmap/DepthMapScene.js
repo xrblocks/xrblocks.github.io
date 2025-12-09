@@ -6,19 +6,21 @@ import {DepthVisualizationPass} from './DepthVisualizationPass.js';
 export class DepthMapScene extends xb.Script {
   init() {
     if (xb.core.effects) {
-      this.depthVisualizationPass = new DepthVisualizationPass(
-        xb.scene,
-        xb.core.camera
-      );
-      xb.core.effects.addPass(this.depthVisualizationPass);
+      this.depthVisPass = new DepthVisualizationPass(xb.scene, xb.core.camera);
+      xb.core.effects.addPass(this.depthVisPass);
     } else {
       console.error(
         'This sample needs post processing for adding the depth visualization pass. Please enable options.usePostprocessing'
       );
     }
 
-    this.depthMeshAlphaSlider = new xb.FreestandingSlider(1.0, 0.0, 1.0, 5.0);
-    // Which controller is currently controlling depthMeshAlphaSlider.
+    this.depthMeshAlphaSlider = new xb.FreestandingSlider(
+      /*start=*/ 1.0,
+      /*min=*/ 0.0,
+      /*max=*/ 1.0,
+      /*scale*/ 5.0
+    );
+    // Which controller is currently selecting depthMeshAlphaSlider.
     this.currentSliderController = null;
 
     const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 3);
@@ -43,7 +45,7 @@ export class DepthMapScene extends xb.Script {
       const opacity = this.depthMeshAlphaSlider.getValueFromController(
         this.currentSliderController
       );
-      this.depthVisualizationPass.setAlpha(opacity);
+      this.depthVisPass.setAlpha(opacity);
       this.depthMeshAlphaSlider.updateValue(opacity);
     }
     this.currentSliderController = null;
@@ -54,8 +56,8 @@ export class DepthMapScene extends xb.Script {
       const opacity = this.depthMeshAlphaSlider.getValueFromController(
         this.currentSliderController
       );
-      this.depthVisualizationPass.setAlpha(opacity);
+      this.depthVisPass.setAlpha(opacity);
     }
-    this.depthVisualizationPass.updateEnvironmentalDepthTexture(xb.core.depth);
+    this.depthVisPass.updateEnvironmentalDepthTexture(xb.core.depth);
   }
 }

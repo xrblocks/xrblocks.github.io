@@ -1,6 +1,7 @@
 import 'xrblocks/addons/simulator/SimulatorAddons.js';
 
 import * as xb from 'xrblocks';
+import * as THREE from 'three';
 
 const options = new xb.Options();
 options.enableReticles();
@@ -106,6 +107,7 @@ class GestureLogger extends xb.Script {
     };
     gestures.addEventListener('gesturestart', this._onGestureStart);
     gestures.addEventListener('gestureend', this._onGestureEnd);
+    this.add(new THREE.HemisphereLight(0xaaaaaa, 0x666666, 3));
   }
 
   dispose() {

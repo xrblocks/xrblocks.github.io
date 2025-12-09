@@ -3,7 +3,12 @@ import * as xb from 'xrblocks';
 
 class DepthMeshVisualizer extends xb.Script {
   currentSliderController = null;
-  depthMeshAlphaSlider = new xb.FreestandingSlider(1.0, 0.0, 1.0, 5.0);
+  depthMeshAlphaSlider = new xb.FreestandingSlider(
+    /*start=*/ 1.0,
+    /*min=*/ 0.0,
+    /*max=*/ 1.0,
+    /*scale*/ 5.0
+  );
 
   constructor() {
     super();

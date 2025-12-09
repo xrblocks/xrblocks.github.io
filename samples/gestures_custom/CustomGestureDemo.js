@@ -3,6 +3,7 @@ import {loadLiteRt, setWebGpuDevice} from '@litertjs/core';
 import {runWithTfjsTensors} from '@litertjs/tfjs-interop';
 // TensorFlow.js + WebGPU backend
 import * as tf from '@tensorflow/tfjs';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {WebGPUBackend} from '@tensorflow/tfjs-backend-webgpu';
 import * as THREE from 'three';
 import * as xb from 'xrblocks';
@@ -127,11 +128,11 @@ export class CustomGestureDemo extends xb.Script {
           .addCol({weight: 0.1})
           .addImage({src: 'images/shaka.png', scaleFactor: 0.3});
 
-        // Vertical alignment on the description text element
-        const botRow = midColumn.addRow({weight: 0.1});
+        // Vertical alignment on the description text element.
+        midColumn.addRow({weight: 0.1});
 
-        // Right indentation
-        const rightColumn = ctrlGrid.addCol({weight: 0.1});
+        // Right indentation.
+        ctrlGrid.addCol({weight: 0.1});
       }
 
       const orbiter = ctrlGrid.addOrbiter();

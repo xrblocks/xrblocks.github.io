@@ -78,16 +78,15 @@ const gameOutcomePhrases = [
 export class GameRps extends xb.Script {
   constructor() {
     super();
-    // List of detected gestures for the Left and right hands
+    // List of detected gestures for the left and right hands.
     this.handGesture = [[], []];
-
     this.isDebug = false;
 
     //
     // Initializes UI.
     //
     {
-      // Make a root panel>grid>row>controlPanel>grid
+      // Makes a root panel > grid > row > controlPanel > grid.
       const panel = new xb.SpatialPanel({
         backgroundColor: '#00000000',
         useDefaultPosition: false,
@@ -98,7 +97,7 @@ export class GameRps extends xb.Script {
       this.add(panel);
 
       const grid = panel.addGrid();
-      // Add blank space on top of the ctrlPanel
+      // Adds blank space on top of the ctrlPanel.
       this.startImageRow = grid.addRow({weight: 0.4});
       this.startImageRow.addCol({weight: 0.3});
       this.startImage = this.startImageRow.addCol({weight: 0.4}).addImage({
@@ -154,12 +153,12 @@ export class GameRps extends xb.Script {
 
         const textCol = gesturesRow.addCol({weight: 1.0});
         this.textField1 = textCol.addRow({weight: 1.0}).addText({
-          text: 'Do you want to play rock-paper-scissors with me?',
+          text: "Let's play Rock-Paper-Scissors!",
           fontColor: '#ffffff',
           fontSize: 0.045,
         });
         this.textField2 = textCol.addRow({weight: 1.0}).addText({
-          text: 'Do do a thumbs-up gesture to get started!',
+          text: 'Do a thumbs-up gesture to get started!',
           fontColor: '#ffffff',
           fontSize: 0.045,
         });
@@ -564,10 +563,6 @@ export class GameRps extends xb.Script {
     return longestGesture;
   }
 
-  onGestureStopped(handIndex, gestureIndex) {
-    // Empty
-  }
-
   /**
    * Initializes the PaintScript.
    */
@@ -581,18 +576,6 @@ export class GameRps extends xb.Script {
 
     this.panel.position.set(0, xb.core.user.height, -1.0);
   }
-
-  /**
-   * Moves the painter to the pivot position when select starts.
-   * @param {XRInputSourceEvent} event
-   */
-  onSelectStart(event) {}
-
-  /**
-   * Updates the painter's line to the current pivot position during selection.
-   * @param {number} id The controller id.
-   */
-  onSelecting(id) {}
 
   async update() {
     //
