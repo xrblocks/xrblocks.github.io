@@ -19,8 +19,8 @@
 <link rel="icon" href="/docs/img/web-app-manifest-512x512.png" sizes="512x512" type="image/png">
 <link rel="manifest" href="/docs/img/site.webmanifest">
 <meta name="algolia-site-verification" content="C7A25C1609F793C8"><link rel="stylesheet" href="/docs/assets/css/styles.727fbdee.css">
-<script src="/docs/assets/js/runtime~main.b6a7ce38.js" defer="defer"></script>
-<script src="/docs/assets/js/main.7bb259c2.js" defer="defer"></script>
+<script src="/docs/assets/js/runtime~main.f949ad9e.js" defer="defer"></script>
+<script src="/docs/assets/js/main.0d2fb6d4.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg style="display: none;"><defs>
@@ -33,7 +33,7 @@
 <blockquote>
 <p><strong>new Depth</strong>(): <code>Depth</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L49" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:49</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L52" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:52</a></p>
 <p>Depth is a lightweight manager based on three.js to simply prototyping
 with Depth in WebXR.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns">Returns<a href="#returns" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
@@ -43,61 +43,79 @@ with Depth in WebXR.</p>
 <blockquote>
 <p><strong>cpuDepthData</strong>: <a href="https://developer.mozilla.org/docs/Web/API/XRCPUDepthInformation" target="_blank" rel="noopener noreferrer"><code>XRCPUDepthInformation</code></a>[] = <code>[]</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L29" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:29</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L28" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:28</a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="deptharray">depthArray<a href="#deptharray" class="hash-link" aria-label="Direct link to depthArray" title="Direct link to depthArray" translate="no">​</a></h3>
 <blockquote>
 <p><strong>depthArray</strong>: <a href="/docs/api/type-aliases/DepthArray/"><code>DepthArray</code></a>[] = <code>[]</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L31" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:31</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L30" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:30</a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="depthmesh">depthMesh?<a href="#depthmesh" class="hash-link" aria-label="Direct link to depthMesh?" title="Direct link to depthMesh?" translate="no">​</a></h3>
 <blockquote>
 <p><code>optional</code> <strong>depthMesh</strong>: <a href="/docs/api/classes/DepthMesh/"><code>DepthMesh</code></a></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L32" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:32</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L31" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:31</a></p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="depthprojectionmatrices">depthProjectionMatrices<a href="#depthprojectionmatrices" class="hash-link" aria-label="Direct link to depthProjectionMatrices" title="Direct link to depthProjectionMatrices" translate="no">​</a></h3>
+<blockquote>
+<p><strong>depthProjectionMatrices</strong>: <a href="https://threejs.org/docs/#api/en/math/Matrix4" target="_blank" rel="noopener noreferrer"><code>Matrix4</code></a>[] = <code>[]</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L44" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:44</a></p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="depthviewmatrices">depthViewMatrices<a href="#depthviewmatrices" class="hash-link" aria-label="Direct link to depthViewMatrices" title="Direct link to depthViewMatrices" translate="no">​</a></h3>
+<blockquote>
+<p><strong>depthViewMatrices</strong>: <a href="https://threejs.org/docs/#api/en/math/Matrix4" target="_blank" rel="noopener noreferrer"><code>Matrix4</code></a>[] = <code>[]</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L45" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:45</a></p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="depthviewprojectionmatrices">depthViewProjectionMatrices<a href="#depthviewprojectionmatrices" class="hash-link" aria-label="Direct link to depthViewProjectionMatrices" title="Direct link to depthViewProjectionMatrices" translate="no">​</a></h3>
+<blockquote>
+<p><strong>depthViewProjectionMatrices</strong>: <a href="https://threejs.org/docs/#api/en/math/Matrix4" target="_blank" rel="noopener noreferrer"><code>Matrix4</code></a>[] = <code>[]</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L46" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:46</a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="gpudepthdata">gpuDepthData<a href="#gpudepthdata" class="hash-link" aria-label="Direct link to gpuDepthData" title="Direct link to gpuDepthData" translate="no">​</a></h3>
 <blockquote>
 <p><strong>gpuDepthData</strong>: <a href="https://developer.mozilla.org/docs/Web/API/XRWebGLDepthInformation" target="_blank" rel="noopener noreferrer"><code>XRWebGLDepthInformation</code></a>[] = <code>[]</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L30" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:30</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L29" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:29</a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="height">height<a href="#height" class="hash-link" aria-label="Direct link to height" title="Direct link to height" translate="no">​</a></h3>
 <blockquote>
 <p><strong>height</strong>: <code>number</code> = <code>DEFAULT_DEPTH_HEIGHT</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L36" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:36</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L35" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:35</a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="occludableshaders">occludableShaders<a href="#occludableshaders" class="hash-link" aria-label="Direct link to occludableShaders" title="Direct link to occludableShaders" translate="no">​</a></h3>
 <blockquote>
 <p><strong>occludableShaders</strong>: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set" target="_blank" rel="noopener noreferrer"><code>Set</code></a>&lt;<a href="/docs/api/interfaces/Shader/"><code>Shader</code></a>&gt;</p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L38" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:38</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L37" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:37</a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="options">options<a href="#options" class="hash-link" aria-label="Direct link to options" title="Direct link to options" translate="no">​</a></h3>
 <blockquote>
 <p><strong>options</strong>: <a href="/docs/api/classes/DepthOptions/"><code>DepthOptions</code></a></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L34" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:34</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L33" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:33</a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="rawvaluetometers">rawValueToMeters<a href="#rawvaluetometers" class="hash-link" aria-label="Direct link to rawValueToMeters" title="Direct link to rawValueToMeters" translate="no">​</a></h3>
 <blockquote>
 <p><strong>rawValueToMeters</strong>: <code>number</code> = <code>0.0010000000474974513</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L37" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:37</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L36" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:36</a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="view">view<a href="#view" class="hash-link" aria-label="Direct link to view" title="Direct link to view" translate="no">​</a></h3>
 <blockquote>
 <p><strong>view</strong>: <a href="https://developer.mozilla.org/docs/Web/API/XRView" target="_blank" rel="noopener noreferrer"><code>XRView</code></a>[] = <code>[]</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L28" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:28</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L27" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:27</a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="width">width<a href="#width" class="hash-link" aria-label="Direct link to width" title="Direct link to width" translate="no">​</a></h3>
 <blockquote>
 <p><strong>width</strong>: <code>number</code> = <code>DEFAULT_DEPTH_WIDTH</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L35" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:35</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L34" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:34</a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="instance">instance?<a href="#instance" class="hash-link" aria-label="Direct link to instance?" title="Direct link to instance?" translate="no">​</a></h3>
 <blockquote>
@@ -109,7 +127,7 @@ with Depth in WebXR.</p>
 <blockquote>
 <p><strong>debugLog</strong>(): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L347" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:347</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L374" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:374</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-1">Returns<a href="#returns-1" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <hr>
@@ -117,7 +135,7 @@ with Depth in WebXR.</p>
 <blockquote>
 <p><strong>getDepth</strong>(<code>u</code>, <code>v</code>): <code>number</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L103" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:103</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L106" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:106</a></p>
 <p>Retrieves the depth at normalized coordinates (u, v).</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters">Parameters<a href="#parameters" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="u">u<a href="#u" class="hash-link" aria-label="Direct link to u" title="Direct link to u" translate="no">​</a></h5>
@@ -134,7 +152,7 @@ with Depth in WebXR.</p>
 <blockquote>
 <p><strong>getProjectedDepthViewPositionFromWorldPosition</strong>(<code>position</code>, <code>target</code>): <a href="https://threejs.org/docs/#api/en/math/Vector3" target="_blank" rel="noopener noreferrer"><code>Vector3</code></a></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L118" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:118</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L121" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:121</a></p>
 <p>Projects the given world position to clip space and then to view
 space using the depth.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-1">Parameters<a href="#parameters-1" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
@@ -148,11 +166,11 @@ space using the depth.</p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="gettexture">getTexture()<a href="#gettexture" class="hash-link" aria-label="Direct link to getTexture()" title="Direct link to getTexture()" translate="no">​</a></h3>
 <blockquote>
-<p><strong>getTexture</strong>(<code>view_id</code>): <code>undefined</code> | <a href="https://threejs.org/docs/#api/en/textures/DataTexture" target="_blank" rel="noopener noreferrer"><code>DataTexture</code></a> | <code>ExternalTexture</code></p>
+<p><strong>getTexture</strong>(<code>viewId</code>): <code>undefined</code> | <a href="https://threejs.org/docs/#api/en/textures/DataTexture" target="_blank" rel="noopener noreferrer"><code>DataTexture</code></a> | <code>ExternalTexture</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L241" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:241</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L274" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:274</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-2">Parameters<a href="#parameters-2" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
-<h5 class="anchor anchorWithStickyNavbar_LWe7" id="view_id">view_id<a href="#view_id" class="hash-link" aria-label="Direct link to view_id" title="Direct link to view_id" translate="no">​</a></h5>
+<h5 class="anchor anchorWithStickyNavbar_LWe7" id="viewid">viewId<a href="#viewid" class="hash-link" aria-label="Direct link to viewId" title="Direct link to viewId" translate="no">​</a></h5>
 <p><code>number</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-4">Returns<a href="#returns-4" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>undefined</code> | <a href="https://threejs.org/docs/#api/en/textures/DataTexture" target="_blank" rel="noopener noreferrer"><code>DataTexture</code></a> | <code>ExternalTexture</code></p>
@@ -161,7 +179,7 @@ space using the depth.</p>
 <blockquote>
 <p><strong>getVertex</strong>(<code>u</code>, <code>v</code>): <code>null</code> | <a href="https://threejs.org/docs/#api/en/math/Vector3" target="_blank" rel="noopener noreferrer"><code>Vector3</code></a></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L142" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:142</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L145" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:145</a></p>
 <p>Retrieves the depth at normalized coordinates (u, v).</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-3">Parameters<a href="#parameters-3" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="u-1">u<a href="#u-1" class="hash-link" aria-label="Direct link to u" title="Direct link to u" translate="no">​</a></h5>
@@ -178,7 +196,7 @@ space using the depth.</p>
 <blockquote>
 <p><strong>init</strong>(<code>camera</code>, <code>options</code>, <code>renderer</code>, <code>registry</code>, <code>scene</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L59" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:59</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L62" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:62</a></p>
 <p>Initialize Depth manager.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-4">Parameters<a href="#parameters-4" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="camera">camera<a href="#camera" class="hash-link" aria-label="Direct link to camera" title="Direct link to camera" translate="no">​</a></h5>
@@ -198,7 +216,7 @@ space using the depth.</p>
 <blockquote>
 <p><strong>pauseDepth</strong>(<code>client</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L364" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:364</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L391" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:391</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-5">Parameters<a href="#parameters-5" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="client">client<a href="#client" class="hash-link" aria-label="Direct link to client" title="Direct link to client" translate="no">​</a></h5>
 <p><code>object</code></p>
@@ -209,7 +227,7 @@ space using the depth.</p>
 <blockquote>
 <p><strong>renderOcclusionPass</strong>(): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L314" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:314</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L341" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:341</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-8">Returns<a href="#returns-8" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <hr>
@@ -217,7 +235,7 @@ space using the depth.</p>
 <blockquote>
 <p><strong>resumeDepth</strong>(<code>client</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L359" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:359</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L386" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:386</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-6">Parameters<a href="#parameters-6" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="client-1">client<a href="#client-1" class="hash-link" aria-label="Direct link to client" title="Direct link to client" translate="no">​</a></h5>
 <p><code>object</code></p>
@@ -228,7 +246,7 @@ space using the depth.</p>
 <blockquote>
 <p><strong>update</strong>(<code>frame?</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L246" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:246</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L279" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:279</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-7">Parameters<a href="#parameters-7" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="frame">frame?<a href="#frame" class="hash-link" aria-label="Direct link to frame?" title="Direct link to frame?" translate="no">​</a></h5>
 <p><a href="https://developer.mozilla.org/docs/Web/API/XRFrame" target="_blank" rel="noopener noreferrer"><code>XRFrame</code></a></p>
@@ -237,26 +255,26 @@ space using the depth.</p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="updatecpudepthdata">updateCPUDepthData()<a href="#updatecpudepthdata" class="hash-link" aria-label="Direct link to updateCPUDepthData()" title="Direct link to updateCPUDepthData()" translate="no">​</a></h3>
 <blockquote>
-<p><strong>updateCPUDepthData</strong>(<code>depthData</code>, <code>view_id</code>): <code>void</code></p>
+<p><strong>updateCPUDepthData</strong>(<code>depthData</code>, <code>viewId</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L161" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:161</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L190" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:190</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-8">Parameters<a href="#parameters-8" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="depthdata">depthData<a href="#depthdata" class="hash-link" aria-label="Direct link to depthData" title="Direct link to depthData" translate="no">​</a></h5>
 <p><a href="https://developer.mozilla.org/docs/Web/API/XRCPUDepthInformation" target="_blank" rel="noopener noreferrer"><code>XRCPUDepthInformation</code></a></p>
-<h5 class="anchor anchorWithStickyNavbar_LWe7" id="view_id-1">view_id<a href="#view_id-1" class="hash-link" aria-label="Direct link to view_id" title="Direct link to view_id" translate="no">​</a></h5>
+<h5 class="anchor anchorWithStickyNavbar_LWe7" id="viewid-1">viewId<a href="#viewid-1" class="hash-link" aria-label="Direct link to viewId" title="Direct link to viewId" translate="no">​</a></h5>
 <p><code>number</code> = <code>0</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-11">Returns<a href="#returns-11" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="updategpudepthdata">updateGPUDepthData()<a href="#updategpudepthdata" class="hash-link" aria-label="Direct link to updateGPUDepthData()" title="Direct link to updateGPUDepthData()" translate="no">​</a></h3>
 <blockquote>
-<p><strong>updateGPUDepthData</strong>(<code>depthData</code>, <code>view_id</code>): <code>void</code></p>
+<p><strong>updateGPUDepthData</strong>(<code>depthData</code>, <code>viewId</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L195" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:195</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L226" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:226</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-9">Parameters<a href="#parameters-9" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="depthdata-1">depthData<a href="#depthdata-1" class="hash-link" aria-label="Direct link to depthData" title="Direct link to depthData" translate="no">​</a></h5>
 <p><a href="https://developer.mozilla.org/docs/Web/API/XRWebGLDepthInformation" target="_blank" rel="noopener noreferrer"><code>XRWebGLDepthInformation</code></a></p>
-<h5 class="anchor anchorWithStickyNavbar_LWe7" id="view_id-2">view_id<a href="#view_id-2" class="hash-link" aria-label="Direct link to view_id" title="Direct link to view_id" translate="no">​</a></h5>
+<h5 class="anchor anchorWithStickyNavbar_LWe7" id="viewid-2">viewId<a href="#viewid-2" class="hash-link" aria-label="Direct link to viewId" title="Direct link to viewId" translate="no">​</a></h5>
 <p><code>number</code> = <code>0</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-12">Returns<a href="#returns-12" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
@@ -265,11 +283,11 @@ space using the depth.</p>
 <blockquote>
 <p><strong>updateLocalDepth</strong>(<code>frame</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L256" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:256</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/depth/Depth.ts#L289" target="_blank" rel="noopener noreferrer">src/depth/Depth.ts:289</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-10">Parameters<a href="#parameters-10" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="frame-1">frame<a href="#frame-1" class="hash-link" aria-label="Direct link to frame" title="Direct link to frame" translate="no">​</a></h5>
 <p><a href="https://developer.mozilla.org/docs/Web/API/XRFrame" target="_blank" rel="noopener noreferrer"><code>XRFrame</code></a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-13">Returns<a href="#returns-13" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
-<p><code>void</code></p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/api/classes/CoreSound/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">CoreSound</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/api/classes/DepthMesh/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">DepthMesh</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#constructors" class="table-of-contents__link toc-highlight">Constructors</a><ul><li><a href="#constructor" class="table-of-contents__link toc-highlight">Constructor</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#cpudepthdata" class="table-of-contents__link toc-highlight">cpuDepthData</a></li><li><a href="#deptharray" class="table-of-contents__link toc-highlight">depthArray</a></li><li><a href="#depthmesh" class="table-of-contents__link toc-highlight">depthMesh?</a></li><li><a href="#gpudepthdata" class="table-of-contents__link toc-highlight">gpuDepthData</a></li><li><a href="#height" class="table-of-contents__link toc-highlight">height</a></li><li><a href="#occludableshaders" class="table-of-contents__link toc-highlight">occludableShaders</a></li><li><a href="#options" class="table-of-contents__link toc-highlight">options</a></li><li><a href="#rawvaluetometers" class="table-of-contents__link toc-highlight">rawValueToMeters</a></li><li><a href="#view" class="table-of-contents__link toc-highlight">view</a></li><li><a href="#width" class="table-of-contents__link toc-highlight">width</a></li><li><a href="#instance" class="table-of-contents__link toc-highlight">instance?</a></li></ul></li><li><a href="#methods" class="table-of-contents__link toc-highlight">Methods</a><ul><li><a href="#debuglog" class="table-of-contents__link toc-highlight">debugLog()</a></li><li><a href="#getdepth" class="table-of-contents__link toc-highlight">getDepth()</a></li><li><a href="#getprojecteddepthviewpositionfromworldposition" class="table-of-contents__link toc-highlight">getProjectedDepthViewPositionFromWorldPosition()</a></li><li><a href="#gettexture" class="table-of-contents__link toc-highlight">getTexture()</a></li><li><a href="#getvertex" class="table-of-contents__link toc-highlight">getVertex()</a></li><li><a href="#init" class="table-of-contents__link toc-highlight">init()</a></li><li><a href="#pausedepth" class="table-of-contents__link toc-highlight">pauseDepth()</a></li><li><a href="#renderocclusionpass" class="table-of-contents__link toc-highlight">renderOcclusionPass()</a></li><li><a href="#resumedepth" class="table-of-contents__link toc-highlight">resumeDepth()</a></li><li><a href="#update" class="table-of-contents__link toc-highlight">update()</a></li><li><a href="#updatecpudepthdata" class="table-of-contents__link toc-highlight">updateCPUDepthData()</a></li><li><a href="#updategpudepthdata" class="table-of-contents__link toc-highlight">updateGPUDepthData()</a></li><li><a href="#updatelocaldepth" class="table-of-contents__link toc-highlight">updateLocalDepth()</a></li></ul></li></ul></div></div></div></div></main></div></div></div></div>
+<p><code>void</code></p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/api/classes/CoreSound/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">CoreSound</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/api/classes/DepthMesh/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">DepthMesh</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#constructors" class="table-of-contents__link toc-highlight">Constructors</a><ul><li><a href="#constructor" class="table-of-contents__link toc-highlight">Constructor</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#cpudepthdata" class="table-of-contents__link toc-highlight">cpuDepthData</a></li><li><a href="#deptharray" class="table-of-contents__link toc-highlight">depthArray</a></li><li><a href="#depthmesh" class="table-of-contents__link toc-highlight">depthMesh?</a></li><li><a href="#depthprojectionmatrices" class="table-of-contents__link toc-highlight">depthProjectionMatrices</a></li><li><a href="#depthviewmatrices" class="table-of-contents__link toc-highlight">depthViewMatrices</a></li><li><a href="#depthviewprojectionmatrices" class="table-of-contents__link toc-highlight">depthViewProjectionMatrices</a></li><li><a href="#gpudepthdata" class="table-of-contents__link toc-highlight">gpuDepthData</a></li><li><a href="#height" class="table-of-contents__link toc-highlight">height</a></li><li><a href="#occludableshaders" class="table-of-contents__link toc-highlight">occludableShaders</a></li><li><a href="#options" class="table-of-contents__link toc-highlight">options</a></li><li><a href="#rawvaluetometers" class="table-of-contents__link toc-highlight">rawValueToMeters</a></li><li><a href="#view" class="table-of-contents__link toc-highlight">view</a></li><li><a href="#width" class="table-of-contents__link toc-highlight">width</a></li><li><a href="#instance" class="table-of-contents__link toc-highlight">instance?</a></li></ul></li><li><a href="#methods" class="table-of-contents__link toc-highlight">Methods</a><ul><li><a href="#debuglog" class="table-of-contents__link toc-highlight">debugLog()</a></li><li><a href="#getdepth" class="table-of-contents__link toc-highlight">getDepth()</a></li><li><a href="#getprojecteddepthviewpositionfromworldposition" class="table-of-contents__link toc-highlight">getProjectedDepthViewPositionFromWorldPosition()</a></li><li><a href="#gettexture" class="table-of-contents__link toc-highlight">getTexture()</a></li><li><a href="#getvertex" class="table-of-contents__link toc-highlight">getVertex()</a></li><li><a href="#init" class="table-of-contents__link toc-highlight">init()</a></li><li><a href="#pausedepth" class="table-of-contents__link toc-highlight">pauseDepth()</a></li><li><a href="#renderocclusionpass" class="table-of-contents__link toc-highlight">renderOcclusionPass()</a></li><li><a href="#resumedepth" class="table-of-contents__link toc-highlight">resumeDepth()</a></li><li><a href="#update" class="table-of-contents__link toc-highlight">update()</a></li><li><a href="#updatecpudepthdata" class="table-of-contents__link toc-highlight">updateCPUDepthData()</a></li><li><a href="#updategpudepthdata" class="table-of-contents__link toc-highlight">updateGPUDepthData()</a></li><li><a href="#updatelocaldepth" class="table-of-contents__link toc-highlight">updateLocalDepth()</a></li></ul></li></ul></div></div></div></div></main></div></div></div></div>
 </body>
 </html>

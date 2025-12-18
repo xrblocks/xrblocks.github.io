@@ -12,13 +12,29 @@ export declare const aspectRatios: {
  *
  * @param rgbUv - The RGB UV coordinate, e.g., \{ u: 0.5, v: 0.5 \}.
  * @param xrDeviceCamera - The device camera instance.
+ * @returns The transformed UV coordinate in the render camera clip space, or null if
+ *     inputs are invalid.
+ */
+export declare function transformRgbToRenderCameraClip(rgbUv: {
+    u: number;
+    v: number;
+}, xrDeviceCamera?: XRDeviceCamera): THREE.Vector2 | null;
+/**
+ * Maps a UV coordinate from a RGB space to a destination depth space,
+ * applying Brown-Conrady distortion and affine transformations based on
+ * aspect ratios. If the simulator camera is used, no transformation is applied.
+ *
+ * @param rgbUv - The RGB UV coordinate, e.g., \{ u: 0.5, v: 0.5 \}.
+ * @param renderCameraWorldFromClip - Render camera world from clip, i.e. inverse of the View Projection matrix.
+ * @param depthCameraClipFromWorld - Depth camera clip from world, i.e.
+ * @param xrDeviceCamera - The device camera instance.
  * @returns The transformed UV coordinate in the depth image space, or null if
  *     inputs are invalid.
  */
 export declare function transformRgbToDepthUv(rgbUv: {
     u: number;
     v: number;
-}, xrDeviceCamera?: XRDeviceCamera): {
+}, renderCameraWorldFromClip: THREE.Matrix4, depthCameraClipFromWorld: THREE.Matrix4, xrDeviceCamera?: XRDeviceCamera): {
     u: number;
     v: number;
 } | null;
@@ -30,9 +46,9 @@ export declare function transformRgbToDepthUv(rgbUv: {
  *
  * @param rgbUv - The RGB UV coordinate, e.g., \{ u: 0.5, v: 0.5 \}.
  * @param depthArray - Array containing depth data.
- * @param viewProjectionMatrix - XRView object with corresponding
+ * @param projectionMatrix - XRView object with corresponding
  * projection matrix.
- * @param matrixWorld - Matrix for view-to-world translation.
+ * @param matrixWorld - Rendering camera's model matrix.
  * @param xrDeviceCamera - The device camera instance.
  * @param xrDepth - The SDK's Depth module.
  * @returns Vertex at (u, v) in world space.
@@ -40,7 +56,7 @@ export declare function transformRgbToDepthUv(rgbUv: {
 export declare function transformRgbUvToWorld(rgbUv: {
     u: number;
     v: number;
-}, depthArray: number[] | Uint16Array | Float32Array, viewProjectionMatrix: THREE.Matrix4, matrixWorld: THREE.Matrix4, xrDeviceCamera?: XRDeviceCamera, xrDepth?: Depth | undefined): THREE.Vector3 | null;
+}, depthArray: number[] | Uint16Array | Float32Array, projectionMatrix: THREE.Matrix4, matrixWorld: THREE.Matrix4, xrDeviceCamera?: XRDeviceCamera, xrDepth?: Depth | undefined): THREE.Vector3;
 /**
  * Asynchronously crops a base64 encoded image using a THREE.Box2 bounding box.
  * This function creates an in-memory image, draws a specified portion of it to

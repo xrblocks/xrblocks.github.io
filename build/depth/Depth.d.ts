@@ -10,7 +10,6 @@ export declare class Depth {
     private renderer;
     private scene;
     private projectionMatrixInverse;
-    private xrRefSpace?;
     view: XRView[];
     cpuDepthData: XRCPUDepthInformation[];
     gpuDepthData: XRWebGLDepthInformation[];
@@ -25,6 +24,9 @@ export declare class Depth {
     private occlusionPass?;
     private depthClientsInitialized;
     private depthClients;
+    depthProjectionMatrices: THREE.Matrix4[];
+    depthViewMatrices: THREE.Matrix4[];
+    depthViewProjectionMatrices: THREE.Matrix4[];
     /**
      * Depth is a lightweight manager based on three.js to simply prototyping
      * with Depth in WebXR.
@@ -54,9 +56,10 @@ export declare class Depth {
      * @returns Vertex at (u, v)
      */
     getVertex(u: number, v: number): THREE.Vector3 | null;
-    updateCPUDepthData(depthData: XRCPUDepthInformation, view_id?: number): void;
-    updateGPUDepthData(depthData: XRWebGLDepthInformation, view_id?: number): void;
-    getTexture(view_id: number): THREE.DataTexture | THREE.ExternalTexture | undefined;
+    private updateDepthMatrices;
+    updateCPUDepthData(depthData: XRCPUDepthInformation, viewId?: number): void;
+    updateGPUDepthData(depthData: XRWebGLDepthInformation, viewId?: number): void;
+    getTexture(viewId: number): THREE.DataTexture | THREE.ExternalTexture | undefined;
     update(frame?: XRFrame): void;
     updateLocalDepth(frame: XRFrame): void;
     renderOcclusionPass(): void;

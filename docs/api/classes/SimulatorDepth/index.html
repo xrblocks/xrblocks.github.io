@@ -19,8 +19,8 @@
 <link rel="icon" href="/docs/img/web-app-manifest-512x512.png" sizes="512x512" type="image/png">
 <link rel="manifest" href="/docs/img/site.webmanifest">
 <meta name="algolia-site-verification" content="C7A25C1609F793C8"><link rel="stylesheet" href="/docs/assets/css/styles.727fbdee.css">
-<script src="/docs/assets/js/runtime~main.b6a7ce38.js" defer="defer"></script>
-<script src="/docs/assets/js/main.7bb259c2.js" defer="defer"></script>
+<script src="/docs/assets/js/runtime~main.f949ad9e.js" defer="defer"></script>
+<script src="/docs/assets/js/main.0d2fb6d4.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg style="display: none;"><defs>
@@ -33,24 +33,26 @@
 <blockquote>
 <p><strong>new SimulatorDepth</strong>(<code>simulatorScene</code>): <code>SimulatorDepth</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorDepth.ts#L19" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorDepth.ts:19</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorDepth.ts#L31" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorDepth.ts:31</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters">Parameters<a href="#parameters" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="simulatorscene">simulatorScene<a href="#simulatorscene" class="hash-link" aria-label="Direct link to simulatorScene" title="Direct link to simulatorScene" translate="no">​</a></h5>
 <p><a href="/docs/api/classes/SimulatorScene/"><code>SimulatorScene</code></a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns">Returns<a href="#returns" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>SimulatorDepth</code></p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="properties">Properties<a href="#properties" class="hash-link" aria-label="Direct link to Properties" title="Direct link to Properties" translate="no">​</a></h2>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="camera">camera<a href="#camera" class="hash-link" aria-label="Direct link to camera" title="Direct link to camera" translate="no">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="autoupdatedepthcameraprojection">autoUpdateDepthCameraProjection<a href="#autoupdatedepthcameraprojection" class="hash-link" aria-label="Direct link to autoUpdateDepthCameraProjection" title="Direct link to autoUpdateDepthCameraProjection" translate="no">​</a></h3>
 <blockquote>
-<p><strong>camera</strong>: <a href="https://threejs.org/docs/#api/en/cameras/Camera" target="_blank" rel="noopener noreferrer"><code>Camera</code></a></p>
+<p><strong>autoUpdateDepthCameraProjection</strong>: <code>boolean</code> = <code>true</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorDepth.ts#L10" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorDepth.ts:10</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorDepth.ts#L23" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorDepth.ts:23</a></p>
+<p>If true, copies the rendering camera&#x27;s projection matrix each frame.</p>
 <hr>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="depth">depth<a href="#depth" class="hash-link" aria-label="Direct link to depth" title="Direct link to depth" translate="no">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="autoupdatedepthcameratransform">autoUpdateDepthCameraTransform<a href="#autoupdatedepthcameratransform" class="hash-link" aria-label="Direct link to autoUpdateDepthCameraTransform" title="Direct link to autoUpdateDepthCameraTransform" translate="no">​</a></h3>
 <blockquote>
-<p><strong>depth</strong>: <a href="/docs/api/classes/Depth/"><code>Depth</code></a></p>
+<p><strong>autoUpdateDepthCameraTransform</strong>: <code>boolean</code> = <code>true</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorDepth.ts#L11" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorDepth.ts:11</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorDepth.ts#L27" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorDepth.ts:27</a></p>
+<p>If true, copies the rendering camera&#x27;s transform each frame.</p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="depthbuffer">depthBuffer<a href="#depthbuffer" class="hash-link" aria-label="Direct link to depthBuffer" title="Direct link to depthBuffer" translate="no">​</a></h3>
 <blockquote>
@@ -63,6 +65,12 @@
 <p><strong>depthBufferSlice</strong>: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Float32Array" target="_blank" rel="noopener noreferrer"><code>Float32Array</code></a>&lt;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer" target="_blank" rel="noopener noreferrer"><code>ArrayBuffer</code></a>&gt;</p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorDepth.ts#L14" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorDepth.ts:14</a></p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="depthcamera">depthCamera<a href="#depthcamera" class="hash-link" aria-label="Direct link to depthCamera" title="Direct link to depthCamera" translate="no">​</a></h3>
+<blockquote>
+<p><strong>depthCamera</strong>: <a href="https://threejs.org/docs/#api/en/cameras/Camera" target="_blank" rel="noopener noreferrer"><code>Camera</code></a></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorDepth.ts#L19" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorDepth.ts:19</a></p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="depthheight">depthHeight<a href="#depthheight" class="hash-link" aria-label="Direct link to depthHeight" title="Direct link to depthHeight" translate="no">​</a></h3>
 <blockquote>
@@ -87,18 +95,12 @@
 <p><strong>depthWidth</strong>: <code>number</code> = <code>160</code></p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorDepth.ts#L12" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorDepth.ts:12</a></p>
-<hr>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="renderer">renderer<a href="#renderer" class="hash-link" aria-label="Direct link to renderer" title="Direct link to renderer" translate="no">​</a></h3>
-<blockquote>
-<p><strong>renderer</strong>: <a href="https://threejs.org/docs/#api/en/renderers/WebGLRenderer" target="_blank" rel="noopener noreferrer"><code>WebGLRenderer</code></a></p>
-</blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorDepth.ts#L9" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorDepth.ts:9</a></p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="methods">Methods<a href="#methods" class="hash-link" aria-label="Direct link to Methods" title="Direct link to Methods" translate="no">​</a></h2>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="createrendertarget">createRenderTarget()<a href="#createrendertarget" class="hash-link" aria-label="Direct link to createRenderTarget()" title="Direct link to createRenderTarget()" translate="no">​</a></h3>
 <blockquote>
 <p><strong>createRenderTarget</strong>(): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorDepth.ts#L33" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorDepth.ts:33</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorDepth.ts#L46" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorDepth.ts:46</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-1">Returns<a href="#returns-1" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <hr>
@@ -106,7 +108,7 @@
 <blockquote>
 <p><strong>init</strong>(<code>renderer</code>, <code>camera</code>, <code>depth</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorDepth.ts#L24" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorDepth.ts:24</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorDepth.ts#L36" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorDepth.ts:36</a></p>
 <p>Initialize Simulator Depth.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-1">Parameters<a href="#parameters-1" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="renderer">renderer<a href="#renderer" class="hash-link" aria-label="Direct link to renderer" title="Direct link to renderer" translate="no">​</a></h5>
@@ -118,28 +120,12 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-2">Returns<a href="#returns-2" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <hr>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="renderdepthscene">renderDepthScene()<a href="#renderdepthscene" class="hash-link" aria-label="Direct link to renderDepthScene()" title="Direct link to renderDepthScene()" translate="no">​</a></h3>
-<blockquote>
-<p><strong>renderDepthScene</strong>(): <code>void</code></p>
-</blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorDepth.ts#L50" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorDepth.ts:50</a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-3">Returns<a href="#returns-3" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
-<p><code>void</code></p>
-<hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="update">update()<a href="#update" class="hash-link" aria-label="Direct link to update()" title="Direct link to update()" translate="no">​</a></h3>
 <blockquote>
 <p><strong>update</strong>(): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorDepth.ts#L45" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorDepth.ts:45</a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-4">Returns<a href="#returns-4" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
-<p><code>void</code></p>
-<hr>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="updatedepth">updateDepth()<a href="#updatedepth" class="hash-link" aria-label="Direct link to updateDepth()" title="Direct link to updateDepth()" translate="no">​</a></h3>
-<blockquote>
-<p><strong>updateDepth</strong>(): <code>void</code></p>
-</blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorDepth.ts#L59" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorDepth.ts:59</a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-5">Returns<a href="#returns-5" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
-<p><code>void</code></p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/api/classes/SimulatorControls/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">SimulatorControls</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/api/classes/SimulatorDepthMaterial/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">SimulatorDepthMaterial</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#constructors" class="table-of-contents__link toc-highlight">Constructors</a><ul><li><a href="#constructor" class="table-of-contents__link toc-highlight">Constructor</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#camera" class="table-of-contents__link toc-highlight">camera</a></li><li><a href="#depth" class="table-of-contents__link toc-highlight">depth</a></li><li><a href="#depthbuffer" class="table-of-contents__link toc-highlight">depthBuffer</a></li><li><a href="#depthbufferslice" class="table-of-contents__link toc-highlight">depthBufferSlice</a></li><li><a href="#depthheight" class="table-of-contents__link toc-highlight">depthHeight</a></li><li><a href="#depthmaterial" class="table-of-contents__link toc-highlight">depthMaterial</a></li><li><a href="#depthrendertarget" class="table-of-contents__link toc-highlight">depthRenderTarget</a></li><li><a href="#depthwidth" class="table-of-contents__link toc-highlight">depthWidth</a></li><li><a href="#renderer" class="table-of-contents__link toc-highlight">renderer</a></li></ul></li><li><a href="#methods" class="table-of-contents__link toc-highlight">Methods</a><ul><li><a href="#createrendertarget" class="table-of-contents__link toc-highlight">createRenderTarget()</a></li><li><a href="#init" class="table-of-contents__link toc-highlight">init()</a></li><li><a href="#renderdepthscene" class="table-of-contents__link toc-highlight">renderDepthScene()</a></li><li><a href="#update" class="table-of-contents__link toc-highlight">update()</a></li><li><a href="#updatedepth" class="table-of-contents__link toc-highlight">updateDepth()</a></li></ul></li></ul></div></div></div></div></main></div></div></div></div>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorDepth.ts#L58" target="_blank" rel="noopener noreferrer">src/simulator/SimulatorDepth.ts:58</a></p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-3">Returns<a href="#returns-3" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<p><code>void</code></p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/api/classes/SimulatorControls/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">SimulatorControls</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/api/classes/SimulatorDepthMaterial/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">SimulatorDepthMaterial</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#constructors" class="table-of-contents__link toc-highlight">Constructors</a><ul><li><a href="#constructor" class="table-of-contents__link toc-highlight">Constructor</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#autoupdatedepthcameraprojection" class="table-of-contents__link toc-highlight">autoUpdateDepthCameraProjection</a></li><li><a href="#autoupdatedepthcameratransform" class="table-of-contents__link toc-highlight">autoUpdateDepthCameraTransform</a></li><li><a href="#depthbuffer" class="table-of-contents__link toc-highlight">depthBuffer</a></li><li><a href="#depthbufferslice" class="table-of-contents__link toc-highlight">depthBufferSlice</a></li><li><a href="#depthcamera" class="table-of-contents__link toc-highlight">depthCamera</a></li><li><a href="#depthheight" class="table-of-contents__link toc-highlight">depthHeight</a></li><li><a href="#depthmaterial" class="table-of-contents__link toc-highlight">depthMaterial</a></li><li><a href="#depthrendertarget" class="table-of-contents__link toc-highlight">depthRenderTarget</a></li><li><a href="#depthwidth" class="table-of-contents__link toc-highlight">depthWidth</a></li></ul></li><li><a href="#methods" class="table-of-contents__link toc-highlight">Methods</a><ul><li><a href="#createrendertarget" class="table-of-contents__link toc-highlight">createRenderTarget()</a></li><li><a href="#init" class="table-of-contents__link toc-highlight">init()</a></li><li><a href="#update" class="table-of-contents__link toc-highlight">update()</a></li></ul></li></ul></div></div></div></div></main></div></div></div></div>
 </body>
 </html>

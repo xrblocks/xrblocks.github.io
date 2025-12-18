@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.5.1
- * @commitid cbf3f14
- * @builddate 2025-12-17T15:23:18.669Z
+ * @commitid 689e2f0
+ * @builddate 2025-12-18T01:19:55.452Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -3075,6 +3075,9 @@ class Depth {
         // Whether we're counting the number of depth clients.
         this.depthClientsInitialized = false;
         this.depthClients = new Set();
+        this.depthProjectionMatrices = [];
+        this.depthViewMatrices = [];
+        this.depthViewProjectionMatrices = [];
         if (Depth.instance) {
             return Depth.instance;
         }
@@ -3157,16 +3160,34 @@ class Depth {
         vertexPosition.multiplyScalar(-depth / vertexPosition.z);
         return vertexPosition;
     }
-    updateCPUDepthData(depthData, view_id = 0) {
-        this.cpuDepthData[view_id] = depthData;
+    updateDepthMatrices(depthData, viewId) {
+        // Populate depth view and projection matrices.
+        while (viewId >= this.depthViewMatrices.length) {
+            this.depthViewMatrices.push(new THREE.Matrix4());
+            this.depthViewProjectionMatrices.push(new THREE.Matrix4());
+            this.depthProjectionMatrices.push(new THREE.Matrix4());
+        }
+        if (depthData.projectionMatrix && depthData.transform) {
+            this.depthProjectionMatrices[viewId].fromArray(depthData.projectionMatrix);
+            this.depthViewMatrices[viewId].fromArray(depthData.transform.inverse.matrix);
+        }
+        else {
+            const camera = this.renderer.xr?.getCamera()?.cameras?.[viewId] ?? this.camera;
+            this.depthProjectionMatrices[viewId].copy(camera.projectionMatrix);
+            this.depthViewMatrices[viewId].copy(camera.matrixWorldInverse);
+        }
+        this.depthViewProjectionMatrices[viewId].multiplyMatrices(this.depthProjectionMatrices[viewId], this.depthViewMatrices[viewId]);
+    }
+    updateCPUDepthData(depthData, viewId = 0) {
+        this.cpuDepthData[viewId] = depthData;
         // Workaround for b/382679381.
         this.rawValueToMeters = depthData.rawValueToMeters;
         if (this.options.useFloat32) {
             this.rawValueToMeters = 1.0;
         }
         // Updates Depth Array.
-        if (this.depthArray[view_id] == null) {
-            this.depthArray[view_id] = this.options.useFloat32
+        if (this.depthArray[viewId] == null) {
+            this.depthArray[viewId] = this.options.useFloat32
                 ? new Float32Array(depthData.data)
                 : new Uint16Array(depthData.data);
             this.width = depthData.width;
@@ -3174,20 +3195,21 @@ class Depth {
         }
         else {
             // Copies the data from an ArrayBuffer to the existing TypedArray.
-            this.depthArray[view_id].set(this.options.useFloat32
+            this.depthArray[viewId].set(this.options.useFloat32
                 ? new Float32Array(depthData.data)
                 : new Uint16Array(depthData.data));
         }
         // Updates Depth Texture.
         if (this.options.depthTexture.enabled && this.depthTextures) {
-            this.depthTextures.updateData(depthData, view_id);
+            this.depthTextures.updateData(depthData, viewId);
         }
-        if (this.options.depthMesh.enabled && this.depthMesh && view_id == 0) {
+        if (this.options.depthMesh.enabled && this.depthMesh && viewId == 0) {
             this.depthMesh.updateDepth(depthData);
         }
+        this.updateDepthMatrices(depthData, viewId);
     }
-    updateGPUDepthData(depthData, view_id = 0) {
-        this.gpuDepthData[view_id] = depthData;
+    updateGPUDepthData(depthData, viewId = 0) {
+        this.gpuDepthData[viewId] = depthData;
         // Workaround for b/382679381.
         this.rawValueToMeters = depthData.rawValueToMeters;
         if (this.options.useFloat32) {
@@ -3200,8 +3222,8 @@ class Depth {
             ? this.depthMesh.convertGPUToGPU(depthData)
             : null;
         if (cpuDepth) {
-            if (this.depthArray[view_id] == null) {
-                this.depthArray[view_id] = this.options.useFloat32
+            if (this.depthArray[viewId] == null) {
+                this.depthArray[viewId] = this.options.useFloat32
                     ? new Float32Array(cpuDepth.data)
                     : new Uint16Array(cpuDepth.data);
                 this.width = cpuDepth.width;
@@ -3209,16 +3231,16 @@ class Depth {
             }
             else {
                 // Copies the data from an ArrayBuffer to the existing TypedArray.
-                this.depthArray[view_id].set(this.options.useFloat32
+                this.depthArray[viewId].set(this.options.useFloat32
                     ? new Float32Array(cpuDepth.data)
                     : new Uint16Array(cpuDepth.data));
             }
         }
         // Updates Depth Texture.
         if (this.options.depthTexture.enabled && this.depthTextures) {
-            this.depthTextures.updateNativeTexture(depthData, this.renderer, view_id);
+            this.depthTextures.updateNativeTexture(depthData, this.renderer, viewId);
         }
-        if (this.options.depthMesh.enabled && this.depthMesh && view_id == 0) {
+        if (this.options.depthMesh.enabled && this.depthMesh && viewId == 0) {
             if (cpuDepth) {
                 this.depthMesh.updateDepth(cpuDepth);
             }
@@ -3226,11 +3248,12 @@ class Depth {
                 this.depthMesh.updateGPUDepth(depthData);
             }
         }
+        this.updateDepthMatrices(depthData, viewId);
     }
-    getTexture(view_id) {
+    getTexture(viewId) {
         if (!this.options.depthTexture.enabled)
             return undefined;
-        return this.depthTextures?.get(view_id);
+        return this.depthTextures?.get(viewId);
     }
     update(frame) {
         if (!this.options.enabled)
@@ -3264,16 +3287,9 @@ class Depth {
                 return;
             }
         }
-        if (this.xrRefSpace == null) {
-            session.requestReferenceSpace('local').then((refSpace) => {
-                this.xrRefSpace = refSpace;
-            });
-            session.addEventListener('end', () => {
-                this.xrRefSpace = undefined;
-            });
-        }
-        else {
-            const pose = frame.getViewerPose(this.xrRefSpace);
+        const xrRefSpace = this.renderer.xr.getReferenceSpace();
+        if (xrRefSpace) {
+            const pose = frame.getViewerPose(xrRefSpace);
             if (pose) {
                 for (let view_id = 0; view_id < pose.views.length; ++view_id) {
                     const view = pose.views[view_id];
@@ -3348,10 +3364,10 @@ const aspectRatios = {
  *
  * @param rgbUv - The RGB UV coordinate, e.g., \{ u: 0.5, v: 0.5 \}.
  * @param xrDeviceCamera - The device camera instance.
- * @returns The transformed UV coordinate in the depth image space, or null if
+ * @returns The transformed UV coordinate in the render camera clip space, or null if
  *     inputs are invalid.
  */
-function transformRgbToDepthUv(rgbUv, xrDeviceCamera) {
+function transformRgbToRenderCameraClip(rgbUv, xrDeviceCamera) {
     if (xrDeviceCamera?.simulatorCamera) {
         // The simulator camera crops the viewport image to match its aspect ratio,
         // while the depth map covers the entire viewport, so we adjust for this.
@@ -3369,7 +3385,7 @@ function transformRgbToDepthUv(rgbUv, xrDeviceCamera) {
             const relativeHeight = viewportAspect / cameraAspect;
             v = v * relativeHeight + (1.0 - relativeHeight) / 2.0;
         }
-        return { u, v: 1.0 - v };
+        return new THREE.Vector2(2 * u - 1, 2 * v - 1);
     }
     if (!aspectRatios || !aspectRatios.depth || !aspectRatios.RGB) {
         console.error('Invalid aspect ratios provided.');
@@ -3408,10 +3424,34 @@ function transformRgbToDepthUv(rgbUv, xrDeviceCamera) {
     // Apply the final user-controlled scaling (zoom and stretch).
     const finalNormX = u_fitted * params.scale * params.scaleX;
     const finalNormY = v_fitted * params.scale * params.scaleY;
-    // Convert the final normalized coordinate back to a UV coordinate [0, 1].
-    const finalU = finalNormX + 0.5;
-    const finalV = finalNormY + 0.5;
-    return { u: finalU, v: 1.0 - finalV };
+    return new THREE.Vector2(2 * finalNormX, 2 * finalNormY);
+}
+/**
+ * Maps a UV coordinate from a RGB space to a destination depth space,
+ * applying Brown-Conrady distortion and affine transformations based on
+ * aspect ratios. If the simulator camera is used, no transformation is applied.
+ *
+ * @param rgbUv - The RGB UV coordinate, e.g., \{ u: 0.5, v: 0.5 \}.
+ * @param renderCameraWorldFromClip - Render camera world from clip, i.e. inverse of the View Projection matrix.
+ * @param depthCameraClipFromWorld - Depth camera clip from world, i.e.
+ * @param xrDeviceCamera - The device camera instance.
+ * @returns The transformed UV coordinate in the depth image space, or null if
+ *     inputs are invalid.
+ */
+function transformRgbToDepthUv(rgbUv, renderCameraWorldFromClip, depthCameraClipFromWorld, xrDeviceCamera) {
+    // Render camera clip space coordinates.
+    const clipCoords = transformRgbToRenderCameraClip(rgbUv, xrDeviceCamera);
+    if (!clipCoords) {
+        return null;
+    }
+    // Backwards project from the render camera to depth camera.
+    const depthClipCoord = new THREE.Vector4(clipCoords.x, clipCoords.y, 1, 1);
+    depthClipCoord.applyMatrix4(renderCameraWorldFromClip);
+    depthClipCoord.applyMatrix4(depthCameraClipFromWorld);
+    depthClipCoord.multiplyScalar(1 / depthClipCoord.w);
+    const finalU = 0.5 * depthClipCoord.x + 0.5;
+    const finalV = 1.0 - (0.5 * depthClipCoord.y + 0.5);
+    return { u: finalU, v: finalV };
 }
 /**
  * Retrieves the world space position of a given RGB UV coordinate.
@@ -3421,19 +3461,30 @@ function transformRgbToDepthUv(rgbUv, xrDeviceCamera) {
  *
  * @param rgbUv - The RGB UV coordinate, e.g., \{ u: 0.5, v: 0.5 \}.
  * @param depthArray - Array containing depth data.
- * @param viewProjectionMatrix - XRView object with corresponding
+ * @param projectionMatrix - XRView object with corresponding
  * projection matrix.
- * @param matrixWorld - Matrix for view-to-world translation.
+ * @param matrixWorld - Rendering camera's model matrix.
  * @param xrDeviceCamera - The device camera instance.
  * @param xrDepth - The SDK's Depth module.
  * @returns Vertex at (u, v) in world space.
  */
-function transformRgbUvToWorld(rgbUv, depthArray, viewProjectionMatrix, matrixWorld, xrDeviceCamera, xrDepth = Depth.instance) {
-    if (!depthArray || !viewProjectionMatrix || !matrixWorld || !xrDepth)
-        return null;
-    const depthUV = transformRgbToDepthUv(rgbUv, xrDeviceCamera);
+function transformRgbUvToWorld(rgbUv, depthArray, projectionMatrix, matrixWorld, xrDeviceCamera, xrDepth = Depth.instance) {
+    if (!depthArray || !projectionMatrix || !matrixWorld || !xrDepth) {
+        throw new Error('Missing parameter in transformRgbUvToWorld');
+    }
+    const worldFromClip = matrixWorld
+        .clone()
+        .invert()
+        .premultiply(projectionMatrix)
+        .invert();
+    const depthProjectionMatrixInverse = xrDepth.depthProjectionMatrices[0]
+        .clone()
+        .invert();
+    const depthClipFromWorld = xrDepth.depthViewProjectionMatrices[0];
+    const depthModelMatrix = xrDepth.depthViewMatrices[0].clone().invert();
+    const depthUV = transformRgbToDepthUv(rgbUv, worldFromClip, depthClipFromWorld, xrDeviceCamera);
     if (!depthUV) {
-        return null;
+        throw new Error('Failed to get depth UV');
     }
     const { u: depthU, v: depthV } = depthUV;
     const depthX = Math.round(clamp(depthU * xrDepth.width, 0, xrDepth.width - 1));
@@ -3444,12 +3495,13 @@ function transformRgbUvToWorld(rgbUv, depthArray, viewProjectionMatrix, matrixWo
     // Convert UV to normalized device coordinates and create a point on the near
     // plane.
     const viewSpacePosition = new THREE.Vector3(2.0 * (depthU - 0.5), 2.0 * (depthV - 0.5), -1);
-    const viewProjectionMatrixInverse = viewProjectionMatrix.clone().invert();
     // Unproject the point from clip space to view space and scale it along the
     // ray from the camera to the correct depth. Camera looks down -Z axis.
-    viewSpacePosition.applyMatrix4(viewProjectionMatrixInverse);
+    viewSpacePosition.applyMatrix4(depthProjectionMatrixInverse);
     viewSpacePosition.multiplyScalar(-depthInMeters / viewSpacePosition.z);
-    const worldPosition = viewSpacePosition.clone().applyMatrix4(matrixWorld);
+    const worldPosition = viewSpacePosition
+        .clone()
+        .applyMatrix4(depthModelMatrix);
     return worldPosition;
 }
 /**
@@ -8196,6 +8248,15 @@ class SimulatorDepth {
         this.depthWidth = 160;
         this.depthHeight = 160;
         this.depthBufferSlice = new Float32Array();
+        /**
+         * If true, copies the rendering camera's projection matrix each frame.
+         */
+        this.autoUpdateDepthCameraProjection = true;
+        /**
+         * If true, copies the rendering camera's transform each frame.
+         */
+        this.autoUpdateDepthCameraTransform = true;
+        this.projectionMatrixArray = new Float32Array(16);
     }
     /**
      * Initialize Simulator Depth.
@@ -8204,6 +8265,7 @@ class SimulatorDepth {
         this.renderer = renderer;
         this.camera = camera;
         this.depth = depth;
+        this.depthCamera = this.camera.clone();
         this.createRenderTarget();
         this.depthMaterial = new SimulatorDepthMaterial();
     }
@@ -8215,14 +8277,32 @@ class SimulatorDepth {
         this.depthBuffer = new Float32Array(this.depthWidth * this.depthHeight);
     }
     update() {
+        this.updateDepthCamera();
         this.renderDepthScene();
         this.updateDepth();
+    }
+    updateDepthCamera() {
+        const renderingCamera = this.camera;
+        const depthCamera = this.depthCamera;
+        if (this.autoUpdateDepthCameraProjection) {
+            depthCamera.projectionMatrix.copy(renderingCamera.projectionMatrix);
+            depthCamera.projectionMatrixInverse.copy(renderingCamera.projectionMatrixInverse);
+        }
+        if (this.autoUpdateDepthCameraTransform) {
+            depthCamera.position.copy(renderingCamera.position);
+            depthCamera.rotation.order = renderingCamera.rotation.order;
+            depthCamera.quaternion.copy(renderingCamera.quaternion);
+            depthCamera.scale.copy(renderingCamera.scale);
+            depthCamera.matrix.copy(renderingCamera.matrix);
+            depthCamera.matrixWorld.copy(renderingCamera.matrixWorld);
+            depthCamera.matrixWorldInverse.copy(renderingCamera.matrixWorldInverse);
+        }
     }
     renderDepthScene() {
         const originalRenderTarget = this.renderer.getRenderTarget();
         this.renderer.setRenderTarget(this.depthRenderTarget);
         this.simulatorScene.overrideMaterial = this.depthMaterial;
-        this.renderer.render(this.simulatorScene, this.camera);
+        this.renderer.render(this.simulatorScene, this.depthCamera);
         this.simulatorScene.overrideMaterial = null;
         this.renderer.setRenderTarget(originalRenderTarget);
     }
@@ -8247,11 +8327,14 @@ class SimulatorDepth {
             // Copy the temp slice (original row i) to row j
             this.depthBuffer.set(this.depthBufferSlice, j_offset);
         }
+        this.depthCamera.projectionMatrix.toArray(this.projectionMatrixArray);
         const depthData = {
             width: this.depthWidth,
             height: this.depthHeight,
             data: this.depthBuffer.buffer,
             rawValueToMeters: 1.0,
+            projectionMatrix: this.projectionMatrixArray,
+            transform: new XRRigidTransform(this.depthCamera.position, this.depthCamera.quaternion),
         };
         this.depth.updateCPUDepthData(depthData, 0);
     }
@@ -17218,5 +17301,5 @@ class VideoFileStream extends VideoStream {
     }
 }
 
-export { AI, AIOptions, AVERAGE_IPD_METERS, ActiveControllers, Agent, AnimatableNumber, AudioListener, AudioPlayer, BACK, BackgroundMusic, CategoryVolumes, Col, Core, CoreSound, DEFAULT_DEVICE_CAMERA_HEIGHT, DEFAULT_DEVICE_CAMERA_WIDTH, DEFAULT_RGB_TO_DEPTH_PARAMS, DOWN, Depth, DepthMesh, DepthMeshOptions, DepthOptions, DepthTextures, DetectedObject, DetectedPlane, DeviceCameraOptions, DragManager, DragMode, ExitButton, FORWARD, FreestandingSlider, GazeController, Gemini, GeminiOptions, GenerateSkyboxTool, GestureRecognition, GestureRecognitionOptions, GetWeatherTool, Grid, HAND_BONE_IDX_CONNECTION_MAP, HAND_JOINT_COUNT, HAND_JOINT_IDX_CONNECTION_MAP, HAND_JOINT_NAMES, Handedness, Hands, HandsOptions, HorizontalPager, IconButton, IconView, ImageView, Input, InputOptions, Keycodes, LEFT, LEFT_VIEW_ONLY_LAYER, LabelView, Lighting, LightingOptions, LoadingSpinnerManager, MaterialSymbolsView, MeshScript, ModelLoader, ModelViewer, MouseController, NEXT_SIMULATOR_MODE, NUM_HANDS, OCCLUDABLE_ITEMS_LAYER, ObjectDetector, ObjectsOptions, OcclusionPass, OcclusionUtils, OpenAI, OpenAIOptions, Options, PageIndicator, Pager, PagerState, Panel, PanelMesh, Physics, PhysicsOptions, PinchOnButtonAction, PlaneDetector, PlanesOptions, RIGHT, RIGHT_VIEW_ONLY_LAYER, Registry, Reticle, ReticleOptions, RotationRaycastMesh, Row, SIMULATOR_HAND_POSE_NAMES, SIMULATOR_HAND_POSE_TO_JOINTS_LEFT, SIMULATOR_HAND_POSE_TO_JOINTS_RIGHT, SOUND_PRESETS, ScreenshotSynthesizer, Script, ScriptMixin, ScriptsManager, ScrollingTroikaTextView, SetSimulatorModeEvent, ShowHandsAction, Simulator, SimulatorCamera, SimulatorControlMode, SimulatorControllerState, SimulatorControls, SimulatorDepth, SimulatorDepthMaterial, SimulatorHandPose, SimulatorHandPoseChangeRequestEvent, SimulatorHands, SimulatorInterface, SimulatorMediaDeviceInfo, SimulatorMode, SimulatorOptions, SimulatorRenderMode, SimulatorScene, SimulatorUser, SimulatorUserAction, SketchPanel, SkyboxAgent, SoundOptions, SoundSynthesizer, SpatialAudio, SpatialPanel, SpeechRecognizer, SpeechRecognizerOptions, SpeechSynthesizer, SpeechSynthesizerOptions, SplatAnchor, StreamState, TextButton, TextScrollerState, TextView, Tool, UI, UI_OVERLAY_LAYER, UP, UX, User, VIEW_DEPTH_GAP, VerticalPager, VideoFileStream, VideoStream, VideoView, View, VolumeCategory, WaitFrame, WalkTowardsPanelAction, World, WorldOptions, XRButton, XRDeviceCamera, XREffects, XRPass, XRTransitionOptions, XR_BLOCKS_ASSETS_PATH, ZERO_VECTOR3, add, ai, aspectRatios, callInitWithDependencyInjection, clamp, clampRotationToAngle, core, cropImage, extractYaw, getColorHex, getDeltaTime, getUrlParamBool, getUrlParamFloat, getUrlParamInt, getUrlParameter, getVec4ByColorString, getXrCameraLeft, getXrCameraRight, init, initScript, lerp, loadStereoImageAsTextures, loadingSpinnerManager, lookAtRotation, objectIsDescendantOf, parseBase64DataURL, placeObjectAtIntersectionFacingTarget, print, scene, showOnlyInLeftEye, showOnlyInRightEye, showReticleOnDepthMesh, transformRgbToDepthUv, transformRgbUvToWorld, traverseUtil, uninitScript, urlParams, user, world, xrDepthMeshOptions, xrDepthMeshPhysicsOptions, xrDepthMeshVisualizationOptions, xrDeviceCameraEnvironmentContinuousOptions, xrDeviceCameraEnvironmentOptions, xrDeviceCameraUserContinuousOptions, xrDeviceCameraUserOptions };
+export { AI, AIOptions, AVERAGE_IPD_METERS, ActiveControllers, Agent, AnimatableNumber, AudioListener, AudioPlayer, BACK, BackgroundMusic, CategoryVolumes, Col, Core, CoreSound, DEFAULT_DEVICE_CAMERA_HEIGHT, DEFAULT_DEVICE_CAMERA_WIDTH, DEFAULT_RGB_TO_DEPTH_PARAMS, DOWN, Depth, DepthMesh, DepthMeshOptions, DepthOptions, DepthTextures, DetectedObject, DetectedPlane, DeviceCameraOptions, DragManager, DragMode, ExitButton, FORWARD, FreestandingSlider, GazeController, Gemini, GeminiOptions, GenerateSkyboxTool, GestureRecognition, GestureRecognitionOptions, GetWeatherTool, Grid, HAND_BONE_IDX_CONNECTION_MAP, HAND_JOINT_COUNT, HAND_JOINT_IDX_CONNECTION_MAP, HAND_JOINT_NAMES, Handedness, Hands, HandsOptions, HorizontalPager, IconButton, IconView, ImageView, Input, InputOptions, Keycodes, LEFT, LEFT_VIEW_ONLY_LAYER, LabelView, Lighting, LightingOptions, LoadingSpinnerManager, MaterialSymbolsView, MeshScript, ModelLoader, ModelViewer, MouseController, NEXT_SIMULATOR_MODE, NUM_HANDS, OCCLUDABLE_ITEMS_LAYER, ObjectDetector, ObjectsOptions, OcclusionPass, OcclusionUtils, OpenAI, OpenAIOptions, Options, PageIndicator, Pager, PagerState, Panel, PanelMesh, Physics, PhysicsOptions, PinchOnButtonAction, PlaneDetector, PlanesOptions, RIGHT, RIGHT_VIEW_ONLY_LAYER, Registry, Reticle, ReticleOptions, RotationRaycastMesh, Row, SIMULATOR_HAND_POSE_NAMES, SIMULATOR_HAND_POSE_TO_JOINTS_LEFT, SIMULATOR_HAND_POSE_TO_JOINTS_RIGHT, SOUND_PRESETS, ScreenshotSynthesizer, Script, ScriptMixin, ScriptsManager, ScrollingTroikaTextView, SetSimulatorModeEvent, ShowHandsAction, Simulator, SimulatorCamera, SimulatorControlMode, SimulatorControllerState, SimulatorControls, SimulatorDepth, SimulatorDepthMaterial, SimulatorHandPose, SimulatorHandPoseChangeRequestEvent, SimulatorHands, SimulatorInterface, SimulatorMediaDeviceInfo, SimulatorMode, SimulatorOptions, SimulatorRenderMode, SimulatorScene, SimulatorUser, SimulatorUserAction, SketchPanel, SkyboxAgent, SoundOptions, SoundSynthesizer, SpatialAudio, SpatialPanel, SpeechRecognizer, SpeechRecognizerOptions, SpeechSynthesizer, SpeechSynthesizerOptions, SplatAnchor, StreamState, TextButton, TextScrollerState, TextView, Tool, UI, UI_OVERLAY_LAYER, UP, UX, User, VIEW_DEPTH_GAP, VerticalPager, VideoFileStream, VideoStream, VideoView, View, VolumeCategory, WaitFrame, WalkTowardsPanelAction, World, WorldOptions, XRButton, XRDeviceCamera, XREffects, XRPass, XRTransitionOptions, XR_BLOCKS_ASSETS_PATH, ZERO_VECTOR3, add, ai, aspectRatios, callInitWithDependencyInjection, clamp, clampRotationToAngle, core, cropImage, extractYaw, getColorHex, getDeltaTime, getUrlParamBool, getUrlParamFloat, getUrlParamInt, getUrlParameter, getVec4ByColorString, getXrCameraLeft, getXrCameraRight, init, initScript, lerp, loadStereoImageAsTextures, loadingSpinnerManager, lookAtRotation, objectIsDescendantOf, parseBase64DataURL, placeObjectAtIntersectionFacingTarget, print, scene, showOnlyInLeftEye, showOnlyInRightEye, showReticleOnDepthMesh, transformRgbToDepthUv, transformRgbToRenderCameraClip, transformRgbUvToWorld, traverseUtil, uninitScript, urlParams, user, world, xrDepthMeshOptions, xrDepthMeshPhysicsOptions, xrDepthMeshVisualizationOptions, xrDeviceCameraEnvironmentContinuousOptions, xrDeviceCameraEnvironmentOptions, xrDeviceCameraUserContinuousOptions, xrDeviceCameraUserOptions };
 //# sourceMappingURL=xrblocks.js.map
