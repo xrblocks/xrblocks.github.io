@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.5.1
- * @commitid 2a53001
- * @builddate 2025-12-18T21:33:58.637Z
+ * @commitid c94c86d
+ * @builddate 2025-12-19T17:33:28.539Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -8265,7 +8265,16 @@ class SimulatorDepth {
         this.renderer = renderer;
         this.camera = camera;
         this.depth = depth;
-        this.depthCamera = this.camera.clone();
+        if (this.camera instanceof THREE.PerspectiveCamera) {
+            this.depthCamera = new THREE.PerspectiveCamera();
+        }
+        else if (this.camera instanceof THREE.OrthographicCamera) {
+            this.depthCamera = new THREE.OrthographicCamera();
+        }
+        else {
+            throw new Error('Unknown camera type');
+        }
+        this.depthCamera.copy(this.camera, /*recursive=*/ false);
         this.createRenderTarget();
         this.depthMaterial = new SimulatorDepthMaterial();
     }
