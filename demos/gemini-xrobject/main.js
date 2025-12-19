@@ -19,7 +19,7 @@ options.world.enableObjectDetection();
 options.depth.enabled = true;
 options.depth.depthMesh.updateFullResolutionGeometry = true;
 options.depth.depthMesh.renderShadow = true;
-options.depth.depthTexture.enabled = true;
+options.depth.depthTexture.enabled = false;
 options.depth.matchDepthView = false;
 options.hands.enabled = true;
 options.hands.visualization = false;
