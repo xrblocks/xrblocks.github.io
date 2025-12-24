@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.6.0
- * @commitid da31108
- * @builddate 2025-12-23T18:01:38.083Z
+ * @commitid 3d88593
+ * @builddate 2025-12-24T00:56:19.212Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -2502,7 +2502,7 @@ const xrDepthMeshPhysicsOptions = deepFreeze(new DepthOptions({
 class DepthTextures {
     constructor(options) {
         this.options = options;
-        this.uint16Arrays = [];
+        this.float32Arrays = [];
         this.uint8Arrays = [];
         this.dataTextures = [];
         this.nativeTextures = [];
@@ -2513,10 +2513,10 @@ class DepthTextures {
             this.dataTextures[view_id].dispose();
         }
         if (this.options.useFloat32) {
-            const typedArray = new Uint16Array(depthData.width * depthData.height);
+            const typedArray = new Float32Array(depthData.width * depthData.height);
             const format = THREE.RedFormat;
-            const type = THREE.HalfFloatType;
-            this.uint16Arrays[view_id] = typedArray;
+            const type = THREE.FloatType;
+            this.float32Arrays[view_id] = typedArray;
             this.dataTextures[view_id] = new THREE.DataTexture(typedArray, depthData.width, depthData.height, format, type);
         }
         else {
@@ -2534,12 +2534,7 @@ class DepthTextures {
             this.createDataDepthTextures(depthData, view_id);
         }
         if (this.options.useFloat32) {
-            const float32Data = new Float32Array(depthData.data);
-            const float16Data = new Uint16Array(float32Data.length);
-            for (let i = 0; i < float16Data.length; i++) {
-                float16Data[i] = THREE.DataUtils.toHalfFloat(float32Data[i]);
-            }
-            this.uint16Arrays[view_id].set(float16Data);
+            this.float32Arrays[view_id].set(new Float32Array(depthData.data));
         }
         else {
             this.uint8Arrays[view_id].set(new Uint8Array(depthData.data));

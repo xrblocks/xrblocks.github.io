@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { DepthOptions } from './DepthOptions';
 export declare class DepthTextures {
     private options;
-    private uint16Arrays;
+    private float32Arrays;
     private uint8Arrays;
     private dataTextures;
     private nativeTextures;
