@@ -175,38 +175,55 @@
 
         createPlayerPanel() {
           // Panel 2: Interactive Media Player (Top-Center)
-          const playerPanel = new xb.SpatialPanel({
-            width: 1.2,
-            height: 1.0,
-            backgroundColor: '#21252baa',
+          const panel = new xb.SpatialPanel({
+            width: 1.5,
+            height: 1.25,
+            backgroundColor: '#00000000',
           });
-          playerPanel.position.set(
+          panel.position.set(
             0,
             xb.user.height * 2.0,
             -xb.user.panelDistance - 1.0
           );
-          this.add(playerPanel);
-
-          const playerGrid = playerPanel.addGrid();
-          const videoRow = playerGrid.addRow({weight: 0.6});
-          videoRow.addVideo({
-            src: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+          panel.isRoot = true;
+          this.add(panel);
+          const grid = panel.addGrid();
+          // Space for orbiter
+          grid.addRow({weight: 0.25});
+          // player row
+          const playerRow = grid.addRow({weight: 0.75});
+          const playerPanel = playerRow.addPanel({
+            width: 1.0,
+            height: 1.2,
+            backgroundColor: '#21252baa',
           });
-
-          const progressRow = playerGrid.addRow({weight: 0.1});
-
-          const controlsRow = playerGrid.addRow({weight: 0.3});
-          controlsRow.addCol({weight: 0.2});
-          controlsRow
-            .addCol({weight: 0.2})
-            .addIconButton({text: 'skip_previous', fontSize: 0.6});
-          controlsRow
-            .addCol({weight: 0.2})
-            .addIconButton({text: 'play_arrow', fontSize: 0.8});
-          controlsRow
-            .addCol({weight: 0.2})
-            .addIconButton({text: 'skip_next', fontSize: 0.6});
-          controlsRow.addCol({weight: 0.2});
+          const playerGrid = playerPanel.addGrid();
+          {
+            // video row
+            playerGrid.addRow({weight: 0.1});
+            const videoRow = playerGrid.addRow({weight: 0.5});
+            videoRow.addVideo({
+              src: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            });
+            // progress row
+            const progressRow = playerGrid.addRow({weight: 0.05});
+            // controls row
+            const controlsRow = playerGrid.addRow({weight: 0.35});
+            controlsRow.addCol({weight: 0.2});
+            controlsRow
+              .addCol({weight: 0.2})
+              .addIconButton({text: 'skip_previous', fontSize: 0.4});
+            controlsRow
+              .addCol({weight: 0.2})
+              .addIconButton({text: 'play_arrow', fontSize: 0.6});
+            controlsRow
+              .addCol({weight: 0.2})
+              .addIconButton({text: 'skip_next', fontSize: 0.4});
+            controlsRow.addCol({weight: 0.2});
+          }
+          const orbiter = playerGrid.addOrbiter();
+          orbiter.addExitButton();
+          panel.updateLayouts();
         }
 
         createSettingsPanel() {
