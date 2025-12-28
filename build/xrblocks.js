@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.6.0
- * @commitid f739bc7
- * @builddate 2025-12-28T03:59:13.627Z
+ * @commitid bbfa402
+ * @builddate 2025-12-28T04:16:55.347Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -8311,12 +8311,15 @@ class SimulatorDepth {
         this.simulatorScene.overrideMaterial = null;
         this.renderer.setRenderTarget(originalRenderTarget);
     }
-    updateDepth() {
+    async updateDepth() {
         // We preventively unbind the PIXEL_PACK_BUFFER before reading from the
         // render target in case external libraries (Spark.js) left it bound.
         const context = this.renderer.getContext();
         context.bindBuffer(context.PIXEL_PACK_BUFFER, null);
-        this.renderer.readRenderTargetPixels(this.depthRenderTarget, 0, 0, this.depthWidth, this.depthHeight, this.depthBuffer);
+        // Cache the projection matrix and transform of the rendered depth.
+        const projectionMatrix = this.depthCamera.projectionMatrix.clone();
+        const transform = new XRRigidTransform(this.depthCamera.position, this.depthCamera.quaternion);
+        await this.renderer.readRenderTargetPixelsAsync(this.depthRenderTarget, 0, 0, this.depthWidth, this.depthHeight, this.depthBuffer);
         // Flip the depth buffer.
         if (this.depthBufferSlice.length != this.depthWidth) {
             this.depthBufferSlice = new Float32Array(this.depthWidth);
@@ -8332,14 +8335,14 @@ class SimulatorDepth {
             // Copy the temp slice (original row i) to row j
             this.depthBuffer.set(this.depthBufferSlice, j_offset);
         }
-        this.depthCamera.projectionMatrix.toArray(this.projectionMatrixArray);
+        projectionMatrix.toArray(this.projectionMatrixArray);
         const depthData = {
             width: this.depthWidth,
             height: this.depthHeight,
             data: this.depthBuffer.buffer,
             rawValueToMeters: 1.0,
             projectionMatrix: this.projectionMatrixArray,
-            transform: new XRRigidTransform(this.depthCamera.position, this.depthCamera.quaternion),
+            transform: transform,
         };
         this.depth.updateCPUDepthData(depthData, 0);
     }
