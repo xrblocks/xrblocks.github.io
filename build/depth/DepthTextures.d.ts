@@ -9,7 +9,7 @@ export declare class DepthTextures {
     depthData: XRCPUDepthInformation[];
     constructor(options: DepthOptions);
     private createDataDepthTextures;
-    updateData(depthData: XRCPUDepthInformation, view_id: number): void;
-    updateNativeTexture(depthData: XRWebGLDepthInformation, renderer: THREE.WebGLRenderer, view_id: number): void;
-    get(view_id: number): THREE.DataTexture | THREE.ExternalTexture;
+    updateData(depthData: XRCPUDepthInformation, viewId: number): void;
+    updateNativeTexture(depthData: XRWebGLDepthInformation, renderer: THREE.WebGLRenderer, viewId: number): void;
+    get(viewId: number): THREE.DataTexture | THREE.ExternalTexture;
 }
