@@ -19,7 +19,7 @@ export declare class Depth {
     options: DepthOptions;
     width: number;
     height: number;
-    rawValueToMeters: number;
+    get rawValueToMeters(): number;
     occludableShaders: Set<Shader>;
     private occlusionPass?;
     private depthClientsInitialized;

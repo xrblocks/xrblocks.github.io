@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.6.0
- * @commitid f342b1c
- * @builddate 2025-12-29T03:03:32.220Z
+ * @commitid 174b98b
+ * @builddate 2025-12-29T03:06:58.420Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -2255,10 +2255,6 @@ class DepthMesh extends MeshScript {
             const depthY = Math.round(clamp((1.0 - v) * height, 0, height - 1));
             const rawDepth = depthArray[depthY * width + depthX];
             let depth = depthData.rawValueToMeters * rawDepth;
-            // Workaround for b/382679381.
-            if (this.depthOptions.useFloat32) {
-                depth = rawDepth;
-            }
             // Finds global min/max.
             if (depth > 0) {
                 if (depth < this.minDepth) {
@@ -3052,6 +3048,15 @@ const DEFAULT_DEPTH_WIDTH = 160;
 const DEFAULT_DEPTH_HEIGHT = DEFAULT_DEPTH_WIDTH;
 const clipSpacePosition = new THREE.Vector3();
 class Depth {
+    get rawValueToMeters() {
+        if (this.cpuDepthData.length) {
+            return this.cpuDepthData[0].rawValueToMeters;
+        }
+        else if (this.gpuDepthData.length) {
+            return this.gpuDepthData[0].rawValueToMeters;
+        }
+        return 0;
+    }
     /**
      * Depth is a lightweight manager based on three.js to simply prototyping
      * with Depth in WebXR.
@@ -3065,7 +3070,6 @@ class Depth {
         this.options = new DepthOptions();
         this.width = DEFAULT_DEPTH_WIDTH;
         this.height = DEFAULT_DEPTH_HEIGHT;
-        this.rawValueToMeters = 0.0010000000474974513;
         this.occludableShaders = new Set();
         // Whether we're counting the number of depth clients.
         this.depthClientsInitialized = false;
@@ -3175,11 +3179,6 @@ class Depth {
     }
     updateCPUDepthData(depthData, viewId = 0) {
         this.cpuDepthData[viewId] = depthData;
-        // Workaround for b/382679381.
-        this.rawValueToMeters = depthData.rawValueToMeters;
-        if (this.options.useFloat32) {
-            this.rawValueToMeters = 1.0;
-        }
         // Updates Depth Array.
         if (this.depthArray[viewId] == null) {
             this.depthArray[viewId] = this.options.useFloat32
@@ -3205,11 +3204,6 @@ class Depth {
     }
     updateGPUDepthData(depthData, viewId = 0) {
         this.gpuDepthData[viewId] = depthData;
-        // Workaround for b/382679381.
-        this.rawValueToMeters = depthData.rawValueToMeters;
-        if (this.options.useFloat32) {
-            this.rawValueToMeters = 1.0;
-        }
         // For now, assume that we need cpu depth only if depth mesh is enabled.
         // In the future, add a separate option.
         const needCpuDepth = this.options.depthMesh.enabled;
