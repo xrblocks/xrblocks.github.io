@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.6.0
- * @commitid 5be9f7b
- * @builddate 2025-12-30T00:04:57.029Z
+ * @commitid a32bd24
+ * @builddate 2025-12-31T11:21:24.680Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -12452,6 +12452,15 @@ class VideoView extends View {
         /** The cross-origin setting for the video element. Default is 'anonymous'. */
         this.crossOrigin = 'anonymous';
         this.videoAspectRatio = 0.0;
+        // set video options if passed in
+        this.autoplay = options.autoplay ?? this.autoplay;
+        this.muted = options.muted ?? this.muted;
+        this.loop = options.loop ?? this.loop;
+        this.playsInline = options.playsInline ?? this.playsInline;
+        if (options.crossOrigin)
+            this.crossOrigin = options.crossOrigin;
+        if (options.mode)
+            this.mode = options.mode;
         const videoGeometry = new THREE.PlaneGeometry(1, 1);
         const videoMaterial = new THREE.MeshBasicMaterial({
             transparent: true,
