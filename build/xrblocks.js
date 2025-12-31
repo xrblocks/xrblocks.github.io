@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.6.0
- * @commitid a32bd24
- * @builddate 2025-12-31T11:21:24.680Z
+ * @commitid 8ee9395
+ * @builddate 2025-12-31T11:25:07.357Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -4174,6 +4174,9 @@ class ScriptsManager {
         this.callKeyUpBound = this.callKeyUp.bind(this);
         /** The set of scripts currently being initialized. */
         this.initializingScripts = new Set();
+        this.seenScripts = new Set();
+        this.syncPromises = [];
+        this.checkScriptBound = this.checkScript.bind(this);
     }
     /**
      * Initializes a script and adds it to the set of scripts which will receive
@@ -4205,28 +4208,32 @@ class ScriptsManager {
         this.initializingScripts.delete(script);
     }
     /**
+     * Helper for scene traversal to avoid closure allocation.
+     */
+    checkScript(obj) {
+        if (obj.isXRScript) {
+            const script = obj;
+            this.syncPromises.push(this.initScript(script));
+            this.seenScripts.add(script);
+        }
+    }
+    /**
      * Finds all scripts in the scene and initializes them or uninitailizes them.
      * Returns a promise which resolves when all new scripts are finished
      * initalizing.
      * @param scene - The main scene which is used to find scripts.
      */
-    async syncScriptsWithScene(scene) {
-        const seenScripts = new Set();
-        const promises = [];
-        scene.traverse((obj) => {
-            if (obj.isXRScript) {
-                const script = obj;
-                promises.push(this.initScript(script));
-                seenScripts.add(script);
-            }
-        });
-        await Promise.allSettled(promises);
+    syncScriptsWithScene(scene) {
+        this.seenScripts.clear();
+        this.syncPromises.length = 0;
+        scene.traverse(this.checkScriptBound);
         // Delete missing scripts.
         for (const script of this.scripts) {
-            if (!seenScripts.has(script)) {
+            if (!this.seenScripts.has(script)) {
                 this.uninitScript(script);
             }
         }
+        return Promise.allSettled(this.syncPromises);
     }
     callSelectStart(event) {
         for (const script of this.scripts) {

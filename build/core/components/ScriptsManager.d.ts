@@ -14,6 +14,9 @@ export declare class ScriptsManager {
     callKeyUpBound: (event: KeyEvent) => void;
     /** The set of scripts currently being initialized. */
     private initializingScripts;
+    private seenScripts;
+    private syncPromises;
+    private checkScriptBound;
     constructor(initScriptFunction: (script: Script) => Promise<void>);
     /**
      * Initializes a script and adds it to the set of scripts which will receive
@@ -30,12 +33,16 @@ export declare class ScriptsManager {
      */
     uninitScript(script: Script): void;
     /**
+     * Helper for scene traversal to avoid closure allocation.
+     */
+    private checkScript;
+    /**
      * Finds all scripts in the scene and initializes them or uninitailizes them.
      * Returns a promise which resolves when all new scripts are finished
      * initalizing.
      * @param scene - The main scene which is used to find scripts.
      */
-    syncScriptsWithScene(scene: THREE.Scene): Promise<void>;
+    syncScriptsWithScene(scene: THREE.Scene): Promise<PromiseSettledResult<void>[]>;
     callSelectStart(event: SelectEvent): void;
     callSelectEnd(event: SelectEvent): void;
     callSelect(event: SelectEvent): void;
