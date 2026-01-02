@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>XR Blocks Prompts for Gemini Canvas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="https://xrblocks.github.io/styles.css" />
+
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* Specific overrides for this landing page layout */
+      .hero {
+        min-height: 100vh; /* Fill screen to center the message */
+      }
+      .manual-download-text {
+        margin-top: 30px;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px;
+      }
+      .manual-download-text a {
+        color: #fff;
+        text-decoration: underline;
+        font-weight: 500;
+      }
+      .button-group {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <h1>
+          <img src="../icons/apple-touch-icon.png" alt="XR Blocks Logo" />
+          <a href="/" target="_blank" rel="noopener noreferrer">XR Blocks</a>
+        </h1>
+        <nav id="main-nav">
+          <a
+            href="https://xrblocks.github.io/docs/samples/ModelViewer"
+            target="_blank"
+            >Demos</a
+          >
+          <a href="https://github.com/google/xrblocks" target="_blank"
+            >GitHub</a
+          >
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-content">
+          <h2>
+            Thank you for trying out XR Blocks Prompts for Gemini Canvas (beta)
+          </h2>
+
+          <div class="button-group">
+            <a
+              href="https://xrblocks.github.io/docs/samples/ModelViewer"
+              class="button"
+            >
+              XR Blocks Demos
+              <span class="material-icons-outlined">arrow_forward</span>
+            </a>
+
+            <a href="https://github.com/google/xrblocks" class="button">
+              XR Blocks GitHub
+              <span class="material-icons-outlined">code</span>
+            </a>
+
+            <a
+              href="https://gemini.google.com/canvas"
+              class="button"
+              target="_blank"
+            >
+              Gemini Canvas
+              <span class="material-icons-outlined">open_in_new</span>
+            </a>
+
+            <button onclick="downloadPrompts()" class="button dark">
+              Download Again
+              <span class="material-icons-outlined">download</span>
+            </button>
+          </div>
+
+          <p class="manual-download-text">
+            If the download didn't start automatically,
+            <a href="../prompts.txt" download="../prompts.txt" id="manualLink"
+              >click here to download XR Blocks prompts manually</a
+            >.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      function downloadPrompts() {
+        const fileName = "../prompts.txt";
+        const link = document.createElement("a");
+        link.href = fileName;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      // Automatically trigger download on page load
+      window.addEventListener("DOMContentLoaded", () => {
+        // Small delay to ensure browser allows the pop-up/download
+        setTimeout(downloadPrompts, 500);
+      });
+    </script>
+  </body>
+</html>
