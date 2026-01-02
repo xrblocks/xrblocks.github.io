@@ -100,7 +100,10 @@
 
           <p class="manual-download-text">
             If the download didn't start automatically,
-            <a href="../prompts.txt" download="../prompts.txt" id="manualLink"
+            <a
+              href="../prompts.txt"
+              download="xrblocks_prompts_for_gemini_canvas.txt"
+              id="manualLink"
               >click here to download XR Blocks prompts manually</a
             >.
           </p>
@@ -110,7 +113,7 @@
 
     <script>
       function downloadPrompts() {
-        const fileName = "../prompts.txt";
+        const fileName = "xrblocks_prompts_for_gemini_canvas.txt";
         const link = document.createElement("a");
         link.href = fileName;
         link.download = fileName;
