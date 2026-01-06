@@ -14,9 +14,9 @@
  * limitations under the License.
  *
  * @file xrblocks.js
- * @version v0.6.0
- * @commitid 8ee9395
- * @builddate 2026-01-02T22:26:55.047Z
+ * @version v0.7.0
+ * @commitid 8f949ca
+ * @builddate 2026-01-06T19:02:12.397Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -1521,7 +1521,6 @@ class AI extends Script {
         return null;
     }
     async init({ aiOptions }) {
-        this.lock = false;
         this.options = aiOptions;
         if (!aiOptions.enabled) {
             console.log('AI is disabled in options');
@@ -1604,7 +1603,7 @@ class AI extends Script {
         return key && typeof key === 'string' && key.length > 0;
     }
     isAvailable() {
-        return this.model && this.model.isAvailable() && !this.lock;
+        return this.model && this.model.isAvailable();
     }
     async query(input, tools) {
         if (!this.isAvailable()) {
@@ -1619,13 +1618,11 @@ class AI extends Script {
         if (!('isLiveAvailable' in this.model) || !this.model.isLiveAvailable()) {
             throw new Error('Live session is not available for the current model.');
         }
-        this.lock = true;
         try {
             const session = await this.model.startLiveSession(config, model);
             return session;
         }
         catch (error) {
-            this.lock = false;
             console.error('❌ Failed to start Live session:', error);
             throw error;
         }
@@ -1638,9 +1635,6 @@ class AI extends Script {
         }
         catch (error) {
             console.error('❌ Error stopping Live session:', error);
-        }
-        finally {
-            this.lock = false;
         }
     }
     async setLiveCallbacks(callbacks) {
