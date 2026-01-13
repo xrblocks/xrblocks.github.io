@@ -1,8 +1,8 @@
 import 'xrblocks/addons/simulator/SimulatorAddons.js';
+import {LongSelectHandler} from 'xrblocks/addons/ui/LongSelectHandler.js';
 
 import * as xb from 'xrblocks';
 
-import {TriggerManager} from './TriggerManager.js';
 import {XRObjectManager} from './XRObjectManager.js';
 
 const options = new xb.Options();
@@ -36,11 +36,11 @@ options.ai.gemini.model = 'gemini-2.5-flash';
 
 function start() {
   const xrObjectManager = new XRObjectManager();
-  const triggerManager = new TriggerManager(
+  const longSelectHandler = new LongSelectHandler(
     xrObjectManager.queryObjectionDetection.bind(xrObjectManager)
   );
   xb.add(xrObjectManager);
-  xb.add(triggerManager);
+  xb.add(longSelectHandler);
   xb.init(options);
 }
 
