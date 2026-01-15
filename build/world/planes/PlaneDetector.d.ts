@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { Script } from '../../core/Script';
 import { WorldOptions } from '../WorldOptions';
 import { DetectedPlane } from './DetectedPlane';
+import { SimulatorPlane } from './SimulatorPlane';
 /**
  * Detects and manages real-world planes provided by the WebXR Plane Detection
  * API. It creates, updates, and removes `Plane` mesh objects in the scene.
@@ -24,6 +25,7 @@ export declare class PlaneDetector extends Script {
      */
     private _xrRefSpace?;
     private renderer;
+    private usingSimulatorPlanes;
     /**
      * Initializes the PlaneDetector.
      */
@@ -78,4 +80,6 @@ export declare class PlaneDetector extends Script {
      * @param visible - Whether to show or hide the planes.
      */
     showDebugVisualizations(visible?: boolean): void;
+    private _addSimulatorPlaneMesh;
+    setSimulatorPlanes(planes: SimulatorPlane[]): void;
 }

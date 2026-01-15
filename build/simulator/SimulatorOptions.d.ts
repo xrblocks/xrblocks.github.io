@@ -22,7 +22,8 @@ export declare class SimulatorOptions {
         y: number;
         z: number;
     };
-    scenePath: string;
+    scenePath?: string;
+    scenePlanesPath?: string;
     videoPath?: string;
     initialScenePosition: {
         x: number;

@@ -16,6 +16,8 @@ import { SimulatorInterface } from './SimulatorInterface';
 import { SimulatorOptions } from './SimulatorOptions';
 import { SimulatorScene } from './SimulatorScene';
 import { SimulatorUser } from './SimulatorUser';
+import { SimulatorWorld } from './SimulatorWorld';
+import { World } from '../world/World';
 export declare class Simulator extends Script {
     private renderMainScene;
     static dependencies: {
@@ -28,8 +30,10 @@ export declare class Simulator extends Script {
         registry: typeof Registry;
         options: typeof Options;
         depth: typeof Depth;
+        world: typeof World;
     };
     simulatorScene: SimulatorScene;
+    simulatorWorld: SimulatorWorld;
     depth: SimulatorDepth;
     simulatorControllerState: SimulatorControllerState;
     hands: SimulatorHands;
@@ -54,7 +58,7 @@ export declare class Simulator extends Script {
     private sparkRenderer?;
     private registry?;
     constructor(renderMainScene: (cameraOverride?: THREE.Camera) => void);
-    init({ simulatorOptions, input, timer, camera, renderer, scene, registry, options, depth, }: {
+    init({ simulatorOptions, input, timer, camera, renderer, scene, registry, options, depth, world, }: {
         simulatorOptions: SimulatorOptions;
         input: Input;
         timer: THREE.Timer;
@@ -64,6 +68,7 @@ export declare class Simulator extends Script {
         registry: Registry;
         options: Options;
         depth: Depth;
+        world: World;
     }): Promise<void>;
     simulatorUpdate(): void;
     setStereoRenderMode(mode: SimulatorRenderMode): void;

@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.7.0
- * @commitid 743de10
- * @builddate 2026-01-15T18:05:53.118Z
+ * @commitid d5f5903
+ * @builddate 2026-01-15T22:22:17.344Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -1788,7 +1788,7 @@ const DEFAULT_DEVICE_CAMERA_WIDTH = 1280;
  * Corresponds to a 720p resolution.
  */
 const DEFAULT_DEVICE_CAMERA_HEIGHT = 720;
-const XR_BLOCKS_ASSETS_PATH = 'https://cdn.jsdelivr.net/gh/xrblocks/assets@34228db7ec7cef66fd65ef3250ef6f4a930fe373/';
+const XR_BLOCKS_ASSETS_PATH = 'https://cdn.jsdelivr.net/gh/xrblocks/assets@a500427f2dfc12312df1a75860460244bab3a146/';
 
 /**
  * Recursively freezes an object and all its nested properties, making them
@@ -7298,6 +7298,8 @@ class SimulatorOptions {
     constructor(options) {
         this.initialCameraPosition = { x: 0, y: 1.5, z: 0 };
         this.scenePath = XR_BLOCKS_ASSETS_PATH + 'simulator/scenes/XREmulatorsceneV5_livingRoom.glb';
+        this.scenePlanesPath = XR_BLOCKS_ASSETS_PATH +
+            'simulator/scenes/XREmulatorsceneV5_livingRoom_planes.json';
         this.videoPath = undefined;
         this.initialScenePosition = { x: -1.6, y: 0.3, z: 0 };
         this.defaultMode = SimulatorMode.USER;
@@ -10079,10 +10081,809 @@ class SimulatorUser extends Script {
     }
 }
 
+// World sensing for the simulator.
+// Currently just injects planes.
+class SimulatorWorld {
+    async init(options, world) {
+        this.options = options;
+        this.world = world;
+        if (options.world.planes.enabled && options.simulator.scenePlanesPath) {
+            await this.loadPlanes(options.simulator.scenePlanesPath);
+        }
+    }
+    async loadPlanes(path) {
+        const offsetPosition = new THREE.Vector3().copy(this.options.simulator.initialScenePosition);
+        try {
+            const planesData = (await fetch(path).then((response) => response.json()));
+            const planes = planesData.planes.map((plane) => {
+                return {
+                    type: plane.type,
+                    area: plane.area,
+                    position: new THREE.Vector3(plane.position.x, plane.position.y, plane.position.z).add(offsetPosition),
+                    quaternion: new THREE.Quaternion(plane.quaternion[0], plane.quaternion[1], plane.quaternion[2], plane.quaternion[3]),
+                    polygon: plane.polygon,
+                };
+            });
+            this.world.planes.setSimulatorPlanes(planes);
+        }
+        catch (error) {
+            console.error('Failed to load planes:', error);
+        }
+    }
+}
+
 // Object which just holds the spark renderer so other classes don't need to import spark.
 class SparkRendererHolder {
     constructor(renderer) {
         this.renderer = renderer;
+    }
+}
+
+/**
+ * Utility functions for positioning and orienting objects in 3D
+ * space.
+ */
+// Reusable instances to avoid creating new objects in the render loop.
+const vector3$3 = new THREE.Vector3();
+const vector3a = new THREE.Vector3();
+const vector3b = new THREE.Vector3();
+const matrix4$2 = new THREE.Matrix4();
+/**
+ * Places and orients an object at a specific intersection point on another
+ * object's surface. The placed object's 'up' direction will align with the
+ * surface normal at the intersection, and its 'forward' direction will point
+ * towards a specified target object (e.g., the camera), but constrained to the
+ * surface plane.
+ *
+ * This is useful for placing objects on walls or floors so they sit flat
+ * against the surface but still turn to face the user.
+ *
+ * @param obj - The object to be placed and oriented.
+ * @param intersection - The intersection data from a
+ *     raycast,
+ * containing the point and normal of the surface. The normal is assumed to be
+ * in local space.
+ * @param target - The object that `obj` should face (e.g., the
+ *     camera).
+ * @returns The modified `obj`.
+ */
+function placeObjectAtIntersectionFacingTarget(obj, intersection, target) {
+    // 1. Position the object at the intersection point.
+    obj.position.copy(intersection.point);
+    // 2. Determine the world-space normal of the surface at the intersection
+    // point. We must ensure the matrix of the intersected object is up-to-date.
+    intersection.object.updateWorldMatrix(true, false);
+    // 3. Determine the desired forward direction.
+    // This is the vector from the object to the target, projected onto the
+    // surface plane.
+    const worldNormal = vector3b
+        .copy(intersection.normal)
+        .transformDirection(intersection.object.matrixWorld);
+    const forwardVector = target
+        .getWorldPosition(vector3$3)
+        .sub(obj.position)
+        .cross(worldNormal)
+        .cross(worldNormal)
+        .multiplyScalar(-1)
+        .normalize();
+    // 4. Create an orthonormal basis (a new coordinate system).
+    // The 'up' vector is the surface normal.
+    // The 'forward' vector is the direction towards the target on the plane.
+    // The 'right' vector is perpendicular to both.
+    const rightVector = vector3a.crossVectors(worldNormal, forwardVector);
+    matrix4$2.makeBasis(rightVector, worldNormal, forwardVector);
+    // 5. Apply the rotation from the new basis to the object.
+    // This aligns the object's local axes with the new basis vectors.
+    // Note: Three.js objects' 'forward' is conventionally the -Z axis.
+    // makeBasis sets the +Z axis to forwardVector, so models may need to be
+    // authored with +Z forward, or a rotation offset can be applied here.
+    obj.quaternion.setFromRotationMatrix(matrix4$2);
+    return obj;
+}
+
+/**
+ * Represents a single detected object in the XR environment and holds metadata
+ * about the object's properties. Note: 3D object position is stored in the
+ * position property of `Three.Object3D`.
+ */
+class DetectedObject extends THREE.Object3D {
+    /**
+     * @param label - The semantic label of the object.
+     * @param image - The base64 encoded cropped image of the object.
+     * @param boundingBox - The 2D bounding box.
+     * @param additionalData - A key-value map of additional properties from the
+     * detector. This includes any object proparties that is requested through the
+     * schema but is not assigned a class property by default (e.g., color, size).
+     */
+    constructor(label, image, boundingBox, 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    additionalData = {}) {
+        super();
+        this.label = label;
+        this.image = image;
+        this.detection2DBoundingBox = boundingBox;
+        // Assign any additional properties to this object.
+        Object.assign(this, additionalData);
+    }
+}
+
+/**
+ * Detects objects in the user's environment using a specified backend.
+ * It queries an AI model with the device camera feed and returns located
+ * objects with 2D and 3D positioning data.
+ */
+class ObjectDetector extends Script {
+    constructor() {
+        super(...arguments);
+        /**
+         * A map from the object's UUID to our custom `DetectedObject` instance.
+         */
+        this._detectedObjects = new Map();
+    }
+    static { this.dependencies = {
+        options: WorldOptions,
+        ai: AI,
+        aiOptions: AIOptions,
+        deviceCamera: XRDeviceCamera,
+        depth: Depth,
+        camera: THREE.Camera,
+    }; }
+    /**
+     * Initializes the ObjectDetector.
+     * @override
+     */
+    init({ options, ai, aiOptions, deviceCamera, depth, camera, }) {
+        this.options = options;
+        this.ai = ai;
+        this.aiOptions = aiOptions;
+        this.deviceCamera = deviceCamera;
+        this.depth = depth;
+        this.camera = camera;
+        this._geminiConfig = this._buildGeminiConfig();
+        if (this.options.objects.showDebugVisualizations) {
+            this._debugVisualsGroup = new THREE.Group();
+            // Disable raycasting for the debug group to prevent interaction errors.
+            this._debugVisualsGroup.raycast = () => { };
+            this.add(this._debugVisualsGroup);
+        }
+    }
+    /**
+     * Runs the object detection process based on the configured backend.
+     * @returns A promise that resolves with an
+     * array of detected `DetectedObject` instances.
+     */
+    async runDetection() {
+        this.clear(); // Clear previous results before starting a new detection.
+        switch (this.options.objects.backendConfig.activeBackend) {
+            case 'gemini':
+                return this._runGeminiDetection();
+            // Future backends like 'mediapipe' will be handled here.
+            // case 'mediapipe':
+            //   return this._runMediaPipeDetection();
+            default:
+                console.warn(`ObjectDetector backend '${this.options.objects.backendConfig.activeBackend}' is not supported.`);
+                return [];
+        }
+    }
+    /**
+     * Runs object detection using the Gemini backend.
+     */
+    async _runGeminiDetection() {
+        if (!this.ai.isAvailable()) {
+            console.error('Gemini is unavailable for object detection.');
+            return [];
+        }
+        const base64Image = this.deviceCamera.getSnapshot({
+            outputFormat: 'base64',
+        });
+        if (!base64Image) {
+            console.warn('Could not get device camera snapshot.');
+            return [];
+        }
+        const { mimeType, strippedBase64 } = parseBase64DataURL(base64Image);
+        // Cache depth and camera data to align with the captured image frame.
+        const cachedDepthArray = this.depth.depthArray[0].slice(0);
+        const cachedMatrixWorld = this.camera.matrixWorld.clone();
+        // Temporarily set the Gemini config for this specific query type.
+        const originalGeminiConfig = this.aiOptions.gemini.config;
+        this.aiOptions.gemini.config = this._geminiConfig;
+        const textPrompt = 'What do you see in this image?';
+        try {
+            const rawResponse = await this.ai.model.query({
+                type: 'multiPart',
+                parts: [
+                    { inlineData: { mimeType: mimeType || undefined, data: strippedBase64 } },
+                    { text: textPrompt },
+                ],
+            });
+            let parsedResponse;
+            try {
+                if (rawResponse && rawResponse.text) {
+                    parsedResponse = JSON.parse(rawResponse.text);
+                }
+                else {
+                    console.error('AI response is missing text field:', rawResponse, 'Raw response was:', rawResponse);
+                    return [];
+                }
+            }
+            catch (e) {
+                console.error('Failed to parse AI response JSON:', e, 'Raw response was:', rawResponse);
+                return [];
+            }
+            if (!Array.isArray(parsedResponse)) {
+                console.error('Parsed AI response is not an array:', parsedResponse);
+                return [];
+            }
+            if (this.options.objects.showDebugVisualizations) {
+                this._visualizeBoundingBoxesOnImage(base64Image, parsedResponse);
+                this._visualizeDepthMap(cachedDepthArray);
+            }
+            const detectionPromises = parsedResponse.map(async (item) => {
+                const { ymin, xmin, ymax, xmax, objectName, ...additionalData } = item || {};
+                if ([ymin, xmin, ymax, xmax].some((coord) => typeof coord !== 'number')) {
+                    return null;
+                }
+                // Bounding box from AI is 0-1000, convert to normalized 0-1.
+                const boundingBox = new THREE.Box2(new THREE.Vector2(xmin / 1000, ymin / 1000), new THREE.Vector2(xmax / 1000, ymax / 1000));
+                const center = new THREE.Vector2();
+                boundingBox.getCenter(center);
+                const uvInput = { u: center.x, v: center.y };
+                const projectionMatrix = this.deviceCamera.simulatorCamera
+                    ? this.camera.projectionMatrix
+                    : new THREE.Matrix4().fromArray(this.depth.view[0].projectionMatrix);
+                const worldPosition = transformRgbUvToWorld(uvInput, cachedDepthArray, projectionMatrix, cachedMatrixWorld, this.deviceCamera, this.depth);
+                if (worldPosition) {
+                    const margin = this.options.objects.objectImageMargin;
+                    // Create a new bounding box for cropping that includes the margin.
+                    const cropBox = boundingBox.clone();
+                    cropBox.min.subScalar(margin);
+                    cropBox.max.addScalar(margin);
+                    const objectImage = await cropImage(base64Image, cropBox);
+                    const object = new DetectedObject(objectName, objectImage, boundingBox, additionalData);
+                    object.position.copy(worldPosition);
+                    this.add(object);
+                    this._detectedObjects.set(object.uuid, object);
+                    if (this._debugVisualsGroup) {
+                        this._createDebugVisual(object);
+                    }
+                    return object;
+                }
+            });
+            const detectedObjects = (await Promise.all(detectionPromises)).filter(Boolean);
+            return detectedObjects;
+        }
+        catch (error) {
+            console.error('AI query for object detection failed:', error);
+            return [];
+        }
+        finally {
+            // Restore the original config after the query.
+            this.aiOptions.gemini.config = originalGeminiConfig;
+        }
+    }
+    /**
+     * Retrieves a list of currently detected objects.
+     *
+     * @param label - The semantic label to filter by (e.g., 'chair'). If null,
+     * all objects are returned.
+     * @returns An array of `Object` instances.
+     */
+    get(label = null) {
+        const allObjects = Array.from(this._detectedObjects.values());
+        if (!label) {
+            return allObjects;
+        }
+        return allObjects.filter((obj) => obj.label === label);
+    }
+    /**
+     * Removes all currently detected objects from the scene and internal
+     * tracking.
+     */
+    clear() {
+        for (const obj of this._detectedObjects.values()) {
+            this.remove(obj);
+        }
+        this._detectedObjects.clear();
+        if (this._debugVisualsGroup) {
+            this._debugVisualsGroup.clear();
+        }
+        return this;
+    }
+    /**
+     * Toggles the visibility of all debug visualizations for detected objects.
+     * @param visible - Whether the visualizations should be visible.
+     */
+    showDebugVisualizations(visible = true) {
+        if (this._debugVisualsGroup) {
+            this._debugVisualsGroup.visible = visible;
+        }
+    }
+    /**
+     * Draws the detected bounding boxes on the input image and triggers a
+     * download for debugging.
+     * @param base64Image - The base64 encoded input image.
+     * @param detections - The array of detected objects from the AI response.
+     */
+    _visualizeBoundingBoxesOnImage(base64Image, detections) {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            detections.forEach((item) => {
+                const { ymin, xmin, ymax, xmax, objectName } = (item || {});
+                if ([ymin, xmin, ymax, xmax].some((coord) => typeof coord !== 'number')) {
+                    return;
+                }
+                // Bounding box from AI is 0-1000, scale it to image dimensions.
+                const rectX = (xmin / 1000) * canvas.width;
+                const rectY = (ymin / 1000) * canvas.height;
+                const rectWidth = ((xmax - xmin) / 1000) * canvas.width;
+                const rectHeight = ((ymax - ymin) / 1000) * canvas.height;
+                ctx.strokeStyle = '#FF0000';
+                ctx.lineWidth = Math.max(2, canvas.width / 400);
+                ctx.strokeRect(rectX, rectY, rectWidth, rectHeight);
+                // Draw label.
+                const text = objectName || 'unknown';
+                const fontSize = Math.max(16, canvas.width / 80);
+                ctx.font = `bold ${fontSize}px sans-serif`;
+                ctx.textBaseline = 'bottom';
+                const textMetrics = ctx.measureText(text);
+                // Draw a background for the text for better readability.
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+                ctx.fillRect(rectX, rectY - fontSize, textMetrics.width + 8, fontSize + 4);
+                // Draw the text itself.
+                ctx.fillStyle = '#FFFFFF'; // White text
+                ctx.fillText(text, rectX + 4, rectY + 2);
+            });
+            // Create a link and trigger the download.
+            const timestamp = new Date()
+                .toISOString()
+                .slice(0, 19)
+                .replace('T', '_')
+                .replace(/:/g, '-');
+            const link = document.createElement('a');
+            link.download = `detection_debug_${timestamp}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        };
+        img.src = base64Image;
+    }
+    /**
+     * Generates a visual representation of the depth map, normalized to 0-1 range,
+     * and triggers a download for debugging.
+     * @param depthArray - The raw depth data array.
+     */
+    _visualizeDepthMap(depthArray) {
+        const width = this.depth.width;
+        const height = this.depth.height;
+        if (!width || !height || depthArray.length === 0) {
+            console.warn('Cannot visualize depth map: missing dimensions or data.');
+            return;
+        }
+        // 1. Find Min/Max for normalization (ignoring 0/invalid depth).
+        let min = Infinity;
+        let max = -Infinity;
+        for (let i = 0; i < depthArray.length; ++i) {
+            const val = depthArray[i];
+            if (val > 0) {
+                if (val < min)
+                    min = val;
+                if (val > max)
+                    max = val;
+            }
+        }
+        // Handle edge case where no valid depth exists.
+        if (min === Infinity) {
+            min = 0;
+            max = 1;
+        }
+        if (min === max) {
+            max = min + 1; // Avoid divide by zero
+        }
+        // 2. Create Canvas.
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        const imageData = ctx.createImageData(width, height);
+        const data = imageData.data;
+        // 3. Fill Pixels.
+        for (let i = 0; i < depthArray.length; ++i) {
+            const raw = depthArray[i];
+            // Normalize to 0-1.
+            // Typically 0 means invalid/sky in some depth APIs, so we keep it black.
+            // Otherwise, map [min, max] to [0, 1].
+            const normalized = raw === 0 ? 0 : (raw - min) / (max - min);
+            const byteVal = Math.floor(normalized * 255);
+            const stride = i * 4;
+            data[stride] = byteVal; // R
+            data[stride + 1] = byteVal; // G
+            data[stride + 2] = byteVal; // B
+            data[stride + 3] = 255; // Alpha
+        }
+        ctx.putImageData(imageData, 0, 0);
+        // 4. Download.
+        const timestamp = new Date()
+            .toISOString()
+            .slice(0, 19)
+            .replace('T', '_')
+            .replace(/:/g, '-');
+        const link = document.createElement('a');
+        link.download = `depth_debug_${timestamp}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }
+    /**
+     * Creates a simple debug visualization for an object based on its position
+     * (center of its 2D detection bounding box).
+     * @param object - The detected object to visualize.
+     */
+    async _createDebugVisual(object) {
+        // Create sphere.
+        const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.03, 16, 16), new THREE.MeshBasicMaterial({ color: 0xff4285f4 }));
+        sphere.position.copy(object.position);
+        // Create and configure the text label using Troika.
+        const { Text } = await import('troika-three-text');
+        const textLabel = new Text();
+        textLabel.text = object.label;
+        textLabel.fontSize = 0.07;
+        textLabel.color = 0xffffff;
+        textLabel.anchorX = 'center';
+        textLabel.anchorY = 'bottom';
+        // Position the label above the sphere
+        textLabel.position.copy(sphere.position);
+        textLabel.position.y += 0.04; // Offset above the sphere.
+        this._debugVisualsGroup.add(sphere, textLabel);
+        textLabel.sync(); // Required for Troika text to appear.
+    }
+    /**
+     * Builds the Gemini configuration object from the world options.
+     */
+    _buildGeminiConfig() {
+        const geminiOptions = this.options.objects.backendConfig.gemini;
+        return {
+            thinkingConfig: {
+                thinkingBudget: 0,
+            },
+            responseMimeType: 'application/json',
+            responseSchema: geminiOptions.responseSchema,
+            systemInstruction: [{ text: geminiOptions.systemInstruction }],
+        };
+    }
+}
+
+/**
+ * Represents a single detected plane in the XR environment. It's a THREE.Mesh
+ * that also holds metadata about the plane's properties.
+ * Note: This requires chrome://flags/#openxr-spatial-entities to be enabled.
+ */
+class DetectedPlane extends THREE.Mesh {
+    /**
+     * @param xrPlane - The plane object from the WebXR API.
+     * @param material - The material for the mesh.
+     */
+    constructor(xrPlane, material, simulatorPlane) {
+        let geometry;
+        if (xrPlane) {
+            // Create geometry from the plane's polygon points.
+            const planePolygon = xrPlane.polygon;
+            const vertices = [];
+            for (const point of planePolygon) {
+                vertices.push(new THREE.Vector2(point.x, point.z));
+            }
+            const shape = new THREE.Shape(vertices);
+            geometry = new THREE.ShapeGeometry(shape);
+            // ShapeGeometry creates a mesh in the XY plane by default.
+            // We must rotate it to lie flat in the XZ plane to correctly represent
+            // horizontal surfaces before applying the world pose provided by the API.
+            geometry.rotateX(Math.PI / 2);
+        }
+        else if (simulatorPlane) {
+            const shape = new THREE.Shape(simulatorPlane.polygon);
+            geometry = new THREE.ShapeGeometry(shape);
+            // ShapeGeometry creates a mesh in the XY plane by default.
+            // We must rotate it to lie flat in the XZ plane to correctly represent
+            // horizontal surfaces before applying the world pose provided by the API.
+            geometry.rotateX(Math.PI / 2);
+        }
+        super(geometry, material);
+        this.xrPlane = xrPlane;
+        this.simulatorPlane = simulatorPlane;
+        if (xrPlane) {
+            this.label = xrPlane.semanticLabel;
+            this.orientation = xrPlane.orientation;
+        }
+        else if (simulatorPlane) {
+            this.label = simulatorPlane.type;
+            this.orientation = simulatorPlane.type;
+            this.position.copy(simulatorPlane.position);
+            this.quaternion.copy(simulatorPlane.quaternion);
+        }
+    }
+}
+
+/**
+ * Detects and manages real-world planes provided by the WebXR Plane Detection
+ * API. It creates, updates, and removes `Plane` mesh objects in the scene.
+ */
+class PlaneDetector extends Script {
+    constructor() {
+        super(...arguments);
+        /**
+         * A map from the WebXR `XRPlane` object to our custom `DetectedPlane` mesh.
+         */
+        this._detectedPlanes = new Map();
+        this.usingSimulatorPlanes = false;
+    }
+    static { this.dependencies = { options: WorldOptions, renderer: THREE.WebGLRenderer }; }
+    /**
+     * Initializes the PlaneDetector.
+     */
+    init({ options, renderer, }) {
+        this.renderer = renderer;
+        if (options.planes.showDebugVisualizations) {
+            this._debugMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffff00,
+                wireframe: true,
+                side: THREE.DoubleSide,
+            });
+        }
+    }
+    /**
+     * Processes the XRFrame to update plane information.
+     */
+    update(_, frame) {
+        if (!frame || !frame.detectedPlanes || this.usingSimulatorPlanes)
+            return;
+        this._xrRefSpace =
+            this._xrRefSpace || this.renderer.xr.getReferenceSpace() || undefined;
+        if (!this._xrRefSpace)
+            return;
+        const detectedPlanesInFrame = frame.detectedPlanes;
+        const planesToRemove = new Set(this._detectedPlanes.keys());
+        for (const xrPlane of detectedPlanesInFrame) {
+            planesToRemove.delete(xrPlane); // This plane is still active.
+            const existingPlaneMesh = this._detectedPlanes.get(xrPlane);
+            if (existingPlaneMesh) {
+                // Plane already exists, check if it needs an update.
+                if (xrPlane.lastChangedTime >
+                    (existingPlaneMesh.xrPlane?.lastChangedTime || 0)) {
+                    this._updatePlaneMesh(frame, existingPlaneMesh, xrPlane);
+                }
+            }
+            else {
+                // This is a newly detected plane.
+                this._addPlaneMesh(frame, xrPlane);
+            }
+        }
+        // Remove planes that are no longer detected.
+        for (const xrPlane of planesToRemove) {
+            this._removePlaneMesh(xrPlane);
+        }
+    }
+    /**
+     * Creates and adds a new `Plane` mesh to the scene.
+     * @param frame - WebXR frame.
+     * @param xrPlane - The new WebXR plane object.
+     */
+    _addPlaneMesh(frame, xrPlane) {
+        const material = this._debugMaterial || new THREE.MeshBasicMaterial({ visible: false });
+        const planeMesh = new DetectedPlane(xrPlane, material);
+        this._updatePlanePose(frame, planeMesh, xrPlane);
+        this._detectedPlanes.set(xrPlane, planeMesh);
+        this.add(planeMesh);
+        return planeMesh;
+    }
+    /**
+     * Updates an existing `DetectedPlane` mesh's geometry and pose.
+     * @param frame - WebXR frame.
+     * @param planeMesh - The mesh to update.
+     * @param xrPlane - The updated plane data.
+     */
+    _updatePlaneMesh(frame, planeMesh, xrPlane) {
+        // Recreate geometry from the new polygon.
+        const newVertices = xrPlane.polygon.map((p) => new THREE.Vector2(p.x, p.z));
+        const newShape = new THREE.Shape(newVertices);
+        const newGeometry = new THREE.ShapeGeometry(newShape);
+        planeMesh.geometry.dispose();
+        planeMesh.geometry = newGeometry;
+        planeMesh.xrPlane = xrPlane; // Update the reference.
+        this._updatePlanePose(frame, planeMesh, xrPlane);
+    }
+    /**
+     * Removes a `Plane` mesh from the scene and disposes of its resources.
+     * @param xrPlane - The WebXR plane object to remove.
+     */
+    _removePlaneMesh(xrPlane) {
+        const planeMesh = this._detectedPlanes.get(xrPlane);
+        if (planeMesh) {
+            planeMesh.geometry.dispose();
+            this.remove(planeMesh);
+            this._detectedPlanes.delete(xrPlane);
+        }
+    }
+    /**
+     * Updates the position and orientation of a `DetectedPlane` mesh from its XR
+     * pose.
+     * @param frame - The current XRFrame.
+     * @param planeMesh - The mesh to update.
+     * @param xrPlane - The plane data with the pose.
+     */
+    _updatePlanePose(frame, planeMesh, xrPlane) {
+        const pose = frame.getPose(xrPlane.planeSpace, this._xrRefSpace);
+        if (pose) {
+            planeMesh.position.copy(pose.transform.position);
+            planeMesh.quaternion.copy(pose.transform.orientation);
+        }
+    }
+    /**
+     * Retrieves a list of detected planes, optionally filtered by a semantic
+     * label.
+     *
+     * @param label - The semantic label to filter by (e.g.,
+     *     'floor', 'wall').
+     * If null or undefined, all detected planes are returned.
+     * @returns An array of `DetectedPlane` objects
+     *     matching the criteria.
+     */
+    get(label) {
+        const allPlanes = Array.from(this._detectedPlanes.values());
+        if (!label) {
+            return allPlanes;
+        }
+        return allPlanes.filter((plane) => plane.label === label);
+    }
+    /**
+     * Toggles the visibility of the debug meshes for all planes.
+     * Requires `showDebugVisualizations` to be true in the options.
+     * @param visible - Whether to show or hide the planes.
+     */
+    showDebugVisualizations(visible = true) {
+        if (this._debugMaterial) {
+            this.visible = visible;
+        }
+    }
+    _addSimulatorPlaneMesh(plane) {
+        const material = this._debugMaterial || new THREE.MeshBasicMaterial({ visible: false });
+        const planeMesh = new DetectedPlane(null, material, plane);
+        this.add(planeMesh);
+        return planeMesh;
+    }
+    setSimulatorPlanes(planes) {
+        this.usingSimulatorPlanes = true;
+        this._detectedPlanes.clear();
+        for (const plane of planes) {
+            this._addSimulatorPlaneMesh(plane);
+        }
+    }
+}
+
+// Import other modules as they are implemented in future.
+// import { SceneMesh } from '/depth/SceneMesh.js';
+// import { LightEstimation } from '/lighting/LightEstimation.js';
+// import { HumanRecognizer } from '/human/HumanRecognizer.js';
+/**
+ * Manages all interactions with the real-world environment perceived by the XR
+ * device. This class abstracts the complexity of various perception APIs
+ * (Depth, Planes, Meshes, etc.) and provides a simple, event-driven interface
+ * for developers to use `this.world.depth.mesh`, `this.world.planes`.
+ */
+class World extends Script {
+    constructor() {
+        super(...arguments);
+        /**
+         * A Three.js Raycaster for performing intersection tests.
+         */
+        this.raycaster = new THREE.Raycaster();
+    }
+    static { this.dependencies = {
+        options: WorldOptions,
+        camera: THREE.Camera,
+    }; }
+    /**
+     * Initializes the world-sensing modules based on the provided configuration.
+     * This method is called automatically by the XRCore.
+     */
+    async init({ options, camera, }) {
+        this.options = options;
+        this.camera = camera;
+        if (!this.options || !this.options.enabled) {
+            return;
+        }
+        // Conditionally initialize each perception module based on options.
+        if (this.options.planes.enabled) {
+            this.planes = new PlaneDetector();
+            this.add(this.planes);
+        }
+        if (this.options.objects.enabled) {
+            this.objects = new ObjectDetector();
+            this.add(this.objects);
+        }
+        // TODO: Initialize other modules as they are available & implemented.
+        /*
+        if (this.options.sceneMesh.enabled) {
+          this.meshes = new SceneMesh();
+        }
+    
+        if (this.options.lighting.enabled) {
+          this.lighting = new LightEstimation();
+        }
+    
+        if (this.options.humans.enabled) {
+          this.humans = new HumanRecognizer();
+        }
+        */
+    }
+    /**
+     * Places an object at the reticle.
+     */
+    anchorObjectAtReticle(_object, _reticle) {
+        throw new Error('Method not implemented');
+    }
+    /**
+     * Updates all active world-sensing modules with the latest XRFrame data.
+     * This method is called automatically by the XRCore on each frame.
+     * @param _timestamp - The timestamp for the current frame.
+     * @param frame - The current XRFrame, containing environmental
+     * data.
+     * @override
+     */
+    update(_timestamp, frame) {
+        if (!this.options?.enabled || !frame) {
+            return;
+        }
+        // Note: Object detection is not run per-frame by default as it's a
+        // costly operation. It should be triggered manually via
+        // `this.world.objects.runDetection()`.
+        // TODO: Update other modules as they are available & implemented.
+        // this.meshes?.update(frame);
+        // this.lighting?.update(frame);
+        // this.humans?.update(frame);
+    }
+    /**
+     * Performs a raycast from a controller against detected real-world surfaces
+     * (currently planes) and places a 3D object at the intersection point,
+     * oriented to face the user.
+     *
+     * We recommend using /templates/3_depth/ to anchor objects based on
+     * depth mesh for mixed reality experience for accuracy. This function is
+     * design for demonstration purposes.
+     *
+     * @param objectToPlace - The object to position in the
+     * world.
+     * @param controller - The controller to use for raycasting.
+     * @returns True if the object was successfully placed, false
+     * otherwise.
+     */
+    placeOnSurface(objectToPlace, controller) {
+        if (!this.planes) {
+            console.warn('Cannot placeOnSurface: PlaneDetector is not enabled.');
+            return false;
+        }
+        const allPlanes = this.planes.get();
+        if (allPlanes.length === 0) {
+            return false; // No surfaces to cast against.
+        }
+        this.raycaster.setFromXRController(controller);
+        const intersections = this.raycaster.intersectObjects(allPlanes);
+        if (intersections.length > 0) {
+            const intersection = intersections[0];
+            placeObjectAtIntersectionFacingTarget(objectToPlace, intersection, this.camera);
+            return true;
+        }
+        return false;
+    }
+    /**
+     * Toggles the visibility of all debug visualizations for world features.
+     * @param visible - Whether the visualizations should be visible.
+     */
+    showDebugVisualizations(visible = true) {
+        this.planes?.showDebugVisualizations(visible);
+        this.objects?.showDebugVisualizations(visible);
+        // this.meshes?.showDebugVisualizations(visible);
     }
 }
 
@@ -10097,11 +10898,13 @@ class Simulator extends Script {
         registry: Registry,
         options: Options,
         depth: Depth,
+        world: World,
     }; }
     constructor(renderMainScene) {
         super();
         this.renderMainScene = renderMainScene;
         this.simulatorScene = new SimulatorScene();
+        this.simulatorWorld = new SimulatorWorld();
         this.depth = new SimulatorDepth(this.simulatorScene);
         // Controller poses relative to the camera.
         this.simulatorControllerState = new SimulatorControllerState();
@@ -10116,7 +10919,7 @@ class Simulator extends Script {
         this.renderSimulatorSceneToCanvasBound = this.renderSimulatorSceneToCanvas.bind(this);
         this.add(this.simulatorUser);
     }
-    async init({ simulatorOptions, input, timer, camera, renderer, scene, registry, options, depth, }) {
+    async init({ simulatorOptions, input, timer, camera, renderer, scene, registry, options, depth, world, }) {
         if (this.initialized)
             return;
         // Get optional dependencies from the registry.
@@ -10127,6 +10930,7 @@ class Simulator extends Script {
         this.userInterface.init(simulatorOptions, this.controls, this.hands);
         renderer.autoClearColor = false;
         await this.simulatorScene.init(simulatorOptions);
+        await this.simulatorWorld.init(options, world);
         this.hands.init({ input });
         this.controls.init({ camera, input, timer, renderer, simulatorOptions });
         if (deviceCamera && !this.camera) {
@@ -13916,739 +14720,6 @@ class LoadingSpinnerManager {
 const loadingSpinnerManager = new LoadingSpinnerManager();
 
 /**
- * Utility functions for positioning and orienting objects in 3D
- * space.
- */
-// Reusable instances to avoid creating new objects in the render loop.
-const vector3$3 = new THREE.Vector3();
-const vector3a = new THREE.Vector3();
-const vector3b = new THREE.Vector3();
-const matrix4$2 = new THREE.Matrix4();
-/**
- * Places and orients an object at a specific intersection point on another
- * object's surface. The placed object's 'up' direction will align with the
- * surface normal at the intersection, and its 'forward' direction will point
- * towards a specified target object (e.g., the camera), but constrained to the
- * surface plane.
- *
- * This is useful for placing objects on walls or floors so they sit flat
- * against the surface but still turn to face the user.
- *
- * @param obj - The object to be placed and oriented.
- * @param intersection - The intersection data from a
- *     raycast,
- * containing the point and normal of the surface. The normal is assumed to be
- * in local space.
- * @param target - The object that `obj` should face (e.g., the
- *     camera).
- * @returns The modified `obj`.
- */
-function placeObjectAtIntersectionFacingTarget(obj, intersection, target) {
-    // 1. Position the object at the intersection point.
-    obj.position.copy(intersection.point);
-    // 2. Determine the world-space normal of the surface at the intersection
-    // point. We must ensure the matrix of the intersected object is up-to-date.
-    intersection.object.updateWorldMatrix(true, false);
-    // 3. Determine the desired forward direction.
-    // This is the vector from the object to the target, projected onto the
-    // surface plane.
-    const worldNormal = vector3b
-        .copy(intersection.normal)
-        .transformDirection(intersection.object.matrixWorld);
-    const forwardVector = target
-        .getWorldPosition(vector3$3)
-        .sub(obj.position)
-        .cross(worldNormal)
-        .cross(worldNormal)
-        .multiplyScalar(-1)
-        .normalize();
-    // 4. Create an orthonormal basis (a new coordinate system).
-    // The 'up' vector is the surface normal.
-    // The 'forward' vector is the direction towards the target on the plane.
-    // The 'right' vector is perpendicular to both.
-    const rightVector = vector3a.crossVectors(worldNormal, forwardVector);
-    matrix4$2.makeBasis(rightVector, worldNormal, forwardVector);
-    // 5. Apply the rotation from the new basis to the object.
-    // This aligns the object's local axes with the new basis vectors.
-    // Note: Three.js objects' 'forward' is conventionally the -Z axis.
-    // makeBasis sets the +Z axis to forwardVector, so models may need to be
-    // authored with +Z forward, or a rotation offset can be applied here.
-    obj.quaternion.setFromRotationMatrix(matrix4$2);
-    return obj;
-}
-
-/**
- * Represents a single detected object in the XR environment and holds metadata
- * about the object's properties. Note: 3D object position is stored in the
- * position property of `Three.Object3D`.
- */
-class DetectedObject extends THREE.Object3D {
-    /**
-     * @param label - The semantic label of the object.
-     * @param image - The base64 encoded cropped image of the object.
-     * @param boundingBox - The 2D bounding box.
-     * @param additionalData - A key-value map of additional properties from the
-     * detector. This includes any object proparties that is requested through the
-     * schema but is not assigned a class property by default (e.g., color, size).
-     */
-    constructor(label, image, boundingBox, 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    additionalData = {}) {
-        super();
-        this.label = label;
-        this.image = image;
-        this.detection2DBoundingBox = boundingBox;
-        // Assign any additional properties to this object.
-        Object.assign(this, additionalData);
-    }
-}
-
-/**
- * Detects objects in the user's environment using a specified backend.
- * It queries an AI model with the device camera feed and returns located
- * objects with 2D and 3D positioning data.
- */
-class ObjectDetector extends Script {
-    constructor() {
-        super(...arguments);
-        /**
-         * A map from the object's UUID to our custom `DetectedObject` instance.
-         */
-        this._detectedObjects = new Map();
-    }
-    static { this.dependencies = {
-        options: WorldOptions,
-        ai: AI,
-        aiOptions: AIOptions,
-        deviceCamera: XRDeviceCamera,
-        depth: Depth,
-        camera: THREE.Camera,
-    }; }
-    /**
-     * Initializes the ObjectDetector.
-     * @override
-     */
-    init({ options, ai, aiOptions, deviceCamera, depth, camera, }) {
-        this.options = options;
-        this.ai = ai;
-        this.aiOptions = aiOptions;
-        this.deviceCamera = deviceCamera;
-        this.depth = depth;
-        this.camera = camera;
-        this._geminiConfig = this._buildGeminiConfig();
-        if (this.options.objects.showDebugVisualizations) {
-            this._debugVisualsGroup = new THREE.Group();
-            // Disable raycasting for the debug group to prevent interaction errors.
-            this._debugVisualsGroup.raycast = () => { };
-            this.add(this._debugVisualsGroup);
-        }
-    }
-    /**
-     * Runs the object detection process based on the configured backend.
-     * @returns A promise that resolves with an
-     * array of detected `DetectedObject` instances.
-     */
-    async runDetection() {
-        this.clear(); // Clear previous results before starting a new detection.
-        switch (this.options.objects.backendConfig.activeBackend) {
-            case 'gemini':
-                return this._runGeminiDetection();
-            // Future backends like 'mediapipe' will be handled here.
-            // case 'mediapipe':
-            //   return this._runMediaPipeDetection();
-            default:
-                console.warn(`ObjectDetector backend '${this.options.objects.backendConfig.activeBackend}' is not supported.`);
-                return [];
-        }
-    }
-    /**
-     * Runs object detection using the Gemini backend.
-     */
-    async _runGeminiDetection() {
-        if (!this.ai.isAvailable()) {
-            console.error('Gemini is unavailable for object detection.');
-            return [];
-        }
-        const base64Image = this.deviceCamera.getSnapshot({
-            outputFormat: 'base64',
-        });
-        if (!base64Image) {
-            console.warn('Could not get device camera snapshot.');
-            return [];
-        }
-        const { mimeType, strippedBase64 } = parseBase64DataURL(base64Image);
-        // Cache depth and camera data to align with the captured image frame.
-        const cachedDepthArray = this.depth.depthArray[0].slice(0);
-        const cachedMatrixWorld = this.camera.matrixWorld.clone();
-        // Temporarily set the Gemini config for this specific query type.
-        const originalGeminiConfig = this.aiOptions.gemini.config;
-        this.aiOptions.gemini.config = this._geminiConfig;
-        const textPrompt = 'What do you see in this image?';
-        try {
-            const rawResponse = await this.ai.model.query({
-                type: 'multiPart',
-                parts: [
-                    { inlineData: { mimeType: mimeType || undefined, data: strippedBase64 } },
-                    { text: textPrompt },
-                ],
-            });
-            let parsedResponse;
-            try {
-                if (rawResponse && rawResponse.text) {
-                    parsedResponse = JSON.parse(rawResponse.text);
-                }
-                else {
-                    console.error('AI response is missing text field:', rawResponse, 'Raw response was:', rawResponse);
-                    return [];
-                }
-            }
-            catch (e) {
-                console.error('Failed to parse AI response JSON:', e, 'Raw response was:', rawResponse);
-                return [];
-            }
-            if (!Array.isArray(parsedResponse)) {
-                console.error('Parsed AI response is not an array:', parsedResponse);
-                return [];
-            }
-            if (this.options.objects.showDebugVisualizations) {
-                this._visualizeBoundingBoxesOnImage(base64Image, parsedResponse);
-                this._visualizeDepthMap(cachedDepthArray);
-            }
-            const detectionPromises = parsedResponse.map(async (item) => {
-                const { ymin, xmin, ymax, xmax, objectName, ...additionalData } = item || {};
-                if ([ymin, xmin, ymax, xmax].some((coord) => typeof coord !== 'number')) {
-                    return null;
-                }
-                // Bounding box from AI is 0-1000, convert to normalized 0-1.
-                const boundingBox = new THREE.Box2(new THREE.Vector2(xmin / 1000, ymin / 1000), new THREE.Vector2(xmax / 1000, ymax / 1000));
-                const center = new THREE.Vector2();
-                boundingBox.getCenter(center);
-                const uvInput = { u: center.x, v: center.y };
-                const projectionMatrix = this.deviceCamera.simulatorCamera
-                    ? this.camera.projectionMatrix
-                    : new THREE.Matrix4().fromArray(this.depth.view[0].projectionMatrix);
-                const worldPosition = transformRgbUvToWorld(uvInput, cachedDepthArray, projectionMatrix, cachedMatrixWorld, this.deviceCamera, this.depth);
-                if (worldPosition) {
-                    const margin = this.options.objects.objectImageMargin;
-                    // Create a new bounding box for cropping that includes the margin.
-                    const cropBox = boundingBox.clone();
-                    cropBox.min.subScalar(margin);
-                    cropBox.max.addScalar(margin);
-                    const objectImage = await cropImage(base64Image, cropBox);
-                    const object = new DetectedObject(objectName, objectImage, boundingBox, additionalData);
-                    object.position.copy(worldPosition);
-                    this.add(object);
-                    this._detectedObjects.set(object.uuid, object);
-                    if (this._debugVisualsGroup) {
-                        this._createDebugVisual(object);
-                    }
-                    return object;
-                }
-            });
-            const detectedObjects = (await Promise.all(detectionPromises)).filter(Boolean);
-            return detectedObjects;
-        }
-        catch (error) {
-            console.error('AI query for object detection failed:', error);
-            return [];
-        }
-        finally {
-            // Restore the original config after the query.
-            this.aiOptions.gemini.config = originalGeminiConfig;
-        }
-    }
-    /**
-     * Retrieves a list of currently detected objects.
-     *
-     * @param label - The semantic label to filter by (e.g., 'chair'). If null,
-     * all objects are returned.
-     * @returns An array of `Object` instances.
-     */
-    get(label = null) {
-        const allObjects = Array.from(this._detectedObjects.values());
-        if (!label) {
-            return allObjects;
-        }
-        return allObjects.filter((obj) => obj.label === label);
-    }
-    /**
-     * Removes all currently detected objects from the scene and internal
-     * tracking.
-     */
-    clear() {
-        for (const obj of this._detectedObjects.values()) {
-            this.remove(obj);
-        }
-        this._detectedObjects.clear();
-        if (this._debugVisualsGroup) {
-            this._debugVisualsGroup.clear();
-        }
-        return this;
-    }
-    /**
-     * Toggles the visibility of all debug visualizations for detected objects.
-     * @param visible - Whether the visualizations should be visible.
-     */
-    showDebugVisualizations(visible = true) {
-        if (this._debugVisualsGroup) {
-            this._debugVisualsGroup.visible = visible;
-        }
-    }
-    /**
-     * Draws the detected bounding boxes on the input image and triggers a
-     * download for debugging.
-     * @param base64Image - The base64 encoded input image.
-     * @param detections - The array of detected objects from the AI response.
-     */
-    _visualizeBoundingBoxesOnImage(base64Image, detections) {
-        const img = new Image();
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = img.naturalWidth;
-            canvas.height = img.naturalHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0);
-            detections.forEach((item) => {
-                const { ymin, xmin, ymax, xmax, objectName } = (item || {});
-                if ([ymin, xmin, ymax, xmax].some((coord) => typeof coord !== 'number')) {
-                    return;
-                }
-                // Bounding box from AI is 0-1000, scale it to image dimensions.
-                const rectX = (xmin / 1000) * canvas.width;
-                const rectY = (ymin / 1000) * canvas.height;
-                const rectWidth = ((xmax - xmin) / 1000) * canvas.width;
-                const rectHeight = ((ymax - ymin) / 1000) * canvas.height;
-                ctx.strokeStyle = '#FF0000';
-                ctx.lineWidth = Math.max(2, canvas.width / 400);
-                ctx.strokeRect(rectX, rectY, rectWidth, rectHeight);
-                // Draw label.
-                const text = objectName || 'unknown';
-                const fontSize = Math.max(16, canvas.width / 80);
-                ctx.font = `bold ${fontSize}px sans-serif`;
-                ctx.textBaseline = 'bottom';
-                const textMetrics = ctx.measureText(text);
-                // Draw a background for the text for better readability.
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-                ctx.fillRect(rectX, rectY - fontSize, textMetrics.width + 8, fontSize + 4);
-                // Draw the text itself.
-                ctx.fillStyle = '#FFFFFF'; // White text
-                ctx.fillText(text, rectX + 4, rectY + 2);
-            });
-            // Create a link and trigger the download.
-            const timestamp = new Date()
-                .toISOString()
-                .slice(0, 19)
-                .replace('T', '_')
-                .replace(/:/g, '-');
-            const link = document.createElement('a');
-            link.download = `detection_debug_${timestamp}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        };
-        img.src = base64Image;
-    }
-    /**
-     * Generates a visual representation of the depth map, normalized to 0-1 range,
-     * and triggers a download for debugging.
-     * @param depthArray - The raw depth data array.
-     */
-    _visualizeDepthMap(depthArray) {
-        const width = this.depth.width;
-        const height = this.depth.height;
-        if (!width || !height || depthArray.length === 0) {
-            console.warn('Cannot visualize depth map: missing dimensions or data.');
-            return;
-        }
-        // 1. Find Min/Max for normalization (ignoring 0/invalid depth).
-        let min = Infinity;
-        let max = -Infinity;
-        for (let i = 0; i < depthArray.length; ++i) {
-            const val = depthArray[i];
-            if (val > 0) {
-                if (val < min)
-                    min = val;
-                if (val > max)
-                    max = val;
-            }
-        }
-        // Handle edge case where no valid depth exists.
-        if (min === Infinity) {
-            min = 0;
-            max = 1;
-        }
-        if (min === max) {
-            max = min + 1; // Avoid divide by zero
-        }
-        // 2. Create Canvas.
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        const imageData = ctx.createImageData(width, height);
-        const data = imageData.data;
-        // 3. Fill Pixels.
-        for (let i = 0; i < depthArray.length; ++i) {
-            const raw = depthArray[i];
-            // Normalize to 0-1.
-            // Typically 0 means invalid/sky in some depth APIs, so we keep it black.
-            // Otherwise, map [min, max] to [0, 1].
-            const normalized = raw === 0 ? 0 : (raw - min) / (max - min);
-            const byteVal = Math.floor(normalized * 255);
-            const stride = i * 4;
-            data[stride] = byteVal; // R
-            data[stride + 1] = byteVal; // G
-            data[stride + 2] = byteVal; // B
-            data[stride + 3] = 255; // Alpha
-        }
-        ctx.putImageData(imageData, 0, 0);
-        // 4. Download.
-        const timestamp = new Date()
-            .toISOString()
-            .slice(0, 19)
-            .replace('T', '_')
-            .replace(/:/g, '-');
-        const link = document.createElement('a');
-        link.download = `depth_debug_${timestamp}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-    }
-    /**
-     * Creates a simple debug visualization for an object based on its position
-     * (center of its 2D detection bounding box).
-     * @param object - The detected object to visualize.
-     */
-    async _createDebugVisual(object) {
-        // Create sphere.
-        const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.03, 16, 16), new THREE.MeshBasicMaterial({ color: 0xff4285f4 }));
-        sphere.position.copy(object.position);
-        // Create and configure the text label using Troika.
-        const { Text } = await import('troika-three-text');
-        const textLabel = new Text();
-        textLabel.text = object.label;
-        textLabel.fontSize = 0.07;
-        textLabel.color = 0xffffff;
-        textLabel.anchorX = 'center';
-        textLabel.anchorY = 'bottom';
-        // Position the label above the sphere
-        textLabel.position.copy(sphere.position);
-        textLabel.position.y += 0.04; // Offset above the sphere.
-        this._debugVisualsGroup.add(sphere, textLabel);
-        textLabel.sync(); // Required for Troika text to appear.
-    }
-    /**
-     * Builds the Gemini configuration object from the world options.
-     */
-    _buildGeminiConfig() {
-        const geminiOptions = this.options.objects.backendConfig.gemini;
-        return {
-            thinkingConfig: {
-                thinkingBudget: 0,
-            },
-            responseMimeType: 'application/json',
-            responseSchema: geminiOptions.responseSchema,
-            systemInstruction: [{ text: geminiOptions.systemInstruction }],
-        };
-    }
-}
-
-/**
- * Represents a single detected plane in the XR environment. It's a THREE.Mesh
- * that also holds metadata about the plane's properties.
- * Note: This requires experimental flag for Chrome.
- */
-class DetectedPlane extends THREE.Mesh {
-    /**
-     * @param xrPlane - The plane object from the WebXR API.
-     * @param material - The material for the mesh.
-     */
-    constructor(xrPlane, material) {
-        // Create geometry from the plane's polygon points.
-        const planePolygon = xrPlane.polygon;
-        const vertices = [];
-        for (const point of planePolygon) {
-            vertices.push(new THREE.Vector2(point.x, point.z));
-        }
-        const shape = new THREE.Shape(vertices);
-        const geometry = new THREE.ShapeGeometry(shape);
-        // ShapeGeometry creates a mesh in the XY plane by default.
-        // We must rotate it to lie flat in the XZ plane to correctly represent
-        // horizontal surfaces before applying the world pose provided by the API.
-        geometry.rotateX(Math.PI / 2);
-        super(geometry, material);
-        this.xrPlane = xrPlane;
-        this.label = xrPlane.semanticLabel || 'unknown';
-        this.orientation = xrPlane.orientation;
-    }
-}
-
-/**
- * Detects and manages real-world planes provided by the WebXR Plane Detection
- * API. It creates, updates, and removes `Plane` mesh objects in the scene.
- */
-class PlaneDetector extends Script {
-    constructor() {
-        super(...arguments);
-        /**
-         * A map from the WebXR `XRPlane` object to our custom `DetectedPlane` mesh.
-         */
-        this._detectedPlanes = new Map();
-    }
-    static { this.dependencies = { options: WorldOptions, renderer: THREE.WebGLRenderer }; }
-    /**
-     * Initializes the PlaneDetector.
-     */
-    init({ options, renderer, }) {
-        this.renderer = renderer;
-        if (options.planes.showDebugVisualizations) {
-            this._debugMaterial = new THREE.MeshBasicMaterial({
-                color: 0xffff00,
-                wireframe: true,
-                side: THREE.DoubleSide,
-            });
-        }
-    }
-    /**
-     * Processes the XRFrame to update plane information.
-     */
-    update(_, frame) {
-        if (!frame || !frame.detectedPlanes)
-            return;
-        this._xrRefSpace =
-            this._xrRefSpace || this.renderer.xr.getReferenceSpace() || undefined;
-        if (!this._xrRefSpace)
-            return;
-        const detectedPlanesInFrame = frame.detectedPlanes;
-        const planesToRemove = new Set(this._detectedPlanes.keys());
-        for (const xrPlane of detectedPlanesInFrame) {
-            planesToRemove.delete(xrPlane); // This plane is still active.
-            const existingPlaneMesh = this._detectedPlanes.get(xrPlane);
-            if (existingPlaneMesh) {
-                // Plane already exists, check if it needs an update.
-                if (xrPlane.lastChangedTime >
-                    (existingPlaneMesh.xrPlane.lastChangedTime || 0)) {
-                    this._updatePlaneMesh(frame, existingPlaneMesh, xrPlane);
-                }
-            }
-            else {
-                // This is a newly detected plane.
-                this._addPlaneMesh(frame, xrPlane);
-            }
-        }
-        // Remove planes that are no longer detected.
-        for (const xrPlane of planesToRemove) {
-            this._removePlaneMesh(xrPlane);
-        }
-    }
-    /**
-     * Creates and adds a new `Plane` mesh to the scene.
-     * @param frame - WebXR frame.
-     * @param xrPlane - The new WebXR plane object.
-     */
-    _addPlaneMesh(frame, xrPlane) {
-        const material = this._debugMaterial || new THREE.MeshBasicMaterial({ visible: false });
-        const planeMesh = new DetectedPlane(xrPlane, material);
-        this._updatePlanePose(frame, planeMesh, xrPlane);
-        this._detectedPlanes.set(xrPlane, planeMesh);
-        this.add(planeMesh);
-    }
-    /**
-     * Updates an existing `DetectedPlane` mesh's geometry and pose.
-     * @param frame - WebXR frame.
-     * @param planeMesh - The mesh to update.
-     * @param xrPlane - The updated plane data.
-     */
-    _updatePlaneMesh(frame, planeMesh, xrPlane) {
-        // Recreate geometry from the new polygon.
-        const newVertices = xrPlane.polygon.map((p) => new THREE.Vector2(p.x, p.z));
-        const newShape = new THREE.Shape(newVertices);
-        const newGeometry = new THREE.ShapeGeometry(newShape);
-        planeMesh.geometry.dispose();
-        planeMesh.geometry = newGeometry;
-        planeMesh.xrPlane = xrPlane; // Update the reference.
-        this._updatePlanePose(frame, planeMesh, xrPlane);
-    }
-    /**
-     * Removes a `Plane` mesh from the scene and disposes of its resources.
-     * @param xrPlane - The WebXR plane object to remove.
-     */
-    _removePlaneMesh(xrPlane) {
-        const planeMesh = this._detectedPlanes.get(xrPlane);
-        if (planeMesh) {
-            planeMesh.geometry.dispose();
-            this.remove(planeMesh);
-            this._detectedPlanes.delete(xrPlane);
-        }
-    }
-    /**
-     * Updates the position and orientation of a `DetectedPlane` mesh from its XR
-     * pose.
-     * @param frame - The current XRFrame.
-     * @param planeMesh - The mesh to update.
-     * @param xrPlane - The plane data with the pose.
-     */
-    _updatePlanePose(frame, planeMesh, xrPlane) {
-        const pose = frame.getPose(xrPlane.planeSpace, this._xrRefSpace);
-        if (pose) {
-            planeMesh.position.copy(pose.transform.position);
-            planeMesh.quaternion.copy(pose.transform.orientation);
-        }
-    }
-    /**
-     * Retrieves a list of detected planes, optionally filtered by a semantic
-     * label.
-     *
-     * @param label - The semantic label to filter by (e.g.,
-     *     'floor', 'wall').
-     * If null or undefined, all detected planes are returned.
-     * @returns An array of `DetectedPlane` objects
-     *     matching the criteria.
-     */
-    get(label) {
-        const allPlanes = Array.from(this._detectedPlanes.values());
-        if (!label) {
-            return allPlanes;
-        }
-        return allPlanes.filter((plane) => plane.label === label);
-    }
-    /**
-     * Toggles the visibility of the debug meshes for all planes.
-     * Requires `showDebugVisualizations` to be true in the options.
-     * @param visible - Whether to show or hide the planes.
-     */
-    showDebugVisualizations(visible = true) {
-        if (this._debugMaterial) {
-            this.visible = visible;
-        }
-    }
-}
-
-// Import other modules as they are implemented in future.
-// import { SceneMesh } from '/depth/SceneMesh.js';
-// import { LightEstimation } from '/lighting/LightEstimation.js';
-// import { HumanRecognizer } from '/human/HumanRecognizer.js';
-/**
- * Manages all interactions with the real-world environment perceived by the XR
- * device. This class abstracts the complexity of various perception APIs
- * (Depth, Planes, Meshes, etc.) and provides a simple, event-driven interface
- * for developers to use `this.world.depth.mesh`, `this.world.planes`.
- */
-class World extends Script {
-    constructor() {
-        super(...arguments);
-        /**
-         * A Three.js Raycaster for performing intersection tests.
-         */
-        this.raycaster = new THREE.Raycaster();
-    }
-    static { this.dependencies = {
-        options: WorldOptions,
-        camera: THREE.Camera,
-    }; }
-    /**
-     * Initializes the world-sensing modules based on the provided configuration.
-     * This method is called automatically by the XRCore.
-     */
-    async init({ options, camera, }) {
-        this.options = options;
-        this.camera = camera;
-        if (!this.options || !this.options.enabled) {
-            return;
-        }
-        // Conditionally initialize each perception module based on options.
-        if (this.options.planes.enabled) {
-            this.planes = new PlaneDetector();
-            this.add(this.planes);
-        }
-        if (this.options.objects.enabled) {
-            this.objects = new ObjectDetector();
-            this.add(this.objects);
-        }
-        // TODO: Initialize other modules as they are available & implemented.
-        /*
-        if (this.options.sceneMesh.enabled) {
-          this.meshes = new SceneMesh();
-        }
-    
-        if (this.options.lighting.enabled) {
-          this.lighting = new LightEstimation();
-        }
-    
-        if (this.options.humans.enabled) {
-          this.humans = new HumanRecognizer();
-        }
-        */
-    }
-    /**
-     * Places an object at the reticle.
-     */
-    anchorObjectAtReticle(_object, _reticle) {
-        throw new Error('Method not implemented');
-    }
-    /**
-     * Updates all active world-sensing modules with the latest XRFrame data.
-     * This method is called automatically by the XRCore on each frame.
-     * @param _timestamp - The timestamp for the current frame.
-     * @param frame - The current XRFrame, containing environmental
-     * data.
-     * @override
-     */
-    update(_timestamp, frame) {
-        if (!this.options?.enabled || !frame) {
-            return;
-        }
-        // Note: Object detection is not run per-frame by default as it's a
-        // costly operation. It should be triggered manually via
-        // `this.world.objects.runDetection()`.
-        // TODO: Update other modules as they are available & implemented.
-        // this.meshes?.update(frame);
-        // this.lighting?.update(frame);
-        // this.humans?.update(frame);
-    }
-    /**
-     * Performs a raycast from a controller against detected real-world surfaces
-     * (currently planes) and places a 3D object at the intersection point,
-     * oriented to face the user.
-     *
-     * We recommend using /templates/3_depth/ to anchor objects based on
-     * depth mesh for mixed reality experience for accuracy. This function is
-     * design for demonstration purposes.
-     *
-     * @param objectToPlace - The object to position in the
-     * world.
-     * @param controller - The controller to use for raycasting.
-     * @returns True if the object was successfully placed, false
-     * otherwise.
-     */
-    placeOnSurface(objectToPlace, controller) {
-        if (!this.planes) {
-            console.warn('Cannot placeOnSurface: PlaneDetector is not enabled.');
-            return false;
-        }
-        const allPlanes = this.planes.get();
-        if (allPlanes.length === 0) {
-            return false; // No surfaces to cast against.
-        }
-        this.raycaster.setFromXRController(controller);
-        const intersections = this.raycaster.intersectObjects(allPlanes);
-        if (intersections.length > 0) {
-            const intersection = intersections[0];
-            placeObjectAtIntersectionFacingTarget(objectToPlace, intersection, this.camera);
-            return true;
-        }
-        return false;
-    }
-    /**
-     * Toggles the visibility of all debug visualizations for world features.
-     * @param visible - Whether the visualizations should be visible.
-     */
-    showDebugVisualizations(visible = true) {
-        this.planes?.showDebugVisualizations(visible);
-        this.objects?.showDebugVisualizations(visible);
-        // this.meshes?.showDebugVisualizations(visible);
-    }
-}
-
-/**
  * Manages smooth transitions between AR (transparent) and VR (colored)
  * backgrounds within an active XR session.
  */
@@ -15028,6 +15099,7 @@ class Core {
         this.registry.register(this.simulator);
         this.registry.register(this.scriptsManager);
         this.registry.register(this.depth);
+        this.registry.register(this.world);
     }
     /**
      * Initializes the Core system with a given set of options. This includes
