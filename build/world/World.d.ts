@@ -3,6 +3,7 @@ import { Script } from '../core/Script';
 import { ObjectDetector } from './objects/ObjectDetector';
 import { PlaneDetector } from './planes/PlaneDetector';
 import { WorldOptions } from './WorldOptions';
+import { MeshDetector } from './mesh/MeshDetector';
 /**
  * Manages all interactions with the real-world environment perceived by the XR
  * device. This class abstracts the complexity of various perception APIs
@@ -30,18 +31,19 @@ export declare class World extends Script {
      */
     planes?: PlaneDetector;
     /**
-     * The scene mesh module instance. Null if not enabled.
-     * TODO: Not yet supported in Chrome.
-     */
-    /**
      * The object recognition module instance. Null if not enabled.
      */
     objects?: ObjectDetector;
+    /**
+     * The mesh detection module instance. Null if not enabled.
+     */
+    meshes?: MeshDetector;
     /**
      * A Three.js Raycaster for performing intersection tests.
      */
     private raycaster;
     private camera;
+    private needsRoomCapture;
     /**
      * Initializes the world-sensing modules based on the provided configuration.
      * This method is called automatically by the XRCore.

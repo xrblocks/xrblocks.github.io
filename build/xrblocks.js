@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.7.0
- * @commitid d5f5903
- * @builddate 2026-01-15T22:22:17.344Z
+ * @commitid 8684fe2
+ * @builddate 2026-01-16T01:09:27.501Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -7364,6 +7364,23 @@ class SoundOptions {
     }
 }
 
+class MeshDetectionOptions {
+    constructor(options) {
+        this.showDebugVisualizations = false;
+        this.enabled = false;
+        if (options) {
+            deepMerge(this, options);
+        }
+    }
+    /**
+     * Enables the mesh detector.
+     */
+    enable() {
+        this.enabled = true;
+        return this;
+    }
+}
+
 /**
  * Configuration options for the ObjectDetector.
  */
@@ -7435,8 +7452,10 @@ class WorldOptions {
     constructor(options) {
         this.debugging = false;
         this.enabled = false;
+        this.initiateRoomCapture = false;
         this.planes = new PlanesOptions();
         this.objects = new ObjectsOptions();
+        this.meshes = new MeshDetectionOptions();
         if (options) {
             deepMerge(this, options);
         }
@@ -7455,6 +7474,14 @@ class WorldOptions {
     enableObjectDetection() {
         this.enabled = true;
         this.objects.enable();
+        return this;
+    }
+    /**
+     * Enables mesh detection.
+     */
+    enableMeshDetection() {
+        this.enabled = true;
+        this.meshes.enable();
         return this;
     }
 }
@@ -10761,6 +10788,125 @@ class PlaneDetector extends Script {
     }
 }
 
+class DetectedMesh extends THREE.Mesh {
+    constructor(xrMesh, material) {
+        const geometry = new THREE.BufferGeometry();
+        const vertices = new Float32Array(xrMesh.vertices);
+        const indices = new Uint32Array(xrMesh.indices);
+        geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+        geometry.setIndex(new THREE.BufferAttribute(indices, 1));
+        geometry.computeVertexNormals();
+        super(geometry, material);
+        this.lastChangedTime = 0;
+        this.lastChangedTime = xrMesh.lastChangedTime;
+    }
+    initRapierPhysics(RAPIER, blendedWorld) {
+        this.RAPIER = RAPIER;
+        this.blendedWorld = blendedWorld;
+        const desc = RAPIER.RigidBodyDesc.fixed()
+            .setTranslation(this.position.x, this.position.y, this.position.z)
+            .setRotation(this.quaternion);
+        this.rigidBody = blendedWorld.createRigidBody(desc);
+        const vertices = this.geometry.attributes.position.array;
+        const indices = this.geometry.getIndex().array;
+        const colliderDesc = RAPIER.ColliderDesc.trimesh(vertices, indices);
+        this.collider = blendedWorld.createCollider(colliderDesc, this.rigidBody);
+    }
+    updateVertices(mesh) {
+        if (mesh.lastChangedTime === this.lastChangedTime)
+            return;
+        this.lastChangedTime = mesh.lastChangedTime;
+        const geometry = new THREE.BufferGeometry();
+        const vertices = new Float32Array(mesh.vertices);
+        const indices = new Uint32Array(mesh.indices);
+        geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+        geometry.setIndex(new THREE.BufferAttribute(indices, 1));
+        geometry.computeVertexNormals();
+        this.geometry.dispose();
+        this.geometry = geometry;
+        if (this.RAPIER && this.collider) {
+            const RAPIER = this.RAPIER;
+            this.blendedWorld.removeCollider(this.collider, false);
+            const colliderDesc = RAPIER.ColliderDesc.trimesh(vertices, indices);
+            this.collider = this.blendedWorld.createCollider(colliderDesc, this.rigidBody);
+        }
+    }
+}
+
+// Wrapper around WebXR Mesh Detection API
+// https://immersive-web.github.io/real-world-meshing/
+class MeshDetector extends Script {
+    constructor() {
+        super(...arguments);
+        this._debugMaterial = null;
+        this.xrMeshToThreeMesh = new Map();
+        this.threeMeshToXrMesh = new Map();
+    }
+    static { this.dependencies = {
+        options: MeshDetectionOptions,
+        renderer: THREE.WebGLRenderer,
+    }; }
+    init({ options, renderer, }) {
+        this.renderer = renderer;
+        if (options.showDebugVisualizations) {
+            this._debugMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffff00,
+                wireframe: true,
+                side: THREE.DoubleSide,
+            });
+        }
+    }
+    initPhysics(physics) {
+        this.physics = physics;
+        for (const [_, mesh] of this.xrMeshToThreeMesh.entries()) {
+            mesh.initRapierPhysics(physics.RAPIER, physics.blendedWorld);
+        }
+    }
+    updateMeshes(_timestamp, frame) {
+        const meshes = frame?.detectedMeshes;
+        if (!meshes)
+            return;
+        // Delete old meshes
+        for (const [xrMesh, threeMesh] of this.xrMeshToThreeMesh.entries()) {
+            if (!meshes.has(xrMesh)) {
+                this.xrMeshToThreeMesh.delete(xrMesh);
+                this.threeMeshToXrMesh.delete(threeMesh);
+                this.remove(threeMesh);
+            }
+        }
+        // Add new meshes
+        for (const xrMesh of meshes) {
+            if (!this.xrMeshToThreeMesh.has(xrMesh)) {
+                const threeMesh = this.createMesh(frame, xrMesh);
+                this.xrMeshToThreeMesh.set(xrMesh, threeMesh);
+                this.threeMeshToXrMesh.set(threeMesh, xrMesh);
+                this.add(threeMesh);
+                if (this.physics) {
+                    threeMesh.initRapierPhysics(this.physics.RAPIER, this.physics.blendedWorld);
+                }
+            }
+            else {
+                const threeMesh = this.xrMeshToThreeMesh.get(xrMesh);
+                threeMesh.updateVertices(xrMesh);
+                this.updateMeshPose(frame, xrMesh, threeMesh);
+            }
+        }
+    }
+    createMesh(frame, xrMesh) {
+        const material = this._debugMaterial || new THREE.MeshBasicMaterial({ visible: false });
+        const mesh = new DetectedMesh(xrMesh, material);
+        this.updateMeshPose(frame, xrMesh, mesh);
+        return mesh;
+    }
+    updateMeshPose(frame, xrMesh, mesh) {
+        const pose = frame.getPose(xrMesh.meshSpace, this.renderer.xr.getReferenceSpace());
+        if (pose) {
+            mesh.position.copy(pose.transform.position);
+            mesh.quaternion.copy(pose.transform.orientation);
+        }
+    }
+}
+
 // Import other modules as they are implemented in future.
 // import { SceneMesh } from '/depth/SceneMesh.js';
 // import { LightEstimation } from '/lighting/LightEstimation.js';
@@ -10778,6 +10924,8 @@ class World extends Script {
          * A Three.js Raycaster for performing intersection tests.
          */
         this.raycaster = new THREE.Raycaster();
+        // Whether we need to initiate a room capture.
+        this.needsRoomCapture = false;
     }
     static { this.dependencies = {
         options: WorldOptions,
@@ -10793,6 +10941,7 @@ class World extends Script {
         if (!this.options || !this.options.enabled) {
             return;
         }
+        this.needsRoomCapture = this.options.initiateRoomCapture;
         // Conditionally initialize each perception module based on options.
         if (this.options.planes.enabled) {
             this.planes = new PlaneDetector();
@@ -10802,11 +10951,12 @@ class World extends Script {
             this.objects = new ObjectDetector();
             this.add(this.objects);
         }
+        if (this.options.meshes.enabled) {
+            this.meshes = new MeshDetector();
+            this.add(this.meshes);
+        }
         // TODO: Initialize other modules as they are available & implemented.
         /*
-        if (this.options.sceneMesh.enabled) {
-          this.meshes = new SceneMesh();
-        }
     
         if (this.options.lighting.enabled) {
           this.lighting = new LightEstimation();
@@ -10835,13 +10985,11 @@ class World extends Script {
         if (!this.options?.enabled || !frame) {
             return;
         }
-        // Note: Object detection is not run per-frame by default as it's a
-        // costly operation. It should be triggered manually via
-        // `this.world.objects.runDetection()`.
-        // TODO: Update other modules as they are available & implemented.
-        // this.meshes?.update(frame);
-        // this.lighting?.update(frame);
-        // this.humans?.update(frame);
+        if (this.needsRoomCapture && frame.session.initiateRoomCapture) {
+            this.needsRoomCapture = false;
+            frame.session.initiateRoomCapture();
+        }
+        this.meshes?.updateMeshes(_timestamp, frame);
     }
     /**
      * Performs a raycast from a controller against detected real-world surfaces
@@ -10883,7 +11031,6 @@ class World extends Script {
     showDebugVisualizations(visible = true) {
         this.planes?.showDebugVisualizations(visible);
         this.objects?.showDebugVisualizations(visible);
-        // this.meshes?.showDebugVisualizations(visible);
     }
 }
 
@@ -15114,6 +15261,7 @@ class Core {
         this.registry.register(options.depth, DepthOptions);
         this.registry.register(options.simulator, SimulatorOptions);
         this.registry.register(options.world, WorldOptions);
+        this.registry.register(options.world.meshes, MeshDetectionOptions);
         this.registry.register(options.ai, AIOptions);
         this.registry.register(options.sound, SoundOptions);
         this.registry.register(options.gestures, GestureRecognitionOptions);
@@ -15198,6 +15346,9 @@ class Core {
         }
         if (options.world.planes.enabled) {
             webXRRequiredFeatures.push('plane-detection');
+        }
+        if (options.world.meshes.enabled) {
+            webXRRequiredFeatures.push('mesh-detection');
         }
         // Sets up lighting.
         if (options.lighting.enabled) {
