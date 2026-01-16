@@ -18,8 +18,8 @@ Strictly adhere to the following engineering guidelines:
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -55,10 +55,10 @@ Template: 0_basic
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -196,8 +196,8 @@ export class UIManager extends xb.Script {
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -205,8 +205,8 @@ export class UIManager extends xb.Script {
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -371,8 +371,8 @@ export class HandsInteraction extends xb.Script {
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -380,8 +380,8 @@ export class HandsInteraction extends xb.Script {
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -435,9 +435,9 @@ Template: 3_depth
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
+
+
+
     <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
     <script>
       window.litDisableBundleWarning = true;
@@ -445,12 +445,12 @@ Template: 3_depth
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -529,9 +529,9 @@ Template: 4_stereo
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
+
+
+
     <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
     <script>
       window.litDisableBundleWarning = true;
@@ -539,12 +539,12 @@ Template: 4_stereo
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -618,9 +618,9 @@ Template: 5_camera
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
+
+
+
     <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
     <script>
       window.litDisableBundleWarning = true;
@@ -628,8 +628,8 @@ Template: 5_camera
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -637,8 +637,8 @@ Template: 5_camera
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -833,9 +833,9 @@ export class GeminiQueryManager extends xb.Script {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    
-    
+
+
+
     <title>XR Blocks - AI Query Demo</title>
     <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
     <script>
@@ -844,8 +844,8 @@ export class GeminiQueryManager extends xb.Script {
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -853,8 +853,8 @@ export class GeminiQueryManager extends xb.Script {
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/",
           "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
@@ -1136,9 +1136,9 @@ export class TranscriptionManager {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    
-    
+
+
+
     <title>XR Blocks - Gemini Live AI Demo</title>
     <link type="text/css" rel="stylesheet" href="../../site/css/demo.css" />
     <script>
@@ -1147,8 +1147,8 @@ export class TranscriptionManager {
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -1156,8 +1156,8 @@ export class TranscriptionManager {
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/",
           "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
@@ -1245,8 +1245,8 @@ Template: 8_objects
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
@@ -1254,8 +1254,8 @@ Template: 8_objects
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
           "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/",
           "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
@@ -1343,12 +1343,12 @@ Template: 9_xr-toggle
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -1436,8 +1436,8 @@ Template: heuristic_hand_gestures
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -1445,8 +1445,8 @@ Template: heuristic_hand_gestures
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -1577,9 +1577,9 @@ export class MaterialSymbolsIcon extends Svg {
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/": "https://cdn.jsdelivr.net/npm/three@0.181.0/",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/": "https://cdn.jsdelivr.net/npm/three@0.182.0/",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
           "@pmndrs/uikit": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit@1.0.56/dist/index.min.js",
@@ -1587,8 +1587,8 @@ export class MaterialSymbolsIcon extends Svg {
           "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.56/dist/index.min.js",
           "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.12.1/dist/signals-core.mjs",
           "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -1946,9 +1946,9 @@ export const DepthMapShader = {
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
+
+
+
     <link type="text/css" rel="stylesheet" href="../main.css" />
     <script>
       window.litDisableBundleWarning = true;
@@ -1956,8 +1956,8 @@ export const DepthMapShader = {
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -1965,8 +1965,8 @@ export const DepthMapShader = {
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -2012,15 +2012,15 @@ Sample: depthmesh
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
+
+
+
     <link type="text/css" rel="stylesheet" href="../main.css" />
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -2028,8 +2028,8 @@ Sample: depthmesh
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -2278,7 +2278,7 @@ export class CustomGestureDemo extends xb.Script {
       await tf.ready();
 
       // Initializes LiteRT.js's WASM files.
-      const wasmPath = 'https://unpkg.com/@litertjs/core/wasm/';
+      const wasmPath = 'https://unpkg.com/@litertjs/core@0.2.1/wasm/';
       const liteRt = await loadLiteRt(wasmPath);
 
       // Makes LiteRt use the same GPU device as TF.js (for tensor conversion).
@@ -2515,9 +2515,9 @@ export class CustomGestureDemo extends xb.Script {
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
+
+
+
     <link type="text/css" rel="stylesheet" href="../main.css" />
     <script>
       window.litDisableBundleWarning = true;
@@ -2525,8 +2525,8 @@ export class CustomGestureDemo extends xb.Script {
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -2535,13 +2535,13 @@ export class CustomGestureDemo extends xb.Script {
           "@tensorflow/tfjs-core": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core/+esm",
           "@tensorflow/tfjs": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/+esm",
           "@tensorflow/tfjs-backend-webgpu": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgpu/+esm",
-          "@litertjs/core": "https://unpkg.com/@litertjs/core",
-          "@litertjs/tfjs-interop": "https://unpkg.com/@litertjs/tfjs-interop",
-          "@litertjs/wasm-utils": "https://unpkg.com/@litertjs/wasm-utils",
+          "@litertjs/core": "https://unpkg.com/@litertjs/core@0.2.1",
+          "@litertjs/tfjs-interop": "https://unpkg.com/@litertjs/tfjs-interop@1.0.1",
+          "@litertjs/wasm-utils": "https://unpkg.com/@litertjs/wasm-utils@0.2.1",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -2591,9 +2591,9 @@ Sample: gestures_heuristic
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
+
+
+
     <link type="text/css" rel="stylesheet" href="../main.css" />
     <script>
       window.litDisableBundleWarning = true;
@@ -2601,8 +2601,8 @@ Sample: gestures_heuristic
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -2610,8 +2610,8 @@ Sample: gestures_heuristic
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -2935,9 +2935,9 @@ export const ANIMALS_DATA = [
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
+
+
+
     <link type="text/css" rel="stylesheet" href="../main.css" />
     <script>
       window.litDisableBundleWarning = true;
@@ -2945,8 +2945,8 @@ export const ANIMALS_DATA = [
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -2955,8 +2955,8 @@ export const ANIMALS_DATA = [
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
           "@material/web/": "https://esm.run/@material/web/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -3143,9 +3143,9 @@ export class ModelViewerScene extends xb.Script {
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
+
+
+
     <link type="text/css" rel="stylesheet" href="../main.css" />
     <script>
       window.litDisableBundleWarning = true;
@@ -3153,8 +3153,8 @@ export class ModelViewerScene extends xb.Script {
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -3162,8 +3162,8 @@ export class ModelViewerScene extends xb.Script {
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/",
           "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/0.1.10/spark.module.js"
         }
       }
@@ -3219,8 +3219,8 @@ Sample: paint
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -3228,8 +3228,8 @@ Sample: paint
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -3348,15 +3348,15 @@ Sample: reticle
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
+
+
+
     <link type="text/css" rel="stylesheet" href="../main.css" />
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -3364,8 +3364,8 @@ Sample: reticle
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -3793,9 +3793,9 @@ export class TranscriptionManager {
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
+
+
+
     <link type="text/css" rel="stylesheet" href="../main.css" />
     <script>
       window.litDisableBundleWarning = true;
@@ -3803,8 +3803,8 @@ export class TranscriptionManager {
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -3812,8 +3812,8 @@ export class TranscriptionManager {
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/",
           "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
@@ -3838,21 +3838,21 @@ Sample: sound
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
+
+
+
     <link type="text/css" rel="stylesheet" href="../main.css" />
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
           "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js"
         }
       }
     </script>
@@ -4240,14 +4240,14 @@ Sample: ui
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
           "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js"
         }
       }
     </script>
@@ -4400,38 +4400,55 @@ Sample: ui
 
         createPlayerPanel() {
           // Panel 2: Interactive Media Player (Top-Center)
-          const playerPanel = new xb.SpatialPanel({
-            width: 1.2,
-            height: 1.0,
-            backgroundColor: '#21252baa',
+          const panel = new xb.SpatialPanel({
+            width: 1.5,
+            height: 1.25,
+            backgroundColor: '#00000000',
           });
-          playerPanel.position.set(
+          panel.position.set(
             0,
             xb.user.height * 2.0,
             -xb.user.panelDistance - 1.0
           );
-          this.add(playerPanel);
-
-          const playerGrid = playerPanel.addGrid();
-          const videoRow = playerGrid.addRow({weight: 0.6});
-          videoRow.addVideo({
-            src: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+          panel.isRoot = true;
+          this.add(panel);
+          const grid = panel.addGrid();
+          // Space for orbiter
+          grid.addRow({weight: 0.25});
+          // player row
+          const playerRow = grid.addRow({weight: 0.75});
+          const playerPanel = playerRow.addPanel({
+            width: 1.0,
+            height: 1.2,
+            backgroundColor: '#21252baa',
           });
-
-          const progressRow = playerGrid.addRow({weight: 0.1});
-
-          const controlsRow = playerGrid.addRow({weight: 0.3});
-          controlsRow.addCol({weight: 0.2});
-          controlsRow
-            .addCol({weight: 0.2})
-            .addIconButton({text: 'skip_previous', fontSize: 0.6});
-          controlsRow
-            .addCol({weight: 0.2})
-            .addIconButton({text: 'play_arrow', fontSize: 0.8});
-          controlsRow
-            .addCol({weight: 0.2})
-            .addIconButton({text: 'skip_next', fontSize: 0.6});
-          controlsRow.addCol({weight: 0.2});
+          const playerGrid = playerPanel.addGrid();
+          {
+            // video row
+            playerGrid.addRow({weight: 0.1});
+            const videoRow = playerGrid.addRow({weight: 0.5});
+            videoRow.addVideo({
+              src: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            });
+            // progress row
+            const progressRow = playerGrid.addRow({weight: 0.05});
+            // controls row
+            const controlsRow = playerGrid.addRow({weight: 0.35});
+            controlsRow.addCol({weight: 0.2});
+            controlsRow
+              .addCol({weight: 0.2})
+              .addIconButton({text: 'skip_previous', fontSize: 0.4});
+            controlsRow
+              .addCol({weight: 0.2})
+              .addIconButton({text: 'play_arrow', fontSize: 0.6});
+            controlsRow
+              .addCol({weight: 0.2})
+              .addIconButton({text: 'skip_next', fontSize: 0.4});
+            controlsRow.addCol({weight: 0.2});
+          }
+          const orbiter = playerGrid.addOrbiter();
+          orbiter.addExitButton();
+          panel.updateLayouts();
         }
 
         createSettingsPanel() {
@@ -4701,6 +4718,677 @@ Sample: ui
     </script>
   </body>
 </html>
+
+
+
+Demo: balloonpop
+(example: ../xrblocks/demos/balloonpop/BalloonPop.js)
+import * as THREE from 'three';
+import * as xb from 'xrblocks';
+import {playPopSound, playWhooshSound} from './audio.js';
+
+// --- CONSTANTS ---
+const DART_SPEED = 15.0;
+const DART_GRAVITY_SCALE = 0.1;
+const MENU_WIDTH = 0.85;
+const PARTICLE_COUNT = 30;
+const PARTICLE_LIFE = 1.0;
+const BOUNDARY_RADIUS = 7.62;
+const BOUNDARY_IMPULSE = 0.02;
+
+// Physics Groups
+export const GROUP_WORLD = (0x0001 << 16) | (0x0002 | 0x0004);
+const GROUP_BALLOON = (0x0002 << 16) | (0x0001 | 0x0002 | 0x0004);
+const GROUP_DART = (0x0004 << 16) | (0x0001 | 0x0002);
+
+// --- UI HELPER ---
+function createStepperControl(
+  game,
+  grid,
+  labelText,
+  valueRef,
+  min,
+  max,
+  step,
+  isCount
+) {
+  const H_BUTTON = 0.15;
+  const H_VALUE_LABEL = 0.12;
+  const menuHeight = game.menuPanel.height;
+  const getW = (h) => h / menuHeight;
+
+  grid.addRow({weight: getW(H_BUTTON)}).addTextButton({
+    text: '+',
+    fontColor: '#ffffff',
+    backgroundColor: '#4285f4',
+    fontSize: 0.7,
+    width: 0.3,
+    weight: 1.0,
+  }).onTriggered = () => {
+    const maxVal = isCount ? max : 0.1;
+    game[valueRef] = Math.min(maxVal, game[valueRef] + step);
+    game.renderMenu();
+  };
+
+  const displayValue = isCount
+    ? game[valueRef]
+    : Math.round(game[valueRef] * 100);
+  const valueText = grid.addRow({weight: getW(H_VALUE_LABEL)}).addText({
+    text: `${labelText}: ${displayValue}`,
+    fontColor: '#ffffff',
+    fontSize: 0.12,
+    textAlign: 'center',
+  });
+
+  if (isCount) game.countValueText = valueText;
+  else game.speedValueText = valueText;
+
+  grid.addRow({weight: getW(H_BUTTON)}).addTextButton({
+    text: '-',
+    fontColor: '#ffffff',
+    backgroundColor: '#4285f4',
+    fontSize: 0.7,
+    width: 0.3,
+    weight: 1.0,
+  }).onTriggered = () => {
+    game[valueRef] = Math.max(min, game[valueRef] - step);
+    game.renderMenu();
+  };
+  grid.addRow({weight: getW(0.01)});
+}
+
+export class BalloonGame extends xb.Script {
+  constructor() {
+    super();
+    this.balloons = new Map();
+    this.darts = new Map();
+    this.particles = [];
+    this.balloonCount = 10;
+    this.balloonSpeed = 0.03;
+    this.balloonsPopped = 0;
+    this.activeDart = null;
+    this.menuPanel = null;
+    this.isMenuExpanded = true;
+    this.physics = null;
+    this.physicsWorld = null;
+    this.RAPIER = null;
+    this.balloonModel = null;
+    this.dartModel = null;
+    this.particleGeometry = null;
+    this.particleMaterial = null;
+    this.raycaster = new THREE.Raycaster();
+    this.menuPos = new THREE.Vector3(0.6, 1.3, -1.0);
+    this.menuRot = new THREE.Euler(0, -0.4, 0);
+  }
+
+  async init() {
+    // Post-init Stable Activation of Depth Mesh Physics
+    setTimeout(() => {
+      const options = xb.core.registry.get(xb.Options);
+      if (options && options.depth) {
+        options.depth.enabled = true;
+        if (options.depth.depthMesh) {
+          options.depth.depthMesh.enabled = true;
+          options.depth.depthMesh.physicsEnabled = true;
+          options.depth.depthMesh.collisionGroups = GROUP_WORLD;
+        }
+      }
+    }, 1000);
+
+    this.add(new THREE.HemisphereLight(0xffffff, 0xbbbbff, 3));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 2);
+    dirLight.position.set(1, 2, 1);
+    this.add(dirLight);
+
+    this.createPrefabs();
+    this.renderMenu();
+  }
+
+  createPrefabs() {
+    // --- DART ---
+    this.dartModel = new THREE.Group();
+    const needleMat = new THREE.MeshStandardMaterial({
+      color: 0xaaaaaa,
+      metalness: 1.0,
+      roughness: 0.1,
+    });
+    const silverMat = new THREE.MeshStandardMaterial({
+      color: 0xcccccc,
+      metalness: 0.8,
+      roughness: 0.3,
+    });
+    const redMat = new THREE.MeshStandardMaterial({
+      color: 0xaa0000,
+      roughness: 0.5,
+    });
+    const finMat = new THREE.MeshStandardMaterial({
+      color: 0xcc0000,
+      roughness: 0.6,
+    });
+    const needle = new THREE.Mesh(
+      new THREE.ConeGeometry(0.002, 0.04, 6),
+      needleMat
+    );
+    needle.position.y = 0.17;
+    const tipHolder = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.008, 0.012, 0.03, 8),
+      silverMat
+    );
+    tipHolder.position.y = 0.135;
+    const body = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.01, 0.01, 0.18, 8),
+      redMat
+    );
+    body.position.y = 0.03;
+    const createFin = (rotationY) => {
+      const fin = new THREE.Mesh(
+        new THREE.BoxGeometry(0.07, 0.05, 0.002, 1, 1, 1),
+        finMat
+      );
+      fin.position.set(0, -0.05, 0);
+      fin.rotation.set(Math.PI, rotationY, 0);
+      return fin;
+    };
+    this.dartModel.add(needle, tipHolder, body);
+    this.dartModel.add(createFin(0));
+    this.dartModel.add(createFin(Math.PI / 2));
+    this.dartModel.add(createFin(Math.PI));
+    this.dartModel.add(createFin(Math.PI * 1.5));
+
+    // --- HIGH-FIDELITY BALLOON ---
+    this.balloonModel = new THREE.Group();
+    const balloonGeo = new THREE.SphereGeometry(0.5, 32, 32);
+    const pos = balloonGeo.attributes.position;
+    const v = new THREE.Vector3();
+    for (let i = 0; i < pos.count; i++) {
+      v.fromBufferAttribute(pos, i);
+      if (v.y < 0) {
+        const t = 1.0 - Math.abs(v.y) * 0.35;
+        v.x *= t;
+        v.z *= t;
+      }
+      pos.setXYZ(i, v.x, v.y, v.z);
+    }
+    balloonGeo.computeVertexNormals();
+    const balloonMat = new THREE.MeshStandardMaterial({
+      color: 0xffffff,
+      roughness: 0.2,
+      metalness: 0.1,
+      transparent: true,
+      opacity: 0.85,
+      side: THREE.FrontSide,
+    });
+    this.balloonModel.add(new THREE.Mesh(balloonGeo, balloonMat));
+    const knotGeo = new THREE.CylinderGeometry(0.03, 0.01, 0.12, 16);
+    knotGeo.translate(0, -0.54, 0);
+    this.balloonModel.add(new THREE.Mesh(knotGeo, balloonMat));
+    const ringGeo = new THREE.TorusGeometry(0.035, 0.015, 8, 24);
+    ringGeo.rotateX(Math.PI / 2);
+    ringGeo.translate(0, -0.6, 0);
+    this.balloonModel.add(new THREE.Mesh(ringGeo, balloonMat));
+
+    this.particleGeometry = new THREE.PlaneGeometry(0.08, 0.08);
+    this.particleMaterial = new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      transparent: true,
+      opacity: 1.0,
+      side: THREE.DoubleSide,
+      blending: THREE.AdditiveBlending,
+    });
+  }
+
+  initPhysics(physics) {
+    this.physics = physics;
+    this.physicsWorld = physics.blendedWorld;
+    this.RAPIER = physics.RAPIER;
+    this.spawnBalloons();
+    this.renderMenu();
+  }
+
+  renderMenu() {
+    if (this.menuPanel) {
+      this.menuPos.copy(this.menuPanel.position);
+      this.menuRot.copy(this.menuPanel.rotation);
+      this.remove(this.menuPanel);
+    }
+    const H_TOGGLE = 0.1;
+    const H_SCORE = 0.15;
+    const H_RESET = 0.15;
+    const H_SPACE = 0.03;
+    const H_BUTTON = 0.15;
+    const H_VALUE_LABEL = 0.12;
+    const headerHeight = H_TOGGLE + H_SCORE + H_RESET + H_SPACE;
+    const expandedControlsHeight =
+      (H_BUTTON + H_VALUE_LABEL + H_BUTTON + H_SPACE) * 2;
+    const menuHeight = this.isMenuExpanded
+      ? headerHeight + expandedControlsHeight
+      : headerHeight;
+    const getW = (h) => h / menuHeight;
+
+    this.menuPanel = new xb.SpatialPanel({
+      width: MENU_WIDTH,
+      height: menuHeight,
+      backgroundColor: '#2b2b2baa',
+      showEdge: true,
+      edgeColor: 'white',
+      edgeWidth: 0.001,
+    });
+    this.menuPanel.position.copy(this.menuPos);
+    this.menuPanel.rotation.copy(this.menuRot);
+    this.add(this.menuPanel);
+    const grid = this.menuPanel.addGrid();
+    grid.addRow({weight: getW(H_TOGGLE)}).addTextButton({
+      text: this.isMenuExpanded ? '\u25B2' : '\u25BC',
+      fontColor: '#ffffff',
+      backgroundColor: '#444444',
+      fontSize: 0.7,
+      weight: 1.0,
+    }).onTriggered = () => this.toggleMenu();
+    this.scoreText = grid.addRow({weight: getW(H_SCORE)}).addText({
+      text: `${this.balloonsPopped} / ${this.balloonCount}`,
+      fontColor: '#ffffff',
+      fontSize: 0.15,
+      textAlign: 'center',
+    });
+    grid.addRow({weight: getW(H_RESET)}).addTextButton({
+      text: '\u21BB',
+      fontColor: '#ffffff',
+      backgroundColor: '#d93025',
+      fontSize: 0.7,
+      weight: 1.0,
+    }).onTriggered = () => this.resetGame();
+    grid.addRow({weight: getW(H_SPACE)});
+    if (this.isMenuExpanded) {
+      createStepperControl(
+        this,
+        grid,
+        'Balloons',
+        'balloonCount',
+        5,
+        30,
+        1,
+        true
+      );
+      createStepperControl(
+        this,
+        grid,
+        'Speed',
+        'balloonSpeed',
+        0.0,
+        0.1,
+        0.01,
+        false
+      );
+    }
+  }
+
+  toggleMenu() {
+    this.isMenuExpanded = !this.isMenuExpanded;
+    this.renderMenu();
+  }
+  updateScoreDisplay() {
+    if (this.scoreText)
+      this.scoreText.text = `${this.balloonsPopped} / ${this.balloonCount}`;
+  }
+  resetGame() {
+    this.spawnBalloons();
+    this.renderMenu();
+  }
+
+  spawnBalloons() {
+    if (!this.physicsWorld || !this.RAPIER || !this.balloonModel) return;
+    this.clearBalloons();
+    this.balloonsPopped = 0;
+    this.updateScoreDisplay();
+    const color = new THREE.Color();
+    for (let i = 0; i < this.balloonCount; i++) {
+      const grp = this.balloonModel.clone();
+      const x = (Math.random() - 0.5) * 4,
+        y = 1.5 + Math.random() * 1,
+        z = -2 - Math.random() * 2;
+      grp.position.set(x, y, z);
+      const s = 0.7 + Math.random() * 0.6;
+      grp.scale.set(s, s, s);
+      color.setHSL(Math.random(), 0.95, 0.6);
+      grp.traverse((c) => {
+        if (c.isMesh) {
+          c.material = c.material.clone();
+          c.material.color.copy(color);
+        }
+      });
+      const rb = this.physicsWorld.createRigidBody(
+        this.RAPIER.RigidBodyDesc.dynamic()
+          .setTranslation(x, y, z)
+          .setGravityScale(-0.05 * s)
+          .setLinearDamping(0.5)
+          .setAngularDamping(0.5)
+      );
+      const col = this.physicsWorld.createCollider(
+        this.RAPIER.ColliderDesc.ball(0.5 * s)
+          .setActiveEvents(this.RAPIER.ActiveEvents.COLLISION_EVENTS)
+          .setRestitution(0.85)
+          .setDensity(0.1)
+          .setCollisionGroups(GROUP_BALLOON),
+        rb
+      );
+      this.balloons.set(col.handle, {
+        mesh: grp,
+        rigidBody: rb,
+        collider: col,
+        color: color.clone(),
+      });
+      this.add(grp);
+    }
+  }
+
+  clearBalloons() {
+    if (!this.physicsWorld) return;
+    for (const [h, b] of this.balloons.entries()) {
+      this.remove(b.mesh);
+      this.physicsWorld.removeCollider(b.collider, false);
+      this.physicsWorld.removeRigidBody(b.rigidBody);
+    }
+    this.balloons.clear();
+  }
+
+  spawnExplosion(position, color) {
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const mat = this.particleMaterial.clone();
+      mat.color.copy(color);
+      const mesh = new THREE.Mesh(this.particleGeometry, mat);
+      mesh.position.copy(position);
+      this.add(mesh);
+      this.particles.push({
+        mesh,
+        velocity: new THREE.Vector3(
+          (Math.random() - 0.5) * 4.0,
+          (Math.random() - 0.5) * 4.0,
+          (Math.random() - 0.5) * 4.0
+        ),
+        life: PARTICLE_LIFE,
+      });
+    }
+  }
+
+  onSelectStart(event) {
+    if (this.menuPanel && this.menuPanel.parent) {
+      const ctrl = event.target,
+        pos = new THREE.Vector3(),
+        quat = new THREE.Quaternion();
+      ctrl.getWorldPosition(pos);
+      ctrl.getWorldQuaternion(quat);
+      this.raycaster.set(
+        pos,
+        new THREE.Vector3(0, 0, -1).applyQuaternion(quat)
+      );
+      if (this.raycaster.intersectObject(this.menuPanel, true).length > 0)
+        return;
+    }
+    if (this.activeDart) return;
+    this.activeDart = this.dartModel.clone();
+    this.activeDart.position.set(0, -0.05, -0.15);
+    this.activeDart.rotation.set(-Math.PI / 2, 0, 0);
+    event.target.add(this.activeDart);
+  }
+
+  onSelectEnd(event) {
+    const ctrl = event.target;
+    if (!this.activeDart || !this.physicsWorld) return;
+    const dart = this.activeDart;
+    this.activeDart = null;
+    const wPos = new THREE.Vector3(),
+      wQuat = new THREE.Quaternion();
+    dart.getWorldPosition(wPos);
+    dart.getWorldQuaternion(wQuat);
+    ctrl.remove(dart);
+    dart.position.copy(wPos);
+    dart.quaternion.copy(wQuat);
+    this.add(dart);
+    playWhooshSound();
+    const rb = this.physicsWorld.createRigidBody(
+      this.RAPIER.RigidBodyDesc.dynamic()
+        .setTranslation(wPos.x, wPos.y, wPos.z)
+        .setRotation(wQuat)
+        .setGravityScale(DART_GRAVITY_SCALE)
+        .setCcdEnabled(true)
+    );
+    const col = this.physicsWorld.createCollider(
+      this.RAPIER.ColliderDesc.capsule(0.1, 0.015)
+        .setActiveEvents(this.RAPIER.ActiveEvents.COLLISION_EVENTS)
+        .setSensor(true)
+        .setCollisionGroups(GROUP_DART),
+      rb
+    );
+    rb.setLinvel(
+      new THREE.Vector3(0, 1, 0)
+        .applyQuaternion(wQuat)
+        .multiplyScalar(DART_SPEED),
+      true
+    );
+    this.darts.set(col.handle, {mesh: dart, rigidBody: rb, collider: col});
+  }
+
+  update(time, delta) {
+    if (this.physicsWorld) {
+      for (const [h, b] of this.balloons.entries()) {
+        b.mesh.position.copy(b.rigidBody.translation());
+        b.mesh.quaternion.copy(b.rigidBody.rotation());
+      }
+      for (const [h, d] of this.darts.entries()) {
+        d.mesh.position.copy(d.rigidBody.translation());
+        d.mesh.quaternion.copy(d.rigidBody.rotation());
+        if (d.mesh.position.y < -5 || Math.abs(d.mesh.position.z) > 30)
+          this.removeDart(h);
+      }
+    }
+    const dt = delta || 1 / 60;
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      const p = this.particles[i];
+      p.life -= dt;
+      if (p.life <= 0) {
+        this.remove(p.mesh);
+        this.particles.splice(i, 1);
+      } else {
+        p.mesh.position.addScaledVector(p.velocity, dt);
+        p.mesh.material.opacity = p.life / PARTICLE_LIFE;
+        if (xb.core.camera) p.mesh.lookAt(xb.core.camera.position);
+      }
+    }
+  }
+
+  physicsStep() {
+    if (!this.physics || !this.physicsWorld || !xb.core.camera) return;
+    const camPos = xb.core.camera.position;
+    const speedFactor = this.balloonSpeed / 10;
+    for (const [h, b] of this.balloons.entries()) {
+      const s = speedFactor;
+      b.rigidBody.addForce(
+        {
+          x: (Math.random() - 0.5) * s,
+          y: (Math.random() - 0.5) * (s * 0.5),
+          z: (Math.random() - 0.5) * s,
+        },
+        true
+      );
+      const p = b.rigidBody.translation();
+      const dx = p.x - camPos.x,
+        dz = p.z - camPos.z;
+      const dist = Math.sqrt(dx * dx + dz * dz);
+      if (dist > BOUNDARY_RADIUS) {
+        b.rigidBody.applyImpulse(
+          {
+            x: (-dx / dist) * BOUNDARY_IMPULSE,
+            y: 0,
+            z: (-dz / dist) * BOUNDARY_IMPULSE,
+          },
+          true
+        );
+      }
+      if (p.y > 5.0)
+        b.rigidBody.applyImpulse({x: 0, y: -BOUNDARY_IMPULSE, z: 0}, true);
+      if (p.y < 0.5)
+        b.rigidBody.applyImpulse({x: 0, y: BOUNDARY_IMPULSE, z: 0}, true);
+    }
+    this.physics.eventQueue.drainCollisionEvents((h1, h2, s) => {
+      if (!s) return;
+      if (this.darts.has(h1) && this.balloons.has(h2)) {
+        this.popBalloon(h2);
+        this.removeDart(h1);
+      } else if (this.darts.has(h2) && this.balloons.has(h1)) {
+        this.popBalloon(h1);
+        this.removeDart(h2);
+      }
+    });
+  }
+
+  popBalloon(h) {
+    const b = this.balloons.get(h);
+    if (b) {
+      this.spawnExplosion(b.mesh.position.clone(), b.color);
+      playPopSound();
+    }
+    this.removeBalloon(h);
+    this.balloonsPopped++;
+    this.updateScoreDisplay();
+  }
+  removeBalloon(h) {
+    const b = this.balloons.get(h);
+    if (!b) return;
+    this.remove(b.mesh);
+    this.physicsWorld.removeCollider(b.collider, false);
+    this.physicsWorld.removeRigidBody(b.rigidBody);
+    this.balloons.delete(h);
+  }
+  removeDart(h) {
+    const d = this.darts.get(h);
+    if (!d) return;
+    this.remove(d.mesh);
+    this.physicsWorld.removeCollider(d.collider, false);
+    this.physicsWorld.removeRigidBody(d.rigidBody);
+    this.darts.delete(h);
+  }
+}
+
+(example: ../xrblocks/demos/balloonpop/audio.js)
+// --- AUDIO CONTEXT (Retro Noise Pop) ---
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+export function playPopSound() {
+  if (audioContext.state === 'suspended') audioContext.resume();
+  const noiseSource = audioContext.createBufferSource();
+  const bandpass = audioContext.createBiquadFilter();
+  const gainNode = audioContext.createGain();
+  const now = audioContext.currentTime;
+
+  const sampleRate = audioContext.sampleRate;
+  const bufferSize = sampleRate * 0.15;
+  const noiseBuffer = audioContext.createBuffer(1, bufferSize, sampleRate);
+  const output = noiseBuffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    output[i] = Math.random() * 2 - 1;
+  }
+  noiseSource.buffer = noiseBuffer;
+
+  bandpass.type = 'bandpass';
+  bandpass.frequency.setValueAtTime(3000, now);
+  bandpass.Q.setValueAtTime(1.2, now);
+
+  gainNode.gain.setValueAtTime(0, now);
+  gainNode.gain.linearRampToValueAtTime(0.8, now + 0.002);
+  gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+
+  noiseSource.connect(bandpass);
+  bandpass.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+  noiseSource.start(0);
+}
+
+export function playWhooshSound() {
+  if (audioContext.state === 'suspended') audioContext.resume();
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+  const now = audioContext.currentTime;
+  oscillator.type = 'sawtooth';
+  oscillator.frequency.setValueAtTime(800, now);
+  oscillator.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+  gainNode.gain.setValueAtTime(0.3, now);
+  gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+  oscillator.start(0);
+  oscillator.stop(now + 0.1);
+}
+
+(example: ../xrblocks/demos/balloonpop/index.html)
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>XR Blocks: Balloon Pop (v5.1 - Stable Fallback)</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="https://xrblocks.github.io/css/main.css"
+    />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
+          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
+          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
+          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
+          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
+          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
+          "lit/": "https://esm.run/lit@3/",
+          "@dimforge/rapier3d-simd-compat": "https://cdn.skypack.dev/@dimforge/rapier3d-simd-compat@0.17.0",
+          "xrblocks": "https://cdn.jsdelivr.net/gh/google/xrblocks@build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/gh/google/xrblocks@build/addons/"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
+
+(example: ../xrblocks/demos/balloonpop/main.js)
+import * as xb from 'xrblocks';
+import RAPIER from '@dimforge/rapier3d-simd-compat';
+import 'xrblocks/addons/simulator/SimulatorAddons.js';
+import {BalloonGame, GROUP_WORLD} from './BalloonPop.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+  const o = new xb.Options();
+  o.enableUI();
+  o.physics.RAPIER = RAPIER;
+  o.physics.useEventQueue = true;
+  o.physics.worldStep = true;
+  o.hands.enabled = true;
+  o.simulator.defaultMode = xb.SimulatorMode.POSE;
+
+  // START DISABLED to avoid Simulator Camera-Clone Crash
+  o.depth.enabled = false;
+  if (o.depth.depthMesh) {
+    o.depth.depthMesh.enabled = true;
+    o.depth.depthMesh.physicsEnabled = true;
+    o.depth.depthMesh.collisionGroups = GROUP_WORLD;
+    o.depth.depthMesh.colliderUpdateFps = 5;
+  }
+
+  xb.add(new BalloonGame());
+  xb.init(o);
+});
 
 
 
@@ -5039,8 +5727,8 @@ export class BallShooter extends xb.Script {
       {
         "imports": {
           "@dimforge/rapier3d-simd-compat": "https://cdn.jsdelivr.net/npm/@dimforge/rapier3d-simd-compat@0.19.2/rapier.mjs",
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -5048,8 +5736,8 @@ export class BallShooter extends xb.Script {
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -5604,8 +6292,8 @@ export class TranscriptionManager {
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -5613,8 +6301,8 @@ export class TranscriptionManager {
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/",
           "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
@@ -6347,9 +7035,9 @@ export class XRObjectManager extends xb.Script {
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
+
+
+
     <link type="text/css" rel="stylesheet" href="../demo.css" />
     <script>
       window.litDisableBundleWarning = true;
@@ -6359,15 +7047,15 @@ export class XRObjectManager extends xb.Script {
         "imports": {
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
           "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/",
           "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
@@ -6639,15 +7327,15 @@ export class MeasuringTape extends THREE.Object3D {
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
+
+
+
     <link type="text/css" rel="stylesheet" href="../demo.css" />
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -6655,8 +7343,8 @@ export class MeasuringTape extends THREE.Object3D {
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -6891,9 +7579,9 @@ export const ANIMALS_DATA = [
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
+
+
+
     <link type="text/css" rel="stylesheet" href="../demo.css" />
     <script>
       window.litDisableBundleWarning = true;
@@ -6901,8 +7589,8 @@ export const ANIMALS_DATA = [
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -6911,8 +7599,8 @@ export const ANIMALS_DATA = [
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
           "@material/web/": "https://esm.run/@material/web/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -7533,9 +8221,9 @@ export class RainScene extends xb.Script {
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
+
+
+
     <link type="text/css" rel="stylesheet" href="../demo.css" />
 
     <script>
@@ -7544,8 +8232,8 @@ export class RainScene extends xb.Script {
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -7553,8 +8241,8 @@ export class RainScene extends xb.Script {
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -7934,8 +8622,8 @@ export const ClearShader = {
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -7943,8 +8631,8 @@ export const ClearShader = {
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -8470,9 +9158,9 @@ export class SplashScript extends xb.Script {
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
+
+
+
     <link type="text/css" rel="stylesheet" href="../demo.css" />
     <script>
       window.litDisableBundleWarning = true;
@@ -8481,8 +9169,8 @@ export class SplashScript extends xb.Script {
       {
         "imports": {
           "@dimforge/rapier3d-simd-compat": "https://cdn.jsdelivr.net/npm/@dimforge/rapier3d-simd-compat@0.19.2/rapier.mjs",
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -8490,8 +9178,8 @@ export class SplashScript extends xb.Script {
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -8971,7 +9659,7 @@ export class GestureDetectionHandler {
       await tf.ready();
 
       // Initialize LiteRT.js's WASM files
-      const wasmPath = 'https://unpkg.com/@litertjs/core/wasm/';
+      const wasmPath = 'https://unpkg.com/@litertjs/core0.2.1/wasm/';
       const liteRt = await loadLiteRt(wasmPath);
 
       // Make LiteRt use the same GPU device as TFJS (for tensor conversion)
@@ -9457,9 +10145,9 @@ export class MeetEmoji extends xb.Script {
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
+
+
+
     <link type="text/css" rel="stylesheet" href="../demo.css" />
     <script>
       window.litDisableBundleWarning = true;
@@ -9469,8 +10157,8 @@ export class MeetEmoji extends xb.Script {
         "imports": {
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -9479,11 +10167,11 @@ export class MeetEmoji extends xb.Script {
           "@tensorflow/tfjs-core": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core/+esm",
           "@tensorflow/tfjs": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/+esm",
           "@tensorflow/tfjs-backend-webgpu": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgpu/+esm",
-          "@litertjs/core": "https://unpkg.com/@litertjs/core",
-          "@litertjs/tfjs-interop": "https://unpkg.com/@litertjs/tfjs-interop",
-          "@litertjs/wasm-utils": "https://unpkg.com/@litertjs/wasm-utils",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+          "@litertjs/core": "https://unpkg.com/@litertjs/core@0.2.1",
+          "@litertjs/tfjs-interop": "https://unpkg.com/@litertjs/tfjs-interop@1.0.1",
+          "@litertjs/wasm-utils": "https://unpkg.com/@litertjs/wasm-utils@0.2.1",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/"
         }
       }
     </script>
@@ -9621,9 +10309,9 @@ export class PoemGenerator extends xb.Script {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    
-    
+
+
+
     <title>Gemini Poem Generator</title>
     <link type="text/css" rel="stylesheet" href="../demo.css" />
     <script>
@@ -9632,8 +10320,8 @@ export class PoemGenerator extends xb.Script {
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -9641,8 +10329,8 @@ export class PoemGenerator extends xb.Script {
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.7.0/build/addons/",
           "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
@@ -9698,14 +10386,14 @@ document.addEventListener('DOMContentLoaded', function () {
  *
  * @file xrblocks.js
  * @version v0.6.0
- * @commitid 64e2279
- * @builddate 2025-12-20T23:50:17.298Z
+ * @commitid 8ee9395
+ * @builddate 2026-01-12T20:04:07.385Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
  * 1. Include the following importmap for maximum compatibility:
-    "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
+    "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
     "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
     "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
     "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -11938,10 +12626,6 @@ class DepthMesh extends MeshScript {
             const depthY = Math.round(clamp((1.0 - v) * height, 0, height - 1));
             const rawDepth = depthArray[depthY * width + depthX];
             let depth = depthData.rawValueToMeters * rawDepth;
-            // Workaround for b/382679381.
-            if (this.depthOptions.useFloat32) {
-                depth = rawDepth;
-            }
             // Finds global min/max.
             if (depth > 0) {
                 if (depth < this.minDepth) {
@@ -12185,68 +12869,63 @@ const xrDepthMeshPhysicsOptions = deepFreeze(new DepthOptions({
 class DepthTextures {
     constructor(options) {
         this.options = options;
-        this.uint16Arrays = [];
+        this.float32Arrays = [];
         this.uint8Arrays = [];
         this.dataTextures = [];
         this.nativeTextures = [];
         this.depthData = [];
     }
-    createDataDepthTextures(depthData, view_id) {
-        if (this.dataTextures[view_id]) {
-            this.dataTextures[view_id].dispose();
+    createDataDepthTextures(depthData, viewId) {
+        if (this.dataTextures[viewId]) {
+            this.dataTextures[viewId].dispose();
         }
         if (this.options.useFloat32) {
-            const typedArray = new Uint16Array(depthData.width * depthData.height);
+            const typedArray = new Float32Array(depthData.width * depthData.height);
             const format = THREE.RedFormat;
-            const type = THREE.HalfFloatType;
-            this.uint16Arrays[view_id] = typedArray;
-            this.dataTextures[view_id] = new THREE.DataTexture(typedArray, depthData.width, depthData.height, format, type);
+            const type = THREE.FloatType;
+            this.float32Arrays[viewId] = typedArray;
+            this.dataTextures[viewId] = new THREE.DataTexture(typedArray, depthData.width, depthData.height, format, type);
         }
         else {
             const typedArray = new Uint8Array(depthData.width * depthData.height * 2);
             const format = THREE.RGFormat;
             const type = THREE.UnsignedByteType;
-            this.uint8Arrays[view_id] = typedArray;
-            this.dataTextures[view_id] = new THREE.DataTexture(typedArray, depthData.width, depthData.height, format, type);
+            this.uint8Arrays[viewId] = typedArray;
+            this.dataTextures[viewId] = new THREE.DataTexture(typedArray, depthData.width, depthData.height, format, type);
         }
     }
-    updateData(depthData, view_id) {
-        if (this.dataTextures.length < view_id + 1 ||
-            this.dataTextures[view_id].image.width !== depthData.width ||
-            this.dataTextures[view_id].image.height !== depthData.height) {
-            this.createDataDepthTextures(depthData, view_id);
+    updateData(depthData, viewId) {
+        if (this.dataTextures.length < viewId + 1 ||
+            this.dataTextures[viewId].image.width !== depthData.width ||
+            this.dataTextures[viewId].image.height !== depthData.height) {
+            this.createDataDepthTextures(depthData, viewId);
         }
         if (this.options.useFloat32) {
-            const float32Data = new Float32Array(depthData.data);
-            const float16Data = new Uint16Array(float32Data.length);
-            for (let i = 0; i < float16Data.length; i++) {
-                float16Data[i] = THREE.DataUtils.toHalfFloat(float32Data[i]);
-            }
-            this.uint16Arrays[view_id].set(float16Data);
+            this.float32Arrays[viewId].set(new Float32Array(depthData.data));
         }
         else {
-            this.uint8Arrays[view_id].set(new Uint8Array(depthData.data));
+            this.uint8Arrays[viewId].set(new Uint8Array(depthData.data));
         }
-        this.dataTextures[view_id].needsUpdate = true;
-        this.depthData[view_id] = depthData;
+        this.dataTextures[viewId].needsUpdate = true;
+        this.depthData[viewId] = depthData;
     }
-    updateNativeTexture(depthData, renderer, view_id) {
-        if (this.dataTextures.length < view_id + 1) {
-            this.nativeTextures[view_id] = new THREE.ExternalTexture(depthData.texture);
+    updateNativeTexture(depthData, renderer, viewId) {
+        if (this.dataTextures.length < viewId + 1) {
+            this.nativeTextures[viewId] = new THREE.ExternalTexture(depthData.texture);
         }
         else {
-            this.nativeTextures[view_id].sourceTexture = depthData.texture;
+            this.nativeTextures[viewId].sourceTexture = depthData.texture;
         }
         // fixed in newer revision of three
-        const textureProperties = renderer.properties.get(this.nativeTextures[view_id]);
+        const textureProperties = renderer.properties.get(this.nativeTextures[viewId]);
         textureProperties.__webglTexture = depthData.texture;
         textureProperties.__version = 1;
     }
-    get(view_id) {
+    get(viewId) {
         if (this.dataTextures.length > 0) {
-            return this.dataTextures[view_id];
+            return this.dataTextures[viewId];
         }
-        return this.nativeTextures[view_id];
+        return this.nativeTextures[viewId];
     }
 }
 
@@ -12740,6 +13419,15 @@ const DEFAULT_DEPTH_WIDTH = 160;
 const DEFAULT_DEPTH_HEIGHT = DEFAULT_DEPTH_WIDTH;
 const clipSpacePosition = new THREE.Vector3();
 class Depth {
+    get rawValueToMeters() {
+        if (this.cpuDepthData.length) {
+            return this.cpuDepthData[0].rawValueToMeters;
+        }
+        else if (this.gpuDepthData.length) {
+            return this.gpuDepthData[0].rawValueToMeters;
+        }
+        return 0;
+    }
     /**
      * Depth is a lightweight manager based on three.js to simply prototyping
      * with Depth in WebXR.
@@ -12753,7 +13441,6 @@ class Depth {
         this.options = new DepthOptions();
         this.width = DEFAULT_DEPTH_WIDTH;
         this.height = DEFAULT_DEPTH_HEIGHT;
-        this.rawValueToMeters = 0.0010000000474974513;
         this.occludableShaders = new Set();
         // Whether we're counting the number of depth clients.
         this.depthClientsInitialized = false;
@@ -12863,11 +13550,6 @@ class Depth {
     }
     updateCPUDepthData(depthData, viewId = 0) {
         this.cpuDepthData[viewId] = depthData;
-        // Workaround for b/382679381.
-        this.rawValueToMeters = depthData.rawValueToMeters;
-        if (this.options.useFloat32) {
-            this.rawValueToMeters = 1.0;
-        }
         // Updates Depth Array.
         if (this.depthArray[viewId] == null) {
             this.depthArray[viewId] = this.options.useFloat32
@@ -12893,11 +13575,6 @@ class Depth {
     }
     updateGPUDepthData(depthData, viewId = 0) {
         this.gpuDepthData[viewId] = depthData;
-        // Workaround for b/382679381.
-        this.rawValueToMeters = depthData.rawValueToMeters;
-        if (this.options.useFloat32) {
-            this.rawValueToMeters = 1.0;
-        }
         // For now, assume that we need cpu depth only if depth mesh is enabled.
         // In the future, add a separate option.
         const needCpuDepth = this.options.depthMesh.enabled;
@@ -12974,22 +13651,22 @@ class Depth {
         if (xrRefSpace) {
             const pose = frame.getViewerPose(xrRefSpace);
             if (pose) {
-                for (let view_id = 0; view_id < pose.views.length; ++view_id) {
-                    const view = pose.views[view_id];
-                    this.view[view_id] = view;
+                for (let viewId = 0; viewId < pose.views.length; ++viewId) {
+                    const view = pose.views[viewId];
+                    this.view[viewId] = view;
                     if (session.depthUsage === 'gpu-optimized') {
                         const depthData = binding.getDepthInformation(view);
                         if (!depthData) {
                             return;
                         }
-                        this.updateGPUDepthData(depthData, view_id);
+                        this.updateGPUDepthData(depthData, viewId);
                     }
                     else {
                         const depthData = frame.getDepthInformation(view);
                         if (!depthData) {
                             return;
                         }
-                        this.updateCPUDepthData(depthData, view_id);
+                        this.updateCPUDepthData(depthData, viewId);
                     }
                 }
             }
@@ -13868,6 +14545,9 @@ class ScriptsManager {
         this.callKeyUpBound = this.callKeyUp.bind(this);
         /** The set of scripts currently being initialized. */
         this.initializingScripts = new Set();
+        this.seenScripts = new Set();
+        this.syncPromises = [];
+        this.checkScriptBound = this.checkScript.bind(this);
     }
     /**
      * Initializes a script and adds it to the set of scripts which will receive
@@ -13899,28 +14579,32 @@ class ScriptsManager {
         this.initializingScripts.delete(script);
     }
     /**
+     * Helper for scene traversal to avoid closure allocation.
+     */
+    checkScript(obj) {
+        if (obj.isXRScript) {
+            const script = obj;
+            this.syncPromises.push(this.initScript(script));
+            this.seenScripts.add(script);
+        }
+    }
+    /**
      * Finds all scripts in the scene and initializes them or uninitailizes them.
      * Returns a promise which resolves when all new scripts are finished
      * initalizing.
      * @param scene - The main scene which is used to find scripts.
      */
-    async syncScriptsWithScene(scene) {
-        const seenScripts = new Set();
-        const promises = [];
-        scene.traverse((obj) => {
-            if (obj.isXRScript) {
-                const script = obj;
-                promises.push(this.initScript(script));
-                seenScripts.add(script);
-            }
-        });
-        await Promise.allSettled(promises);
+    syncScriptsWithScene(scene) {
+        this.seenScripts.clear();
+        this.syncPromises.length = 0;
+        scene.traverse(this.checkScriptBound);
         // Delete missing scripts.
         for (const script of this.scripts) {
-            if (!seenScripts.has(script)) {
+            if (!this.seenScripts.has(script)) {
                 this.uninitScript(script);
             }
         }
+        return Promise.allSettled(this.syncPromises);
     }
     callSelectStart(event) {
         for (const script of this.scripts) {
@@ -14313,15 +14997,15 @@ class XREffects {
                     const lastRenderTargetIndex = i % 2;
                     const nextRenderTargetIndex = (i + 1) % 2;
                     defaultTarget.viewport.set((eye * this.dimensions.x) / 2, 0, this.dimensions.x / 2, this.dimensions.y);
-                    this.passes[i].render(renderer, this.renderTargets[2 * nextRenderTargetIndex + eye], this.renderTargets[2 * lastRenderTargetIndex + eye], deltaTime, 
-                    /*maskActive=*/ false, 
+                    this.passes[i].render(renderer, this.renderTargets[2 * nextRenderTargetIndex + eye], this.renderTargets[2 * lastRenderTargetIndex + eye], deltaTime,
+                    /*maskActive=*/ false,
                     /*viewId=*/ eye);
                 }
                 if (this.passes.length > 0) {
                     const lastRenderTargetIndex = (this.passes.length - 1) % 2;
                     defaultTarget.viewport.set((eye * this.dimensions.x) / 2, 0, this.dimensions.x / 2, this.dimensions.y);
-                    this.passes[this.passes.length - 1].render(renderer, defaultTarget, this.renderTargets[2 * lastRenderTargetIndex + eye], deltaTime, 
-                    /*maskActive=*/ false, 
+                    this.passes[this.passes.length - 1].render(renderer, defaultTarget, this.renderTargets[2 * lastRenderTargetIndex + eye], deltaTime,
+                    /*maskActive=*/ false,
                     /*viewId=*/ eye);
                 }
             }
@@ -14346,14 +15030,14 @@ class XREffects {
         for (let i = 0; i < this.passes.length - 1; ++i) {
             const lastRenderTargetIndex = i % 2;
             const nextRenderTargetIndex = (i + 1) % 2;
-            this.passes[i].render(renderer, this.renderTargets[nextRenderTargetIndex], this.renderTargets[lastRenderTargetIndex], deltaTime, 
-            /*maskActive=*/ false, 
+            this.passes[i].render(renderer, this.renderTargets[nextRenderTargetIndex], this.renderTargets[lastRenderTargetIndex], deltaTime,
+            /*maskActive=*/ false,
             /*viewId=*/ 0);
         }
         if (this.passes.length > 0) {
             const lastRenderTargetIndex = (this.passes.length - 1) % 2;
-            this.passes[this.passes.length - 1].render(renderer, defaultTarget, this.renderTargets[lastRenderTargetIndex], deltaTime, 
-            /*maskActive=*/ false, 
+            this.passes[this.passes.length - 1].render(renderer, defaultTarget, this.renderTargets[lastRenderTargetIndex], deltaTime,
+            /*maskActive=*/ false,
             /*viewId=*/ 0);
         }
         renderer.xr.enabled = xrEnabled;
@@ -15513,6 +16197,7 @@ function traverseUtil(node, callback) {
     return false;
 }
 
+const tempBox = new THREE.Box3();
 /**
  * User is an embodied instance to manage hands, controllers, speech, and
  * avatars. It extends Script to update human-world interaction.
@@ -15875,8 +16560,8 @@ class User extends Script {
             const currentlyTouchedMeshes = [];
             this.scene.traverse((object) => {
                 if (object.isMesh && object.visible) {
-                    const boundingBox = new THREE.Box3().setFromObject(object);
-                    if (boundingBox.containsPoint(indexTipPosition)) {
+                    tempBox.setFromObject(object);
+                    if (tempBox.containsPoint(indexTipPosition)) {
                         currentlyTouchedMeshes.push(object);
                     }
                 }
@@ -17998,12 +18683,15 @@ class SimulatorDepth {
         this.simulatorScene.overrideMaterial = null;
         this.renderer.setRenderTarget(originalRenderTarget);
     }
-    updateDepth() {
+    async updateDepth() {
         // We preventively unbind the PIXEL_PACK_BUFFER before reading from the
         // render target in case external libraries (Spark.js) left it bound.
         const context = this.renderer.getContext();
         context.bindBuffer(context.PIXEL_PACK_BUFFER, null);
-        this.renderer.readRenderTargetPixels(this.depthRenderTarget, 0, 0, this.depthWidth, this.depthHeight, this.depthBuffer);
+        // Cache the projection matrix and transform of the rendered depth.
+        const projectionMatrix = this.depthCamera.projectionMatrix.clone();
+        const transform = new XRRigidTransform(this.depthCamera.position, this.depthCamera.quaternion);
+        await this.renderer.readRenderTargetPixelsAsync(this.depthRenderTarget, 0, 0, this.depthWidth, this.depthHeight, this.depthBuffer);
         // Flip the depth buffer.
         if (this.depthBufferSlice.length != this.depthWidth) {
             this.depthBufferSlice = new Float32Array(this.depthWidth);
@@ -18019,14 +18707,14 @@ class SimulatorDepth {
             // Copy the temp slice (original row i) to row j
             this.depthBuffer.set(this.depthBufferSlice, j_offset);
         }
-        this.depthCamera.projectionMatrix.toArray(this.projectionMatrixArray);
+        projectionMatrix.toArray(this.projectionMatrixArray);
         const depthData = {
             width: this.depthWidth,
             height: this.depthHeight,
             data: this.depthBuffer.buffer,
             rawValueToMeters: 1.0,
             projectionMatrix: this.projectionMatrixArray,
-            transform: new XRRigidTransform(this.depthCamera.position, this.depthCamera.quaternion),
+            transform: transform,
         };
         this.depth.updateCPUDepthData(depthData, 0);
     }
@@ -21718,7 +22406,7 @@ class IconButton extends TextView {
         }
     }
     /**
-  
+
     /**
      * Handles behavior when the cursor hovers over the button.
      */
@@ -22142,6 +22830,15 @@ class VideoView extends View {
         /** The cross-origin setting for the video element. Default is 'anonymous'. */
         this.crossOrigin = 'anonymous';
         this.videoAspectRatio = 0.0;
+        // set video options if passed in
+        this.autoplay = options.autoplay ?? this.autoplay;
+        this.muted = options.muted ?? this.muted;
+        this.loop = options.loop ?? this.loop;
+        this.playsInline = options.playsInline ?? this.playsInline;
+        if (options.crossOrigin)
+            this.crossOrigin = options.crossOrigin;
+        if (options.mode)
+            this.mode = options.mode;
         const videoGeometry = new THREE.PlaneGeometry(1, 1);
         const videoMaterial = new THREE.MeshBasicMaterial({
             transparent: true,
@@ -23608,7 +24305,7 @@ class DetectedObject extends THREE.Object3D {
      * detector. This includes any object proparties that is requested through the
      * schema but is not assigned a class property by default (e.g., color, size).
      */
-    constructor(label, image, boundingBox, 
+    constructor(label, image, boundingBox,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     additionalData = {}) {
         super();
@@ -24185,11 +24882,11 @@ class World extends Script {
         if (this.options.sceneMesh.enabled) {
           this.meshes = new SceneMesh();
         }
-    
+
         if (this.options.lighting.enabled) {
           this.lighting = new LightEstimation();
         }
-    
+
         if (this.options.humans.enabled) {
           this.humans = new HumanRecognizer();
         }
@@ -24668,8 +25365,8 @@ class Core {
             this.registry.register(this.transition);
         }
         this.camera = new THREE.PerspectiveCamera(
-        /*fov=*/ 90, window.innerWidth / window.innerHeight, 
-        /*near=*/ options.camera.near, 
+        /*fov=*/ 90, window.innerWidth / window.innerHeight,
+        /*near=*/ options.camera.near,
         /*far=*/ options.camera.far);
         this.registry.register(this.camera, THREE.Camera);
         this.registry.register(this.camera, THREE.PerspectiveCamera);
@@ -25502,7 +26199,7 @@ class MaterialSymbolsView extends View {
         });
         this.loadingSvgPath = undefined;
         this.loadedSvgPath = svgPath;
-        const [viewMinX, viewMinY, viewWidth, viewHeight] = 
+        const [viewMinX, viewMinY, viewWidth, viewHeight] =
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         svgData.xml.attributes.viewBox.value.split(' ');
         const paths = svgData.paths;

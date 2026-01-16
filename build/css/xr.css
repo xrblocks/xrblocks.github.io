@@ -1,0 +1,105 @@
+@import url('https://fonts.cdnfonts.com/css/google-sans');
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: "Google Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #000;
+}
+
+body {
+  background-image: url('bg.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+#XRButtonWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
+
+  text-align: center;
+  pointer-events: none;
+}
+
+#XRButtonWrapper > * {
+  pointer-events: auto;
+}
+
+#XRButtonWrapper h1 {
+  font-weight: 400;
+  font-size: 2.5rem;
+  margin: 0;
+  color: #ffffff;
+  letter-spacing: -0.02rem;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.XRButton {
+  background: linear-gradient(135deg, #D4E8FF 50%, #D0A8E3 100%);
+  color: #000000;
+
+  border: none;
+  cursor: pointer;
+  text-transform: none;
+
+  border-radius: 9999px;
+
+  font-family: "Google Sans", sans-serif;
+  font-weight: 400;
+  font-size: 1.5rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+
+  padding: 26px 48px;
+
+  min-width: 260px;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+}
+
+.XRButton::after {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 28px;
+  background: url('xrbutton.svg') no-repeat center center;
+  background-size: contain;
+}
+
+.XRButton:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
+}
+
+.XRButton:active {
+  transform: scale(0.98);
+}

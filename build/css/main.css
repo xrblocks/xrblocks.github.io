@@ -131,18 +131,12 @@ a, button, input, select {
   opacity: 1.0;
 }
 
-/* Custom styles for the buttons */
 .big-btn {
   font-size: 2em;
-  /* Doubling the font size */
   display: flex;
-  /* Using flex to align text */
   align-items: center;
-  /* Vertical alignment */
   justify-content: center;
-  /* Horizontal alignment */
   height: 100%;
-  /* Full height to stretch within the container */
 }
 
 header {
