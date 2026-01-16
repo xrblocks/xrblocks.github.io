@@ -8,8 +8,6 @@ export declare class Depth {
     static instance?: Depth;
     private camera;
     private renderer;
-    private scene;
-    private projectionMatrixInverse;
     enabled: boolean;
     view: XRView[];
     cpuDepthData: XRCPUDepthInformation[];
@@ -26,8 +24,11 @@ export declare class Depth {
     private depthClientsInitialized;
     private depthClients;
     depthProjectionMatrices: THREE.Matrix4[];
+    depthProjectionInverseMatrices: THREE.Matrix4[];
     depthViewMatrices: THREE.Matrix4[];
     depthViewProjectionMatrices: THREE.Matrix4[];
+    depthCameraPositions: THREE.Vector3[];
+    depthCameraRotations: THREE.Quaternion[];
     /**
      * Depth is a lightweight manager based on three.js to simply prototyping
      * with Depth in WebXR.
@@ -45,9 +46,10 @@ export declare class Depth {
      */
     getDepth(u: number, v: number): number;
     /**
-     * Projects the given world position to clip space and then to view
-     * space using the depth.
+     * Projects the given world position to depth camera's clip space and then
+     * to the depth camera's view space using the depth.
      * @param position - The world position to project.
+     * @returns The depth camera view space position.
      */
     getProjectedDepthViewPositionFromWorldPosition(position: THREE.Vector3, target?: THREE.Vector3): THREE.Vector3;
     /**
