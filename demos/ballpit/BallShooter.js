@@ -133,9 +133,9 @@ export class BallShooter extends xb.Script {
           clipSpacePosition.x <= 1.0 &&
           -1.0 <= clipSpacePosition.y &&
           clipSpacePosition.y <= 1.0;
-        if (ballIsInView && xb.core.depth.options.enabled) {
+        if (ballIsInView && xb.depth.enabled) {
           const projectedPosition =
-            xb.core.depth.getProjectedDepthViewPositionFromWorldPosition(
+            xb.depth.getProjectedDepthViewPositionFromWorldPosition(
               position,
               this.projectedPosition
             );

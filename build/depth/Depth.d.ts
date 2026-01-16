@@ -10,6 +10,7 @@ export declare class Depth {
     private renderer;
     private scene;
     private projectionMatrixInverse;
+    enabled: boolean;
     view: XRView[];
     cpuDepthData: XRCPUDepthInformation[];
     gpuDepthData: XRWebGLDepthInformation[];

@@ -39,6 +39,10 @@ export declare const world: import("./xrblocks").World;
  */
 export declare const ai: import("./xrblocks").AI;
 /**
+ * A direct alias to the `Depth` instance, which manages depth sensing features.
+ */
+export declare const depth: import("./xrblocks").Depth;
+/**
  * A shortcut for `core.scene.add()`. Adds one or more objects to the scene.
  * @param object - The object(s) to add.
  * @see {@link three#Object3D.add}
