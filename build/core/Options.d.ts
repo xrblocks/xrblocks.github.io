@@ -100,6 +100,8 @@ export declare class Options {
      * Configuration for the XR session button.
      */
     xrButton: {
+        appTitle: string;
+        appDescription: string;
         enabled: boolean;
         startText: string;
         endText: string;
@@ -179,4 +181,16 @@ export declare class Options {
      * @returns The instance for chaining.
      */
     enableXRTransitions(): this;
+    /**
+     * Sets the title of the app to be displayed above the XR button.
+     * @param title - The title of the app.
+     * @returns The instance for chaining.
+     */
+    setAppTitle(title: string): this;
+    /**
+     * Sets the description of the app to be displayed above the XR button.
+     * @param description - The description of the app.
+     * @returns The instance for chaining.
+     */
+    setAppDescription(description: string): this;
 }

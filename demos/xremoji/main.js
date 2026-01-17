@@ -14,6 +14,7 @@ const options = new xb.Options({
 
 async function start() {
   xb.add(new MeetEmoji());
+  options.setAppTitle('XR Emoji');
   await xb.init(options);
 }
 

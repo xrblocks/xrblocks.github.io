@@ -8,6 +8,7 @@ const options = new xb.Options();
 options.enableUI();
 options.enableAI();
 options.enableCamera();
+options.setAppTitle('XR Poet');
 
 function start() {
   try {

@@ -85,7 +85,7 @@ class PaintDemo extends xb.Script {
  */
 function start() {
   const options = new xb.Options();
-
+  options.setAppTitle('XR Paint');
   xb.add(new PaintDemo());
   xb.init(options);
 }

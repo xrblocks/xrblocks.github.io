@@ -13,6 +13,7 @@ const options = new xb.Options({
 
 function start() {
   xb.add(new MeasureScene());
+  options.setAppTitle('XR Measure');
   xb.init(options);
 }
 

@@ -28,6 +28,7 @@ options.xrButton = {
 };
 async function start() {
   const lightingScene = new LightingScene();
+  options.setAppTitle('Lighting Estimation');
   await xb.init(options);
   xb.add(lightingScene);
   window.addEventListener(

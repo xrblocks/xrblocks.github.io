@@ -54,6 +54,7 @@ class DepthMeshVisualizer extends xb.Script {
 
 document.addEventListener('DOMContentLoaded', function () {
   const options = new xb.Options();
+  options.setAppTitle('Depth Mesh');
   options.depth = new xb.DepthOptions(xb.xrDepthMeshVisualizationOptions);
   options.depth.depthTypeRequest = [xb.getUrlParameter('depthType') ?? 'raw'];
   xb.add(new DepthMeshVisualizer());

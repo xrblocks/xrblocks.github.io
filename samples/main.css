@@ -1,14 +1,24 @@
+@import url('https://fonts.cdnfonts.com/css/google-sans');
+
+html,
 body {
+  height: 100%;
   margin: 0;
   padding: 0;
+  overflow: hidden;
+  font-family: 'Google Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background-color: #000;
   color: #fff;
-  font-family: Monospace;
-  font-size: 13px;
   line-height: 24px;
   overscroll-behavior: none;
 }
 
+body {
+  background-image: url('bg.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 a {
   color: #ff0;
   text-decoration: none;
@@ -21,6 +31,97 @@ a:hover {
 button {
   cursor: pointer;
   text-transform: uppercase;
+  pointer-events: auto;
+}
+
+a,
+input,
+select {
+  pointer-events: auto;
+}
+
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+#XRButtonWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
+  text-align: center;
+  pointer-events: none;
+}
+
+#XRButtonWrapper > * {
+  pointer-events: auto;
+}
+
+#XRButtonWrapper h1 {
+  font-weight: 400;
+  font-size: 2.5rem;
+  margin: 0;
+  color: #ffffff;
+  letter-spacing: -0.02rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.XRButton {
+  background: linear-gradient(135deg, #d4e8ff 50%, #d0a8e3 100%);
+  color: #000000;
+  border: none;
+  cursor: pointer;
+  text-transform: none;
+  border-radius: 9999px;
+  font-family: 'Google Sans', sans-serif;
+  font-weight: 400;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 26px 48px;
+  min-width: 260px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+}
+
+.XRButton::after {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 28px;
+  background: url("data:image/svg+xml,%3Csvg width='28' height='28' viewBox='0 0 28 28' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.9998 4.66699L12.3548 6.31199L18.8648 12.8337H4.6665V15.167H18.8648L12.3548 21.6887L13.9998 23.3337L23.3332 14.0003L13.9998 4.66699Z' fill='black'/%3E%3C/svg%3E")
+    no-repeat center center;
+  background-size: contain;
+}
+
+.XRButton:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
+  opacity: 1;
+}
+
+.XRButton:active {
+  transform: scale(0.98);
 }
 
 #info {
@@ -94,58 +195,12 @@ select {
   padding: 10px;
 }
 
-#XRButtonWrapper {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  gap: 1rem;
-  transform: translate(-50%, -50%);
-  width: 50%;
-  height: 50%;
-  z-index: 1000;
-  background-color: rgba(0, 0, 0, 0.1);
-  color: white;
-  border: '1px solid #fff';
-  border-radius: 5vh;
-  border-color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  outline: none;
-  opacity: 0.5;
-}
-
-.XRButton {
-  color: white;
-  background: transparent;
-  border: 1px solid rgb(255, 255, 255);
-  flex-grow: 1;
-  font: 'normal sans-serif';
-  font-size: 5vh;
-  width: 100%;
-  cursor: pointer;
-  border-radius: 3rem;
-}
-
-.XRButton:hover,
-.XRButton:active {
-  opacity: 1;
-}
-
-/* Custom styles for the buttons */
 .big-btn {
   font-size: 2em;
-  /* Doubling the font size */
   display: flex;
-  /* Using flex to align text */
   align-items: center;
-  /* Vertical alignment */
   justify-content: center;
-  /* Horizontal alignment */
   height: 100%;
-  /* Full height to stretch within the container */
 }
 
 header {

@@ -51,6 +51,7 @@ class ReticleVisualizer extends xb.Script {
 document.addEventListener('DOMContentLoaded', function () {
   const options = new xb.Options();
   options.depth = new xb.DepthOptions(xb.xrDepthMeshOptions);
+  options.setAppTitle('XR Reticle');
   xb.add(new ReticleVisualizer());
   xb.init(options);
 });

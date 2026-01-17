@@ -13,6 +13,7 @@ const options = new xb.Options({
 });
 
 async function start() {
+  options.setAppTitle('Custom Gestures');
   xb.add(new CustomGestureDemo());
   await xb.init(options);
 }

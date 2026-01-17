@@ -13,7 +13,7 @@ const options = new xb.Options();
 options.reticles.enabled = false;
 options.depth = new xb.DepthOptions(xb.xrDepthMeshPhysicsOptions);
 options.depth.depthMesh.colliderUpdateFps = depthMeshColliderUpdateFps;
-options.xrButton.startText = '<i id="xrlogo"></i> MAKE A MESS';
+options.xrButton.startText = '<i id="xrlogo"></i> LET IT RAIN';
 options.xrButton.endText = '<i id="xrlogo"></i> MISSION COMPLETE';
 
 // Initializes the scene, camera, xrRenderer, controls, and XR button.

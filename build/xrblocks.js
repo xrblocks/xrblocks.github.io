@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.8.0
- * @commitid 001d279
- * @builddate 2026-01-16T22:39:29.622Z
+ * @commitid a58dccf
+ * @builddate 2026-01-17T00:51:12.465Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -4437,13 +4437,15 @@ class WebXRSessionManager extends THREE.EventDispatcher {
 const XRBUTTON_WRAPPER_ID = 'XRButtonWrapper';
 const XRBUTTON_CLASS = 'XRButton';
 class XRButton {
-    constructor(sessionManager, permissionsManager, startText = 'ENTER XR', endText = 'END XR', invalidText = 'XR NOT SUPPORTED', startSimulatorText = 'START SIMULATOR', showEnterSimulatorButton = false, startSimulator = () => { }, permissions = {
+    constructor(sessionManager, permissionsManager, appTitle = '', appDescription = '', startText = 'ENTER XR', endText = 'END XR', invalidText = 'XR NOT SUPPORTED', startSimulatorText = 'START SIMULATOR', showEnterSimulatorButton = false, startSimulator = () => { }, permissions = {
         geolocation: false,
         camera: false,
         microphone: false,
     }) {
         this.sessionManager = sessionManager;
         this.permissionsManager = permissionsManager;
+        this.appTitle = appTitle;
+        this.appDescription = appDescription;
         this.startText = startText;
         this.endText = endText;
         this.invalidText = invalidText;
@@ -4454,6 +4456,8 @@ class XRButton {
         this.simulatorButtonElement = document.createElement('button');
         this.xrButtonElement = document.createElement('button');
         this.domElement.id = XRBUTTON_WRAPPER_ID;
+        this.createXRAppTitle();
+        this.createXRAppDescription();
         this.createXRButtonElement();
         if (showEnterSimulatorButton) {
             this.createSimulatorButton();
@@ -4471,6 +4475,22 @@ class XRButton {
             this.startSimulator();
         };
         this.domElement.appendChild(this.simulatorButtonElement);
+    }
+    createXRAppTitle() {
+        if (!this.appTitle) {
+            return;
+        }
+        const appTitle = document.createElement('h1');
+        appTitle.textContent = this.appTitle;
+        this.domElement.appendChild(appTitle);
+    }
+    createXRAppDescription() {
+        if (!this.appDescription) {
+            return;
+        }
+        const appDescription = document.createElement('h4');
+        appDescription.textContent = this.appDescription;
+        this.domElement.appendChild(appDescription);
     }
     createXRButtonElement() {
         this.xrButtonElement.classList.add(XRBUTTON_CLASS);
@@ -7571,6 +7591,8 @@ class Options {
          * Configuration for the XR session button.
          */
         this.xrButton = {
+            appTitle: '',
+            appDescription: '',
             enabled: true,
             startText: 'Enter XR',
             endText: 'Exit XR',
@@ -7686,6 +7708,24 @@ class Options {
      */
     enableXRTransitions() {
         this.transition.enabled = true;
+        return this;
+    }
+    /**
+     * Sets the title of the app to be displayed above the XR button.
+     * @param title - The title of the app.
+     * @returns The instance for chaining.
+     */
+    setAppTitle(title) {
+        this.xrButton.appTitle = title;
+        return this;
+    }
+    /**
+     * Sets the description of the app to be displayed above the XR button.
+     * @param description - The description of the app.
+     * @returns The instance for chaining.
+     */
+    setAppDescription(description) {
+        this.xrButton.appDescription = description;
         return this;
     }
 }
@@ -15352,7 +15392,7 @@ class Core {
         // Sets up xrButton.
         let shouldAutostartSimulator = this.options.xrButton.alwaysAutostartSimulator;
         if (!shouldAutostartSimulator && options.xrButton.enabled) {
-            this.xrButton = new XRButton(this.webXRSessionManager, this.permissionsManager, options.xrButton?.startText, options.xrButton?.endText, options.xrButton?.invalidText, options.xrButton?.startSimulatorText, options.xrButton?.showEnterSimulatorButton, this.startSimulator.bind(this), options.permissions);
+            this.xrButton = new XRButton(this.webXRSessionManager, this.permissionsManager, options.xrButton?.appTitle, options.xrButton?.appDescription, options.xrButton?.startText, options.xrButton?.endText, options.xrButton?.invalidText, options.xrButton?.startSimulatorText, options.xrButton?.showEnterSimulatorButton, this.startSimulator.bind(this), options.permissions);
             document.body.appendChild(this.xrButton.domElement);
         }
         this.webXRSessionManager.addEventListener(WebXRSessionEventType.UNSUPPORTED, () => {

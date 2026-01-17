@@ -9,6 +9,7 @@ options.depth.enabled = true;
 options.depth.depthTexture.enabled = true;
 options.depth.depthTypeRequest = [xb.getUrlParameter('depthType') ?? 'raw'];
 options.usePostprocessing = true;
+options.setAppTitle('Depth Map');
 
 function start() {
   xb.add(new DepthMapScene());

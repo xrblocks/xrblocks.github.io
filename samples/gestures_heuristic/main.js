@@ -203,10 +203,11 @@ class GestureHUD extends xb.Script {
   }
 }
 
-function start() {
+async function start() {
+  options.setAppTitle('Heuristic Gestures');
   xb.add(new GestureLogger());
   xb.add(new GestureHUD());
-  xb.init(options);
+  await xb.init(options);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

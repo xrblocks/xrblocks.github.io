@@ -215,10 +215,10 @@ header {
 
 #xrlogo {
   display: inline-block;
-  width: 2.4rem; /* Adjust width based on your logo size */
-  height: 2.4rem; /* Adjust height based on your logo size */
+  width: 3rem;
+  height: 3rem;
   margin-right: 0.8rem;
-  background-image: url('xrlogo.png');
+  background-image: url('xrlogo.webp');
   background-size: contain; /* Ensures the image fits within the defined size */
   background-repeat: no-repeat;
   vertical-align: middle; /* Aligns with the text */

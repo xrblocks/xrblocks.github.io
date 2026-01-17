@@ -30,9 +30,15 @@ options.sound.speechRecognizer.playSimulatorActivationSounds = true;
 
 // options.ai.gemini.config is dynamic and defined in XRObjectManager. A Gemini
 // API key needs to be provided in the URL: /gemini-xrobject/index.html?key=...
+// or provided with `keys.json` in the same directory.
 options.ai.enabled = true;
 options.ai.gemini.enabled = true;
 options.ai.gemini.model = 'gemini-2.5-flash';
+options.setAppTitle('Gemini XR-Objects');
+options.setAppDescription(
+  'Recognize objects with Gemini and ask questions about them. Perform a long pinch / press to start!'
+);
+options.xrButton.showEnterSimulatorButton = true;
 
 function start() {
   const xrObjectManager = new XRObjectManager();

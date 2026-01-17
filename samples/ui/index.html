@@ -75,11 +75,11 @@
             type: 'Panel',
             options: {
               name: 'JSON Panel',
-              width: 0.8,
-              height: 1.0,
+              width: 1.0,
+              height: 1.2,
               backgroundColor: '#282c3488',
             },
-            position: {x: 1.0, y: 1.5, z: -1.5},
+            position: {x: 1.5, y: 1.5, z: -2.0},
             rotation: {x: 0, y: -45, z: 0},
             children: [
               {
@@ -485,6 +485,7 @@
       document.addEventListener('DOMContentLoaded', function () {
         const options = new xb.Options();
         options.enableUI();
+        options.setAppTitle('Spatial UI');
         xb.add(new MainScript());
         xb.init(options);
       });

@@ -348,6 +348,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const options = new xb.Options();
   options.reticles.enabled = true;
   options.controllers.visualizeRays = true;
+  options.setAppTitle('XR Sound');
 
   xb.add(new SoundDemoScript());
   xb.init(options);

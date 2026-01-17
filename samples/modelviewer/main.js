@@ -17,5 +17,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       to move.`,
     },
   ];
+  options.setAppTitle('Model Viewer');
   await xb.init(options);
 });

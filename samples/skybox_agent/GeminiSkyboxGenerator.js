@@ -254,6 +254,7 @@ async function start() {
     options.enableUI();
     options.enableHands();
     options.enableAI();
+    options.setAppTitle('Generating Skybox with Gemini');
 
     xb.init(options);
     xb.add(new GeminiSkyboxGenerator());
