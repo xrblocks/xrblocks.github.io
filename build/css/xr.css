@@ -1,11 +1,16 @@
 @import url('https://fonts.cdnfonts.com/css/google-sans');
-html, body {
+
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  font-family: "Google Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Google Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background-color: #000;
+  color: #fff;
+  line-height: 24px;
+  overscroll-behavior: none;
 }
 
 body {
@@ -13,6 +18,26 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+a {
+  color: #ff0;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  cursor: pointer;
+  text-transform: uppercase;
+  pointer-events: auto;
+}
+
+a,
+input,
+select {
+  pointer-events: auto;
 }
 
 .background-image {
@@ -35,13 +60,11 @@ body {
   width: 100%;
   height: 100%;
   z-index: 10;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 2.5rem;
-
   text-align: center;
   pointer-events: none;
 }
@@ -56,33 +79,28 @@ body {
   margin: 0;
   color: #ffffff;
   letter-spacing: -0.02rem;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .XRButton {
-  background: linear-gradient(135deg, #D4E8FF 50%, #D0A8E3 100%);
+  background: linear-gradient(135deg, #d4e8ff 50%, #d0a8e3 100%);
   color: #000000;
-
   border: none;
   cursor: pointer;
   text-transform: none;
-
   border-radius: 9999px;
-
-  font-family: "Google Sans", sans-serif;
+  font-family: 'Google Sans', sans-serif;
   font-weight: 400;
   font-size: 1.5rem;
-
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 24px;
-
   padding: 26px 48px;
-
   min-width: 260px;
-
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
 }
 
@@ -91,15 +109,156 @@ body {
   display: block;
   width: 28px;
   height: 28px;
-  background: url('xrbutton.svg') no-repeat center center;
+  background: url("data:image/svg+xml,%3Csvg width='28' height='28' viewBox='0 0 28 28' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.9998 4.66699L12.3548 6.31199L18.8648 12.8337H4.6665V15.167H18.8648L12.3548 21.6887L13.9998 23.3337L23.3332 14.0003L13.9998 4.66699Z' fill='black'/%3E%3C/svg%3E")
+    no-repeat center center;
   background-size: contain;
 }
 
 .XRButton:hover {
   transform: scale(1.02);
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
+  opacity: 1;
 }
 
 .XRButton:active {
   transform: scale(0.98);
+}
+
+#info {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  text-align: center;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none;
+  z-index: 1; /* TODO Solve this in HTML */
+}
+
+a,
+button,
+input,
+select {
+  pointer-events: auto;
+}
+
+.lil-gui {
+  z-index: 2 !important; /* TODO Solve this in HTML */
+}
+
+@media all and (max-width: 640px) {
+  .lil-gui.root {
+    right: auto;
+    top: auto;
+    max-height: 50%;
+    max-width: 80%;
+    bottom: 0;
+    left: 0;
+  }
+}
+
+#overlay {
+  position: absolute;
+  font-size: 16px;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+#overlay button {
+  background: transparent;
+  border: 0;
+  border: 1px solid rgb(255, 255, 255);
+  border-radius: 4px;
+  color: #ffffff;
+  padding: 12px 18px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+#notSupported {
+  width: 50%;
+  margin: auto;
+  background-color: #f00;
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.big-btn {
+  font-size: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+header {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  padding: 0.8rem 1.6rem;
+  color: rgb(255, 255, 255);
+  mix-blend-mode: exclusion;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 101;
+  pointer-events: none;
+}
+
+.logo {
+  font-family: 'Google Sans Text', system-ui, sans-serif;
+  font-size: 1.8rem;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -0.018rem;
+  transform: translate(0px, 0.05rem);
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  pointer-events: all;
+  flex: 0.55 1 0%;
+}
+
+.logo-text {
+  font-family: 'Google Sans Text', system-ui, sans-serif;
+  color: white;
+  font-size: 1.8rem;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -0.018rem;
+  transform: translate(0px, 0.05rem);
+}
+
+.logo-icon {
+  color: white;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-left: 0.2rem;
+  margin-right: 0.2rem;
+}
+
+.slogan {
+  flex: 0.25 1 0%;
+  font-family: 'Google Sans Mono', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 120%;
+  letter-spacing: 0.06rem;
+  display: block;
 }
