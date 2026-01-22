@@ -52,7 +52,7 @@ export declare class ObjectDetector extends Script {
      * @returns A promise that resolves with an
      * array of detected `DetectedObject` instances.
      */
-    runDetection(): Promise<(DetectedObject | null | undefined)[]>;
+    runDetection<T = null>(): Promise<DetectedObject<T>[]>;
     /**
      * Runs object detection using the Gemini backend.
      */
@@ -64,7 +64,7 @@ export declare class ObjectDetector extends Script {
      * all objects are returned.
      * @returns An array of `Object` instances.
      */
-    get(label?: null): DetectedObject[];
+    get<T = null>(label?: null): DetectedObject<T>[];
     /**
      * Removes all currently detected objects from the scene and internal
      * tracking.

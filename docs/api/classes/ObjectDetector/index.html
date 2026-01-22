@@ -19,7 +19,7 @@
 <link rel="icon" href="/docs/img/web-app-manifest-512x512.png" sizes="512x512" type="image/png">
 <link rel="manifest" href="/docs/img/site.webmanifest">
 <meta name="algolia-site-verification" content="C7A25C1609F793C8"><link rel="stylesheet" href="/docs/assets/css/styles.727fbdee.css">
-<script src="/docs/assets/js/runtime~main.15af7e0b.js" defer="defer"></script>
+<script src="/docs/assets/js/runtime~main.5e7d951e.js" defer="defer"></script>
 <script src="/docs/assets/js/main.d0e39d45.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -97,7 +97,7 @@ objects with 2D and 3D positioning data.</p>
 <blockquote>
 <p><strong>clear</strong>(): <code>ObjectDetector</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/world/objects/ObjectDetector.ts#L269" target="_blank" rel="noopener noreferrer">src/world/objects/ObjectDetector.ts:269</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/world/objects/ObjectDetector.ts#L271" target="_blank" rel="noopener noreferrer">src/world/objects/ObjectDetector.ts:271</a></p>
 <p>Removes all currently detected objects from the scene and internal
 tracking.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-1">Returns<a href="#returns-1" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
@@ -118,17 +118,20 @@ tracking.</p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="get">get()<a href="#get" class="hash-link" aria-label="Direct link to get()" title="Direct link to get()" translate="no">​</a></h3>
 <blockquote>
-<p><strong>get</strong>(<code>label</code>): <a href="/docs/api/classes/DetectedObject/"><code>DetectedObject</code></a>[]</p>
+<p><strong>get</strong>&lt;<code>T</code>&gt;(<code>label</code>): <a href="/docs/api/classes/DetectedObject/"><code>DetectedObject</code></a>&lt;<code>T</code>&gt;[]</p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/world/objects/ObjectDetector.ts#L257" target="_blank" rel="noopener noreferrer">src/world/objects/ObjectDetector.ts:257</a></p>
 <p>Retrieves a list of currently detected objects.</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="type-parameters">Type Parameters<a href="#type-parameters" class="hash-link" aria-label="Direct link to Type Parameters" title="Direct link to Type Parameters" translate="no">​</a></h4>
+<h5 class="anchor anchorWithStickyNavbar_LWe7" id="t">T<a href="#t" class="hash-link" aria-label="Direct link to T" title="Direct link to T" translate="no">​</a></h5>
+<p><code>T</code> = <code>null</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters">Parameters<a href="#parameters" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="label">label<a href="#label" class="hash-link" aria-label="Direct link to label" title="Direct link to label" translate="no">​</a></h5>
 <p><code>null</code> = <code>null</code></p>
 <p>The semantic label to filter by (e.g., &#x27;chair&#x27;). If null,
 all objects are returned.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-3">Returns<a href="#returns-3" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
-<p><a href="/docs/api/classes/DetectedObject/"><code>DetectedObject</code></a>[]</p>
+<p><a href="/docs/api/classes/DetectedObject/"><code>DetectedObject</code></a>&lt;<code>T</code>&gt;[]</p>
 <p>An array of <code>Object</code> instances.</p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="init">init()<a href="#init" class="hash-link" aria-label="Direct link to init()" title="Direct link to init()" translate="no">​</a></h3>
@@ -524,12 +527,15 @@ represents, e.g. View, ModelView.</p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="rundetection">runDetection()<a href="#rundetection" class="hash-link" aria-label="Direct link to runDetection()" title="Direct link to runDetection()" translate="no">​</a></h3>
 <blockquote>
-<p><strong>runDetection</strong>(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener noreferrer"><code>Promise</code></a>&lt;(<code>undefined</code> | <code>null</code> | <a href="/docs/api/classes/DetectedObject/"><code>DetectedObject</code></a>)[]&gt;</p>
+<p><strong>runDetection</strong>&lt;<code>T</code>&gt;(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener noreferrer"><code>Promise</code></a>&lt;<a href="/docs/api/classes/DetectedObject/"><code>DetectedObject</code></a>&lt;<code>T</code>&gt;[]&gt;</p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/world/objects/ObjectDetector.ts#L90" target="_blank" rel="noopener noreferrer">src/world/objects/ObjectDetector.ts:90</a></p>
 <p>Runs the object detection process based on the configured backend.</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="type-parameters-1">Type Parameters<a href="#type-parameters-1" class="hash-link" aria-label="Direct link to Type Parameters" title="Direct link to Type Parameters" translate="no">​</a></h4>
+<h5 class="anchor anchorWithStickyNavbar_LWe7" id="t-1">T<a href="#t-1" class="hash-link" aria-label="Direct link to T" title="Direct link to T" translate="no">​</a></h5>
+<p><code>T</code> = <code>null</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-31">Returns<a href="#returns-31" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
-<p><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener noreferrer"><code>Promise</code></a>&lt;(<code>undefined</code> | <code>null</code> | <a href="/docs/api/classes/DetectedObject/"><code>DetectedObject</code></a>)[]&gt;</p>
+<p><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener noreferrer"><code>Promise</code></a>&lt;<a href="/docs/api/classes/DetectedObject/"><code>DetectedObject</code></a>&lt;<code>T</code>&gt;[]&gt;</p>
 <p>A promise that resolves with an
 array of detected <code>DetectedObject</code> instances.</p>
 <hr>
@@ -537,7 +543,7 @@ array of detected <code>DetectedObject</code> instances.</p>
 <blockquote>
 <p><strong>showDebugVisualizations</strong>(<code>visible</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/world/objects/ObjectDetector.ts#L284" target="_blank" rel="noopener noreferrer">src/world/objects/ObjectDetector.ts:284</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/world/objects/ObjectDetector.ts#L286" target="_blank" rel="noopener noreferrer">src/world/objects/ObjectDetector.ts:286</a></p>
 <p>Toggles the visibility of all debug visualizations for detected objects.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-25">Parameters<a href="#parameters-25" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="visible">visible<a href="#visible" class="hash-link" aria-label="Direct link to visible" title="Direct link to visible" translate="no">​</a></h5>

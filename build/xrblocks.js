@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.8.2
- * @commitid 6f96b5b
- * @builddate 2026-01-22T00:31:01.242Z
+ * @commitid 994ab16
+ * @builddate 2026-01-22T03:31:08.860Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -10247,20 +10247,19 @@ class DetectedObject extends THREE.Object3D {
     /**
      * @param label - The semantic label of the object.
      * @param image - The base64 encoded cropped image of the object.
-     * @param boundingBox - The 2D bounding box.
-     * @param additionalData - A key-value map of additional properties from the
-     * detector. This includes any object proparties that is requested through the
+     * @param detection2DBoundingBox - The 2D bounding box of the detected object in normalized screen
+     * coordinates. Values are between 0 and 1. Centerpoint of this bounding is
+     * used for backproject to obtain 3D object position (i.e., this.position).
+     * @param data - Additional properties from the detector.
+     * This includes any object proparties that is requested through the
      * schema but is not assigned a class property by default (e.g., color, size).
      */
-    constructor(label, image, boundingBox, 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    additionalData = {}) {
+    constructor(label, image, detection2DBoundingBox, data) {
         super();
         this.label = label;
         this.image = image;
-        this.detection2DBoundingBox = boundingBox;
-        // Assign any additional properties to this object.
-        Object.assign(this, additionalData);
+        this.detection2DBoundingBox = detection2DBoundingBox;
+        this.data = data;
     }
 }
 
@@ -10406,7 +10405,7 @@ class ObjectDetector extends Script {
                     return object;
                 }
             });
-            const detectedObjects = (await Promise.all(detectionPromises)).filter(Boolean);
+            const detectedObjects = (await Promise.all(detectionPromises)).filter((obj) => obj !== null && obj !== undefined);
             return detectedObjects;
         }
         catch (error) {
