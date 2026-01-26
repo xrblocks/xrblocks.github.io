@@ -1,22 +1,31 @@
 import * as xb from 'xrblocks';
+import {GeminiManager as CoreGeminiManager} from 'xrblocks/addons/ai/GeminiManager.js';
 
 import {TranscriptionManager} from './TranscriptionManager.js';
 
-export class GeminiManager extends xb.Script {
+export class GeminiManager extends CoreGeminiManager {
   constructor() {
     super();
-    this.xrDeviceCamera = null;
-    this.transcription = null;
-    this.ai = null;
-    this.isAIRunning = false;
-    this.screenshotInterval = null;
-    this.defaultText = '';
+    this.defaultText = 'Say "Start" to begin...';
   }
 
   init() {
-    this.xrDeviceCamera = xb.core.deviceCamera;
-    this.ai = xb.core.ai;
+    super.init();
     this.createTextDisplay();
+
+    // Hook into events from the base class
+    this.addEventListener('inputTranscription', (event) => {
+      this.transcription?.handleInputTranscription(event.message);
+    });
+    this.addEventListener('outputTranscription', (event) => {
+      this.transcription?.handleOutputTranscription(event.message);
+    });
+    this.addEventListener('turnComplete', () => {
+      this.transcription?.finalizeTurn();
+    });
+    this.addEventListener('interrupted', () => {
+      // Optional: handle interruption visual cues if needed
+    });
   }
 
   async toggleGeminiLive() {
@@ -24,50 +33,24 @@ export class GeminiManager extends xb.Script {
   }
 
   async startGeminiLive() {
-    if (this.isAIRunning || !this.ai) return;
     try {
-      await xb.core.sound.enableAudio();
-      await this.startLiveAI();
-      this.startScreenshotCapture();
-      this.isAIRunning = true;
+      await super.startGeminiLive();
       this.updateButtonState();
     } catch (error) {
       console.error('Failed to start AI session:', error);
       this.transcription?.addText(
         'Error: Failed to start AI session - ' + error.message
       );
-      this.cleanup();
-      this.isAIRunning = false;
+      this.cleanup(); // Clean up on failure
       this.updateButtonState();
     }
   }
 
   async stopGeminiLive() {
-    if (!this.isAIRunning) return;
-    await this.ai?.stopLiveSession?.();
-    this.cleanup();
-    this.isAIRunning = false;
+    await super.stopGeminiLive();
     this.updateButtonState();
     this.transcription?.clear();
     this.transcription?.setText(this.defaultText);
-  }
-
-  async startLiveAI() {
-    return new Promise((resolve, reject) => {
-      this.ai.setLiveCallbacks({
-        onopen: resolve,
-        onmessage: (message) => this.handleAIMessage(message),
-        onerror: reject,
-        onclose: (closeEvent) => {
-          this.cleanup();
-          this.isAIRunning = false;
-          this.updateButtonState();
-          this.transcription?.clear();
-          this.transcription?.setText(closeEvent.reason || this.defaultText);
-        },
-      });
-      this.ai.startLiveSession().catch(reject);
-    });
   }
 
   createTextDisplay() {
@@ -98,61 +81,7 @@ export class GeminiManager extends xb.Script {
     this.add(this.textPanel);
   }
 
-  handleAIMessage(message) {
-    message.data && xb.core.sound.playAIAudio(message.data);
-
-    const content = message.serverContent;
-    if (content) {
-      content.inputTranscription?.text &&
-        this.transcription.handleInputTranscription(
-          content.inputTranscription.text
-        );
-      content.outputTranscription?.text &&
-        this.transcription.handleOutputTranscription(
-          content.outputTranscription.text
-        );
-      content.turnComplete && this.transcription.finalizeTurn();
-    }
-  }
-
-  startScreenshotCapture() {
-    this.screenshotInterval = setInterval(() => {
-      const base64Image = this.xrDeviceCamera?.getSnapshot({
-        outputFormat: 'base64',
-        mimeType: 'image/jpeg',
-        quality: 1,
-      });
-      if (base64Image) {
-        const base64Data = base64Image.startsWith('data:')
-          ? base64Image.split(',')[1]
-          : base64Image;
-        try {
-          this.ai?.sendRealtimeInput?.({
-            video: {data: base64Data, mimeType: 'image/jpeg'},
-          });
-        } catch (error) {
-          console.warn(error);
-          this.stopGeminiLive();
-        }
-      }
-    }, 1000);
-  }
-
   updateButtonState() {
     this.toggleButton?.setText(this.isAIRunning ? '⏹ Stop' : '▶ Start');
-  }
-
-  cleanup() {
-    if (this.screenshotInterval) {
-      clearInterval(this.screenshotInterval);
-      this.screenshotInterval = null;
-    }
-    xb.core.sound?.disableAudio();
-    xb.core.sound?.stopAIAudio();
-  }
-
-  dispose() {
-    this.cleanup();
-    super.dispose();
   }
 }
