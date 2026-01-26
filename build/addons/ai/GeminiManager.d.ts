@@ -37,7 +37,7 @@ export declare class GeminiManager extends xb.Script<GeminiManagerEventMap> {
     setupAudioCapture(): Promise<void>;
     startLiveAI(params: GoogleGenAITypes.LiveConnectConfig, model?: string): Promise<void>;
     startScreenshotCapture(intervalMs?: number): void;
-    captureAndSendScreenshot(): void;
+    captureAndSendScreenshot(): Promise<void>;
     sendAudioData(audioBuffer: ArrayBuffer): void;
     sendVideoFrame(base64Image: string): void;
     initializeAudioContext(): Promise<void>;

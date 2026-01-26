@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.8.2
- * @commitid 442bdf4
- * @builddate 2026-01-26T20:52:55.957Z
+ * @commitid 7dd10e6
+ * @builddate 2026-01-26T21:16:21.287Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -3534,6 +3534,14 @@ var StreamState;
     StreamState["ERROR"] = "error";
     StreamState["NO_DEVICES_FOUND"] = "no_devices_found";
 })(StreamState || (StreamState = {}));
+function blobToBase64(blob) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+        reader.onerror = () => reject(reader.error);
+    });
+}
 /**
  * The base class for handling video streams (from camera or file), managing
  * the underlying <video> element, streaming state, and snapshot logic.
@@ -3605,12 +3613,7 @@ class VideoStream extends Script {
             }
         }
     }
-    /**
-     * Captures the current video frame.
-     * @param options - The options for the snapshot.
-     * @returns The captured data.
-     */
-    getSnapshot({ width = this.width, height = this.height, outputFormat = 'texture', mimeType = 'image/jpeg', quality = 0.9, } = {}) {
+    getSnapshot({ width = this.width, height = this.height, outputFormat = 'texture', ...rest } = {}) {
         if (!this.loaded ||
             !width ||
             !height ||
@@ -3620,6 +3623,8 @@ class VideoStream extends Script {
         if (width > this.width || height > this.height) {
             console.warn(`The requested snapshot width (${width}px x ${height}px) is larger than the source video width (${this.width}px x ${this.height}px). The snapshot will be upscaled.`);
         }
+        const mimeType = ('mimeType' in rest ? rest.mimeType : undefined) ?? 'image/jpeg';
+        const quality = ('quality' in rest ? rest.quality : undefined) ?? 0.9;
         try {
             // Re-initialize canvas only if dimensions have changed.
             if (!this.canvas_ ||
@@ -3637,7 +3642,9 @@ class VideoStream extends Script {
                 case 'imageData':
                     return this.context_.getImageData(0, 0, width, height);
                 case 'base64':
-                    return this.canvas_.toDataURL(mimeType, quality);
+                    return new Promise((resolve) => this.canvas_.toBlob(resolve, mimeType, quality)).then((blob) => (blob ? blobToBase64(blob) : null));
+                case 'blob':
+                    return new Promise((resolve) => this.canvas_.toBlob(resolve, mimeType, quality));
                 case 'texture':
                 default: {
                     const frozenTexture = new THREE.Texture(this.canvas_);
@@ -10329,7 +10336,10 @@ class ObjectDetector extends Script {
             console.error('Gemini is unavailable for object detection.');
             return [];
         }
-        const base64Image = this.deviceCamera.getSnapshot({
+        // Cache depth and camera data to align with the captured image frame.
+        const cachedDepthArray = this.depth.depthArray[0].slice(0);
+        const cachedMatrixWorld = this.camera.matrixWorld.clone();
+        const base64Image = await this.deviceCamera.getSnapshot({
             outputFormat: 'base64',
         });
         if (!base64Image) {
@@ -10337,9 +10347,6 @@ class ObjectDetector extends Script {
             return [];
         }
         const { mimeType, strippedBase64 } = parseBase64DataURL(base64Image);
-        // Cache depth and camera data to align with the captured image frame.
-        const cachedDepthArray = this.depth.depthArray[0].slice(0);
-        const cachedMatrixWorld = this.camera.matrixWorld.clone();
         // Temporarily set the Gemini config for this specific query type.
         const originalGeminiConfig = this.aiOptions.gemini.config;
         this.aiOptions.gemini.config = this._geminiConfig;

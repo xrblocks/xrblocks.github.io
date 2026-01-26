@@ -123,9 +123,9 @@ class GeminiManager extends xb.Script {
             this.captureAndSendScreenshot();
         }, intervalMs);
     }
-    captureAndSendScreenshot() {
+    async captureAndSendScreenshot() {
         try {
-            const base64Image = this.xrDeviceCamera.getSnapshot({
+            const base64Image = await this.xrDeviceCamera.getSnapshot({
                 outputFormat: 'base64',
                 mimeType: 'image/jpeg',
                 quality: 1,

@@ -20,18 +20,29 @@ export interface VideoStreamEventMap<T> extends THREE.Object3DEventMap {
         details?: T;
     };
 }
-export type VideoStreamGetSnapshotOptions = {
+type VideoStreamGetSnapshotImageDataOptionsBase = {
     /** The target width, defaults to the video width. */
     width?: number;
     /** The target height, defaults to the video height. */
     height?: number;
-    /** The output format, defaults to 'texture'. */
-    outputFormat?: 'texture' | 'base64' | 'imageData';
-    /** The MIME type for base64 output. */
+};
+export type VideoStreamGetSnapshotImageDataOptions = VideoStreamGetSnapshotImageDataOptionsBase & {
+    outputFormat: 'imageData';
+};
+export type VideoStreamGetSnapshotBase64Options = VideoStreamGetSnapshotImageDataOptionsBase & {
+    outputFormat: 'base64';
     mimeType?: string;
-    /** The quality for base64 output. */
     quality?: number;
 };
+export type VideoStreamGetSnapshotBlobOptions = VideoStreamGetSnapshotImageDataOptionsBase & {
+    outputFormat: 'blob';
+    mimeType?: string;
+    quality?: number;
+};
+export type VideoStreamGetSnapshotTextureOptions = VideoStreamGetSnapshotImageDataOptionsBase & {
+    outputFormat?: 'texture';
+};
+export type VideoStreamGetSnapshotOptions = VideoStreamGetSnapshotImageDataOptions | VideoStreamGetSnapshotBase64Options | VideoStreamGetSnapshotTextureOptions | VideoStreamGetSnapshotBlobOptions;
 export type VideoStreamOptions = {
     /** Hint for performance optimization for frequent captures. */
     willCaptureFrequently?: boolean;
@@ -75,7 +86,10 @@ export declare class VideoStream<T extends VideoStreamDetails = VideoStreamDetai
      * @param options - The options for the snapshot.
      * @returns The captured data.
      */
-    getSnapshot({ width, height, outputFormat, mimeType, quality, }?: VideoStreamGetSnapshotOptions): string | THREE.Texture<unknown> | ImageData | null;
+    getSnapshot(_: VideoStreamGetSnapshotImageDataOptions): ImageData;
+    getSnapshot(_: VideoStreamGetSnapshotBase64Options): Promise<string | null>;
+    getSnapshot(_: VideoStreamGetSnapshotTextureOptions): THREE.Texture;
+    getSnapshot(_: VideoStreamGetSnapshotBlobOptions): Promise<Blob | null>;
     /**
      * Stops the current video stream tracks.
      */
@@ -85,3 +99,4 @@ export declare class VideoStream<T extends VideoStreamDetails = VideoStreamDetai
      */
     dispose(): void;
 }
+export {};
