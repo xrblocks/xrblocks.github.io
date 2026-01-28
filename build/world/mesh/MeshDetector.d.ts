@@ -8,11 +8,13 @@ export declare class MeshDetector extends Script {
         options: typeof MeshDetectionOptions;
         renderer: typeof THREE.WebGLRenderer;
     };
-    private _debugMaterial;
+    private debugMaterials;
+    private fallbackDebugMaterial;
     xrMeshToThreeMesh: Map<XRMesh, DetectedMesh>;
     threeMeshToXrMesh: Map<DetectedMesh, XRMesh>;
     private renderer;
     private physics?;
+    private defaultMaterial;
     init({ options, renderer, }: {
         options: MeshDetectionOptions;
         renderer: THREE.WebGLRenderer;

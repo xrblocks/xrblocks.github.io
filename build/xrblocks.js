@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.8.2
- * @commitid 38bcfa2
- * @builddate 2026-01-28T19:04:28.876Z
+ * @commitid baed7ec
+ * @builddate 2026-01-28T21:07:58.754Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -10827,17 +10827,25 @@ class PlaneDetector extends Script {
     }
 }
 
+function toFlatArray(array) {
+    if (!Array.isArray(array))
+        return array;
+    const result = new Float32Array(array.reduce((sum, arr) => sum + arr.length, 0));
+    array.reduce((offset, arr) => (result.set(arr, offset), offset + arr.length), 0);
+    return result;
+}
 class DetectedMesh extends THREE.Mesh {
     constructor(xrMesh, material) {
         const geometry = new THREE.BufferGeometry();
-        const vertices = new Float32Array(xrMesh.vertices);
-        const indices = new Uint32Array(xrMesh.indices);
+        const vertices = toFlatArray(xrMesh.vertices);
+        const indices = xrMesh.indices;
         geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
         geometry.setIndex(new THREE.BufferAttribute(indices, 1));
         geometry.computeVertexNormals();
         super(geometry, material);
         this.lastChangedTime = 0;
         this.lastChangedTime = xrMesh.lastChangedTime;
+        this.semanticLabel = xrMesh.semanticLabel;
     }
     initRapierPhysics(RAPIER, blendedWorld) {
         this.RAPIER = RAPIER;
@@ -10856,8 +10864,8 @@ class DetectedMesh extends THREE.Mesh {
             return;
         this.lastChangedTime = mesh.lastChangedTime;
         const geometry = new THREE.BufferGeometry();
-        const vertices = new Float32Array(mesh.vertices);
-        const indices = new Uint32Array(mesh.indices);
+        const vertices = toFlatArray(mesh.vertices);
+        const indices = mesh.indices;
         geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
         geometry.setIndex(new THREE.BufferAttribute(indices, 1));
         geometry.computeVertexNormals();
@@ -10872,14 +10880,18 @@ class DetectedMesh extends THREE.Mesh {
     }
 }
 
+const SEMANTIC_LABELS = ['Floor', 'Ceiling', 'Wall', 'Table'];
+const SEMANTIC_COLORS = [0x00ff00, 0xff0000, 0x0000ff, 0xffff00];
 // Wrapper around WebXR Mesh Detection API
 // https://immersive-web.github.io/real-world-meshing/
 class MeshDetector extends Script {
     constructor() {
         super(...arguments);
-        this._debugMaterial = null;
+        this.debugMaterials = new Map();
+        this.fallbackDebugMaterial = null;
         this.xrMeshToThreeMesh = new Map();
         this.threeMeshToXrMesh = new Map();
+        this.defaultMaterial = new THREE.MeshBasicMaterial({ visible: false });
     }
     static { this.dependencies = {
         options: MeshDetectionOptions,
@@ -10888,11 +10900,18 @@ class MeshDetector extends Script {
     init({ options, renderer, }) {
         this.renderer = renderer;
         if (options.showDebugVisualizations) {
-            this._debugMaterial = new THREE.MeshBasicMaterial({
-                color: 0xffff00,
+            this.fallbackDebugMaterial = new THREE.MeshBasicMaterial({
+                color: 0x000000,
                 wireframe: true,
                 side: THREE.DoubleSide,
             });
+            for (let i = 0; i < SEMANTIC_LABELS.length; i++) {
+                this.debugMaterials.set(SEMANTIC_LABELS[i], new THREE.MeshBasicMaterial({
+                    color: SEMANTIC_COLORS[i],
+                    wireframe: true,
+                    side: THREE.DoubleSide,
+                }));
+            }
         }
     }
     initPhysics(physics) {
@@ -10932,7 +10951,10 @@ class MeshDetector extends Script {
         }
     }
     createMesh(frame, xrMesh) {
-        const material = this._debugMaterial || new THREE.MeshBasicMaterial({ visible: false });
+        const semanticLabel = xrMesh.semanticLabel;
+        const material = (semanticLabel && this.debugMaterials.get(semanticLabel)) ||
+            this.fallbackDebugMaterial ||
+            this.defaultMaterial;
         const mesh = new DetectedMesh(xrMesh, material);
         this.updateMeshPose(frame, xrMesh, mesh);
         return mesh;
