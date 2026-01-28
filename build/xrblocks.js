@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.8.2
- * @commitid 8cbc819
- * @builddate 2026-01-28T03:26:46.907Z
+ * @commitid 38bcfa2
+ * @builddate 2026-01-28T19:04:28.876Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -3547,6 +3547,9 @@ function blobToBase64(blob) {
  * the underlying <video> element, streaming state, and snapshot logic.
  */
 class VideoStream extends Script {
+    get video() {
+        return this.video_;
+    }
     /**
      * @param options - The configuration options.
      */

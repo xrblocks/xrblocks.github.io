@@ -60,6 +60,7 @@ export declare class VideoStream<T extends VideoStreamDetails = VideoStreamDetai
     state: StreamState;
     protected stream_: MediaStream | null;
     protected video_: HTMLVideoElement;
+    get video(): HTMLVideoElement;
     private willCaptureFrequently_;
     private frozenTexture_;
     private canvas_;
