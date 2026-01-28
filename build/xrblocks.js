@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.8.2
- * @commitid baed7ec
- * @builddate 2026-01-28T21:07:58.754Z
+ * @commitid 1b677cf
+ * @builddate 2026-01-28T21:47:06.779Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -10929,6 +10929,7 @@ class MeshDetector extends Script {
             if (!meshes.has(xrMesh)) {
                 this.xrMeshToThreeMesh.delete(xrMesh);
                 this.threeMeshToXrMesh.delete(threeMesh);
+                threeMesh.geometry.dispose();
                 this.remove(threeMesh);
             }
         }
