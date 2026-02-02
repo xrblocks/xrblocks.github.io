@@ -56,12 +56,12 @@ File: `templates/0_basic/index.html`
 <html lang="en">
   <head>
     <title>Basic: Pinch to Set Color | XR Blocks Template</title>
-    <meta charset="utf-8" />
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -135,6 +135,61 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 ### Template: 1_ui
+File: `templates/1_ui/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>UI: Spatial Panels | XR Blocks Template</title>
+    
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
+          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
+          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
+          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
+          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
+          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
+          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
+          "lit/": "https://esm.run/lit@3/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <script type="module">
+import 'xrblocks/addons/simulator/SimulatorAddons.js';
+
+import * as xb from 'xrblocks';
+
+import {UIManager} from './UIManager.js';
+
+const options = new xb.Options();
+options.enableUI();
+
+document.addEventListener('DOMContentLoaded', function () {
+  xb.add(new UIManager());
+  xb.init(options);
+});
+
+</script>
+  </body>
+</html>
+
+```
 File: `templates/1_ui/UIManager.js`
 ```javascript
 import * as xb from 'xrblocks';
@@ -195,18 +250,21 @@ export class UIManager extends xb.Script {
 }
 
 ```
-File: `templates/1_ui/index.html`
+
+
+### Template: 2_hands
+File: `templates/2_hands/index.html`
 ```html
 <!doctype html>
 <html lang="en">
   <head>
-    <title>UI: Spatial Panels | XR Blocks Template</title>
-    <meta charset="utf-8" />
+    <title>Hands: Mesh and Touch | XR Blocks Template</title>
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -230,31 +288,41 @@ File: `templates/1_ui/index.html`
   </head>
 
   <body>
-    <script type="module" src="main.js?version=2"></script>
-  </body>
-</html>
-
-```
-File: `templates/1_ui/main.js`
-```javascript
+    <script type="module">
+// Provides optional 2D UIs for simulator on desktop.
 import 'xrblocks/addons/simulator/SimulatorAddons.js';
 
 import * as xb from 'xrblocks';
 
-import {UIManager} from './UIManager.js';
+import {HandsInteraction} from './HandsInteraction.js';
 
 const options = new xb.Options();
-options.enableUI();
+options.enableReticles();
+options.enableHands();
+
+options.hands.enabled = true;
+options.hands.visualization = true;
+// Visualize hand joints.
+options.hands.visualizeJoints = true;
+// Visualize hand meshes.
+options.hands.visualizeMeshes = true;
+
+options.simulator.defaultMode = xb.SimulatorMode.POSE;
+
+function start() {
+  xb.add(new HandsInteraction());
+  xb.init(options);
+}
 
 document.addEventListener('DOMContentLoaded', function () {
-  xb.add(new UIManager());
-  xb.init(options);
+  start();
 });
 
+</script>
+  </body>
+</html>
+
 ```
-
-
-### Template: 2_hands
 File: `templates/2_hands/HandsInteraction.js`
 ```javascript
 import * as THREE from 'three';
@@ -376,78 +444,6 @@ export class HandsInteraction extends xb.Script {
 }
 
 ```
-File: `templates/2_hands/index.html`
-```html
-<!doctype html>
-<html lang="en">
-  <head>
-    <title>Hands: Mesh and Touch | XR Blocks Template</title>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no"
-    />
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
-    <script>
-      window.litDisableBundleWarning = true;
-    </script>
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
-          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
-          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
-          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
-          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
-          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
-          "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
-        }
-      }
-    </script>
-  </head>
-
-  <body>
-    <script type="module" src="main.js?version=2"></script>
-  </body>
-</html>
-
-```
-File: `templates/2_hands/main.js`
-```javascript
-// Provides optional 2D UIs for simulator on desktop.
-import 'xrblocks/addons/simulator/SimulatorAddons.js';
-
-import * as xb from 'xrblocks';
-
-import {HandsInteraction} from './HandsInteraction.js';
-
-const options = new xb.Options();
-options.enableReticles();
-options.enableHands();
-
-options.hands.enabled = true;
-options.hands.visualization = true;
-// Visualize hand joints.
-options.hands.visualizeJoints = true;
-// Visualize hand meshes.
-options.hands.visualizeMeshes = true;
-
-options.simulator.defaultMode = xb.SimulatorMode.POSE;
-
-function start() {
-  xb.add(new HandsInteraction());
-  xb.init(options);
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  start();
-});
-
-```
 
 
 ### Template: 3_depth
@@ -457,15 +453,13 @@ File: `templates/3_depth/index.html`
 <html lang="en">
   <head>
     <title>Depth | XR Blocks Template</title>
-    <meta charset="utf-8" />
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
+
+<link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -553,15 +547,13 @@ File: `templates/4_stereo/index.html`
 <html lang="en">
   <head>
     <title>Stereo | XR Blocks Template</title>
-    <meta charset="utf-8" />
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
+
+<link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -644,15 +636,13 @@ File: `templates/5_camera/index.html`
 <html lang="en">
   <head>
     <title>Camera | XR Blocks Template</title>
-    <meta charset="utf-8" />
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
+
+<link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -762,6 +752,69 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 ### Template: 6_ai
+File: `templates/6_ai/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>XR Blocks - AI Query Demo</title>
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
+          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
+          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
+          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
+          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
+          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
+          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
+          "lit/": "https://esm.run/lit@3/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/",
+          "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <script type="module">
+import 'xrblocks/addons/simulator/SimulatorAddons.js';
+
+import * as xb from 'xrblocks';
+
+import {GeminiQueryManager} from './GeminiQueryManager.js';
+
+const options = new xb.Options();
+options.enableUI();
+options.enableAI();
+
+function start() {
+  try {
+    xb.init(options);
+    xb.add(new GeminiQueryManager());
+  } catch (error) {
+    console.error('Failed to initialize XR app:', error);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  start();
+});
+
+</script>
+  </body>
+</html>
+
+```
 File: `templates/6_ai/GeminiQueryManager.js`
 ```javascript
 import * as xb from 'xrblocks';
@@ -861,18 +914,19 @@ export class GeminiQueryManager extends xb.Script {
 }
 
 ```
-File: `templates/6_ai/index.html`
+
+
+### Template: 7_ai_live
+File: `templates/7_ai_live/index.html`
 ```html
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    
-    
-    <title>XR Blocks - AI Query Demo</title>
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
+
+<title>XR Blocks - Gemini Live AI Demo</title>
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -897,27 +951,53 @@ File: `templates/6_ai/index.html`
   </head>
 
   <body>
-    <script type="module" src="main.js"></script>
-  </body>
-</html>
-
-```
-File: `templates/6_ai/main.js`
-```javascript
+    <script type="module">
 import 'xrblocks/addons/simulator/SimulatorAddons.js';
 
 import * as xb from 'xrblocks';
 
-import {GeminiQueryManager} from './GeminiQueryManager.js';
+import {GeminiManager} from './GeminiManager.js';
 
 const options = new xb.Options();
 options.enableUI();
+options.enableHands();
 options.enableAI();
+options.enableCamera();
+options.deviceCamera = new xb.DeviceCameraOptions({
+  enabled: true,
+  videoConstraints: {
+    width: {ideal: 1280},
+    height: {ideal: 720},
+    facingMode: 'environment',
+  },
+});
 
-function start() {
+async function requestAudioPermission() {
   try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        sampleRate: 16000,
+        channelCount: 1,
+        echoCancellation: true,
+        noiseSuppression: true,
+      },
+    });
+    stream.getTracks().forEach((track) => track.stop());
+    return stream;
+  } catch (error) {
+    console.error('Audio permission denied or not available:', error);
+    alert(
+      'Audio permission is required for Gemini Live AI features. Please enable microphone access and refresh the page.'
+    );
+    return null;
+  }
+}
+
+async function start() {
+  try {
+    await requestAudioPermission();
     xb.init(options);
-    xb.add(new GeminiQueryManager());
+    xb.add(new GeminiManager());
   } catch (error) {
     console.error('Failed to initialize XR app:', error);
   }
@@ -927,10 +1007,11 @@ document.addEventListener('DOMContentLoaded', function () {
   start();
 });
 
+</script>
+  </body>
+</html>
+
 ```
-
-
-### Template: 7_ai_live
 File: `templates/7_ai_live/GeminiManager.js`
 ```javascript
 import * as xb from 'xrblocks';
@@ -1101,105 +1182,6 @@ export class TranscriptionManager {
 }
 
 ```
-File: `templates/7_ai_live/index.html`
-```html
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    
-    
-    <title>XR Blocks - Gemini Live AI Demo</title>
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
-    <script>
-      window.litDisableBundleWarning = true;
-    </script>
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
-          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
-          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
-          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
-          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
-          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
-          "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/",
-          "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
-        }
-      }
-    </script>
-  </head>
-
-  <body>
-    <script type="module" src="main.js"></script>
-  </body>
-</html>
-
-```
-File: `templates/7_ai_live/main.js`
-```javascript
-import 'xrblocks/addons/simulator/SimulatorAddons.js';
-
-import * as xb from 'xrblocks';
-
-import {GeminiManager} from './GeminiManager.js';
-
-const options = new xb.Options();
-options.enableUI();
-options.enableHands();
-options.enableAI();
-options.enableCamera();
-options.deviceCamera = new xb.DeviceCameraOptions({
-  enabled: true,
-  videoConstraints: {
-    width: {ideal: 1280},
-    height: {ideal: 720},
-    facingMode: 'environment',
-  },
-});
-
-async function requestAudioPermission() {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: {
-        sampleRate: 16000,
-        channelCount: 1,
-        echoCancellation: true,
-        noiseSuppression: true,
-      },
-    });
-    stream.getTracks().forEach((track) => track.stop());
-    return stream;
-  } catch (error) {
-    console.error('Audio permission denied or not available:', error);
-    alert(
-      'Audio permission is required for Gemini Live AI features. Please enable microphone access and refresh the page.'
-    );
-    return null;
-  }
-}
-
-async function start() {
-  try {
-    await requestAudioPermission();
-    xb.init(options);
-    xb.add(new GeminiManager());
-  } catch (error) {
-    console.error('Failed to initialize XR app:', error);
-  }
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  start();
-});
-
-```
 
 
 ### Template: 8_objects
@@ -1209,12 +1191,12 @@ File: `templates/8_objects/index.html`
 <html lang="en">
   <head>
     <title>World Component: Object Detection | XR Blocks Template</title>
-    <meta charset="utf-8" />
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -1309,12 +1291,12 @@ File: `templates/9_xr-toggle/index.html`
 <html lang="en">
   <head>
     <title>Transition between AR and VR | XR Blocks Template</title>
-    <meta charset="utf-8" />
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -1404,12 +1386,12 @@ File: `templates/heuristic_hand_gestures/index.html`
 <html lang="en">
   <head>
     <title>Gestures: Heuristic Logging | XR Blocks Template</title>
-    <meta charset="utf-8" />
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -1511,15 +1493,13 @@ File: `templates/meshes/index.html`
 <html lang="en">
   <head>
     <title>Meshes | XR Blocks Template</title>
-    <meta charset="utf-8" />
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
+
+<link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -1565,15 +1545,13 @@ File: `templates/planes/index.html`
 <html lang="en">
   <head>
     <title>Planes | XR Blocks Template</title>
-    <meta charset="utf-8" />
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
+
+<link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -1613,56 +1591,18 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
 ### Template: uikit
-File: `templates/uikit/MaterialSymbolsIcon.js`
-```javascript
-import {Svg} from '@pmndrs/uikit';
-import {computed} from '@preact/signals-core';
-
-const SVG_BASE_PATH =
-  'https://cdn.jsdelivr.net/gh/marella/material-symbols@v0.38.0/svg/{{weight}}/{{style}}/{{icon}}.svg';
-
-export class MaterialSymbolsIcon extends Svg {
-  name = 'Material Symbols Icon';
-  constructor(properties, initialClasses, config) {
-    const icon = properties?.icon ?? config?.defaultOverrides?.icon;
-    const iconStyle =
-      properties?.iconStyle ?? config?.defaultOverrides?.iconStyle;
-    const iconWeight =
-      properties?.iconWeight ?? config?.defaultOverrides?.iconWeight;
-
-    const svgPath = computed(() => {
-      const finalIcon = icon?.value ?? icon ?? 'question_mark';
-      const finalStyle = iconStyle?.value ?? iconStyle ?? 'outlined';
-      const finalWeight = iconWeight?.value ?? iconWeight ?? 400;
-
-      return SVG_BASE_PATH.replace('{{style}}', finalStyle)
-        .replace('{{icon}}', finalIcon)
-        .replace('{{weight}}', String(finalWeight));
-    });
-
-    super(properties, initialClasses, {
-      ...config,
-      defaultOverrides: {
-        src: svgPath,
-        ...config?.defaultOverrides,
-      },
-    });
-  }
-}
-
-```
 File: `templates/uikit/index.html`
 ```html
 <!doctype html>
 <html lang="en">
   <head>
     <title>XR Blocks x @pmndrs/uikit Template</title>
-    <meta charset="utf-8" />
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -1687,13 +1627,7 @@ File: `templates/uikit/index.html`
   </head>
 
   <body>
-    <script type="module" src="main.js?version=2"></script>
-  </body>
-</html>
-
-```
-File: `templates/uikit/main.js`
-```javascript
+    <script type="module">
 import 'xrblocks/addons/simulator/SimulatorAddons.js';
 import * as uikit from '@pmndrs/uikit';
 import * as xb from 'xrblocks';
@@ -1810,10 +1744,116 @@ document.addEventListener('DOMContentLoaded', async function () {
   renderer.setTransparentSort(uikit.reversePainterSortStable);
 });
 
+</script>
+  </body>
+</html>
+
+```
+File: `templates/uikit/MaterialSymbolsIcon.js`
+```javascript
+import {Svg} from '@pmndrs/uikit';
+import {computed} from '@preact/signals-core';
+
+const SVG_BASE_PATH =
+  'https://cdn.jsdelivr.net/gh/marella/material-symbols@v0.38.0/svg/{{weight}}/{{style}}/{{icon}}.svg';
+
+export class MaterialSymbolsIcon extends Svg {
+  name = 'Material Symbols Icon';
+  constructor(properties, initialClasses, config) {
+    const icon = properties?.icon ?? config?.defaultOverrides?.icon;
+    const iconStyle =
+      properties?.iconStyle ?? config?.defaultOverrides?.iconStyle;
+    const iconWeight =
+      properties?.iconWeight ?? config?.defaultOverrides?.iconWeight;
+
+    const svgPath = computed(() => {
+      const finalIcon = icon?.value ?? icon ?? 'question_mark';
+      const finalStyle = iconStyle?.value ?? iconStyle ?? 'outlined';
+      const finalWeight = iconWeight?.value ?? iconWeight ?? 400;
+
+      return SVG_BASE_PATH.replace('{{style}}', finalStyle)
+        .replace('{{icon}}', finalIcon)
+        .replace('{{weight}}', String(finalWeight));
+    });
+
+    super(properties, initialClasses, {
+      ...config,
+      defaultOverrides: {
+        src: svgPath,
+        ...config?.defaultOverrides,
+      },
+    });
+  }
+}
+
 ```
 
 
 ### Sample: depthmap
+File: `samples/depthmap/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Depth Map | XR Blocks</title>
+    
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+
+<link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
+          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
+          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
+          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
+          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
+          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
+          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
+          "lit/": "https://esm.run/lit@3/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <script type="module">
+import 'xrblocks/addons/simulator/instructions/SimulatorInstructions.js';
+
+import * as xb from 'xrblocks';
+
+import {DepthMapScene} from './DepthMapScene.js';
+
+const options = new xb.Options();
+options.depth.enabled = true;
+options.depth.depthTexture.enabled = true;
+options.depth.depthTypeRequest = [xb.getUrlParameter('depthType') ?? 'raw'];
+options.usePostprocessing = true;
+options.setAppTitle('Depth Map');
+
+function start() {
+  xb.add(new DepthMapScene());
+  xb.init(options);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  start();
+});
+
+</script>
+  </body>
+</html>
+
+```
 File: `samples/depthmap/DepthMapScene.js`
 ```javascript
 import * as THREE from 'three';
@@ -2037,74 +2077,6 @@ export const DepthMapShader = {
 };
 
 ```
-File: `samples/depthmap/index.html`
-```html
-<!doctype html>
-<html lang="en">
-  <head>
-    <title>Depth Map | XR Blocks</title>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no"
-    />
-    
-    
-    
-    <link type="text/css" rel="stylesheet" href="../main.css" />
-    <script>
-      window.litDisableBundleWarning = true;
-    </script>
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
-          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
-          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
-          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
-          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
-          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
-          "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
-        }
-      }
-    </script>
-  </head>
-
-  <body>
-    <script type="module" src="main.js"></script>
-  </body>
-</html>
-
-```
-File: `samples/depthmap/main.js`
-```javascript
-import 'xrblocks/addons/simulator/instructions/SimulatorInstructions.js';
-
-import * as xb from 'xrblocks';
-
-import {DepthMapScene} from './DepthMapScene.js';
-
-const options = new xb.Options();
-options.depth.enabled = true;
-options.depth.depthTexture.enabled = true;
-options.depth.depthTypeRequest = [xb.getUrlParameter('depthType') ?? 'raw'];
-options.usePostprocessing = true;
-options.setAppTitle('Depth Map');
-
-function start() {
-  xb.add(new DepthMapScene());
-  xb.init(options);
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  start();
-});
-
-```
 
 
 ### Sample: depthmesh
@@ -2114,15 +2086,13 @@ File: `samples/depthmesh/index.html`
 <html lang="en">
   <head>
     <title>Depth Mesh | XR Blocks</title>
-    <meta charset="utf-8" />
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
-    <link type="text/css" rel="stylesheet" href="../main.css" />
+
+<link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script type="importmap">
       {
         "imports": {
@@ -2215,6 +2185,80 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 ### Sample: gestures_custom
+File: `samples/gestures_custom/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Custom Hand Gestures | XR Blocks</title>
+    
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+
+<link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
+          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
+          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
+          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
+          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
+          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
+          "@tensorflow/tfjs-core": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core/+esm",
+          "@tensorflow/tfjs": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/+esm",
+          "@tensorflow/tfjs-backend-webgpu": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgpu/+esm",
+          "@litertjs/core": "https://unpkg.com/@litertjs/core@0.2.1",
+          "@litertjs/tfjs-interop": "https://unpkg.com/@litertjs/tfjs-interop@1.0.1",
+          "@litertjs/wasm-utils": "https://unpkg.com/@litertjs/wasm-utils@0.2.1",
+          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
+          "lit/": "https://esm.run/lit@3/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <script type="module">
+import 'xrblocks/addons/simulator/SimulatorAddons.js';
+
+import * as xb from 'xrblocks';
+
+import {CustomGestureDemo} from './CustomGestureDemo.js';
+
+const options = new xb.Options({
+  antialias: true,
+  reticles: {enabled: true},
+  visualizeRays: false,
+  hands: {enabled: true, visualization: false},
+  simulator: {defaultMode: xb.SimulatorMode.POSE},
+});
+
+async function start() {
+  options.setAppTitle('Custom Gestures');
+  xb.add(new CustomGestureDemo());
+  await xb.init(options);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  setTimeout(function () {
+    start();
+  }, 200);
+});
+
+</script>
+  </body>
+</html>
+
+```
 File: `samples/gestures_custom/CustomGestureDemo.js`
 ```javascript
 // Imports LiteRt: https://ai.google.dev/edge/litert/web/get_started
@@ -2616,21 +2660,22 @@ export class CustomGestureDemo extends xb.Script {
 }
 
 ```
-File: `samples/gestures_custom/index.html`
+
+
+### Sample: lighting
+File: `samples/lighting/index.html`
 ```html
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Custom Hand Gestures | XR Blocks</title>
-    <meta charset="utf-8" />
+    <title>Lighting Estimation | XR Blocks</title>
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
-    <link type="text/css" rel="stylesheet" href="../main.css" />
+
+<link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -2644,14 +2689,9 @@ File: `samples/gestures_custom/index.html`
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
           "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "@tensorflow/tfjs-core": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core/+esm",
-          "@tensorflow/tfjs": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/+esm",
-          "@tensorflow/tfjs-backend-webgpu": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgpu/+esm",
-          "@litertjs/core": "https://unpkg.com/@litertjs/core@0.2.1",
-          "@litertjs/tfjs-interop": "https://unpkg.com/@litertjs/tfjs-interop@1.0.1",
-          "@litertjs/wasm-utils": "https://unpkg.com/@litertjs/wasm-utils@0.2.1",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
+          "@material/web/": "https://esm.run/@material/web/",
           "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
           "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
         }
@@ -2660,43 +2700,54 @@ File: `samples/gestures_custom/index.html`
   </head>
 
   <body>
-    <script type="module" src="main.js"></script>
+    <script type="module">
+import * as xb from 'xrblocks';
+
+import {LightingScene} from './LightingScene.js';
+
+// Set up depth mesh optinos. Need depth mesh to render shadows to.
+let options = new xb.Options();
+options.depth = new xb.DepthOptions(xb.xrDepthMeshOptions);
+options.depth.enabled = true;
+options.depth.depthMesh.enabled = true;
+options.depth.depthTexture.enabled = true;
+options.depth.depthMesh.updateFullResolutionGeometry = true;
+options.depth.depthMesh.renderShadow = true;
+options.depth.depthMesh.shadowOpacity = 0.6;
+options.depth.occlusion.enabled = true;
+
+// Set up lighting options.
+options.lighting = new xb.LightingOptions(xb.xrLightingOptions);
+options.lighting.enabled = true;
+options.lighting.useAmbientSH = true;
+options.lighting.useDirectionalLight = true;
+options.lighting.castDirectionalLightShadow = true;
+options.lighting.useDynamicSoftShadow = false;
+
+options.xrButton = {
+  ...options.xrButton,
+  startText: '<i id="xrlogo"></i> BRING IT TO LIFE',
+  endText: '<i id="xrlogo"></i> MISSION COMPLETE',
+};
+async function start() {
+  const lightingScene = new LightingScene();
+  options.setAppTitle('Lighting Estimation');
+  await xb.init(options);
+  xb.add(lightingScene);
+  window.addEventListener(
+    'pointerdown',
+    lightingScene.onPointerDown.bind(lightingScene)
+  );
+}
+document.addEventListener('DOMContentLoaded', function () {
+  start();
+});
+
+</script>
   </body>
 </html>
 
 ```
-File: `samples/gestures_custom/main.js`
-```javascript
-import 'xrblocks/addons/simulator/SimulatorAddons.js';
-
-import * as xb from 'xrblocks';
-
-import {CustomGestureDemo} from './CustomGestureDemo.js';
-
-const options = new xb.Options({
-  antialias: true,
-  reticles: {enabled: true},
-  visualizeRays: false,
-  hands: {enabled: true, visualization: false},
-  simulator: {defaultMode: xb.SimulatorMode.POSE},
-});
-
-async function start() {
-  options.setAppTitle('Custom Gestures');
-  xb.add(new CustomGestureDemo());
-  await xb.init(options);
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  setTimeout(function () {
-    start();
-  }, 200);
-});
-
-```
-
-
-### Sample: lighting
 File: `samples/lighting/LightingScene.js`
 ```javascript
 import * as THREE from 'three';
@@ -2785,95 +2836,6 @@ export const ANIMALS_DATA = [
 ];
 
 ```
-File: `samples/lighting/index.html`
-```html
-<!doctype html>
-<html lang="en">
-  <head>
-    <title>Lighting Estimation | XR Blocks</title>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no"
-    />
-    
-    
-    
-    <link type="text/css" rel="stylesheet" href="../main.css" />
-    <script>
-      window.litDisableBundleWarning = true;
-    </script>
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
-          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
-          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
-          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
-          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
-          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
-          "lit/": "https://esm.run/lit@3/",
-          "@material/web/": "https://esm.run/@material/web/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
-        }
-      }
-    </script>
-  </head>
-
-  <body>
-    <script type="module" src="main.js"></script>
-  </body>
-</html>
-
-```
-File: `samples/lighting/main.js`
-```javascript
-import * as xb from 'xrblocks';
-
-import {LightingScene} from './LightingScene.js';
-
-// Set up depth mesh optinos. Need depth mesh to render shadows to.
-let options = new xb.Options();
-options.depth = new xb.DepthOptions(xb.xrDepthMeshOptions);
-options.depth.enabled = true;
-options.depth.depthMesh.enabled = true;
-options.depth.depthTexture.enabled = true;
-options.depth.depthMesh.updateFullResolutionGeometry = true;
-options.depth.depthMesh.renderShadow = true;
-options.depth.depthMesh.shadowOpacity = 0.6;
-options.depth.occlusion.enabled = true;
-
-// Set up lighting options.
-options.lighting = new xb.LightingOptions(xb.xrLightingOptions);
-options.lighting.enabled = true;
-options.lighting.useAmbientSH = true;
-options.lighting.useDirectionalLight = true;
-options.lighting.castDirectionalLightShadow = true;
-options.lighting.useDynamicSoftShadow = false;
-
-options.xrButton = {
-  ...options.xrButton,
-  startText: '<i id="xrlogo"></i> BRING IT TO LIFE',
-  endText: '<i id="xrlogo"></i> MISSION COMPLETE',
-};
-async function start() {
-  const lightingScene = new LightingScene();
-  options.setAppTitle('Lighting Estimation');
-  await xb.init(options);
-  xb.add(lightingScene);
-  window.addEventListener(
-    'pointerdown',
-    lightingScene.onPointerDown.bind(lightingScene)
-  );
-}
-document.addEventListener('DOMContentLoaded', function () {
-  start();
-});
-
-```
 
 
 ### Sample: mesh_detection
@@ -2883,15 +2845,13 @@ File: `samples/mesh_detection/index.html`
 <html lang="en">
   <head>
     <title>Mesh Detection | XR Blocks Template</title>
-    <meta charset="utf-8" />
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
+
+<link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -2930,6 +2890,73 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
 ### Sample: modelviewer
+File: `samples/modelviewer/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Model Viewer | XR Blocks</title>
+    
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+
+<link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
+          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
+          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
+          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
+          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
+          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
+          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
+          "lit/": "https://esm.run/lit@3/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/",
+          "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/0.1.10/spark.module.js"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <div class="background-image" style="background-color: #000000"></div>
+    <script type="module">
+import 'xrblocks/addons/simulator/SimulatorAddons.js';
+
+import {html} from 'lit';
+import * as xb from 'xrblocks';
+
+import {ModelViewerScene} from './ModelViewerScene.js';
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const modelViewerScene = new ModelViewerScene();
+  xb.add(modelViewerScene);
+  const options = new xb.Options();
+  options.simulator.instructions.customInstructions = [
+    {
+      header: html`<h1>Model Viewer</h1>`,
+      videoSrc: 'model_viewer_simulator_usage.webm',
+      description: html`Click or pinch the object to rotate. Drag the platform
+      to move.`,
+    },
+  ];
+  options.setAppTitle('Model Viewer');
+  await xb.init(options);
+});
+
+</script>
+  </body>
+</html>
+
+```
 File: `samples/modelviewer/ModelViewerScene.js`
 ```javascript
 import * as THREE from 'three';
@@ -3053,77 +3080,6 @@ export class ModelViewerScene extends xb.Script {
 }
 
 ```
-File: `samples/modelviewer/index.html`
-```html
-<!doctype html>
-<html lang="en">
-  <head>
-    <title>Model Viewer | XR Blocks</title>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no"
-    />
-    
-    
-    
-    <link type="text/css" rel="stylesheet" href="../main.css" />
-    <script>
-      window.litDisableBundleWarning = true;
-    </script>
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
-          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
-          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
-          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
-          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
-          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
-          "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/",
-          "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/0.1.10/spark.module.js"
-        }
-      }
-    </script>
-  </head>
-
-  <body>
-    <div class="background-image" style="background-color: #000000"></div>
-    <script type="module" src="main.js"></script>
-  </body>
-</html>
-
-```
-File: `samples/modelviewer/main.js`
-```javascript
-import 'xrblocks/addons/simulator/SimulatorAddons.js';
-
-import {html} from 'lit';
-import * as xb from 'xrblocks';
-
-import {ModelViewerScene} from './ModelViewerScene.js';
-
-document.addEventListener('DOMContentLoaded', async () => {
-  const modelViewerScene = new ModelViewerScene();
-  xb.add(modelViewerScene);
-  const options = new xb.Options();
-  options.simulator.instructions.customInstructions = [
-    {
-      header: html`<h1>Model Viewer</h1>`,
-      videoSrc: 'model_viewer_simulator_usage.webm',
-      description: html`Click or pinch the object to rotate. Drag the platform
-      to move.`,
-    },
-  ];
-  options.setAppTitle('Model Viewer');
-  await xb.init(options);
-});
-
-```
 
 
 ### Sample: paint
@@ -3133,12 +3089,12 @@ File: `samples/paint/index.html`
 <html lang="en">
   <head>
     <title>Paint | XR Blocks</title>
-    <meta charset="utf-8" />
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <link type="text/css" rel="stylesheet" href="../main.css" />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -3271,15 +3227,13 @@ File: `samples/reticle/index.html`
 <html lang="en">
   <head>
     <title>Reticle | XR Blocks</title>
-    <meta charset="utf-8" />
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
-    <link type="text/css" rel="stylesheet" href="../main.css" />
+
+<link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script type="importmap">
       {
         "imports": {
@@ -3373,15 +3327,13 @@ File: `samples/sound/index.html`
 <html lang="en">
   <head>
     <title>Sound Sample | XR Blocks</title>
-    <meta charset="utf-8" />
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
-    <link type="text/css" rel="stylesheet" href="../main.css" />
+
+<link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script type="importmap">
       {
         "imports": {
@@ -3770,12 +3722,12 @@ File: `samples/ui/index.html`
 <html lang="en">
   <head>
     <title>UI Panels Showcase | XR Blocks</title>
-    <meta charset="utf-8" />
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script type="importmap">
       {
         "imports": {
@@ -4265,6 +4217,75 @@ File: `samples/ui/index.html`
 
 
 ### Demo: balloonpop
+File: `demos/balloonpop/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>XR Blocks: Balloon Pop (v5.1 - Stable Fallback)</title>
+    
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
+          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
+          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
+          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
+          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
+          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
+          "lit/": "https://esm.run/lit@3/",
+          "@dimforge/rapier3d-simd-compat": "https://cdn.skypack.dev/@dimforge/rapier3d-simd-compat@0.17.0",
+          "xrblocks": "https://cdn.jsdelivr.net/gh/google/xrblocks@build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/gh/google/xrblocks@build/addons/"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <script type="module">
+import * as xb from 'xrblocks';
+import RAPIER from '@dimforge/rapier3d-simd-compat';
+import 'xrblocks/addons/simulator/SimulatorAddons.js';
+import {BalloonGame, GROUP_WORLD} from './BalloonPop.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+  const o = new xb.Options();
+  o.enableUI();
+  o.physics.RAPIER = RAPIER;
+  o.physics.useEventQueue = true;
+  o.physics.worldStep = true;
+  o.hands.enabled = true;
+  o.simulator.defaultMode = xb.SimulatorMode.POSE;
+
+  // START DISABLED to avoid Simulator Camera-Clone Crash
+  o.depth.enabled = false;
+  if (o.depth.depthMesh) {
+    o.depth.depthMesh.enabled = true;
+    o.depth.depthMesh.physicsEnabled = true;
+    o.depth.depthMesh.collisionGroups = GROUP_WORLD;
+    o.depth.depthMesh.colliderUpdateFps = 5;
+  }
+
+  xb.add(new BalloonGame());
+  xb.init(o);
+});
+
+</script>
+  </body>
+</html>
+
+```
 File: `demos/balloonpop/BalloonPop.js`
 ```javascript
 import * as THREE from 'three';
@@ -4866,26 +4887,30 @@ export function playWhooshSound() {
 }
 
 ```
-File: `demos/balloonpop/index.html`
+
+
+### Demo: ballpit
+File: `demos/ballpit/index.html`
 ```html
 <!doctype html>
 <html lang="en">
   <head>
-    <title>XR Blocks: Balloon Pop (v5.1 - Stable Fallback)</title>
-    <meta charset="utf-8" />
+    <title>Ballpit</title>
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <link type="text/css" rel="stylesheet" href="../demo.css" />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
     <script type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+          "@dimforge/rapier3d-simd-compat": "https://cdn.jsdelivr.net/npm/@dimforge/rapier3d-simd-compat@0.19.2/rapier.mjs",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
           "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
@@ -4893,53 +4918,62 @@ File: `demos/balloonpop/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "@dimforge/rapier3d-simd-compat": "https://cdn.skypack.dev/@dimforge/rapier3d-simd-compat@0.17.0",
-          "xrblocks": "https://cdn.jsdelivr.net/gh/google/xrblocks@build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/gh/google/xrblocks@build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
         }
       }
     </script>
   </head>
 
   <body>
-    <script type="module" src="main.js"></script>
+    <div
+      class="background-image"
+      style="background-image: url('textures/background.webp')"
+    ></div>
+    <script type="module">
+import 'xrblocks/addons/simulator/SimulatorAddons.js';
+
+import RAPIER from '@dimforge/rapier3d-simd-compat';
+import * as xb from 'xrblocks';
+
+import {BallPit} from './BallPit.js';
+
+const depthMeshColliderUpdateFps = xb.getUrlParamFloat(
+  'depthMeshColliderUpdateFps',
+  5
+);
+
+const useSceneMesh = xb.getUrlParamBool('scenemesh', false);
+
+const options = new xb.Options();
+if (useSceneMesh) {
+  options.world.enableMeshDetection();
+} else {
+  options.depth = new xb.DepthOptions(xb.xrDepthMeshPhysicsOptions);
+  options.depth.depthMesh.colliderUpdateFps = depthMeshColliderUpdateFps;
+}
+options.xrButton = {
+  ...options.xrButton,
+  startText: '<i id="xrlogo"></i> LET THE FUN BEGIN',
+  endText: '<i id="xrlogo"></i> MISSION COMPLETE',
+};
+options.physics.RAPIER = RAPIER;
+
+// Initializes the scene, camera, xrRenderer, controls, and XR button.
+async function start() {
+  xb.add(new BallPit());
+  await xb.init(options);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  start();
+});
+
+</script>
   </body>
 </html>
 
 ```
-File: `demos/balloonpop/main.js`
-```javascript
-import * as xb from 'xrblocks';
-import RAPIER from '@dimforge/rapier3d-simd-compat';
-import 'xrblocks/addons/simulator/SimulatorAddons.js';
-import {BalloonGame, GROUP_WORLD} from './BalloonPop.js';
-
-document.addEventListener('DOMContentLoaded', () => {
-  const o = new xb.Options();
-  o.enableUI();
-  o.physics.RAPIER = RAPIER;
-  o.physics.useEventQueue = true;
-  o.physics.worldStep = true;
-  o.hands.enabled = true;
-  o.simulator.defaultMode = xb.SimulatorMode.POSE;
-
-  // START DISABLED to avoid Simulator Camera-Clone Crash
-  o.depth.enabled = false;
-  if (o.depth.depthMesh) {
-    o.depth.depthMesh.enabled = true;
-    o.depth.depthMesh.physicsEnabled = true;
-    o.depth.depthMesh.collisionGroups = GROUP_WORLD;
-    o.depth.depthMesh.colliderUpdateFps = 5;
-  }
-
-  xb.add(new BalloonGame());
-  xb.init(o);
-});
-
-```
-
-
-### Demo: ballpit
 File: `demos/ballpit/BallPit.js`
 ```javascript
 import * as THREE from 'three';
@@ -5260,25 +5294,27 @@ export class BallShooter extends xb.Script {
 }
 
 ```
-File: `demos/ballpit/index.html`
+
+
+### Demo: gemini-icebreakers
+File: `demos/gemini-icebreakers/index.html`
 ```html
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Ballpit</title>
-    <meta charset="utf-8" />
+    <title>Gemini Icebreakers</title>
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <link type="text/css" rel="stylesheet" href="../demo.css" />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
     <script type="importmap">
       {
         "imports": {
-          "@dimforge/rapier3d-simd-compat": "https://cdn.jsdelivr.net/npm/@dimforge/rapier3d-simd-compat@0.19.2/rapier.mjs",
           "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
           "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
@@ -5289,7 +5325,8 @@ File: `demos/ballpit/index.html`
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
           "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/",
+          "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
     </script>
@@ -5297,47 +5334,27 @@ File: `demos/ballpit/index.html`
 
   <body>
     <div
+      id="background-image"
       class="background-image"
       style="background-image: url('textures/background.webp')"
     ></div>
-    <script type="module" src="main.js"></script>
-  </body>
-</html>
-
-```
-File: `demos/ballpit/main.js`
-```javascript
+    <script type="module">
 import 'xrblocks/addons/simulator/SimulatorAddons.js';
 
-import RAPIER from '@dimforge/rapier3d-simd-compat';
 import * as xb from 'xrblocks';
 
-import {BallPit} from './BallPit.js';
+import {GeminiIcebreakers} from './GeminiIcebreakers.js';
 
-const depthMeshColliderUpdateFps = xb.getUrlParamFloat(
-  'depthMeshColliderUpdateFps',
-  5
-);
+const options = new xb.Options({
+  antialias: true,
+  reticles: {enabled: true},
+  visualizeRays: true,
+});
+options.enableAI();
+options.enableCamera();
 
-const useSceneMesh = xb.getUrlParamBool('scenemesh', false);
-
-const options = new xb.Options();
-if (useSceneMesh) {
-  options.world.enableMeshDetection();
-} else {
-  options.depth = new xb.DepthOptions(xb.xrDepthMeshPhysicsOptions);
-  options.depth.depthMesh.colliderUpdateFps = depthMeshColliderUpdateFps;
-}
-options.xrButton = {
-  ...options.xrButton,
-  startText: '<i id="xrlogo"></i> LET THE FUN BEGIN',
-  endText: '<i id="xrlogo"></i> MISSION COMPLETE',
-};
-options.physics.RAPIER = RAPIER;
-
-// Initializes the scene, camera, xrRenderer, controls, and XR button.
 async function start() {
-  xb.add(new BallPit());
+  xb.add(new GeminiIcebreakers());
   await xb.init(options);
 }
 
@@ -5345,10 +5362,11 @@ document.addEventListener('DOMContentLoaded', function () {
   start();
 });
 
+</script>
+  </body>
+</html>
+
 ```
-
-
-### Demo: gemini-icebreakers
 File: `demos/gemini-icebreakers/EarthAnimation.js`
 ```javascript
 /**
@@ -5841,78 +5859,6 @@ export class TranscriptionManager {
 }
 
 ```
-File: `demos/gemini-icebreakers/index.html`
-```html
-<!doctype html>
-<html lang="en">
-  <head>
-    <title>Gemini Icebreakers</title>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no"
-    />
-    <link type="text/css" rel="stylesheet" href="../demo.css" />
-    <script>
-      window.litDisableBundleWarning = true;
-    </script>
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
-          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
-          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
-          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
-          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
-          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
-          "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/",
-          "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
-        }
-      }
-    </script>
-  </head>
-
-  <body>
-    <div
-      id="background-image"
-      class="background-image"
-      style="background-image: url('textures/background.webp')"
-    ></div>
-    <script type="module" src="main.js"></script>
-  </body>
-</html>
-
-```
-File: `demos/gemini-icebreakers/main.js`
-```javascript
-import 'xrblocks/addons/simulator/SimulatorAddons.js';
-
-import * as xb from 'xrblocks';
-
-import {GeminiIcebreakers} from './GeminiIcebreakers.js';
-
-const options = new xb.Options({
-  antialias: true,
-  reticles: {enabled: true},
-  visualizeRays: true,
-});
-options.enableAI();
-options.enableCamera();
-
-async function start() {
-  xb.add(new GeminiIcebreakers());
-  await xb.init(options);
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  start();
-});
-
-```
 File: `demos/gemini-icebreakers/materials/LinearGradientMaterial.js`
 ```javascript
 import * as THREE from 'three';
@@ -5978,6 +5924,88 @@ export class LinearGradientMaterial extends THREE.ShaderMaterial {
 
 
 ### Demo: occlusion
+File: `demos/occlusion/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Occlusion</title>
+    
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+
+<link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
+          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
+          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
+          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
+          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
+          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
+          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
+          "lit/": "https://esm.run/lit@3/",
+          "@material/web/": "https://esm.run/@material/web/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+        }
+      }
+    </script>
+    <script type="module">
+      import '@material/web/all.js';
+      import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
+
+      document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
+    </script>
+  </head>
+
+  <body>
+    <div
+      class="background-image"
+      style="background-image: url('textures/background.webp')"
+    ></div>
+    <script type="module">
+import * as xb from 'xrblocks';
+
+import {OcclusionScene} from './OcclusionScene.js';
+
+const options = new xb.Options();
+options.reticles.enabled = true;
+options.depth = new xb.DepthOptions(xb.xrDepthMeshOptions);
+options.depth.depthMesh.updateFullResolutionGeometry = true;
+options.depth.depthMesh.renderShadow = true;
+options.depth.depthTexture.enabled = true;
+options.depth.occlusion.enabled = true;
+options.xrButton.startText = '<i id="xrlogo"></i> BRING IT TO LIFE';
+options.xrButton.endText = '<i id="xrlogo"></i> MISSION COMPLETE';
+
+async function start() {
+  const occlusion = new OcclusionScene();
+  await xb.init(options);
+  xb.add(occlusion);
+
+  window.addEventListener(
+    'pointerdown',
+    occlusion.onPointerDown.bind(occlusion)
+  );
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  start();
+});
+
+</script>
+  </body>
+</html>
+
+```
 File: `demos/occlusion/DepthMeshClone.js`
 ```javascript
 import * as THREE from 'three';
@@ -6168,21 +6196,23 @@ export const ANIMALS_DATA = [
 ];
 
 ```
-File: `demos/occlusion/index.html`
+
+
+### Demo: rain
+File: `demos/rain/index.html`
 ```html
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Occlusion</title>
-    <meta charset="utf-8" />
+    <title>Rain</title>
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
-    <link type="text/css" rel="stylesheet" href="../demo.css" />
+
+<link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -6198,17 +6228,10 @@ File: `demos/occlusion/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "@material/web/": "https://esm.run/@material/web/",
           "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
           "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
         }
       }
-    </script>
-    <script type="module">
-      import '@material/web/all.js';
-      import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
-
-      document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
     </script>
   </head>
 
@@ -6217,46 +6240,62 @@ File: `demos/occlusion/index.html`
       class="background-image"
       style="background-image: url('textures/background.webp')"
     ></div>
-    <script type="module" src="main.js"></script>
-  </body>
-</html>
 
-```
-File: `demos/occlusion/main.js`
-```javascript
+    <div
+      id="startButton"
+      style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        z-index: 1000;
+      "
+    >
+      <p style="font-size: 24px">Click to Start Rain Experience</p>
+    </div>
+
+    <script type="module">
+import 'xrblocks/addons/simulator/SimulatorAddons.js';
+
 import * as xb from 'xrblocks';
 
-import {OcclusionScene} from './OcclusionScene.js';
+import {RainScene} from './RainScene.js';
+
+const depthMeshColliderUpdateFps = xb.getUrlParamFloat(
+  'depthMeshColliderUpdateFps',
+  30
+);
 
 const options = new xb.Options();
-options.reticles.enabled = true;
-options.depth = new xb.DepthOptions(xb.xrDepthMeshOptions);
-options.depth.depthMesh.updateFullResolutionGeometry = true;
-options.depth.depthMesh.renderShadow = true;
-options.depth.depthTexture.enabled = true;
-options.depth.occlusion.enabled = true;
-options.xrButton.startText = '<i id="xrlogo"></i> BRING IT TO LIFE';
+options.reticles.enabled = false;
+options.depth = new xb.DepthOptions(xb.xrDepthMeshPhysicsOptions);
+options.depth.depthMesh.colliderUpdateFps = depthMeshColliderUpdateFps;
+options.xrButton.startText = '<i id="xrlogo"></i> LET IT RAIN';
 options.xrButton.endText = '<i id="xrlogo"></i> MISSION COMPLETE';
 
+// Initializes the scene, camera, xrRenderer, controls, and XR button.
 async function start() {
-  const occlusion = new OcclusionScene();
+  const rainScene = new RainScene();
+  xb.add(rainScene);
   await xb.init(options);
-  xb.add(occlusion);
-
-  window.addEventListener(
-    'pointerdown',
-    occlusion.onPointerDown.bind(occlusion)
-  );
 }
 
 document.addEventListener('DOMContentLoaded', function () {
   start();
 });
 
+</script>
+  </body>
+</html>
+
 ```
-
-
-### Demo: rain
 File: `demos/rain/RainParticles.js`
 ```javascript
 import * as THREE from 'three';
@@ -6818,22 +6857,21 @@ export class RainScene extends xb.Script {
 }
 
 ```
-File: `demos/rain/index.html`
+
+
+### Demo: screenwiper
+File: `demos/screenwiper/index.html`
 ```html
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Rain</title>
-    <meta charset="utf-8" />
+    <title>Screen Wiper</title>
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    
-    
-    
-    <link type="text/css" rel="stylesheet" href="../demo.css" />
-
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -6857,71 +6895,39 @@ File: `demos/rain/index.html`
   </head>
 
   <body>
-    <div
-      class="background-image"
-      style="background-image: url('textures/background.webp')"
-    ></div>
+    <audio loop id="music" preload="auto" style="display: none">
+      <source
+        src="https://cdn.jsdelivr.net/gh/xrblocks/assets@main/musicLibrary/BackgroundMusic4.mp3"
+        type="audio/mpeg"
+      />
+    </audio>
 
-    <div
-      id="startButton"
-      style="
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: black;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        z-index: 1000;
-      "
-    >
-      <p style="font-size: 24px">Click to Start Rain Experience</p>
-    </div>
-
-    <script type="module" src="main.js?version=80"></script>
-  </body>
-</html>
-
-```
-File: `demos/rain/main.js`
-```javascript
+    <script type="module">
 import 'xrblocks/addons/simulator/SimulatorAddons.js';
 
 import * as xb from 'xrblocks';
 
-import {RainScene} from './RainScene.js';
-
-const depthMeshColliderUpdateFps = xb.getUrlParamFloat(
-  'depthMeshColliderUpdateFps',
-  30
-);
+import {ScreenWiperScene} from './ScreenWiperScene.js';
 
 const options = new xb.Options();
-options.reticles.enabled = false;
-options.depth = new xb.DepthOptions(xb.xrDepthMeshPhysicsOptions);
-options.depth.depthMesh.colliderUpdateFps = depthMeshColliderUpdateFps;
-options.xrButton.startText = '<i id="xrlogo"></i> LET IT RAIN';
-options.xrButton.endText = '<i id="xrlogo"></i> MISSION COMPLETE';
+options.antialias = true;
+options.reticles.enabled = true;
+options.visualizeRays = true;
 
-// Initializes the scene, camera, xrRenderer, controls, and XR button.
-async function start() {
-  const rainScene = new RainScene();
-  xb.add(rainScene);
-  await xb.init(options);
+function start() {
+  xb.add(new ScreenWiperScene());
+  xb.init(options);
 }
 
 document.addEventListener('DOMContentLoaded', function () {
   start();
 });
 
+</script>
+  </body>
+</html>
+
 ```
-
-
-### Demo: screenwiper
 File: `demos/screenwiper/ScreenWiper.js`
 ```javascript
 import * as THREE from 'three';
@@ -7224,76 +7230,6 @@ export const ClearShader = {
 };
 
 ```
-File: `demos/screenwiper/index.html`
-```html
-<!doctype html>
-<html lang="en">
-  <head>
-    <title>Screen Wiper</title>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no"
-    />
-    <link type="text/css" rel="stylesheet" href="../demo.css" />
-    <script>
-      window.litDisableBundleWarning = true;
-    </script>
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
-          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
-          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
-          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
-          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
-          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
-          "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
-        }
-      }
-    </script>
-  </head>
-
-  <body>
-    <audio loop id="music" preload="auto" style="display: none">
-      <source
-        src="https://cdn.jsdelivr.net/gh/xrblocks/assets@main/musicLibrary/BackgroundMusic4.mp3"
-        type="audio/mpeg"
-      />
-    </audio>
-
-    <script type="module" src="main.js"></script>
-  </body>
-</html>
-
-```
-File: `demos/screenwiper/main.js`
-```javascript
-import 'xrblocks/addons/simulator/SimulatorAddons.js';
-
-import * as xb from 'xrblocks';
-
-import {ScreenWiperScene} from './ScreenWiperScene.js';
-
-const options = new xb.Options();
-options.antialias = true;
-options.reticles.enabled = true;
-options.visualizeRays = true;
-
-function start() {
-  xb.add(new ScreenWiperScene());
-  xb.init(options);
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  start();
-});
-
-```
 File: `demos/screenwiper/screenwipershader.js`
 ```javascript
 import * as THREE from 'three';
@@ -7396,6 +7332,87 @@ export const ScreenWiperShader = {
 
 
 ### Demo: splash
+File: `demos/splash/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Splash</title>
+    
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+
+<link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "@dimforge/rapier3d-simd-compat": "https://cdn.jsdelivr.net/npm/@dimforge/rapier3d-simd-compat@0.19.2/rapier.mjs",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
+          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
+          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
+          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
+          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
+          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
+          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
+          "lit/": "https://esm.run/lit@3/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <div
+      class="background-image"
+      style="background-image: url('textures/background.webp')"
+    ></div>
+    <script type="module">
+import 'xrblocks/addons/simulator/SimulatorAddons.js';
+
+import RAPIER from '@dimforge/rapier3d-simd-compat';
+import * as xb from 'xrblocks';
+
+import {SplashScript} from './SplashScript.js';
+
+const depthMeshColliderUpdateFps = xb.getUrlParamFloat(
+  'depthMeshColliderUpdateFps',
+  30
+);
+const splashScript = new SplashScript();
+
+let options = new xb.Options();
+options.depth = new xb.DepthOptions(xb.xrDepthMeshPhysicsOptions);
+options.depth.depthMesh.colliderUpdateFps = depthMeshColliderUpdateFps;
+options.xrButton = {
+  ...options.xrButton,
+  startText: '<i id="xrlogo"></i> MAKE A MESS',
+  endText: '<i id="xrlogo"></i> MISSION COMPLETE',
+};
+options.physics.RAPIER = RAPIER;
+options.physics.useEventQueue = true;
+
+// Initializes the scene, camera, xrRenderer, controls, and XR button.
+async function start() {
+  xb.add(splashScript);
+  await xb.init(options);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  start();
+});
+
+</script>
+  </body>
+</html>
+
+```
 File: `demos/splash/PaintSplash.js`
 ```javascript
 import * as THREE from 'three';
@@ -7777,91 +7794,6 @@ export class SplashScript extends xb.Script {
 }
 
 ```
-File: `demos/splash/index.html`
-```html
-<!doctype html>
-<html lang="en">
-  <head>
-    <title>Splash</title>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no"
-    />
-    
-    
-    
-    <link type="text/css" rel="stylesheet" href="../demo.css" />
-    <script>
-      window.litDisableBundleWarning = true;
-    </script>
-    <script type="importmap">
-      {
-        "imports": {
-          "@dimforge/rapier3d-simd-compat": "https://cdn.jsdelivr.net/npm/@dimforge/rapier3d-simd-compat@0.19.2/rapier.mjs",
-          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
-          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
-          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
-          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
-          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
-          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
-          "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
-        }
-      }
-    </script>
-  </head>
-
-  <body>
-    <div
-      class="background-image"
-      style="background-image: url('textures/background.webp')"
-    ></div>
-    <script type="module" src="main.js"></script>
-  </body>
-</html>
-
-```
-File: `demos/splash/main.js`
-```javascript
-import 'xrblocks/addons/simulator/SimulatorAddons.js';
-
-import RAPIER from '@dimforge/rapier3d-simd-compat';
-import * as xb from 'xrblocks';
-
-import {SplashScript} from './SplashScript.js';
-
-const depthMeshColliderUpdateFps = xb.getUrlParamFloat(
-  'depthMeshColliderUpdateFps',
-  30
-);
-const splashScript = new SplashScript();
-
-let options = new xb.Options();
-options.depth = new xb.DepthOptions(xb.xrDepthMeshPhysicsOptions);
-options.depth.depthMesh.colliderUpdateFps = depthMeshColliderUpdateFps;
-options.xrButton = {
-  ...options.xrButton,
-  startText: '<i id="xrlogo"></i> MAKE A MESS',
-  endText: '<i id="xrlogo"></i> MISSION COMPLETE',
-};
-options.physics.RAPIER = RAPIER;
-options.physics.useEventQueue = true;
-
-// Initializes the scene, camera, xrRenderer, controls, and XR button.
-async function start() {
-  xb.add(splashScript);
-  await xb.init(options);
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  start();
-});
-
-```
 
 
 ### Demo: webcam_gestures
@@ -7871,13 +7803,13 @@ File: `demos/webcam_gestures/index.html`
 <html lang="en">
   <head>
     <title>Webcam Gestures | XR Blocks</title>
-    <meta charset="utf-8" />
+    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
-    <link type="text/css" rel="stylesheet" href="./styles.css" />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -7907,7 +7839,13 @@ File: `demos/webcam_gestures/index.html`
       <canvas id="output-canvas"></canvas>
       <div id="gesture-label">Loading...</div>
     </div>
-    <script type="module">
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
+
+```
+File: `demos/webcam_gestures/main.js`
+```javascript
 import 'xrblocks/addons/simulator/SimulatorAddons.js';
 import * as xb from 'xrblocks';
 import {
@@ -8119,14 +8057,84 @@ document.addEventListener('DOMContentLoaded', () => {
   xb.init(options);
 });
 
+```
+
+
+### Demo: xremoji
+File: `demos/xremoji/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Meet emoji</title>
+    
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+
+<link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
+          "lit/": "https://esm.run/lit@3/",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
+          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
+          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
+          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
+          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
+          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
+          "@tensorflow/tfjs-core": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core/+esm",
+          "@tensorflow/tfjs": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/+esm",
+          "@tensorflow/tfjs-backend-webgpu": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgpu/+esm",
+          "@litertjs/core": "https://unpkg.com/@litertjs/core@0.2.1",
+          "@litertjs/tfjs-interop": "https://unpkg.com/@litertjs/tfjs-interop@1.0.1",
+          "@litertjs/wasm-utils": "https://unpkg.com/@litertjs/wasm-utils@0.2.1",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <script type="module">
+import 'xrblocks/addons/simulator/SimulatorAddons.js';
+
+import * as xb from 'xrblocks';
+
+import {MeetEmoji} from './MeetEmoji.js';
+
+const options = new xb.Options({
+  antialias: true,
+  reticles: {enabled: true},
+  visualizeRays: false,
+  hands: {enabled: true, visualization: true},
+  simulator: {defaultMode: xb.SimulatorMode.POSE},
+});
+
+async function start() {
+  xb.add(new MeetEmoji());
+  options.setAppTitle('XR Emoji');
+  await xb.init(options);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  setTimeout(function () {
+    start();
+  }, 200);
+});
+
 </script>
   </body>
 </html>
 
 ```
-
-
-### Demo: xremoji
 File: `demos/xremoji/AnimationHandler.js`
 ```javascript
 import * as THREE from 'three';
@@ -9038,29 +9046,25 @@ export class MeetEmoji extends xb.Script {
 }
 
 ```
-File: `demos/xremoji/index.html`
+
+
+### Demo: xrpoet
+File: `demos/xrpoet/index.html`
 ```html
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Meet emoji</title>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no"
-    />
     
-    
-    
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Gemini Poem Generator</title>
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
     <script type="importmap">
       {
         "imports": {
-          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
-          "lit/": "https://esm.run/lit@3/",
           "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
           "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
@@ -9068,57 +9072,48 @@ File: `demos/xremoji/index.html`
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
           "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "@tensorflow/tfjs-core": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core/+esm",
-          "@tensorflow/tfjs": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/+esm",
-          "@tensorflow/tfjs-backend-webgpu": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgpu/+esm",
-          "@litertjs/core": "https://unpkg.com/@litertjs/core@0.2.1",
-          "@litertjs/tfjs-interop": "https://unpkg.com/@litertjs/tfjs-interop@1.0.1",
-          "@litertjs/wasm-utils": "https://unpkg.com/@litertjs/wasm-utils@0.2.1",
+          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
+          "lit/": "https://esm.run/lit@3/",
           "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/",
+          "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
     </script>
   </head>
 
   <body>
-    <script type="module" src="main.js"></script>
-  </body>
-</html>
-
-```
-File: `demos/xremoji/main.js`
-```javascript
+    <script type="module">
 import 'xrblocks/addons/simulator/SimulatorAddons.js';
 
 import * as xb from 'xrblocks';
 
-import {MeetEmoji} from './MeetEmoji.js';
+import {PoemGenerator} from './PoemGenerator.js';
 
-const options = new xb.Options({
-  antialias: true,
-  reticles: {enabled: true},
-  visualizeRays: false,
-  hands: {enabled: true, visualization: true},
-  simulator: {defaultMode: xb.SimulatorMode.POSE},
-});
+const options = new xb.Options();
+options.enableUI();
+options.enableAI();
+options.enableCamera();
+options.setAppTitle('XR Poet');
 
-async function start() {
-  xb.add(new MeetEmoji());
-  options.setAppTitle('XR Emoji');
-  await xb.init(options);
+function start() {
+  try {
+    xb.init(options);
+    xb.add(new PoemGenerator());
+  } catch (error) {
+    console.error('Failed to initialize XR app:', error);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  setTimeout(function () {
-    start();
-  }, 200);
+  start();
 });
 
+</script>
+  </body>
+</html>
+
 ```
-
-
-### Demo: xrpoet
 File: `demos/xrpoet/PoemGenerator.js`
 ```javascript
 import * as xb from 'xrblocks';
@@ -9213,80 +9208,11 @@ export class PoemGenerator extends xb.Script {
 }
 
 ```
-File: `demos/xrpoet/index.html`
-```html
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    
-    
-    <title>Gemini Poem Generator</title>
-    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
-    <script>
-      window.litDisableBundleWarning = true;
-    </script>
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
-          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
-          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
-          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
-          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
-          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
-          "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/",
-          "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
-        }
-      }
-    </script>
-  </head>
-
-  <body>
-    <script type="module" src="main.js"></script>
-  </body>
-</html>
-
-```
-File: `demos/xrpoet/main.js`
-```javascript
-import 'xrblocks/addons/simulator/SimulatorAddons.js';
-
-import * as xb from 'xrblocks';
-
-import {PoemGenerator} from './PoemGenerator.js';
-
-const options = new xb.Options();
-options.enableUI();
-options.enableAI();
-options.enableCamera();
-options.setAppTitle('XR Poet');
-
-function start() {
-  try {
-    xb.init(options);
-    xb.add(new PoemGenerator());
-  } catch (error) {
-    console.error('Failed to initialize XR app:', error);
-  }
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  start();
-});
-
-```
 
 --------------------------------------------------------------------------------
 🔴 FINAL CHECK: IMPORT MAP AND xb.Script
 Before finishing the response, DOUBLE CHECK the `<script type="importmap">`.
-You **MUST** include ALL the imports defined in Rule #1 (SDK Integration) and Rule #2.
+You **MUST** include ALL the imports defined in Engineering Guidelines #2.
 Ensure `three`, `three/addons/`, `troika-three-text`, `lit`, `xrblocks`, **`xrblocks/addons/`** are present and point to the URLs specified above.
 Ensure to write everything as XR Blocks Script as xb.script.
 --------------------------------------------------------------------------------
