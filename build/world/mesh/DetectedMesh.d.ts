@@ -7,7 +7,7 @@ export declare class DetectedMesh extends THREE.Mesh {
     private blendedWorld?;
     private lastChangedTime;
     semanticLabel?: string;
-    constructor(xrMesh: XRMesh, material: THREE.Material);
+    constructor(mesh: XRMesh, material: THREE.Material);
     initRapierPhysics(RAPIER: typeof RAPIER_NS, blendedWorld: RAPIER_NS.World): void;
     updateVertices(mesh: XRMesh): void;
 }

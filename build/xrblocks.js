@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.9.0
- * @commitid a54974b
- * @builddate 2026-02-02T23:03:10.619Z
+ * @commitid da5b429
+ * @builddate 2026-02-03T19:05:55.920Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -10827,25 +10827,16 @@ class PlaneDetector extends Script {
     }
 }
 
-function toFlatArray(array) {
-    if (!Array.isArray(array))
-        return array;
-    const result = new Float32Array(array.reduce((sum, arr) => sum + arr.length, 0));
-    array.reduce((offset, arr) => (result.set(arr, offset), offset + arr.length), 0);
-    return result;
-}
 class DetectedMesh extends THREE.Mesh {
-    constructor(xrMesh, material) {
+    constructor(mesh, material) {
         const geometry = new THREE.BufferGeometry();
-        const vertices = toFlatArray(xrMesh.vertices);
-        const indices = xrMesh.indices;
-        geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-        geometry.setIndex(new THREE.BufferAttribute(indices, 1));
+        geometry.setAttribute('position', new THREE.BufferAttribute(mesh.vertices, 3));
+        geometry.setIndex(new THREE.BufferAttribute(mesh.indices, 1));
         geometry.computeVertexNormals();
         super(geometry, material);
         this.lastChangedTime = 0;
-        this.lastChangedTime = xrMesh.lastChangedTime;
-        this.semanticLabel = xrMesh.semanticLabel;
+        this.lastChangedTime = mesh.lastChangedTime;
+        this.semanticLabel = mesh.semanticLabel;
     }
     initRapierPhysics(RAPIER, blendedWorld) {
         this.RAPIER = RAPIER;
@@ -10864,17 +10855,15 @@ class DetectedMesh extends THREE.Mesh {
             return;
         this.lastChangedTime = mesh.lastChangedTime;
         const geometry = new THREE.BufferGeometry();
-        const vertices = toFlatArray(mesh.vertices);
-        const indices = mesh.indices;
-        geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-        geometry.setIndex(new THREE.BufferAttribute(indices, 1));
+        geometry.setAttribute('position', new THREE.BufferAttribute(mesh.vertices, 3));
+        geometry.setIndex(new THREE.BufferAttribute(mesh.indices, 1));
         geometry.computeVertexNormals();
         this.geometry.dispose();
         this.geometry = geometry;
         if (this.RAPIER && this.collider) {
             const RAPIER = this.RAPIER;
             this.blendedWorld.removeCollider(this.collider, false);
-            const colliderDesc = RAPIER.ColliderDesc.trimesh(vertices, indices);
+            const colliderDesc = RAPIER.ColliderDesc.trimesh(mesh.vertices, mesh.indices);
             this.collider = this.blendedWorld.createCollider(colliderDesc, this.rigidBody);
         }
     }
