@@ -111,7 +111,6 @@ export class BallShooter extends xb.Script {
   }
 
   physicsStep(now = performance.now()) {
-    const camera = xb.core.camera;
     for (let i = 0; i < this.spheres.length; i++) {
       const sphere = this.spheres[i];
       const body = this.rigidBodies[i];
@@ -124,10 +123,10 @@ export class BallShooter extends xb.Script {
         // expiring the ball.
         const viewSpacePosition = this.viewSpacePosition
           .copy(position)
-          .applyMatrix4(camera.matrixWorldInverse);
+          .applyMatrix4(xb.depth.depthViewMatrices[0]);
         const clipSpacePosition = this.clipSpacePosition
           .copy(viewSpacePosition)
-          .applyMatrix4(camera.projectionMatrix);
+          .applyMatrix4(xb.depth.depthProjectionMatrices[0]);
         const ballIsInView =
           -1.0 <= clipSpacePosition.x &&
           clipSpacePosition.x <= 1.0 &&

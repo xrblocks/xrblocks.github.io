@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.9.0
- * @commitid 2132916
- * @builddate 2026-02-04T18:46:09.095Z
+ * @commitid 4211a48
+ * @builddate 2026-02-05T20:49:14.230Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -3108,7 +3108,7 @@ class Depth {
         const depth = this.getDepth(u, v);
         target.set(2.0 * (u - 0.5), 2.0 * (v - 0.5), -1);
         target.applyMatrix4(this.depthProjectionInverseMatrices[0]);
-        target.multiplyScalar((target.z - depth) / target.z);
+        target.multiplyScalar(-depth / target.z);
         return target;
     }
     /**
@@ -3161,19 +3161,11 @@ class Depth {
         this.cpuDepthData[viewId] = depthData;
         this.updateDepthMatrices(depthData, viewId);
         // Updates Depth Array.
-        if (this.depthArray[viewId] == null) {
-            this.depthArray[viewId] = this.options.useFloat32
-                ? new Float32Array(depthData.data)
-                : new Uint16Array(depthData.data);
-            this.width = depthData.width;
-            this.height = depthData.height;
-        }
-        else {
-            // Copies the data from an ArrayBuffer to the existing TypedArray.
-            this.depthArray[viewId].set(this.options.useFloat32
-                ? new Float32Array(depthData.data)
-                : new Uint16Array(depthData.data));
-        }
+        this.depthArray[viewId] = this.options.useFloat32
+            ? new Float32Array(depthData.data)
+            : new Uint16Array(depthData.data);
+        this.width = depthData.width;
+        this.height = depthData.height;
         // Updates Depth Texture.
         if (this.options.depthTexture.enabled && this.depthTextures) {
             this.depthTextures.updateData(depthData, viewId);
