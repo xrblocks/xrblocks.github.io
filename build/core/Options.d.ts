@@ -182,6 +182,13 @@ export declare class Options {
      */
     enableXRTransitions(): this;
     /**
+     * Enables input from hands and controllers.
+     * Note that this is enabled by default and can also be changed at runtime with
+     * xb.core.input.enableControllers() and xb.core.input.disableControllers().
+     * @returns The instance for chaining.
+     */
+    enableControllers(): this;
+    /**
      * Sets the title of the app to be displayed above the XR button.
      * @param title - The title of the app.
      * @returns The instance for chaining.

@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.9.0
- * @commitid 42f0bd5
- * @builddate 2026-02-05T20:58:32.539Z
+ * @commitid dc8bb72
+ * @builddate 2026-02-05T22:22:05.276Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -5384,6 +5384,7 @@ class Input {
      */
     init({ scene, options, renderer, }) {
         scene.add(this.activeControllers);
+        this.controllersEnabled = options.controllers.enabled;
         this.options = options;
         this.scene = scene;
         const controllers = this.controllers;
@@ -7715,6 +7716,16 @@ class Options {
      */
     enableXRTransitions() {
         this.transition.enabled = true;
+        return this;
+    }
+    /**
+     * Enables input from hands and controllers.
+     * Note that this is enabled by default and can also be changed at runtime with
+     * xb.core.input.enableControllers() and xb.core.input.disableControllers().
+     * @returns The instance for chaining.
+     */
+    enableControllers() {
+        this.controllers.enabled = true;
         return this;
     }
     /**
