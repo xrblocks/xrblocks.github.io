@@ -20,7 +20,9 @@ if (useSceneMesh) {
 } else {
   options.depth = new xb.DepthOptions(xb.xrDepthMeshPhysicsOptions);
   options.depth.depthMesh.colliderUpdateFps = depthMeshColliderUpdateFps;
+  options.depth.matchDepthView = false;
 }
+options.reticles.enabled = false;
 options.xrButton = {
   ...options.xrButton,
   startText: '<i id="xrlogo"></i> LET THE FUN BEGIN',
