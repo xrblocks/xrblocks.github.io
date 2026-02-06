@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { Options } from '../core/Options.js';
 import { KeyEvent } from '../core/Script';
+import { Raycaster } from '../core/components/Raycaster';
 import type { Controller, ControllerEvent, ControllerEventMap } from './Controller';
 import { GazeController } from './GazeController';
 import { MouseController } from './MouseController';
@@ -19,7 +20,7 @@ export declare class Input {
     controllers: Controller[];
     controllerGrips: THREE.Group[];
     hands: THREE.XRHandSpace[];
-    raycaster: THREE.Raycaster;
+    raycaster: Raycaster;
     initialized: boolean;
     pivotsEnabled: boolean;
     gazeController: GazeController;
