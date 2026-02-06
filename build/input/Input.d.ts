@@ -146,7 +146,7 @@ export declare class Input {
      * `setFromXRController`.
      * @param controller - The controller to cast a ray from.
      */
-    private _setRaycasterFromController;
+    setRaycasterFromController(controller: THREE.Object3D): void;
     updateReticleFromIntersections(controller: Controller): void;
     enableGazeController(): void;
     disableGazeController(): void;

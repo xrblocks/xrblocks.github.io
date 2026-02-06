@@ -24,6 +24,8 @@ export declare class InputOptions {
     visualization: boolean;
     /** Whether to show the ray lines extending from the controllers. */
     visualizeRays: boolean;
+    /** Whether to perform raycast on update. This is needed for the reticle to work properly. */
+    performRaycastOnUpdate: boolean;
 }
 /**
  * Default options for the reticle (pointing cursor).

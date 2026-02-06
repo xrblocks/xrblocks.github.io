@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.9.0
- * @commitid 0dbc841
- * @builddate 2026-02-06T18:08:09.194Z
+ * @commitid 8402a0b
+ * @builddate 2026-02-06T18:41:19.221Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -5561,7 +5561,7 @@ class Input {
     defaultOnSelectStart(event) {
         const controller = event.target;
         controller.userData.selected = true;
-        this._setRaycasterFromController(controller);
+        this.setRaycasterFromController(controller);
         this.performRaycastOnScene(controller);
     }
     /**
@@ -5703,7 +5703,7 @@ class Input {
      */
     intersectObjectByController(controller, obj) {
         controller.updateMatrixWorld();
-        this._setRaycasterFromController(controller);
+        this.setRaycasterFromController(controller);
         return this.raycaster.intersectObject(obj, false);
     }
     /**
@@ -5743,9 +5743,11 @@ class Input {
             return;
         }
         controller.updateMatrixWorld();
-        this._setRaycasterFromController(controller);
-        this.performRaycastOnScene(controller);
-        this.updateReticleFromIntersections(controller);
+        if (this.options.controllers.performRaycastOnUpdate) {
+            this.setRaycasterFromController(controller);
+            this.performRaycastOnScene(controller);
+            this.updateReticleFromIntersections(controller);
+        }
     }
     /**
      * Sets the raycaster's origin and direction from any Object3D that
@@ -5753,7 +5755,7 @@ class Input {
      * `setFromXRController`.
      * @param controller - The controller to cast a ray from.
      */
-    _setRaycasterFromController(controller) {
+    setRaycasterFromController(controller) {
         controller.getWorldPosition(this.raycaster.ray.origin);
         MATRIX4.identity().extractRotation(controller.matrixWorld);
         this.raycaster.ray.direction
@@ -7569,6 +7571,8 @@ class InputOptions {
         this.visualization = false;
         /** Whether to show the ray lines extending from the controllers. */
         this.visualizeRays = false;
+        /** Whether to perform raycast on update. This is needed for the reticle to work properly. */
+        this.performRaycastOnUpdate = true;
     }
 }
 /**
