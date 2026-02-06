@@ -1,51 +1,11 @@
 # Reticle Sample
 
-## XR Blocks 2.0
+This sample demonstrates how to use the built-in reticle and interact with the physical environment mapping (depth mesh) using WebXR controllers.
 
-```js
-import {ExitButton} from '...';
-import {xrExitButton, xrStats} from '...';
-// you can also import {xrCore}
+When a user points their controller and pulls the trigger (selects), a raycast is performed against the depth mesh. A text billboard appears at the intersection point, detailing the real-time distance and height relative to the world coordinate system.
 
-// Example code for operating a reticle in XR:
-// WebXR, mobile, and desktop simulated.
-// in XR, if depth wasn't enabled, reticle should be bounded to a sphere.
-class ReticleScript extends Script {
-  init() {
-    // xb.add(this);
-    super();
+## Key Features
 
-    this.billboards = new THREE.Group();
-    this.billboards.add(...this.controllers.map(() => new TextBillboard()));
-  }
-
-  /**
-   * Moves painter to the pivot position of the current controller.
-   */
-  onSelectStart(event) {
-    const controller = event.target;
-    const id = controller.userData.id;
-    const billboard = this.billboards.children[id];
-
-    billboard.visible = false;
-  }
-
-  /**
-   * Moves painter to the pivot position of the current controller.
-   */
-  onSelecting(event) {
-    const controller = event.target;
-    const id = controller.userData.id;
-    const billboard = this.billboards.children[id];
-
-    billboard.updateText(
-      `Distance: ${intersections[0].distance.toFixed(2)} m\n` +
-        `Height: ${reticleHeight.toFixed(2)} m`
-    );
-  }
-
-  onSelectEnd(event) {
-    billboard.visible = false;
-  }
-}
-```
+- **Built-in Reticle**: Demonstrates enabling the reticle on the spatial depth mesh (`xb.showReticleOnDepthMesh(true)`).
+- **Environment Interaction**: Uses `xb.core.user.select()` to determine the intersection between the controller's ray and the depth mesh.
+- **Dynamic UI elements**: Spawns and dynamically updates a `TextBillboard` hovering at the physical intersection point, rotating to face the user.
