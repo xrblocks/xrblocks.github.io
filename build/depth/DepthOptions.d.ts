@@ -13,6 +13,8 @@ export declare class DepthMeshOptions {
     useDownsampledGeometry: boolean;
     updateFullResolutionGeometry: boolean;
     colliderUpdateFps: number;
+    depthFullResolution: number;
+    ignoreEdgePixels: number;
 }
 export declare class DepthOptions {
     debugging: boolean;
@@ -49,6 +51,8 @@ export declare const xrDepthMeshOptions: {
         readonly useDownsampledGeometry: boolean;
         readonly updateFullResolutionGeometry: boolean;
         readonly colliderUpdateFps: number;
+        readonly depthFullResolution: number;
+        readonly ignoreEdgePixels: number;
     };
     readonly depthTexture: {
         readonly enabled: boolean;
@@ -80,6 +84,8 @@ export declare const xrDepthMeshVisualizationOptions: {
         readonly useDownsampledGeometry: boolean;
         readonly updateFullResolutionGeometry: boolean;
         readonly colliderUpdateFps: number;
+        readonly depthFullResolution: number;
+        readonly ignoreEdgePixels: number;
     };
     readonly depthTexture: {
         readonly enabled: boolean;
@@ -111,6 +117,8 @@ export declare const xrDepthMeshPhysicsOptions: {
         readonly useDownsampledGeometry: boolean;
         readonly updateFullResolutionGeometry: boolean;
         readonly colliderUpdateFps: number;
+        readonly depthFullResolution: number;
+        readonly ignoreEdgePixels: number;
     };
     readonly depthTexture: {
         readonly enabled: boolean;

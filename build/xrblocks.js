@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.9.0
- * @commitid 2969e12
- * @builddate 2026-02-06T20:54:56.214Z
+ * @commitid 753e9dd
+ * @builddate 2026-02-07T06:23:41.805Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -2036,7 +2036,19 @@ class DepthMesh extends MeshScript {
     static { this.isDepthMesh = true; }
     constructor(depthOptions, width, height, depthTextures) {
         const options = depthOptions.depthMesh;
-        const geometry = new THREE.PlaneGeometry(1, 1, 159, 159);
+        const depthResolution = options.depthFullResolution;
+        const ignoreEdgePixels = options.ignoreEdgePixels;
+        const activeRes = Math.max(2, depthResolution - 2 * ignoreEdgePixels);
+        const geometry = new THREE.PlaneGeometry(1, 1, activeRes - 1, activeRes - 1);
+        const minU = ignoreEdgePixels / (depthResolution - 1);
+        const maxU = (depthResolution - 1 - ignoreEdgePixels) / (depthResolution - 1);
+        const minV = ignoreEdgePixels / (depthResolution - 1);
+        const maxV = (depthResolution - 1 - ignoreEdgePixels) / (depthResolution - 1);
+        const uvs = geometry.attributes.uv.array;
+        for (let i = 0; i < uvs.length; i += 2) {
+            uvs[i] = minU + uvs[i] * (maxU - minU);
+            uvs[i + 1] = minV + uvs[i + 1] * (maxV - minV);
+        }
         let material;
         let uniforms;
         if (options.useDepthTexture || options.showDebugTexture) {
@@ -2094,6 +2106,11 @@ class DepthMesh extends MeshScript {
         // Create a downsampled geometry for raycasts and physics.
         if (options.useDownsampledGeometry) {
             this.downsampledGeometry = new THREE.PlaneGeometry(1, 1, 39, 39);
+            const dsUvs = this.downsampledGeometry.attributes.uv.array;
+            for (let i = 0; i < dsUvs.length; i += 2) {
+                dsUvs[i] = minU + dsUvs[i] * (maxU - minU);
+                dsUvs[i + 1] = minV + dsUvs[i + 1] * (maxV - minV);
+            }
             this.downsampledMesh = new THREE.Mesh(this.downsampledGeometry, material);
             this.downsampledMesh.visible = false;
             this.add(this.downsampledMesh);
@@ -2238,8 +2255,8 @@ class DepthMesh extends MeshScript {
             const u = geometry.attributes.uv.array[2 * i];
             const v = geometry.attributes.uv.array[2 * i + 1];
             // Grabs the nearest for now.
-            const depthX = Math.round(clamp(u * width, 0, width - 1));
-            const depthY = Math.round(clamp((1.0 - v) * height, 0, height - 1));
+            const depthX = Math.round(clamp(u * (width - 1), 0, width - 1));
+            const depthY = Math.round(clamp((1.0 - v) * (height - 1), 0, height - 1));
             const rawDepth = depthArray[depthY * width + depthX];
             let depth = depthData.rawValueToMeters * rawDepth;
             // Finds global min/max.
@@ -2381,6 +2398,8 @@ class DepthMeshOptions {
         // Whether to always update the full resolution geometry.
         this.updateFullResolutionGeometry = false;
         this.colliderUpdateFps = 5;
+        this.depthFullResolution = 160;
+        this.ignoreEdgePixels = 3;
     }
 }
 class DepthOptions {
