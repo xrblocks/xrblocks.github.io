@@ -41,6 +41,7 @@ export declare class DeviceCameraOptions {
      * Parameters for RGB to depth UV mapping given different aspect ratios.
      */
     rgbToDepthParams: RgbToDepthParams;
+    cameraLabel?: string;
     constructor(options?: DeepReadonly<DeepPartial<DeviceCameraOptions>>);
 }
 export declare const xrDeviceCameraEnvironmentOptions: {
@@ -212,6 +213,7 @@ export declare const xrDeviceCameraEnvironmentOptions: {
         readonly xc: number;
         readonly yc: number;
     };
+    readonly cameraLabel?: string | undefined;
 };
 export declare const xrDeviceCameraUserOptions: {
     readonly enabled: boolean;
@@ -382,6 +384,7 @@ export declare const xrDeviceCameraUserOptions: {
         readonly xc: number;
         readonly yc: number;
     };
+    readonly cameraLabel?: string | undefined;
 };
 export declare const xrDeviceCameraEnvironmentContinuousOptions: {
     readonly enabled: boolean;
@@ -552,6 +555,7 @@ export declare const xrDeviceCameraEnvironmentContinuousOptions: {
         readonly xc: number;
         readonly yc: number;
     };
+    readonly cameraLabel?: string | undefined;
 };
 export declare const xrDeviceCameraUserContinuousOptions: {
     readonly enabled: boolean;
@@ -722,4 +726,5 @@ export declare const xrDeviceCameraUserContinuousOptions: {
         readonly xc: number;
         readonly yc: number;
     };
+    readonly cameraLabel?: string | undefined;
 };

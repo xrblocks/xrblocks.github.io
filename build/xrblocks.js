@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.9.0
- * @commitid 753e9dd
- * @builddate 2026-02-07T06:23:41.805Z
+ * @commitid 25fa1b6
+ * @builddate 2026-02-09T22:01:27.206Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -3713,13 +3713,17 @@ class XRDeviceCamera extends VideoStream {
     /**
      * @param options - The configuration options.
      */
-    constructor({ videoConstraints = { facingMode: 'environment' }, willCaptureFrequently = false, rgbToDepthParams = DEFAULT_RGB_TO_DEPTH_PARAMS, } = {}) {
-        super({ willCaptureFrequently });
+    constructor(options) {
+        super({ willCaptureFrequently: options.willCaptureFrequently ?? false });
+        this.options = options;
         this.isInitializing_ = false;
         this.availableDevices_ = [];
         this.currentDeviceIndex_ = -1;
-        this.videoConstraints_ = { ...videoConstraints };
-        this.rgbToDepthParams = rgbToDepthParams;
+        this.videoConstraints_ = options.videoConstraints ?? {
+            facingMode: 'environment',
+        };
+        this.rgbToDepthParams =
+            options.rgbToDepthParams ?? DEFAULT_RGB_TO_DEPTH_PARAMS;
     }
     /**
      * Retrieves the list of available video input devices.
@@ -3761,6 +3765,9 @@ class XRDeviceCamera extends VideoStream {
             throw error;
         }
     }
+    getDeviceIdFromLabel(label) {
+        return (this.availableDevices_.find((x) => x.label == label)?.deviceId ?? null);
+    }
     /**
      * Initializes the media stream from the user's camera. After the stream
      * starts, it updates the current device index based on the stream's active
@@ -3789,6 +3796,15 @@ class XRDeviceCamera extends VideoStream {
                         ?.groupId === 'simulator') ||
                     (!targetDeviceId &&
                         this.videoConstraints_.facingMode === 'environment'));
+            const targetDeviceIdFromLabel = this.options.cameraLabel
+                ? this.getDeviceIdFromLabel(this.options.cameraLabel)
+                : null;
+            if (!this.videoConstraints_.deviceId && targetDeviceIdFromLabel) {
+                this.videoConstraints_ = {
+                    deviceId: targetDeviceIdFromLabel,
+                    ...this.videoConstraints_,
+                };
+            }
             if (useSimulatorCamera) {
                 stream = this.simulatorCamera.getMedia(this.videoConstraints_);
                 if (!stream) {

@@ -14,6 +14,7 @@ type XRDeviceCameraDetails = VideoStreamDetails & {
  * and reports its state using VideoStream's event model.
  */
 export declare class XRDeviceCamera extends VideoStream<XRDeviceCameraDetails> {
+    private options;
     simulatorCamera?: SimulatorCamera;
     rgbToDepthParams: RgbToDepthParams;
     protected videoConstraints_: MediaTrackConstraints;
@@ -24,7 +25,7 @@ export declare class XRDeviceCamera extends VideoStream<XRDeviceCameraDetails> {
     /**
      * @param options - The configuration options.
      */
-    constructor({ videoConstraints, willCaptureFrequently, rgbToDepthParams, }?: Partial<DeviceCameraOptions>);
+    constructor(options: DeviceCameraOptions);
     /**
      * Retrieves the list of available video input devices.
      * @returns A promise that resolves with an
@@ -35,6 +36,7 @@ export declare class XRDeviceCamera extends VideoStream<XRDeviceCameraDetails> {
      * Initializes the camera based on the initial constraints.
      */
     init(): Promise<void>;
+    protected getDeviceIdFromLabel(label: string): string | null;
     /**
      * Initializes the media stream from the user's camera. After the stream
      * starts, it updates the current device index based on the stream's active
