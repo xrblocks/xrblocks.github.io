@@ -19,6 +19,7 @@ export declare class ObjectDetector extends Script {
         deviceCamera: typeof XRDeviceCamera;
         depth: typeof Depth;
         camera: typeof THREE.Camera;
+        renderer: typeof THREE.WebGLRenderer;
     };
     /**
      * A map from the object's UUID to our custom `DetectedObject` instance.
@@ -35,17 +36,20 @@ export declare class ObjectDetector extends Script {
     private deviceCamera;
     private depth;
     private camera;
+    private renderer;
+    targetDevice: string;
     /**
      * Initializes the ObjectDetector.
      * @override
      */
-    init({ options, ai, aiOptions, deviceCamera, depth, camera, }: {
+    init({ options, ai, aiOptions, deviceCamera, depth, camera, renderer, }: {
         options: WorldOptions;
         ai: AI;
         aiOptions: AIOptions;
         deviceCamera: XRDeviceCamera;
         depth: Depth;
-        camera: THREE.Camera;
+        camera: THREE.PerspectiveCamera;
+        renderer: THREE.WebGLRenderer;
     }): void;
     /**
      * Runs the object detection process based on the configured backend.
@@ -53,6 +57,7 @@ export declare class ObjectDetector extends Script {
      * array of detected `DetectedObject` instances.
      */
     runDetection<T = null>(): Promise<DetectedObject<T>[]>;
+    private getDepthMeshSnapshot;
     /**
      * Runs object detection using the Gemini backend.
      */

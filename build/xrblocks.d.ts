@@ -9,6 +9,7 @@ export * from './ai/Gemini';
 export * from './ai/OpenAI';
 export * from './camera/CameraOptions';
 export * from './camera/CameraUtils';
+export * from './camera/CameraParameterUtils';
 export * from './camera/XRDeviceCamera';
 export * from './constants';
 export * from './core/components/Raycaster';

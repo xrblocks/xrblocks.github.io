@@ -1,62 +1,37 @@
 import * as THREE from 'three';
-import { Depth } from '../depth/Depth';
 import { XRDeviceCamera } from './XRDeviceCamera';
-export declare const aspectRatios: {
-    depth: number;
-    RGB: number;
+export type DeviceCameraParameters = {
+    projectionMatrix: THREE.Matrix4;
+    getCameraPose: (camera: THREE.Camera, xrCameras: THREE.WebXRArrayCamera, target: THREE.Matrix4) => void;
 };
+export declare const DEVICE_CAMERA_PARAMETERS: {
+    [key: string]: DeviceCameraParameters;
+};
+export declare function getDeviceCameraClipFromView(renderCamera: THREE.PerspectiveCamera, deviceCamera: XRDeviceCamera, targetDevice: string): THREE.Matrix4;
+export declare function getDeviceCameraWorldFromView(renderCamera: THREE.PerspectiveCamera, xrCameras: THREE.WebXRArrayCamera | null, deviceCamera: XRDeviceCamera, targetDevice: string): THREE.Matrix4;
+export declare function getDeviceCameraWorldFromClip(renderCamera: THREE.PerspectiveCamera, xrCameras: THREE.WebXRArrayCamera | null, deviceCamera: XRDeviceCamera, targetDevice: string): THREE.Matrix4;
+export type CameraParametersSnapshot = {
+    clipFromView: THREE.Matrix4;
+    viewFromClip: THREE.Matrix4;
+    worldFromView: THREE.Matrix4;
+    worldFromClip: THREE.Matrix4;
+};
+export declare function getCameraParametersSnapshot(camera: THREE.PerspectiveCamera, xrCameras: THREE.WebXRArrayCamera | null, deviceCamera: XRDeviceCamera, targetDevice: string): CameraParametersSnapshot;
 /**
- * Maps a UV coordinate from a RGB space to a destination depth space,
- * applying Brown-Conrady distortion and affine transformations based on
- * aspect ratios. If the simulator camera is used, no transformation is applied.
- *
- * @param rgbUv - The RGB UV coordinate, e.g., \{ u: 0.5, v: 0.5 \}.
- * @param xrDeviceCamera - The device camera instance.
- * @returns The transformed UV coordinate in the render camera clip space, or null if
- *     inputs are invalid.
+ * Raycasts to the depth mesh to find the world position and normal at a given UV coordinate.
+ * @param rgbUv - The UV coordinate to raycast from.
+ * @param depthMeshSnapshot - The depth mesh to raycast against.
+ * @param depthTransformParameters - The depth transform parameters.
+ * @returns The world position, normal, and depth at the given UV coordinate.
  */
-export declare function transformRgbToRenderCameraClip(rgbUv: {
-    u: number;
-    v: number;
-}, xrDeviceCamera?: XRDeviceCamera): THREE.Vector2 | null;
-/**
- * Maps a UV coordinate from a RGB space to a destination depth space,
- * applying Brown-Conrady distortion and affine transformations based on
- * aspect ratios. If the simulator camera is used, no transformation is applied.
- *
- * @param rgbUv - The RGB UV coordinate, e.g., \{ u: 0.5, v: 0.5 \}.
- * @param renderCameraWorldFromClip - Render camera world from clip, i.e. inverse of the View Projection matrix.
- * @param depthCameraClipFromWorld - Depth camera clip from world, i.e.
- * @param xrDeviceCamera - The device camera instance.
- * @returns The transformed UV coordinate in the depth image space, or null if
- *     inputs are invalid.
- */
-export declare function transformRgbToDepthUv(rgbUv: {
-    u: number;
-    v: number;
-}, renderCameraWorldFromClip: THREE.Matrix4, depthCameraClipFromWorld: THREE.Matrix4, xrDeviceCamera?: XRDeviceCamera): {
-    u: number;
-    v: number;
+export declare function transformRgbUvToWorld(rgbUv: THREE.Vector2, depthMeshSnapshot: THREE.Mesh, cameraParametersSnapshot: {
+    worldFromView: THREE.Matrix4;
+    worldFromClip: THREE.Matrix4;
+}): {
+    worldPosition: THREE.Vector3;
+    worldNormal: THREE.Vector3;
+    depthInMeters: number;
 } | null;
-/**
- * Retrieves the world space position of a given RGB UV coordinate.
- * Note: it is essential that the coordinates, depth array, and projection
- * matrix all correspond to the same view ID (e.g., 0 for left). It is also
- * advised that all of these are obtained at the same time.
- *
- * @param rgbUv - The RGB UV coordinate, e.g., \{ u: 0.5, v: 0.5 \}.
- * @param depthArray - Array containing depth data.
- * @param projectionMatrix - XRView object with corresponding
- * projection matrix.
- * @param matrixWorld - Rendering camera's model matrix.
- * @param xrDeviceCamera - The device camera instance.
- * @param xrDepth - The SDK's Depth module.
- * @returns Vertex at (u, v) in world space.
- */
-export declare function transformRgbUvToWorld(rgbUv: {
-    u: number;
-    v: number;
-}, depthArray: number[] | Uint16Array | Float32Array, projectionMatrix: THREE.Matrix4, matrixWorld: THREE.Matrix4, xrDeviceCamera?: XRDeviceCamera, xrDepth?: Depth | undefined): THREE.Vector3;
 /**
  * Asynchronously crops a base64 encoded image using a THREE.Box2 bounding box.
  * This function creates an in-memory image, draws a specified portion of it to
