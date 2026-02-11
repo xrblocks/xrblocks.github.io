@@ -43,6 +43,10 @@ export declare const ai: import("./xrblocks").AI;
  */
 export declare const depth: import("./xrblocks").Depth;
 /**
+ * A direct alias to the `Timer` instance, which manages time deltas.
+ */
+export declare const timer: THREE.Timer;
+/**
  * A shortcut for `core.scene.add()`. Adds one or more objects to the scene.
  * @param object - The object(s) to add.
  * @see {@link three#Object3D.add}
@@ -70,12 +74,19 @@ export declare function initScript(script: Script): Promise<void>;
  */
 export declare function uninitScript(script: Script): void;
 /**
- * A shortcut for `core.clock.getDeltaTime()`. Gets the time in seconds since
+ * A shortcut for `core.timer.getDelta()`. Gets the time in seconds since
  * the last frame, useful for animations.
  * @returns The delta time in seconds.
- * @see {@link Clock.getDeltaTime}
+ * @see {@link THREE.Timer.getDelta}
  */
 export declare function getDeltaTime(): number;
+/**
+ * A shortcut for `core.timer.getElapsed()`. Gets the total time in seconds
+ * since the application started.
+ * @returns The elapsed time in seconds.
+ * @see {@link THREE.Timer.getElapsed}
+ */
+export declare function getElapsedTime(): number;
 /**
  * Toggles whether the reticle can target the depth-sensing mesh.
  * @param value - True to add the depth mesh as a target, false to
