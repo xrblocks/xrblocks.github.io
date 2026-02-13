@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.9.0
- * @commitid 6d375e9
- * @builddate 2026-02-11T00:42:08.185Z
+ * @commitid 84416b6
+ * @builddate 2026-02-13T06:30:44.586Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -6319,8 +6319,10 @@ class User extends Script {
     callHoverExit(controller, target) {
         if (target == null)
             return;
-        if (target.isXRScript) {
-            target.onHoverExit(controller);
+        if (target.isXRScript &&
+            target.onHoverExit(controller)) {
+            // The event was handled already so do not propagate up.
+            return;
         }
         this.callHoverExit(controller, target.parent);
     }
@@ -6332,8 +6334,10 @@ class User extends Script {
     callHoverEnter(controller, target) {
         if (target == null)
             return;
-        if (target.isXRScript) {
-            target.onHoverEnter(controller);
+        if (target.isXRScript &&
+            target.onHoverEnter(controller)) {
+            // The event was handled already so do not propagate up.
+            return;
         }
         this.callHoverEnter(controller, target.parent);
     }
@@ -6345,8 +6349,10 @@ class User extends Script {
     callOnHovering(controller, target) {
         if (target == null)
             return;
-        if (target.isXRScript) {
-            target.onHovering(controller);
+        if (target.isXRScript &&
+            target.onHovering(controller)) {
+            // The event was handled already so do not propagate up.
+            return;
         }
         this.callOnHovering(controller, target.parent);
     }

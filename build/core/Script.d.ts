@@ -125,17 +125,17 @@ export declare function ScriptMixin<TBase extends Constructor<THREE.Object3D>>(b
          * Called when the controller starts hovering over this object with reticle.
          * @param _controller - An XR controller.
          */
-        onHoverEnter(_controller: THREE.Object3D): void;
+        onHoverEnter(_controller: THREE.Object3D): boolean | void;
         /**
          * Called when the controller hovers over this object with reticle.
          * @param _controller - An XR controller.
          */
-        onHoverExit(_controller: THREE.Object3D): void;
+        onHoverExit(_controller: THREE.Object3D): boolean | void;
         /**
          * Called when the controller hovers over this object with reticle.
          * @param _controller - An XR controller.
          */
-        onHovering(_controller: THREE.Object3D): void;
+        onHovering(_controller: THREE.Object3D): boolean | void;
         /**
          * Called when a hand's index finger starts touching this object.
          */
@@ -337,17 +337,17 @@ declare const ScriptMixinObject3D: {
          * Called when the controller starts hovering over this object with reticle.
          * @param _controller - An XR controller.
          */
-        onHoverEnter(_controller: THREE.Object3D): void;
+        onHoverEnter(_controller: THREE.Object3D): boolean | void;
         /**
          * Called when the controller hovers over this object with reticle.
          * @param _controller - An XR controller.
          */
-        onHoverExit(_controller: THREE.Object3D): void;
+        onHoverExit(_controller: THREE.Object3D): boolean | void;
         /**
          * Called when the controller hovers over this object with reticle.
          * @param _controller - An XR controller.
          */
-        onHovering(_controller: THREE.Object3D): void;
+        onHovering(_controller: THREE.Object3D): boolean | void;
         /**
          * Called when a hand's index finger starts touching this object.
          */
@@ -555,17 +555,17 @@ declare const ScriptMixinMeshScript: {
          * Called when the controller starts hovering over this object with reticle.
          * @param _controller - An XR controller.
          */
-        onHoverEnter(_controller: THREE.Object3D): void;
+        onHoverEnter(_controller: THREE.Object3D): boolean | void;
         /**
          * Called when the controller hovers over this object with reticle.
          * @param _controller - An XR controller.
          */
-        onHoverExit(_controller: THREE.Object3D): void;
+        onHoverExit(_controller: THREE.Object3D): boolean | void;
         /**
          * Called when the controller hovers over this object with reticle.
          * @param _controller - An XR controller.
          */
-        onHovering(_controller: THREE.Object3D): void;
+        onHovering(_controller: THREE.Object3D): boolean | void;
         /**
          * Called when a hand's index finger starts touching this object.
          */
