@@ -95,6 +95,14 @@ export declare class UX {
      */
     initializeVariablesForId(id: number): void;
     /**
+     * Checks if the intersection object belongs to this UX's attached Script.
+     * Allow overriding this function for more complex objects with multiple
+     * meshes.
+     * @param intersection - The raycast intersection to check.
+     * @returns True if the intersection is relevant to this UX's parent object.
+     */
+    isRelevantIntersection(intersection: THREE.Intersection): boolean;
+    /**
      * Resets the hover and selection states for all controllers. This is
      * typically called at the beginning of each frame.
      */

@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.9.0
- * @commitid 7d4916c
- * @builddate 2026-02-13T18:12:12.420Z
+ * @commitid 66f7c8a
+ * @builddate 2026-02-13T18:28:55.667Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -679,8 +679,7 @@ class UX {
     update(controller, intersection) {
         const id = controller.userData.id;
         this.initializeVariablesForId(id);
-        if (intersection.object === this.parent ||
-            intersection.object === this.parent.mesh) {
+        if (this.isRelevantIntersection(intersection)) {
             this.hovered[id] = true;
             this.selected[id] = controller.userData.selected;
             if (intersection.uv) {
@@ -707,6 +706,17 @@ class UX {
             this.distances.push(1);
             this.uvs.push(new THREE.Vector2());
         }
+    }
+    /**
+     * Checks if the intersection object belongs to this UX's attached Script.
+     * Allow overriding this function for more complex objects with multiple
+     * meshes.
+     * @param intersection - The raycast intersection to check.
+     * @returns True if the intersection is relevant to this UX's parent object.
+     */
+    isRelevantIntersection(intersection) {
+        return (intersection.object === this.parent ||
+            intersection.object === this.parent.mesh);
     }
     /**
      * Resets the hover and selection states for all controllers. This is

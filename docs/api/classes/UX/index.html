@@ -19,7 +19,7 @@
 <link rel="icon" href="/docs/img/web-app-manifest-512x512.png" sizes="512x512" type="image/png">
 <link rel="manifest" href="/docs/img/site.webmanifest">
 <meta name="algolia-site-verification" content="C7A25C1609F793C8"><link rel="stylesheet" href="/docs/assets/css/styles.75fc60c9.css">
-<script src="/docs/assets/js/runtime~main.cbb51d15.js" defer="defer"></script>
+<script src="/docs/assets/js/runtime~main.6ec7fad4.js" defer="defer"></script>
 <script src="/docs/assets/js/main.b8db85ac.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -145,7 +145,7 @@ controller.</p>
 <blockquote>
 <p><strong>getPrimaryTwoControllerIds</strong>(): <code>number</code>[]</p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ux/UX.ts#L182" target="_blank" rel="noopener noreferrer" class="">src/ux/UX.ts:182</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ux/UX.ts#L193" target="_blank" rel="noopener noreferrer" class="">src/ux/UX.ts:193</a></p>
 <p>Gets the IDs of up to two controllers that are currently hovering over the
 parent object, always returning a two-element array. This is useful for
 shaders or components like Panels that expect a fixed number of interaction
@@ -159,7 +159,7 @@ controller ID (e.g., 0, 1) or null.</p>
 <blockquote>
 <p><strong>initializeVariablesForId</strong>(<code>id</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ux/UX.ts#L151" target="_blank" rel="noopener noreferrer" class="">src/ux/UX.ts:151</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ux/UX.ts#L148" target="_blank" rel="noopener noreferrer" class="">src/ux/UX.ts:148</a></p>
 <p>Ensures that the internal arrays for tracking states are large enough to
 accommodate a given controller ID.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-1">Parameters<a href="#parameters-1" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
@@ -187,23 +187,39 @@ accommodate a given controller ID.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-4">Returns<a href="#returns-4" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>boolean</code></p>
 <hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="isrelevantintersection">isRelevantIntersection()<a href="#isrelevantintersection" class="hash-link" aria-label="Direct link to isRelevantIntersection()" title="Direct link to isRelevantIntersection()" translate="no">​</a></h3>
+<blockquote>
+<p><strong>isRelevantIntersection</strong>(<code>intersection</code>): <code>boolean</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ux/UX.ts#L166" target="_blank" rel="noopener noreferrer" class="">src/ux/UX.ts:166</a></p>
+<p>Checks if the intersection object belongs to this UX&#x27;s attached Script.
+Allow overriding this function for more complex objects with multiple
+meshes.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-2">Parameters<a href="#parameters-2" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
+<h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="intersection">intersection<a href="#intersection" class="hash-link" aria-label="Direct link to intersection" title="Direct link to intersection" translate="no">​</a></h5>
+<p><code>Intersection</code></p>
+<p>The raycast intersection to check.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-5">Returns<a href="#returns-5" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<p><code>boolean</code></p>
+<p>True if the intersection is relevant to this UX&#x27;s parent object.</p>
+<hr>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="isselected">isSelected()<a href="#isselected" class="hash-link" aria-label="Direct link to isSelected()" title="Direct link to isSelected()" translate="no">​</a></h3>
 <blockquote>
 <p><strong>isSelected</strong>(): <code>boolean</code></p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ux/UX.ts#L105" target="_blank" rel="noopener noreferrer" class="">src/ux/UX.ts:105</a></p>
 <p>Checks if the object is currently being selected by any controller.</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-5">Returns<a href="#returns-5" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-6">Returns<a href="#returns-6" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>boolean</code></p>
 <hr>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="reset">reset()<a href="#reset" class="hash-link" aria-label="Direct link to reset()" title="Direct link to reset()" translate="no">​</a></h3>
 <blockquote>
 <p><strong>reset</strong>(): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ux/UX.ts#L166" target="_blank" rel="noopener noreferrer" class="">src/ux/UX.ts:166</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/ux/UX.ts#L177" target="_blank" rel="noopener noreferrer" class="">src/ux/UX.ts:177</a></p>
 <p>Resets the hover and selection states for all controllers. This is
 typically called at the beginning of each frame.</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-6">Returns<a href="#returns-6" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-7">Returns<a href="#returns-7" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <hr>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="update">update()<a href="#update" class="hash-link" aria-label="Direct link to update()" title="Direct link to update()" translate="no">​</a></h3>
@@ -214,15 +230,15 @@ typically called at the beginning of each frame.</p>
 <p>Updates the interaction state for a specific controller based on a new
 intersection. This is internally called by the core input system when a
 raycast hits the parent object.</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-2">Parameters<a href="#parameters-2" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-3">Parameters<a href="#parameters-3" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="controller">controller<a href="#controller" class="hash-link" aria-label="Direct link to controller" title="Direct link to controller" translate="no">​</a></h5>
 <p><a href="https://threejs.org/docs/#api/en/core/Object3D" target="_blank" rel="noopener noreferrer" class=""><code>Object3D</code></a></p>
 <p>The controller performing the
 interaction.</p>
-<h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="intersection">intersection<a href="#intersection" class="hash-link" aria-label="Direct link to intersection" title="Direct link to intersection" translate="no">​</a></h5>
+<h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="intersection-1">intersection<a href="#intersection-1" class="hash-link" aria-label="Direct link to intersection" title="Direct link to intersection" translate="no">​</a></h5>
 <p><code>Intersection</code></p>
 <p>The raycast intersection data.</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-7">Returns<a href="#returns-7" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
-<p><code>void</code></p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/api/classes/User/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">User</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/api/classes/VerticalPager/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">VerticalPager</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#constructors" class="table-of-contents__link toc-highlight">Constructors</a><ul><li><a href="#constructor" class="table-of-contents__link toc-highlight">Constructor</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#activedragged" class="table-of-contents__link toc-highlight">activeDragged</a></li><li><a href="#distances" class="table-of-contents__link toc-highlight">distances</a></li><li><a href="#draggable" class="table-of-contents__link toc-highlight">draggable</a></li><li><a href="#hovered" class="table-of-contents__link toc-highlight">hovered</a></li><li><a href="#initialdistance" class="table-of-contents__link toc-highlight">initialDistance?</a></li><li><a href="#initialposition" class="table-of-contents__link toc-highlight">initialPosition</a></li><li><a href="#parent" class="table-of-contents__link toc-highlight">parent</a></li><li><a href="#positions" class="table-of-contents__link toc-highlight">positions</a></li><li><a href="#selectable" class="table-of-contents__link toc-highlight">selectable</a></li><li><a href="#selected" class="table-of-contents__link toc-highlight">selected</a></li><li><a href="#touchable" class="table-of-contents__link toc-highlight">touchable</a></li><li><a href="#touched" class="table-of-contents__link toc-highlight">touched</a></li><li><a href="#uvs" class="table-of-contents__link toc-highlight">uvs</a></li></ul></li><li><a href="#methods" class="table-of-contents__link toc-highlight">Methods</a><ul><li><a href="#getprimarytwocontrollerids" class="table-of-contents__link toc-highlight">getPrimaryTwoControllerIds()</a></li><li><a href="#initializevariablesforid" class="table-of-contents__link toc-highlight">initializeVariablesForId()</a></li><li><a href="#isdragging" class="table-of-contents__link toc-highlight">isDragging()</a></li><li><a href="#ishovered" class="table-of-contents__link toc-highlight">isHovered()</a></li><li><a href="#isselected" class="table-of-contents__link toc-highlight">isSelected()</a></li><li><a href="#reset" class="table-of-contents__link toc-highlight">reset()</a></li><li><a href="#update" class="table-of-contents__link toc-highlight">update()</a></li></ul></li></ul></div></div></div></div></main></div></div></div></div>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-8">Returns<a href="#returns-8" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
+<p><code>void</code></p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/api/classes/User/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">User</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/api/classes/VerticalPager/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">VerticalPager</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#constructors" class="table-of-contents__link toc-highlight">Constructors</a><ul><li><a href="#constructor" class="table-of-contents__link toc-highlight">Constructor</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#activedragged" class="table-of-contents__link toc-highlight">activeDragged</a></li><li><a href="#distances" class="table-of-contents__link toc-highlight">distances</a></li><li><a href="#draggable" class="table-of-contents__link toc-highlight">draggable</a></li><li><a href="#hovered" class="table-of-contents__link toc-highlight">hovered</a></li><li><a href="#initialdistance" class="table-of-contents__link toc-highlight">initialDistance?</a></li><li><a href="#initialposition" class="table-of-contents__link toc-highlight">initialPosition</a></li><li><a href="#parent" class="table-of-contents__link toc-highlight">parent</a></li><li><a href="#positions" class="table-of-contents__link toc-highlight">positions</a></li><li><a href="#selectable" class="table-of-contents__link toc-highlight">selectable</a></li><li><a href="#selected" class="table-of-contents__link toc-highlight">selected</a></li><li><a href="#touchable" class="table-of-contents__link toc-highlight">touchable</a></li><li><a href="#touched" class="table-of-contents__link toc-highlight">touched</a></li><li><a href="#uvs" class="table-of-contents__link toc-highlight">uvs</a></li></ul></li><li><a href="#methods" class="table-of-contents__link toc-highlight">Methods</a><ul><li><a href="#getprimarytwocontrollerids" class="table-of-contents__link toc-highlight">getPrimaryTwoControllerIds()</a></li><li><a href="#initializevariablesforid" class="table-of-contents__link toc-highlight">initializeVariablesForId()</a></li><li><a href="#isdragging" class="table-of-contents__link toc-highlight">isDragging()</a></li><li><a href="#ishovered" class="table-of-contents__link toc-highlight">isHovered()</a></li><li><a href="#isrelevantintersection" class="table-of-contents__link toc-highlight">isRelevantIntersection()</a></li><li><a href="#isselected" class="table-of-contents__link toc-highlight">isSelected()</a></li><li><a href="#reset" class="table-of-contents__link toc-highlight">reset()</a></li><li><a href="#update" class="table-of-contents__link toc-highlight">update()</a></li></ul></li></ul></div></div></div></div></main></div></div></div></div>
 </body>
 </html>
