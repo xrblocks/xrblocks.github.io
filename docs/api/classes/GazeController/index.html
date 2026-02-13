@@ -19,7 +19,7 @@
 <link rel="icon" href="/docs/img/web-app-manifest-512x512.png" sizes="512x512" type="image/png">
 <link rel="manifest" href="/docs/img/site.webmanifest">
 <meta name="algolia-site-verification" content="C7A25C1609F793C8"><link rel="stylesheet" href="/docs/assets/css/styles.75fc60c9.css">
-<script src="/docs/assets/js/runtime~main.621d8f07.js" defer="defer"></script>
+<script src="/docs/assets/js/runtime~main.cbb51d15.js" defer="defer"></script>
 <script src="/docs/assets/js/main.b8db85ac.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -192,7 +192,7 @@ initiated.</p>
 <blockquote>
 <p><strong>dispose</strong>(): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L197" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:197</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L196" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:196</a></p>
 <p>Called when the script is removed from the scene. Opposite of init.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-5">Returns<a href="#returns-5" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
@@ -236,7 +236,7 @@ three.js&#x27;s scene graph). If this returns a promise, we will wait for it.</p
 <blockquote>
 <p><strong>onHoverEnter</strong>(<code>_controller</code>): <code>boolean</code> | <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L158" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:158</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L155" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:155</a></p>
 <p>Called when the controller starts hovering over this object with reticle.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-2">Parameters<a href="#parameters-2" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="_controller">_controller<a href="#_controller" class="hash-link" aria-label="Direct link to _controller" title="Direct link to _controller" translate="no">​</a></h5>
@@ -244,6 +244,7 @@ three.js&#x27;s scene graph). If this returns a promise, we will wait for it.</p
 <p>An XR controller.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-8">Returns<a href="#returns-8" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>boolean</code> | <code>void</code></p>
+<p>Whether the event was handled. If true, the event will not bubble up.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="inherited-from-5">Inherited from<a href="#inherited-from-5" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a class="" href="/docs/api/classes/Script/"><code>Script</code></a>.<a class="" href="/docs/api/classes/Script/#onhoverenter"><code>onHoverEnter</code></a></p>
 <hr>
@@ -251,7 +252,7 @@ three.js&#x27;s scene graph). If this returns a promise, we will wait for it.</p
 <blockquote>
 <p><strong>onHoverExit</strong>(<code>_controller</code>): <code>boolean</code> | <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L163" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:163</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L161" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:161</a></p>
 <p>Called when the controller hovers over this object with reticle.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-3">Parameters<a href="#parameters-3" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="_controller-1">_controller<a href="#_controller-1" class="hash-link" aria-label="Direct link to _controller" title="Direct link to _controller" translate="no">​</a></h5>
@@ -259,6 +260,7 @@ three.js&#x27;s scene graph). If this returns a promise, we will wait for it.</p
 <p>An XR controller.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-9">Returns<a href="#returns-9" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>boolean</code> | <code>void</code></p>
+<p>Whether the event was handled. If true, the event will not bubble up.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="inherited-from-6">Inherited from<a href="#inherited-from-6" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a class="" href="/docs/api/classes/Script/"><code>Script</code></a>.<a class="" href="/docs/api/classes/Script/#onhoverexit"><code>onHoverExit</code></a></p>
 <hr>
@@ -266,7 +268,7 @@ three.js&#x27;s scene graph). If this returns a promise, we will wait for it.</p
 <blockquote>
 <p><strong>onHovering</strong>(<code>_controller</code>): <code>boolean</code> | <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L168" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:168</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L167" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:167</a></p>
 <p>Called when the controller hovers over this object with reticle.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-4">Parameters<a href="#parameters-4" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="_controller-2">_controller<a href="#_controller-2" class="hash-link" aria-label="Direct link to _controller" title="Direct link to _controller" translate="no">​</a></h5>
@@ -274,6 +276,7 @@ three.js&#x27;s scene graph). If this returns a promise, we will wait for it.</p
 <p>An XR controller.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-10">Returns<a href="#returns-10" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>boolean</code> | <code>void</code></p>
+<p>Whether the event was handled. If true, the event will not bubble up.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="inherited-from-7">Inherited from<a href="#inherited-from-7" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a class="" href="/docs/api/classes/Script/"><code>Script</code></a>.<a class="" href="/docs/api/classes/Script/#onhovering"><code>onHovering</code></a></p>
 <hr>
@@ -309,7 +312,7 @@ three.js&#x27;s scene graph). If this returns a promise, we will wait for it.</p
 <blockquote>
 <p><strong>onObjectGrabbing</strong>(<code>_event</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L188" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:188</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L187" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:187</a></p>
 <p>Called every frame a hand is grabbing this object.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-7">Parameters<a href="#parameters-7" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="_event-2">_event<a href="#_event-2" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
@@ -323,7 +326,7 @@ three.js&#x27;s scene graph). If this returns a promise, we will wait for it.</p
 <blockquote>
 <p><strong>onObjectGrabEnd</strong>(<code>_event</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L192" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:192</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L191" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:191</a></p>
 <p>Called when a hand stops grabbing this object.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-8">Parameters<a href="#parameters-8" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="_event-3">_event<a href="#_event-3" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
@@ -337,7 +340,7 @@ three.js&#x27;s scene graph). If this returns a promise, we will wait for it.</p
 <blockquote>
 <p><strong>onObjectGrabStart</strong>(<code>_event</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L184" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:184</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L183" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:183</a></p>
 <p>Called when a hand starts grabbing this object (touching + pinching).</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-9">Parameters<a href="#parameters-9" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="_event-4">_event<a href="#_event-4" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
@@ -349,9 +352,9 @@ three.js&#x27;s scene graph). If this returns a promise, we will wait for it.</p
 <hr>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="onobjectselectend">onObjectSelectEnd()<a href="#onobjectselectend" class="hash-link" aria-label="Direct link to onObjectSelectEnd()" title="Direct link to onObjectSelectEnd()" translate="no">​</a></h3>
 <blockquote>
-<p><strong>onObjectSelectEnd</strong>(<code>_event</code>): <code>boolean</code></p>
+<p><strong>onObjectSelectEnd</strong>(<code>_event</code>): <code>boolean</code> | <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L151" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:151</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L149" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:149</a></p>
 <p>Called when the controller stops selecting this object the script
 represents, e.g. View, ModelView.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-10">Parameters<a href="#parameters-10" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
@@ -359,14 +362,14 @@ represents, e.g. View, ModelView.</p>
 <p><a class="" href="/docs/api/interfaces/SelectEvent/"><code>SelectEvent</code></a></p>
 <p>event.target holds its controller.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-16">Returns<a href="#returns-16" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
-<p><code>boolean</code></p>
-<p>Whether the event was handled</p>
+<p><code>boolean</code> | <code>void</code></p>
+<p>Whether the event was handled. If true, the event will not bubble up.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="inherited-from-13">Inherited from<a href="#inherited-from-13" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a class="" href="/docs/api/classes/Script/"><code>Script</code></a>.<a class="" href="/docs/api/classes/Script/#onobjectselectend"><code>onObjectSelectEnd</code></a></p>
 <hr>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="onobjectselectstart">onObjectSelectStart()<a href="#onobjectselectstart" class="hash-link" aria-label="Direct link to onObjectSelectStart()" title="Direct link to onObjectSelectStart()" translate="no">​</a></h3>
 <blockquote>
-<p><strong>onObjectSelectStart</strong>(<code>_event</code>): <code>boolean</code></p>
+<p><strong>onObjectSelectStart</strong>(<code>_event</code>): <code>boolean</code> | <code>void</code></p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L142" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:142</a></p>
 <p>Called when the controller starts selecting this object the script
@@ -376,8 +379,8 @@ represents, e.g. View, ModelView.</p>
 <p><a class="" href="/docs/api/interfaces/SelectEvent/"><code>SelectEvent</code></a></p>
 <p>event.target holds its controller.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-17">Returns<a href="#returns-17" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
-<p><code>boolean</code></p>
-<p>Whether the event was handled</p>
+<p><code>boolean</code> | <code>void</code></p>
+<p>Whether the event was handled. If true, the event will not bubble up.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="inherited-from-14">Inherited from<a href="#inherited-from-14" class="hash-link" aria-label="Direct link to Inherited from" title="Direct link to Inherited from" translate="no">​</a></h4>
 <p><a class="" href="/docs/api/classes/Script/"><code>Script</code></a>.<a class="" href="/docs/api/classes/Script/#onobjectselectstart"><code>onObjectSelectStart</code></a></p>
 <hr>
@@ -385,7 +388,7 @@ represents, e.g. View, ModelView.</p>
 <blockquote>
 <p><strong>onObjectTouchEnd</strong>(<code>_event</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L180" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:180</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L179" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:179</a></p>
 <p>Called when a hand&#x27;s index finger stops touching this object.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-12">Parameters<a href="#parameters-12" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="_event-7">_event<a href="#_event-7" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
@@ -399,7 +402,7 @@ represents, e.g. View, ModelView.</p>
 <blockquote>
 <p><strong>onObjectTouching</strong>(<code>_event</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L176" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:176</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L175" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:175</a></p>
 <p>Called every frame that a hand&#x27;s index finger is touching this object.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-13">Parameters<a href="#parameters-13" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="_event-8">_event<a href="#_event-8" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>
@@ -413,7 +416,7 @@ represents, e.g. View, ModelView.</p>
 <blockquote>
 <p><strong>onObjectTouchStart</strong>(<code>_event</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L172" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:172</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/Script.ts#L171" target="_blank" rel="noopener noreferrer" class="">src/core/Script.ts:171</a></p>
 <p>Called when a hand&#x27;s index finger starts touching this object.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-14">Parameters<a href="#parameters-14" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="_event-9">_event<a href="#_event-9" class="hash-link" aria-label="Direct link to _event" title="Direct link to _event" translate="no">​</a></h5>

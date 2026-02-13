@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.9.0
- * @commitid 84416b6
- * @builddate 2026-02-13T06:30:44.586Z
+ * @commitid 7d4916c
+ * @builddate 2026-02-13T18:12:12.420Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -844,33 +844,32 @@ function ScriptMixin(base) {
          * Called when the controller starts selecting this object the script
          * represents, e.g. View, ModelView.
          * @param _event - event.target holds its controller.
-         * @returns Whether the event was handled
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
-        onObjectSelectStart(_event) {
-            return false;
-        }
+        onObjectSelectStart(_event) { }
         /**
          * Called when the controller stops selecting this object the script
          * represents, e.g. View, ModelView.
          * @param _event - event.target holds its controller.
-         * @returns Whether the event was handled
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
-        onObjectSelectEnd(_event) {
-            return false; // Whether the event was handled
-        }
+        onObjectSelectEnd(_event) { }
         /**
          * Called when the controller starts hovering over this object with reticle.
          * @param _controller - An XR controller.
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
         onHoverEnter(_controller) { }
         /**
          * Called when the controller hovers over this object with reticle.
          * @param _controller - An XR controller.
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
         onHoverExit(_controller) { }
         /**
          * Called when the controller hovers over this object with reticle.
          * @param _controller - An XR controller.
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
         onHovering(_controller) { }
         /**

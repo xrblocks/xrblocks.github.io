@@ -111,29 +111,32 @@ export declare function ScriptMixin<TBase extends Constructor<THREE.Object3D>>(b
          * Called when the controller starts selecting this object the script
          * represents, e.g. View, ModelView.
          * @param _event - event.target holds its controller.
-         * @returns Whether the event was handled
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
-        onObjectSelectStart(_event: SelectEvent): boolean;
+        onObjectSelectStart(_event: SelectEvent): boolean | void;
         /**
          * Called when the controller stops selecting this object the script
          * represents, e.g. View, ModelView.
          * @param _event - event.target holds its controller.
-         * @returns Whether the event was handled
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
-        onObjectSelectEnd(_event: SelectEvent): boolean;
+        onObjectSelectEnd(_event: SelectEvent): boolean | void;
         /**
          * Called when the controller starts hovering over this object with reticle.
          * @param _controller - An XR controller.
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
         onHoverEnter(_controller: THREE.Object3D): boolean | void;
         /**
          * Called when the controller hovers over this object with reticle.
          * @param _controller - An XR controller.
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
         onHoverExit(_controller: THREE.Object3D): boolean | void;
         /**
          * Called when the controller hovers over this object with reticle.
          * @param _controller - An XR controller.
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
         onHovering(_controller: THREE.Object3D): boolean | void;
         /**
@@ -323,29 +326,32 @@ declare const ScriptMixinObject3D: {
          * Called when the controller starts selecting this object the script
          * represents, e.g. View, ModelView.
          * @param _event - event.target holds its controller.
-         * @returns Whether the event was handled
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
-        onObjectSelectStart(_event: SelectEvent): boolean;
+        onObjectSelectStart(_event: SelectEvent): boolean | void;
         /**
          * Called when the controller stops selecting this object the script
          * represents, e.g. View, ModelView.
          * @param _event - event.target holds its controller.
-         * @returns Whether the event was handled
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
-        onObjectSelectEnd(_event: SelectEvent): boolean;
+        onObjectSelectEnd(_event: SelectEvent): boolean | void;
         /**
          * Called when the controller starts hovering over this object with reticle.
          * @param _controller - An XR controller.
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
         onHoverEnter(_controller: THREE.Object3D): boolean | void;
         /**
          * Called when the controller hovers over this object with reticle.
          * @param _controller - An XR controller.
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
         onHoverExit(_controller: THREE.Object3D): boolean | void;
         /**
          * Called when the controller hovers over this object with reticle.
          * @param _controller - An XR controller.
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
         onHovering(_controller: THREE.Object3D): boolean | void;
         /**
@@ -541,29 +547,32 @@ declare const ScriptMixinMeshScript: {
          * Called when the controller starts selecting this object the script
          * represents, e.g. View, ModelView.
          * @param _event - event.target holds its controller.
-         * @returns Whether the event was handled
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
-        onObjectSelectStart(_event: SelectEvent): boolean;
+        onObjectSelectStart(_event: SelectEvent): boolean | void;
         /**
          * Called when the controller stops selecting this object the script
          * represents, e.g. View, ModelView.
          * @param _event - event.target holds its controller.
-         * @returns Whether the event was handled
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
-        onObjectSelectEnd(_event: SelectEvent): boolean;
+        onObjectSelectEnd(_event: SelectEvent): boolean | void;
         /**
          * Called when the controller starts hovering over this object with reticle.
          * @param _controller - An XR controller.
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
         onHoverEnter(_controller: THREE.Object3D): boolean | void;
         /**
          * Called when the controller hovers over this object with reticle.
          * @param _controller - An XR controller.
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
         onHoverExit(_controller: THREE.Object3D): boolean | void;
         /**
          * Called when the controller hovers over this object with reticle.
          * @param _controller - An XR controller.
+         * @returns Whether the event was handled. If true, the event will not bubble up.
          */
         onHovering(_controller: THREE.Object3D): boolean | void;
         /**
