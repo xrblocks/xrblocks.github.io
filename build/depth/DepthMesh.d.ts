@@ -1,4 +1,4 @@
-import type RAPIER_NS from '@dimforge/rapier3d';
+import type RAPIER_NS from 'rapier3d';
 import * as THREE from 'three';
 import { MeshScript } from '../core/Script';
 import { DepthOptions } from './DepthOptions';

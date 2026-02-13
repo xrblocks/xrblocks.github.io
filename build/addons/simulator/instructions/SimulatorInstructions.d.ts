@@ -3,7 +3,7 @@ import './HandsInstructions.js';
 import './NavigationInstructions.js';
 import './UserInstructions.js';
 import { LitElement } from 'lit';
-import type { SimulatorCustomInstruction } from '../../../simulator/SimulatorOptions.js';
+import type { SimulatorCustomInstruction } from 'xrblocks';
 export declare class SimulatorInstructions extends LitElement {
     static styles: import("lit").CSSResult;
     steps: import("lit-html").TemplateResult<1>[];

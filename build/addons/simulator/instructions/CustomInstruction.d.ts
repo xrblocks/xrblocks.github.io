@@ -1,4 +1,4 @@
-import type { SimulatorCustomInstruction } from '../../../simulator/SimulatorOptions.js';
+import type { SimulatorCustomInstruction } from 'xrblocks';
 import { SimulatorInstructionsCard } from './SimulatorInstructionsCard.js';
 export declare class CustomInstruction extends SimulatorInstructionsCard {
     customInstruction: SimulatorCustomInstruction;
