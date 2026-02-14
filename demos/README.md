@@ -8,6 +8,13 @@ everyone so they may bring their ideas to life faster.
 For basic demo to demonstrate the use of a particular module, we suggest you
 submit to `/samples/`.
 
+## Running Demos Locally
+
+Follow the [development guide](../README.md#development-guide) to serve the
+repository, then open your demo path, for example:
+
+- `http://localhost:8080/demos/math3d/`
+
 ## Contributing a New Demo
 
 ### Step 1: Clone this repository and sign contributor agreement

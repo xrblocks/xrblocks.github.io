@@ -41,11 +41,8 @@ To change default display size and curvature, please update the parameters of `W
    ```
 
 4. Serve the web pages:
-   The HTML files need to be served by a local HTTP server. The simplest way is to use the develop.sh script in the project's root directory. This uses port `8080` by default.
-
-   ```bash
-   sh develop.sh
-   ```
+   Follow the [development guide](../../README.md#development-guide) to serve
+   the repository from `http://localhost:8080`.
 
 5. Open sender and receiver:
    - _On your computer_, navigate to http://localhost:8080/samples/virtual-screens/send.html.
