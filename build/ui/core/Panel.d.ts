@@ -108,6 +108,7 @@ export declare class Panel extends View implements Draggable, Partial<HasDraggin
      * Ensures all child materials are configured for transparency.
      */
     private _prepareMaterialsForFade;
+    private _setMaterialOpacity;
     /**
      * Applies the given opacity to all materials in the hierarchy.
      */

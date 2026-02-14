@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.9.0
- * @commitid a1dfa08
- * @builddate 2026-02-14T01:05:39.403Z
+ * @commitid 7fb3ec9
+ * @builddate 2026-02-14T02:34:46.373Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -6556,6 +6556,7 @@ declare class Panel extends View implements Draggable, Partial<HasDraggingMode> 
      * Ensures all child materials are configured for transparency.
      */
     private _prepareMaterialsForFade;
+    private _setMaterialOpacity;
     /**
      * Applies the given opacity to all materials in the hierarchy.
      */

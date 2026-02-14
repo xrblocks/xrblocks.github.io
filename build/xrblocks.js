@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.9.0
- * @commitid a1dfa08
- * @builddate 2026-02-14T01:05:39.403Z
+ * @commitid 7fb3ec9
+ * @builddate 2026-02-14T02:34:46.373Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -14548,6 +14548,15 @@ class Panel extends View {
             }
         });
     }
+    _setMaterialOpacity(opacityValue, material) {
+        if (material instanceof THREE.ShaderMaterial &&
+            material.uniforms.uOpacity) {
+            material.uniforms.uOpacity.value = opacityValue;
+        }
+        else {
+            material.opacity = opacityValue;
+        }
+    }
     /**
      * Applies the given opacity to all materials in the hierarchy.
      */
@@ -14556,17 +14565,14 @@ class Panel extends View {
             if (child instanceof View)
                 child.opacity = opacityValue;
             if (child instanceof THREE.Mesh && child.material) {
-                const materials = Array.isArray(child.material)
-                    ? child.material
-                    : [child.material];
-                materials.forEach((material) => {
-                    if (material instanceof THREE.ShaderMaterial) {
-                        material.uniforms.uOpacity.value = opacityValue;
+                if (Array.isArray(child.material)) {
+                    for (const material of child.material) {
+                        this._setMaterialOpacity(opacityValue, material);
                     }
-                    else {
-                        material.opacity = opacityValue;
-                    }
-                });
+                }
+                else {
+                    this._setMaterialOpacity(opacityValue, child.material);
+                }
             }
         });
     }
