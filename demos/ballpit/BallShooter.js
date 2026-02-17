@@ -132,12 +132,21 @@ export class BallShooter extends xb.Script {
         const position = sphere.position.copy(body.translation());
         // If the ball falls behind the depth then adjust the spawnTime to begin
         // expiring the ball.
+
+        // Use depth matrices if depth is enabled, otherwise fall back to camera matrices
+        const viewMatrix = xb.depth?.enabled
+          ? xb.depth.depthViewMatrices[0]
+          : xb.core.camera.matrixWorldInverse;
+        const projectionMatrix = xb.depth?.enabled
+          ? xb.depth.depthProjectionMatrices[0]
+          : xb.core.camera.projectionMatrix;
+
         const viewSpacePosition = this.viewSpacePosition
           .copy(position)
-          .applyMatrix4(xb.depth.depthViewMatrices[0]);
+          .applyMatrix4(viewMatrix);
         const clipSpacePosition = this.clipSpacePosition
           .copy(viewSpacePosition)
-          .applyMatrix4(xb.depth.depthProjectionMatrices[0]);
+          .applyMatrix4(projectionMatrix);
         const ballIsInView =
           -1.0 <= clipSpacePosition.x &&
           clipSpacePosition.x <= 1.0 &&
