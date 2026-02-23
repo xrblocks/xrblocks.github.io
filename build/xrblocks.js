@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.10.0
- * @commitid 795ca91
- * @builddate 2026-02-20T03:02:25.009Z
+ * @commitid a546487
+ * @builddate 2026-02-23T20:30:52.714Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -8292,6 +8292,7 @@ class SimulatorControls {
         this._onKeyDown = this.onKeyDown.bind(this);
         this._onKeyUp = this.onKeyUp.bind(this);
         this._onPointerMove = this.onPointerMove.bind(this);
+        this._onBlur = this.onBlur.bind(this);
         const toggleUserInterface = () => {
             this.userInterface.toggleInterfaceVisible();
         };
@@ -8323,6 +8324,8 @@ class SimulatorControls {
         domElement.addEventListener('pointerdown', this._onPointerDown);
         domElement.addEventListener('pointerup', this._onPointerUp);
         domElement.addEventListener('contextmenu', preventDefault);
+        window.addEventListener('blur', this._onBlur);
+        document.addEventListener('visibilitychange', this._onBlur);
     }
     update() {
         this.simulatorModeControls.update();
@@ -8339,6 +8342,14 @@ class SimulatorControls {
         this.pointerDown = false;
     }
     onKeyDown(event) {
+        // On macOS, keyup events are not fired for keys held when Command (Meta)
+        // is pressed. Clear all keys to prevent stuck movement.
+        if (event.metaKey ||
+            event.code === 'MetaLeft' ||
+            event.code === 'MetaRight') {
+            this.downKeys.clear();
+            return;
+        }
         this.downKeys.add(event.code);
         if (event.code == Keycodes.LEFT_SHIFT_CODE) {
             this.setSimulatorMode(NEXT_SIMULATOR_MODE[this.simulatorMode]);
@@ -8347,6 +8358,9 @@ class SimulatorControls {
     }
     onKeyUp(event) {
         this.downKeys.delete(event.code);
+    }
+    onBlur() {
+        this.downKeys.clear();
     }
     setSimulatorMode(mode) {
         this.simulatorMode = mode;
