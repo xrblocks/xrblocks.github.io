@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.10.0
- * @commitid a546487
- * @builddate 2026-02-23T20:30:52.714Z
+ * @commitid 38ead9d
+ * @builddate 2026-02-23T20:44:35.129Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -12854,6 +12854,7 @@ class TextView extends View {
         this.lineHeight = 0;
         /** The total number of lines after text wrapping. */
         this.lineCount = 0;
+        this._onSyncCompleteBound = this.onSyncComplete.bind(this);
         this._initializeTextCalled = false;
         this._text = 'TextView';
         this.useSDFText = options.useSDFText ?? this.useSDFText;
@@ -13035,7 +13036,7 @@ class TextView extends View {
         if (this.useSDFText && Text && this.textObj instanceof Text) {
             this.textObj.addEventListener(
             // @ts-expect-error Missing type in Troika
-            'synccomplete', this.onSyncComplete.bind(this));
+            'synccomplete', this._onSyncCompleteBound);
             if (this.imageOverlay) {
                 new THREE.TextureLoader().load(this.imageOverlay, (texture) => {
                     texture.colorSpace = THREE.SRGBColorSpace;
@@ -13068,7 +13069,7 @@ class TextView extends View {
             this.textObj instanceof Text) {
             this.textObj.removeEventListener(
             // @ts-expect-error Missing type in Troika
-            'synccomplete', this.onSyncComplete.bind(this));
+            'synccomplete', this._onSyncCompleteBound);
         }
         super.dispose();
     }

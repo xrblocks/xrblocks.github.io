@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.10.0
- * @commitid a546487
- * @builddate 2026-02-23T20:30:52.714Z
+ * @commitid 38ead9d
+ * @builddate 2026-02-23T20:44:35.129Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -5936,6 +5936,7 @@ declare class TextView extends View<TextViewEventMap> {
     lineHeight: number;
     /** The total number of lines after text wrapping. */
     lineCount: number;
+    private _onSyncCompleteBound;
     private _initializeTextCalled;
     private _text;
     set text(text: string);
