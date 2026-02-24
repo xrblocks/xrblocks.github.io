@@ -1,4 +1,3 @@
-
 # Role
 Act as an expert Creative Technologist specialized in three.js, WebXR, and the **XR Blocks (xrblocks)** library.
 
@@ -6,13 +5,14 @@ Act as an expert Creative Technologist specialized in three.js, WebXR, and the *
 You are authoring single-file WebXR experiences. You must strictly adhere to the XR Blocks framework architecture.
 
 # User Request
-Create the following experience: <my_xr_experience>
+Create the app following user's request: <my_xr_experience>, following the XR Blocks examples.
 
 # Engineering Guidelines (Strict)
 
 1. **Architecture (Single File):**
    - Output a SINGLE `index.html` file.
    - Logic must be inside a class extending `xb.Script` within `<script type="module">`.
+   - XR Blocks handles XR sessions, window resizing, and rendering loop.
    - CSS must use: `https://xrblocks.github.io/css/xr.css`.
 
 2. **Dependency Management (Critical):**
@@ -25,17 +25,18 @@ Create the following experience: <my_xr_experience>
      - "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
      - "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
      - "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
-     - "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",    
+     - "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
      - "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
      - "lit/": "https://esm.run/lit@3/",
-     - "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js"
-     - "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+     - "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js"
+     - "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
 
 3. **Coding Standards:**
    - **Class Structure:** logic must be inside `class MyScript extends xb.Script`.
    - **Lifecycle:** Use `init()` for setup and `update()` for the loop. Do NOT use `requestAnimationFrame` manually; `xb.Script` handles this.
    - **Interactions:** Use `onSelectStart`, `onSelectEnd`, `onSelecting` methods within the class.
    - **Coordinates:** `y` is up. `z` is forward/backward. Initialize objects at `z = -this.user.objectDistance`.
+   - **Spatial UI:** Use XR Blocks's 3D UI instead of 2D overlay divs.
 
 4. **Specific XR Features:**
    - **Text:** Use `troika-three-text` (Pattern: `1_ui`).
@@ -56,7 +57,7 @@ File: `templates/0_basic/index.html`
 <html lang="en">
   <head>
     <title>Basic: Pinch to Set Color | XR Blocks Template</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -70,8 +71,8 @@ File: `templates/0_basic/index.html`
         "imports": {
           "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
           "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -141,7 +142,7 @@ File: `templates/1_ui/index.html`
 <html lang="en">
   <head>
     <title>UI: Spatial Panels | XR Blocks Template</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -162,8 +163,8 @@ File: `templates/1_ui/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -259,7 +260,7 @@ File: `templates/2_hands/index.html`
 <html lang="en">
   <head>
     <title>Hands: Mesh and Touch | XR Blocks Template</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -280,8 +281,8 @@ File: `templates/2_hands/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -453,7 +454,7 @@ File: `templates/3_depth/index.html`
 <html lang="en">
   <head>
     <title>Depth | XR Blocks Template</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -470,8 +471,8 @@ File: `templates/3_depth/index.html`
           "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -547,7 +548,7 @@ File: `templates/4_stereo/index.html`
 <html lang="en">
   <head>
     <title>Stereo | XR Blocks Template</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -564,8 +565,8 @@ File: `templates/4_stereo/index.html`
           "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -636,7 +637,7 @@ File: `templates/5_camera/index.html`
 <html lang="en">
   <head>
     <title>Camera | XR Blocks Template</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -658,8 +659,8 @@ File: `templates/5_camera/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -757,7 +758,7 @@ File: `templates/6_ai/index.html`
 <!doctype html>
 <html lang="en">
   <head>
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <title>XR Blocks - AI Query Demo</title>
@@ -777,8 +778,8 @@ File: `templates/6_ai/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/",
           "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
@@ -922,7 +923,7 @@ File: `templates/7_ai_live/index.html`
 <!doctype html>
 <html lang="en">
   <head>
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <title>XR Blocks - Gemini Live AI Demo</title>
@@ -942,8 +943,8 @@ File: `templates/7_ai_live/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/",
           "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
@@ -1191,7 +1192,7 @@ File: `templates/8_objects/index.html`
 <html lang="en">
   <head>
     <title>World Component: Object Detection | XR Blocks Template</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -1212,8 +1213,8 @@ File: `templates/8_objects/index.html`
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
           "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/",
           "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
@@ -1291,7 +1292,7 @@ File: `templates/9_xr-toggle/index.html`
 <html lang="en">
   <head>
     <title>Transition between AR and VR | XR Blocks Template</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -1307,8 +1308,8 @@ File: `templates/9_xr-toggle/index.html`
           "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -1386,7 +1387,7 @@ File: `templates/heuristic_hand_gestures/index.html`
 <html lang="en">
   <head>
     <title>Gestures: Heuristic Logging | XR Blocks Template</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -1407,8 +1408,8 @@ File: `templates/heuristic_hand_gestures/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -1493,7 +1494,7 @@ File: `templates/meshes/index.html`
 <html lang="en">
   <head>
     <title>Meshes | XR Blocks Template</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -1510,8 +1511,8 @@ File: `templates/meshes/index.html`
           "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -1545,7 +1546,7 @@ File: `templates/planes/index.html`
 <html lang="en">
   <head>
     <title>Planes | XR Blocks Template</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -1562,8 +1563,8 @@ File: `templates/planes/index.html`
           "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -1597,7 +1598,7 @@ File: `templates/uikit/index.html`
 <html lang="en">
   <head>
     <title>XR Blocks x @pmndrs/uikit Template</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -1619,8 +1620,8 @@ File: `templates/uikit/index.html`
           "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.56/dist/index.min.js",
           "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.12.1/dist/signals-core.mjs",
           "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -1796,7 +1797,7 @@ File: `samples/depthmap/index.html`
 <html lang="en">
   <head>
     <title>Depth Map | XR Blocks</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -1818,8 +1819,8 @@ File: `samples/depthmap/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -2086,7 +2087,7 @@ File: `samples/depthmesh/index.html`
 <html lang="en">
   <head>
     <title>Depth Mesh | XR Blocks</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -2105,8 +2106,8 @@ File: `samples/depthmesh/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -2191,7 +2192,7 @@ File: `samples/gestures_custom/index.html`
 <html lang="en">
   <head>
     <title>Custom Hand Gestures | XR Blocks</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -2219,8 +2220,8 @@ File: `samples/gestures_custom/index.html`
           "@litertjs/wasm-utils": "https://unpkg.com/@litertjs/wasm-utils@0.2.1",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -2669,7 +2670,7 @@ File: `samples/lighting/index.html`
 <html lang="en">
   <head>
     <title>Lighting Estimation | XR Blocks</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -2692,8 +2693,8 @@ File: `samples/lighting/index.html`
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
           "@material/web/": "https://esm.run/@material/web/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -2845,7 +2846,7 @@ File: `samples/mesh_detection/index.html`
 <html lang="en">
   <head>
     <title>Mesh Detection | XR Blocks Template</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -2862,8 +2863,8 @@ File: `samples/mesh_detection/index.html`
           "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -2896,7 +2897,7 @@ File: `samples/modelviewer/index.html`
 <html lang="en">
   <head>
     <title>Model Viewer | XR Blocks</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -2918,8 +2919,8 @@ File: `samples/modelviewer/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/",
           "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/0.1.10/spark.module.js"
         }
       }
@@ -3089,7 +3090,7 @@ File: `samples/paint/index.html`
 <html lang="en">
   <head>
     <title>Paint | XR Blocks</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -3110,8 +3111,8 @@ File: `samples/paint/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -3220,6 +3221,56 @@ document.addEventListener('DOMContentLoaded', start);
 ```
 
 
+### Sample: planar-vst
+File: `samples/planar-vst/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Planar VST | XR Blocks</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <script type="module">
+      import * as THREE from 'three';
+      import * as xb from 'xrblocks';
+      import {PlanarVST} from 'xrblocks/addons/camera/PlanarVST.js';
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const options = new xb.Options();
+        options.enableCamera();
+        options.deviceCamera.videoConstraints = {
+          width: {ideal: 1280},
+          height: {ideal: 720},
+          facingMode: 'environment',
+        };
+        options.enableDepth();
+        xb.add(new PlanarVST());
+        xb.init(options);
+      });
+    </script>
+  </body>
+</html>
+
+```
+
+
 ### Sample: reticle
 File: `samples/reticle/index.html`
 ```html
@@ -3227,7 +3278,7 @@ File: `samples/reticle/index.html`
 <html lang="en">
   <head>
     <title>Reticle | XR Blocks</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -3246,8 +3297,8 @@ File: `samples/reticle/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -3327,7 +3378,7 @@ File: `samples/sound/index.html`
 <html lang="en">
   <head>
     <title>Sound Sample | XR Blocks</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -3344,7 +3395,7 @@ File: `samples/sound/index.html`
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
           "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js"
         }
       }
     </script>
@@ -3722,7 +3773,7 @@ File: `samples/ui/index.html`
 <html lang="en">
   <head>
     <title>UI Panels Showcase | XR Blocks</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -3738,7 +3789,7 @@ File: `samples/ui/index.html`
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
           "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js"
         }
       }
     </script>
@@ -4223,7 +4274,7 @@ File: `demos/balloonpop/index.html`
 <html lang="en">
   <head>
     <title>XR Blocks: Balloon Pop (v5.1 - Stable Fallback)</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -4896,7 +4947,7 @@ File: `demos/ballpit/index.html`
 <html lang="en">
   <head>
     <title>Ballpit</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -4918,8 +4969,8 @@ File: `demos/ballpit/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -4944,14 +4995,19 @@ const depthMeshColliderUpdateFps = xb.getUrlParamFloat(
 );
 
 const useSceneMesh = xb.getUrlParamBool('scenemesh', false);
+const sceneMeshDebug = xb.getUrlParamBool('scenemeshdebug', false);
 
 const options = new xb.Options();
 if (useSceneMesh) {
   options.world.enableMeshDetection();
+  options.world.meshes.showDebugVisualizations = sceneMeshDebug;
 } else {
   options.depth = new xb.DepthOptions(xb.xrDepthMeshPhysicsOptions);
   options.depth.depthMesh.colliderUpdateFps = depthMeshColliderUpdateFps;
+  options.depth.matchDepthView = false;
 }
+options.reticles.enabled = false;
+options.controllers.performRaycastOnUpdate = false;
 options.xrButton = {
   ...options.xrButton,
   startText: '<i id="xrlogo"></i> LET THE FUN BEGIN',
@@ -5119,13 +5175,11 @@ export class BallShooter extends xb.Script {
       this.spheres.push(sphere);
     }
 
-    const matrix = new THREE.Matrix4();
     for (let i = 0; i < this.spheres.length; i++) {
       const x = Math.random() * 2 - 2;
       const y = Math.random() * 2;
       const z = Math.random() * 2 - 2;
 
-      matrix.setPosition(x, y, z);
       this.spheres[i].position.set(x, y, z);
       if (palette != null) {
         this.spheres[i].material.color.copy(palette.getRandomLiteGColor());
@@ -5162,20 +5216,10 @@ export class BallShooter extends xb.Script {
     colliderActiveEvents = 0,
     continuousCollisionDetection = false,
   }) {
-    for (let i = 0; i < this.spheres.length; ++i) {
-      const position = this.spheres[i].position;
-      const desc = RAPIER.RigidBodyDesc.dynamic()
-        .setTranslation(...position)
-        .setCcdEnabled(continuousCollisionDetection);
-      const body = blendedWorld.createRigidBody(desc);
-      const shape = RAPIER.ColliderDesc.ball(
-        this.spheres[i].geometry.parameters.radius
-      ).setActiveEvents(colliderActiveEvents);
-      const collider = blendedWorld.createCollider(shape, body);
-      this.colliderHandleToIndex.set(collider.handle, i);
-      this.rigidBodies.push(body);
-      this.colliders.push(collider);
-    }
+    this.RAPIER = RAPIER;
+    this.blendedWorld = blendedWorld;
+    this.colliderActiveEvents = colliderActiveEvents;
+    this.continuousCollisionDetection = continuousCollisionDetection;
   }
 
   /**
@@ -5193,34 +5237,65 @@ export class BallShooter extends xb.Script {
     ball.position.copy(position);
     ball.scale.setScalar(1.0);
     ball.opacity = 1.0;
-    if (this.rigidBodies.length > 0) {
-      const body = this.rigidBodies[this.nextBall];
-      body.setTranslation(position);
-      body.setLinvel(velocity);
-    }
+    this._createRigidBody(
+      this.nextBall,
+      position,
+      velocity,
+      ball.geometry.parameters.radius
+    );
     this.spawnTimes[this.nextBall] = now;
     this.nextBall = (this.nextBall + 1) % this.spheres.length;
     this.add(ball);
   }
 
+  _createRigidBody(index, position, velocity, radius) {
+    // Delete existing body if one already exists for this index
+    if (this.rigidBodies[index] != null) {
+      const existingBody = this.rigidBodies[index];
+      this.blendedWorld.removeRigidBody(existingBody);
+    }
+
+    // Create new body
+    const desc = this.RAPIER.RigidBodyDesc.dynamic()
+      .setTranslation(position.x, position.y, position.z)
+      .setLinvel(velocity.x, velocity.y, velocity.z)
+      .setCcdEnabled(this.continuousCollisionDetection);
+    const body = this.blendedWorld.createRigidBody(desc);
+    const shape = this.RAPIER.ColliderDesc.ball(radius).setActiveEvents(
+      this.colliderActiveEvents
+    );
+    const collider = this.blendedWorld.createCollider(shape, body);
+    this.colliderHandleToIndex.set(collider.handle, index);
+    this.rigidBodies[index] = body;
+    this.colliders[index] = collider;
+  }
+
   physicsStep(now = performance.now()) {
-    const camera = xb.core.camera;
     for (let i = 0; i < this.spheres.length; i++) {
       const sphere = this.spheres[i];
       const body = this.rigidBodies[i];
       let spawnTime = this.spawnTimes[i];
 
-      if (this.isBallActive(i)) {
+      if (this.isBallActive(i) && body != null) {
         let ballVisibility = 1.0;
         const position = sphere.position.copy(body.translation());
         // If the ball falls behind the depth then adjust the spawnTime to begin
         // expiring the ball.
+
+        // Use depth matrices if depth is enabled, otherwise fall back to camera matrices
+        const viewMatrix = xb.depth?.enabled
+          ? xb.depth.depthViewMatrices[0]
+          : xb.core.camera.matrixWorldInverse;
+        const projectionMatrix = xb.depth?.enabled
+          ? xb.depth.depthProjectionMatrices[0]
+          : xb.core.camera.projectionMatrix;
+
         const viewSpacePosition = this.viewSpacePosition
           .copy(position)
-          .applyMatrix4(camera.matrixWorldInverse);
+          .applyMatrix4(viewMatrix);
         const clipSpacePosition = this.clipSpacePosition
           .copy(viewSpacePosition)
-          .applyMatrix4(camera.projectionMatrix);
+          .applyMatrix4(projectionMatrix);
         const ballIsInView =
           -1.0 <= clipSpacePosition.x &&
           clipSpacePosition.x <= 1.0 &&
@@ -5259,20 +5334,15 @@ export class BallShooter extends xb.Script {
           ballVisibility = 1.0 - deflateAmount;
         }
 
-        body.setTranslation(position);
         sphere.material.opacity = ballVisibility;
 
         if (ballVisibility < 0.001) {
-          sphere.material.opacity = 0.0;
-          sphere.scale.setScalar(0);
-          position.set(0.0, -1000.0, 0.0);
-          body.setTranslation(position);
           this.removeBall(i);
+        } else {
+          sphere.position.copy(body.translation());
+          sphere.quaternion.copy(body.rotation());
         }
       }
-
-      sphere.position.copy(body.translation());
-      sphere.quaternion.copy(body.rotation());
     }
   }
 
@@ -5282,9 +5352,14 @@ export class BallShooter extends xb.Script {
 
   removeBall(index) {
     const ball = this.spheres[index];
+    ball.material.opacity = 0.0;
+    ball.scale.setScalar(0);
     const body = this.rigidBodies[index];
-    ball.position.set(0.0, -1000.0, 0.0);
-    body.setTranslation(ball.position);
+    if (body != null) {
+      this.blendedWorld.removeRigidBody(body);
+      this.rigidBodies[index] = null;
+      this.colliders[index] = null;
+    }
     this.remove(ball);
   }
 
@@ -5303,7 +5378,7 @@ File: `demos/gemini-icebreakers/index.html`
 <html lang="en">
   <head>
     <title>Gemini Icebreakers</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -5324,8 +5399,8 @@ File: `demos/gemini-icebreakers/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/",
           "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
@@ -5930,7 +6005,7 @@ File: `demos/occlusion/index.html`
 <html lang="en">
   <head>
     <title>Occlusion</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -5953,8 +6028,8 @@ File: `demos/occlusion/index.html`
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
           "@material/web/": "https://esm.run/@material/web/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -6205,7 +6280,7 @@ File: `demos/rain/index.html`
 <html lang="en">
   <head>
     <title>Rain</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -6228,8 +6303,8 @@ File: `demos/rain/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -6866,7 +6941,7 @@ File: `demos/screenwiper/index.html`
 <html lang="en">
   <head>
     <title>Screen Wiper</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -6887,8 +6962,8 @@ File: `demos/screenwiper/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -7338,7 +7413,7 @@ File: `demos/splash/index.html`
 <html lang="en">
   <head>
     <title>Splash</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -7361,8 +7436,8 @@ File: `demos/splash/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -7803,7 +7878,7 @@ File: `demos/webcam_gestures/index.html`
 <html lang="en">
   <head>
     <title>Webcam Gestures | XR Blocks</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -7825,8 +7900,8 @@ File: `demos/webcam_gestures/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/",
           "@mediapipe/tasks-vision": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.9/+esm"
         }
       }
@@ -8067,7 +8142,7 @@ File: `demos/xremoji/index.html`
 <html lang="en">
   <head>
     <title>Meet emoji</title>
-    
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -8095,8 +8170,8 @@ File: `demos/xremoji/index.html`
           "@litertjs/core": "https://unpkg.com/@litertjs/core@0.2.1",
           "@litertjs/tfjs-interop": "https://unpkg.com/@litertjs/tfjs-interop@1.0.1",
           "@litertjs/wasm-utils": "https://unpkg.com/@litertjs/wasm-utils@0.2.1",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
         }
       }
     </script>
@@ -9054,7 +9129,7 @@ File: `demos/xrpoet/index.html`
 <!doctype html>
 <html lang="en">
   <head>
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <title>Gemini Poem Generator</title>
@@ -9074,8 +9149,8 @@ File: `demos/xrpoet/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.9.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/",
           "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
@@ -9218,3 +9293,4 @@ Ensure to write everything as XR Blocks Script as xb.script.
 --------------------------------------------------------------------------------
 After writing code, RECHECK THE TOP 10 RULES and REVISE code.
 Do NOT hullicinate other xrblocks versions.
+In the end, remind users that "The XR app is best viewed in an Android XR device like Galaxy XR. On desktop, we provide you a simulated environment for previewing the app."
