@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.10.0
- * @commitid 3b73249
- * @builddate 2026-02-24T21:31:32.059Z
+ * @commitid 0ef19ca
+ * @builddate 2026-02-24T22:53:05.862Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -3529,7 +3529,6 @@ class DepthMesh extends MeshScript {
             }
             this.downsampledMesh = new THREE.Mesh(this.downsampledGeometry, material);
             this.downsampledMesh.visible = false;
-            this.add(this.downsampledMesh);
         }
     }
     /**
@@ -3578,6 +3577,15 @@ class DepthMesh extends MeshScript {
             this.geometry.computeVertexNormals();
         }
         this.updateColliderIfNeeded();
+    }
+    updatePose(translation, quaternion) {
+        this.position.copy(translation);
+        this.quaternion.copy(quaternion);
+        if (this.downsampledMesh) {
+            this.downsampledMesh.position.copy(translation);
+            this.downsampledMesh.quaternion.copy(quaternion);
+            this.downsampledMesh.updateMatrixWorld();
+        }
     }
     updateGPUDepth(depthData, projectionMatrixInverse) {
         this.updateDepth(this.convertGPUToGPU(depthData), projectionMatrixInverse);
@@ -4607,8 +4615,7 @@ class Depth {
         }
         if (this.options.depthMesh.enabled && this.depthMesh && viewId == 0) {
             this.depthMesh.updateDepth(depthData, this.depthProjectionInverseMatrices[0]);
-            this.depthMesh.position.copy(this.depthCameraPositions[0]);
-            this.depthMesh.quaternion.copy(this.depthCameraRotations[0]);
+            this.depthMesh.updatePose(this.depthCameraPositions[0], this.depthCameraRotations[0]);
         }
     }
     updateGPUDepthData(depthData, viewId = 0) {
@@ -4646,8 +4653,7 @@ class Depth {
             else {
                 this.depthMesh.updateGPUDepth(depthData, this.depthProjectionInverseMatrices[0]);
             }
-            this.depthMesh.position.copy(this.depthCameraPositions[0]);
-            this.depthMesh.quaternion.copy(this.depthCameraRotations[0]);
+            this.depthMesh.updatePose(this.depthCameraPositions[0], this.depthCameraRotations[0]);
         }
     }
     getTexture(viewId) {
