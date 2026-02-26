@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.10.0
- * @commitid f2d7cdf
- * @builddate 2026-02-26T18:53:30.582Z
+ * @commitid 3e5b312
+ * @builddate 2026-02-26T20:59:24.334Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -3855,16 +3855,72 @@ declare class Hands {
     isValid(handIndex?: number): boolean;
 }
 
+/**
+ * A frozen object containing standardized string values for `event.code`.
+ * Used for desktop simulation.
+ */
+declare enum Keycodes {
+    W_CODE = "KeyW",
+    A_CODE = "KeyA",
+    S_CODE = "KeyS",
+    D_CODE = "KeyD",
+    UP = "ArrowUp",
+    DOWN = "ArrowDown",
+    LEFT = "ArrowLeft",
+    RIGHT = "ArrowRight",
+    Q_CODE = "KeyQ",// Often used for 'down' or 'strafe left'
+    E_CODE = "KeyE",// Often used for 'up' or 'strafe right'
+    PAGE_UP = "PageUp",
+    PAGE_DOWN = "PageDown",
+    SPACE_CODE = "Space",
+    ENTER_CODE = "Enter",
+    T_CODE = "KeyT",// General purpose 'toggle' or 'tool' key
+    LEFT_SHIFT_CODE = "ShiftLeft",
+    RIGHT_SHIFT_CODE = "ShiftRight",
+    LEFT_CTRL_CODE = "ControlLeft",
+    RIGHT_CTRL_CODE = "ControlRight",
+    LEFT_ALT_CODE = "AltLeft",
+    RIGHT_ALT_CODE = "AltRight",
+    CAPS_LOCK_CODE = "CapsLock",
+    ESCAPE_CODE = "Escape",
+    TAB_CODE = "Tab",
+    B_CODE = "KeyB",
+    C_CODE = "KeyC",
+    F_CODE = "KeyF",
+    G_CODE = "KeyG",
+    H_CODE = "KeyH",
+    I_CODE = "KeyI",
+    J_CODE = "KeyJ",
+    K_CODE = "KeyK",
+    L_CODE = "KeyL",
+    M_CODE = "KeyM",
+    N_CODE = "KeyN",
+    O_CODE = "KeyO",
+    P_CODE = "KeyP",
+    R_CODE = "KeyR",
+    U_CODE = "KeyU",
+    V_CODE = "KeyV",
+    X_CODE = "KeyX",
+    Y_CODE = "KeyY",
+    Z_CODE = "KeyZ",
+    DIGIT_0 = "Digit0",
+    DIGIT_1 = "Digit1",
+    DIGIT_2 = "Digit2",
+    DIGIT_3 = "Digit3",
+    DIGIT_4 = "Digit4",
+    DIGIT_5 = "Digit5",
+    DIGIT_6 = "Digit6",
+    DIGIT_7 = "Digit7",
+    DIGIT_8 = "Digit8",
+    DIGIT_9 = "Digit9",
+    BACKQUOTE = "Backquote"
+}
+
 declare enum SimulatorMode {
     USER = "User",
     POSE = "Navigation",
     CONTROLLER = "Hands"
 }
-declare const NEXT_SIMULATOR_MODE: {
-    User: SimulatorMode;
-    Navigation: SimulatorMode;
-    Hands: SimulatorMode;
-};
 interface SimulatorCustomInstruction {
     header: string | TemplateResult;
     videoSrc?: string;
@@ -3886,6 +3942,14 @@ declare class SimulatorOptions {
     };
     defaultMode: SimulatorMode;
     defaultHand: Handedness;
+    modeToggle: {
+        toggleKey: Keycodes | null;
+        toggleOrder: {
+            User: SimulatorMode;
+            Navigation: SimulatorMode;
+            Hands: SimulatorMode;
+        };
+    };
     modeIndicator: {
         enabled: boolean;
         element: string;
@@ -4976,67 +5040,6 @@ declare class SimulatorControllerState {
     currentControllerIndex: number;
 }
 
-/**
- * A frozen object containing standardized string values for `event.code`.
- * Used for desktop simulation.
- */
-declare enum Keycodes {
-    W_CODE = "KeyW",
-    A_CODE = "KeyA",
-    S_CODE = "KeyS",
-    D_CODE = "KeyD",
-    UP = "ArrowUp",
-    DOWN = "ArrowDown",
-    LEFT = "ArrowLeft",
-    RIGHT = "ArrowRight",
-    Q_CODE = "KeyQ",// Often used for 'down' or 'strafe left'
-    E_CODE = "KeyE",// Often used for 'up' or 'strafe right'
-    PAGE_UP = "PageUp",
-    PAGE_DOWN = "PageDown",
-    SPACE_CODE = "Space",
-    ENTER_CODE = "Enter",
-    T_CODE = "KeyT",// General purpose 'toggle' or 'tool' key
-    LEFT_SHIFT_CODE = "ShiftLeft",
-    RIGHT_SHIFT_CODE = "ShiftRight",
-    LEFT_CTRL_CODE = "ControlLeft",
-    RIGHT_CTRL_CODE = "ControlRight",
-    LEFT_ALT_CODE = "AltLeft",
-    RIGHT_ALT_CODE = "AltRight",
-    CAPS_LOCK_CODE = "CapsLock",
-    ESCAPE_CODE = "Escape",
-    TAB_CODE = "Tab",
-    B_CODE = "KeyB",
-    C_CODE = "KeyC",
-    F_CODE = "KeyF",
-    G_CODE = "KeyG",
-    H_CODE = "KeyH",
-    I_CODE = "KeyI",
-    J_CODE = "KeyJ",
-    K_CODE = "KeyK",
-    L_CODE = "KeyL",
-    M_CODE = "KeyM",
-    N_CODE = "KeyN",
-    O_CODE = "KeyO",
-    P_CODE = "KeyP",
-    R_CODE = "KeyR",
-    U_CODE = "KeyU",
-    V_CODE = "KeyV",
-    X_CODE = "KeyX",
-    Y_CODE = "KeyY",
-    Z_CODE = "KeyZ",
-    DIGIT_0 = "Digit0",
-    DIGIT_1 = "Digit1",
-    DIGIT_2 = "Digit2",
-    DIGIT_3 = "Digit3",
-    DIGIT_4 = "Digit4",
-    DIGIT_5 = "Digit5",
-    DIGIT_6 = "Digit6",
-    DIGIT_7 = "Digit7",
-    DIGIT_8 = "Digit8",
-    DIGIT_9 = "Digit9",
-    BACKQUOTE = "Backquote"
-}
-
 type SimulatorHandPoseJoints = {
     t: number[];
     r: number[];
@@ -5175,6 +5178,7 @@ declare class SimulatorControls {
         [key: string]: SimulatorControlMode;
     };
     renderer: THREE.WebGLRenderer;
+    private simulatorOptions?;
     private _onPointerDown;
     private _onPointerUp;
     private _onKeyDown;
@@ -7985,5 +7989,5 @@ declare class VideoFileStream extends VideoStream<VideoFileStreamDetails> {
     setSource(videoFile: string | File): Promise<void>;
 }
 
-export { AI, AIOptions, AVERAGE_IPD_METERS, ActiveControllers, Agent, AnimatableNumber, AudioListener, AudioPlayer, BACK, BackgroundMusic, CategoryVolumes, Col, Core, CoreSound, DEFAULT_DEVICE_CAMERA_HEIGHT, DEFAULT_DEVICE_CAMERA_WIDTH, DEFAULT_RGB_TO_DEPTH_PARAMS, DEVICE_CAMERA_PARAMETERS, DOWN, Depth, DepthMesh, DepthMeshOptions, DepthOptions, DepthTextures, DetectedObject, DetectedPlane, DeviceCameraOptions, DragManager, DragMode, ExitButton, FORWARD, FreestandingSlider, GazeController, Gemini, GeminiOptions, GenerateSkyboxTool, GestureRecognition, GestureRecognitionOptions, GetWeatherTool, Grid, HAND_BONE_IDX_CONNECTION_MAP, HAND_JOINT_COUNT, HAND_JOINT_IDX_CONNECTION_MAP, HAND_JOINT_NAMES, Handedness, Hands, HandsOptions, HorizontalPager, IconButton, IconView, ImageView, Input, InputOptions, Keycodes, LEFT, LEFT_VIEW_ONLY_LAYER, LabelView, Lighting, LightingOptions, LoadingSpinnerManager, MaterialSymbolsView, MeshScript, ModelLoader, ModelViewer, MouseController, NEXT_SIMULATOR_MODE, NUM_HANDS, OCCLUDABLE_ITEMS_LAYER, ObjectDetector, ObjectsOptions, OcclusionPass, OcclusionUtils, OpenAI, OpenAIOptions, Options, PageIndicator, Pager, PagerState, Panel, PanelMesh, Physics, PhysicsOptions, PinchOnButtonAction, PlaneDetector, PlanesOptions, RIGHT, RIGHT_VIEW_ONLY_LAYER, Raycaster, Registry, Reticle, ReticleOptions, RotationRaycastMesh, Row, SIMULATOR_HAND_POSE_NAMES, SIMULATOR_HAND_POSE_TO_JOINTS_LEFT, SIMULATOR_HAND_POSE_TO_JOINTS_RIGHT, SOUND_PRESETS, ScreenshotSynthesizer, Script, ScriptMixin, ScriptsManager, ScrollingTroikaTextView, SetSimulatorModeEvent, ShowHandsAction, Simulator, SimulatorCamera, SimulatorControlMode, SimulatorControllerState, SimulatorControls, SimulatorDepth, SimulatorDepthMaterial, SimulatorHandPose, SimulatorHandPoseChangeRequestEvent, SimulatorHands, SimulatorInterface, SimulatorMediaDeviceInfo, SimulatorMode, SimulatorOptions, SimulatorRenderMode, SimulatorScene, SimulatorUser, SimulatorUserAction, SketchPanel, SkyboxAgent, SoundOptions, SoundSynthesizer, SpatialAudio, SpatialPanel, SpeechRecognizer, SpeechRecognizerOptions, SpeechSynthesizer, SpeechSynthesizerOptions, SplatAnchor, StreamState, TextButton, TextScrollerState, TextView, Tool, UI, UI_OVERLAY_LAYER, UP, UX, User, VIEW_DEPTH_GAP, VerticalPager, VideoFileStream, VideoStream, VideoView, View, VolumeCategory, WaitFrame, WalkTowardsPanelAction, World, WorldOptions, XRButton, XRDeviceCamera, XREffects, XRPass, XRTransitionOptions, XR_BLOCKS_ASSETS_PATH, ZERO_VECTOR3, add, ai, callInitWithDependencyInjection, clamp, clampRotationToAngle, core, cropImage, depth, extractYaw, getCameraParametersSnapshot, getColorHex, getDeltaTime, getDeviceCameraClipFromView, getDeviceCameraWorldFromClip, getDeviceCameraWorldFromView, getElapsedTime, getUrlParamBool, getUrlParamFloat, getUrlParamInt, getUrlParameter, getVec4ByColorString, getXrCameraLeft, getXrCameraRight, init, initScript, intrinsicsToProjectionMatrix, lerp, loadStereoImageAsTextures, loadingSpinnerManager, lookAtRotation, objectIsDescendantOf, parseBase64DataURL, placeObjectAtIntersectionFacingTarget, print, scene, showOnlyInLeftEye, showOnlyInRightEye, showReticleOnDepthMesh, timer, transformRgbUvToWorld, traverseUtil, uninitScript, urlParams, user, world, xrDepthMeshOptions, xrDepthMeshPhysicsOptions, xrDepthMeshVisualizationOptions, xrDeviceCameraEnvironmentContinuousOptions, xrDeviceCameraEnvironmentOptions, xrDeviceCameraUserContinuousOptions, xrDeviceCameraUserOptions };
+export { AI, AIOptions, AVERAGE_IPD_METERS, ActiveControllers, Agent, AnimatableNumber, AudioListener, AudioPlayer, BACK, BackgroundMusic, CategoryVolumes, Col, Core, CoreSound, DEFAULT_DEVICE_CAMERA_HEIGHT, DEFAULT_DEVICE_CAMERA_WIDTH, DEFAULT_RGB_TO_DEPTH_PARAMS, DEVICE_CAMERA_PARAMETERS, DOWN, Depth, DepthMesh, DepthMeshOptions, DepthOptions, DepthTextures, DetectedObject, DetectedPlane, DeviceCameraOptions, DragManager, DragMode, ExitButton, FORWARD, FreestandingSlider, GazeController, Gemini, GeminiOptions, GenerateSkyboxTool, GestureRecognition, GestureRecognitionOptions, GetWeatherTool, Grid, HAND_BONE_IDX_CONNECTION_MAP, HAND_JOINT_COUNT, HAND_JOINT_IDX_CONNECTION_MAP, HAND_JOINT_NAMES, Handedness, Hands, HandsOptions, HorizontalPager, IconButton, IconView, ImageView, Input, InputOptions, Keycodes, LEFT, LEFT_VIEW_ONLY_LAYER, LabelView, Lighting, LightingOptions, LoadingSpinnerManager, MaterialSymbolsView, MeshScript, ModelLoader, ModelViewer, MouseController, NUM_HANDS, OCCLUDABLE_ITEMS_LAYER, ObjectDetector, ObjectsOptions, OcclusionPass, OcclusionUtils, OpenAI, OpenAIOptions, Options, PageIndicator, Pager, PagerState, Panel, PanelMesh, Physics, PhysicsOptions, PinchOnButtonAction, PlaneDetector, PlanesOptions, RIGHT, RIGHT_VIEW_ONLY_LAYER, Raycaster, Registry, Reticle, ReticleOptions, RotationRaycastMesh, Row, SIMULATOR_HAND_POSE_NAMES, SIMULATOR_HAND_POSE_TO_JOINTS_LEFT, SIMULATOR_HAND_POSE_TO_JOINTS_RIGHT, SOUND_PRESETS, ScreenshotSynthesizer, Script, ScriptMixin, ScriptsManager, ScrollingTroikaTextView, SetSimulatorModeEvent, ShowHandsAction, Simulator, SimulatorCamera, SimulatorControlMode, SimulatorControllerState, SimulatorControls, SimulatorDepth, SimulatorDepthMaterial, SimulatorHandPose, SimulatorHandPoseChangeRequestEvent, SimulatorHands, SimulatorInterface, SimulatorMediaDeviceInfo, SimulatorMode, SimulatorOptions, SimulatorRenderMode, SimulatorScene, SimulatorUser, SimulatorUserAction, SketchPanel, SkyboxAgent, SoundOptions, SoundSynthesizer, SpatialAudio, SpatialPanel, SpeechRecognizer, SpeechRecognizerOptions, SpeechSynthesizer, SpeechSynthesizerOptions, SplatAnchor, StreamState, TextButton, TextScrollerState, TextView, Tool, UI, UI_OVERLAY_LAYER, UP, UX, User, VIEW_DEPTH_GAP, VerticalPager, VideoFileStream, VideoStream, VideoView, View, VolumeCategory, WaitFrame, WalkTowardsPanelAction, World, WorldOptions, XRButton, XRDeviceCamera, XREffects, XRPass, XRTransitionOptions, XR_BLOCKS_ASSETS_PATH, ZERO_VECTOR3, add, ai, callInitWithDependencyInjection, clamp, clampRotationToAngle, core, cropImage, depth, extractYaw, getCameraParametersSnapshot, getColorHex, getDeltaTime, getDeviceCameraClipFromView, getDeviceCameraWorldFromClip, getDeviceCameraWorldFromView, getElapsedTime, getUrlParamBool, getUrlParamFloat, getUrlParamInt, getUrlParameter, getVec4ByColorString, getXrCameraLeft, getXrCameraRight, init, initScript, intrinsicsToProjectionMatrix, lerp, loadStereoImageAsTextures, loadingSpinnerManager, lookAtRotation, objectIsDescendantOf, parseBase64DataURL, placeObjectAtIntersectionFacingTarget, print, scene, showOnlyInLeftEye, showOnlyInRightEye, showReticleOnDepthMesh, timer, transformRgbUvToWorld, traverseUtil, uninitScript, urlParams, user, world, xrDepthMeshOptions, xrDepthMeshPhysicsOptions, xrDepthMeshVisualizationOptions, xrDeviceCameraEnvironmentContinuousOptions, xrDeviceCameraEnvironmentOptions, xrDeviceCameraUserContinuousOptions, xrDeviceCameraUserOptions };
 export type { AIModel, AgentLifecycleCallbacks, AudioListenerOptions, AudioPlayerOptions, BuiltInGestureName, CameraParametersSnapshot, ColOptions, Constructor, DeepPartial, DeepReadonly, DepthArray, DeviceCameraParameters, Draggable, FormFactor, GLTFData, GeminiLiveOptions, GeminiQueryInput, GestureConfiguration, GestureConfigurations, GestureEvent, GestureEventDetail, GestureEventType, GestureHandedness, GestureProvider, GetWeatherArgs, GridOptions, HasDraggingMode, HasIgnoreReticleRaycast, IconButtonOptions, IconViewOptions, ImageViewOptions, Injectable, InjectableConstructor, KeyEvent, KeysJson, LabelViewOptions, LiveSessionState, MaterialSymbolsViewOptions, MaybeHasIgnoreReticleRaycast, MediaOrSimulatorMediaDeviceInfo, ModelClass, ModelLoaderLoadGLTFOptions, ModelLoaderLoadOptions, ModelOptions, ObjectGrabEvent, ObjectTouchEvent, OrbiterOptions, PagerOptions, PanelFadeState, PanelOptions, PlaySoundOptions, RAPIERCompat, RgbToDepthParams, RowOptions, ScrollingTroikaTextViewOptions, SelectEvent, Shader, ShaderUniforms, SimulatorCustomInstruction, SimulatorHandPoseHTMLElement, SimulatorHandPoseJoints, SimulatorModeIndicatorElement, SimulatorPlane, SimulatorPlaneType, SpatialPanelOptions, SplatData, TextButtonOptions, TextViewOptions, ToolCall, ToolOptions, ToolResult, ToolSchema, UIJsonNode, UIJsonNodeOptions, VideoFileStreamOptions, VideoStreamDetails, VideoStreamEventMap, VideoStreamGetSnapshotBase64Options, VideoStreamGetSnapshotBlobOptions, VideoStreamGetSnapshotImageDataOptions, VideoStreamGetSnapshotOptions, VideoStreamGetSnapshotTextureOptions, VideoStreamOptions, VideoViewOptions, ViewOptions, WeatherData };

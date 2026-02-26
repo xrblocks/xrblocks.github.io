@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.10.0
- * @commitid f2d7cdf
- * @builddate 2026-02-26T18:53:30.582Z
+ * @commitid 3e5b312
+ * @builddate 2026-02-26T20:59:24.334Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -7386,13 +7386,82 @@ class PhysicsOptions {
     }
 }
 
+/**
+ * A frozen object containing standardized string values for `event.code`.
+ * Used for desktop simulation.
+ */
+var Keycodes;
+(function (Keycodes) {
+    // --- Movement Keys ---
+    Keycodes["W_CODE"] = "KeyW";
+    Keycodes["A_CODE"] = "KeyA";
+    Keycodes["S_CODE"] = "KeyS";
+    Keycodes["D_CODE"] = "KeyD";
+    Keycodes["UP"] = "ArrowUp";
+    Keycodes["DOWN"] = "ArrowDown";
+    Keycodes["LEFT"] = "ArrowLeft";
+    Keycodes["RIGHT"] = "ArrowRight";
+    // --- Vertical Movement / Elevation ---
+    Keycodes["Q_CODE"] = "KeyQ";
+    Keycodes["E_CODE"] = "KeyE";
+    Keycodes["PAGE_UP"] = "PageUp";
+    Keycodes["PAGE_DOWN"] = "PageDown";
+    // --- Action & Interaction Keys ---
+    Keycodes["SPACE_CODE"] = "Space";
+    Keycodes["ENTER_CODE"] = "Enter";
+    Keycodes["T_CODE"] = "KeyT";
+    // --- Modifier Keys ---
+    Keycodes["LEFT_SHIFT_CODE"] = "ShiftLeft";
+    Keycodes["RIGHT_SHIFT_CODE"] = "ShiftRight";
+    Keycodes["LEFT_CTRL_CODE"] = "ControlLeft";
+    Keycodes["RIGHT_CTRL_CODE"] = "ControlRight";
+    Keycodes["LEFT_ALT_CODE"] = "AltLeft";
+    Keycodes["RIGHT_ALT_CODE"] = "AltRight";
+    Keycodes["CAPS_LOCK_CODE"] = "CapsLock";
+    // --- UI & System Keys ---
+    Keycodes["ESCAPE_CODE"] = "Escape";
+    Keycodes["TAB_CODE"] = "Tab";
+    // --- Alphabet Keys ---
+    Keycodes["B_CODE"] = "KeyB";
+    Keycodes["C_CODE"] = "KeyC";
+    Keycodes["F_CODE"] = "KeyF";
+    Keycodes["G_CODE"] = "KeyG";
+    Keycodes["H_CODE"] = "KeyH";
+    Keycodes["I_CODE"] = "KeyI";
+    Keycodes["J_CODE"] = "KeyJ";
+    Keycodes["K_CODE"] = "KeyK";
+    Keycodes["L_CODE"] = "KeyL";
+    Keycodes["M_CODE"] = "KeyM";
+    Keycodes["N_CODE"] = "KeyN";
+    Keycodes["O_CODE"] = "KeyO";
+    Keycodes["P_CODE"] = "KeyP";
+    Keycodes["R_CODE"] = "KeyR";
+    Keycodes["U_CODE"] = "KeyU";
+    Keycodes["V_CODE"] = "KeyV";
+    Keycodes["X_CODE"] = "KeyX";
+    Keycodes["Y_CODE"] = "KeyY";
+    Keycodes["Z_CODE"] = "KeyZ";
+    // --- Number Keys ---
+    Keycodes["DIGIT_0"] = "Digit0";
+    Keycodes["DIGIT_1"] = "Digit1";
+    Keycodes["DIGIT_2"] = "Digit2";
+    Keycodes["DIGIT_3"] = "Digit3";
+    Keycodes["DIGIT_4"] = "Digit4";
+    Keycodes["DIGIT_5"] = "Digit5";
+    Keycodes["DIGIT_6"] = "Digit6";
+    Keycodes["DIGIT_7"] = "Digit7";
+    Keycodes["DIGIT_8"] = "Digit8";
+    Keycodes["DIGIT_9"] = "Digit9";
+    Keycodes["BACKQUOTE"] = "Backquote";
+})(Keycodes || (Keycodes = {}));
+
 var SimulatorMode;
 (function (SimulatorMode) {
     SimulatorMode["USER"] = "User";
     SimulatorMode["POSE"] = "Navigation";
     SimulatorMode["CONTROLLER"] = "Hands";
 })(SimulatorMode || (SimulatorMode = {}));
-const NEXT_SIMULATOR_MODE = {
+const DEFAULT_MODE_TOGGLE_ORDER = {
     [SimulatorMode.USER]: SimulatorMode.POSE,
     [SimulatorMode.POSE]: SimulatorMode.CONTROLLER,
     [SimulatorMode.CONTROLLER]: SimulatorMode.USER,
@@ -7407,6 +7476,10 @@ class SimulatorOptions {
         this.initialScenePosition = { x: -1.6, y: 0.3, z: 0 };
         this.defaultMode = SimulatorMode.USER;
         this.defaultHand = Handedness.LEFT;
+        this.modeToggle = {
+            toggleKey: Keycodes.LEFT_SHIFT_CODE,
+            toggleOrder: DEFAULT_MODE_TOGGLE_ORDER,
+        };
         this.modeIndicator = {
             enabled: true,
             element: 'xrblocks-simulator-mode-indicator',
@@ -8052,75 +8125,6 @@ class SimulatorControllerState {
     }
 }
 
-/**
- * A frozen object containing standardized string values for `event.code`.
- * Used for desktop simulation.
- */
-var Keycodes;
-(function (Keycodes) {
-    // --- Movement Keys ---
-    Keycodes["W_CODE"] = "KeyW";
-    Keycodes["A_CODE"] = "KeyA";
-    Keycodes["S_CODE"] = "KeyS";
-    Keycodes["D_CODE"] = "KeyD";
-    Keycodes["UP"] = "ArrowUp";
-    Keycodes["DOWN"] = "ArrowDown";
-    Keycodes["LEFT"] = "ArrowLeft";
-    Keycodes["RIGHT"] = "ArrowRight";
-    // --- Vertical Movement / Elevation ---
-    Keycodes["Q_CODE"] = "KeyQ";
-    Keycodes["E_CODE"] = "KeyE";
-    Keycodes["PAGE_UP"] = "PageUp";
-    Keycodes["PAGE_DOWN"] = "PageDown";
-    // --- Action & Interaction Keys ---
-    Keycodes["SPACE_CODE"] = "Space";
-    Keycodes["ENTER_CODE"] = "Enter";
-    Keycodes["T_CODE"] = "KeyT";
-    // --- Modifier Keys ---
-    Keycodes["LEFT_SHIFT_CODE"] = "ShiftLeft";
-    Keycodes["RIGHT_SHIFT_CODE"] = "ShiftRight";
-    Keycodes["LEFT_CTRL_CODE"] = "ControlLeft";
-    Keycodes["RIGHT_CTRL_CODE"] = "ControlRight";
-    Keycodes["LEFT_ALT_CODE"] = "AltLeft";
-    Keycodes["RIGHT_ALT_CODE"] = "AltRight";
-    Keycodes["CAPS_LOCK_CODE"] = "CapsLock";
-    // --- UI & System Keys ---
-    Keycodes["ESCAPE_CODE"] = "Escape";
-    Keycodes["TAB_CODE"] = "Tab";
-    // --- Alphabet Keys ---
-    Keycodes["B_CODE"] = "KeyB";
-    Keycodes["C_CODE"] = "KeyC";
-    Keycodes["F_CODE"] = "KeyF";
-    Keycodes["G_CODE"] = "KeyG";
-    Keycodes["H_CODE"] = "KeyH";
-    Keycodes["I_CODE"] = "KeyI";
-    Keycodes["J_CODE"] = "KeyJ";
-    Keycodes["K_CODE"] = "KeyK";
-    Keycodes["L_CODE"] = "KeyL";
-    Keycodes["M_CODE"] = "KeyM";
-    Keycodes["N_CODE"] = "KeyN";
-    Keycodes["O_CODE"] = "KeyO";
-    Keycodes["P_CODE"] = "KeyP";
-    Keycodes["R_CODE"] = "KeyR";
-    Keycodes["U_CODE"] = "KeyU";
-    Keycodes["V_CODE"] = "KeyV";
-    Keycodes["X_CODE"] = "KeyX";
-    Keycodes["Y_CODE"] = "KeyY";
-    Keycodes["Z_CODE"] = "KeyZ";
-    // --- Number Keys ---
-    Keycodes["DIGIT_0"] = "Digit0";
-    Keycodes["DIGIT_1"] = "Digit1";
-    Keycodes["DIGIT_2"] = "Digit2";
-    Keycodes["DIGIT_3"] = "Digit3";
-    Keycodes["DIGIT_4"] = "Digit4";
-    Keycodes["DIGIT_5"] = "Digit5";
-    Keycodes["DIGIT_6"] = "Digit6";
-    Keycodes["DIGIT_7"] = "Digit7";
-    Keycodes["DIGIT_8"] = "Digit8";
-    Keycodes["DIGIT_9"] = "Digit9";
-    Keycodes["BACKQUOTE"] = "Backquote";
-})(Keycodes || (Keycodes = {}));
-
 const { A_CODE: A_CODE$1, D_CODE: D_CODE$1, E_CODE: E_CODE$1, Q_CODE: Q_CODE$1, S_CODE: S_CODE$1, W_CODE: W_CODE$1 } = Keycodes;
 const vector3$6 = new THREE.Vector3();
 const euler$2 = new THREE.Euler();
@@ -8362,6 +8366,7 @@ class SimulatorControls {
         this.setSimulatorMode(simulatorOptions.defaultMode);
         this.simulatorControllerState.currentControllerIndex =
             simulatorOptions.defaultHand === Handedness.LEFT ? 0 : 1;
+        this.simulatorOptions = simulatorOptions;
         this.connect();
     }
     connect() {
@@ -8399,8 +8404,9 @@ class SimulatorControls {
             return;
         }
         this.downKeys.add(event.code);
-        if (event.code == Keycodes.LEFT_SHIFT_CODE) {
-            this.setSimulatorMode(NEXT_SIMULATOR_MODE[this.simulatorMode]);
+        if (this.simulatorOptions &&
+            event.code === this.simulatorOptions.modeToggle.toggleKey) {
+            this.setSimulatorMode(this.simulatorOptions.modeToggle.toggleOrder[this.simulatorMode]);
         }
         this.simulatorModeControls.onKeyDown(event);
     }
@@ -17836,5 +17842,5 @@ class VideoFileStream extends VideoStream {
     }
 }
 
-export { AI, AIOptions, AVERAGE_IPD_METERS, ActiveControllers, Agent, AnimatableNumber, AudioListener, AudioPlayer, BACK, BackgroundMusic, CategoryVolumes, Col, Core, CoreSound, DEFAULT_DEVICE_CAMERA_HEIGHT, DEFAULT_DEVICE_CAMERA_WIDTH, DEFAULT_RGB_TO_DEPTH_PARAMS, DEVICE_CAMERA_PARAMETERS, DOWN, Depth, DepthMesh, DepthMeshOptions, DepthOptions, DepthTextures, DetectedObject, DetectedPlane, DeviceCameraOptions, DragManager, DragMode, ExitButton, FORWARD, FreestandingSlider, GazeController, Gemini, GeminiOptions, GenerateSkyboxTool, GestureRecognition, GestureRecognitionOptions, GetWeatherTool, Grid, HAND_BONE_IDX_CONNECTION_MAP, HAND_JOINT_COUNT, HAND_JOINT_IDX_CONNECTION_MAP, HAND_JOINT_NAMES, Handedness, Hands, HandsOptions, HorizontalPager, IconButton, IconView, ImageView, Input, InputOptions, Keycodes, LEFT, LEFT_VIEW_ONLY_LAYER, LabelView, Lighting, LightingOptions, LoadingSpinnerManager, MaterialSymbolsView, MeshScript, ModelLoader, ModelViewer, MouseController, NEXT_SIMULATOR_MODE, NUM_HANDS, OCCLUDABLE_ITEMS_LAYER, ObjectDetector, ObjectsOptions, OcclusionPass, OcclusionUtils, OpenAI, OpenAIOptions, Options, PageIndicator, Pager, PagerState, Panel, PanelMesh, Physics, PhysicsOptions, PinchOnButtonAction, PlaneDetector, PlanesOptions, RIGHT, RIGHT_VIEW_ONLY_LAYER, Raycaster, Registry, Reticle, ReticleOptions, RotationRaycastMesh, Row, SIMULATOR_HAND_POSE_NAMES, SIMULATOR_HAND_POSE_TO_JOINTS_LEFT, SIMULATOR_HAND_POSE_TO_JOINTS_RIGHT, SOUND_PRESETS, ScreenshotSynthesizer, Script, ScriptMixin, ScriptsManager, ScrollingTroikaTextView, SetSimulatorModeEvent, ShowHandsAction, Simulator, SimulatorCamera, SimulatorControlMode, SimulatorControllerState, SimulatorControls, SimulatorDepth, SimulatorDepthMaterial, SimulatorHandPose, SimulatorHandPoseChangeRequestEvent, SimulatorHands, SimulatorInterface, SimulatorMediaDeviceInfo, SimulatorMode, SimulatorOptions, SimulatorRenderMode, SimulatorScene, SimulatorUser, SimulatorUserAction, SketchPanel, SkyboxAgent, SoundOptions, SoundSynthesizer, SpatialAudio, SpatialPanel, SpeechRecognizer, SpeechRecognizerOptions, SpeechSynthesizer, SpeechSynthesizerOptions, SplatAnchor, StreamState, TextButton, TextScrollerState, TextView, Tool, UI, UI_OVERLAY_LAYER, UP, UX, User, VIEW_DEPTH_GAP, VerticalPager, VideoFileStream, VideoStream, VideoView, View, VolumeCategory, WaitFrame, WalkTowardsPanelAction, World, WorldOptions, XRButton, XRDeviceCamera, XREffects, XRPass, XRTransitionOptions, XR_BLOCKS_ASSETS_PATH, ZERO_VECTOR3, add, ai, callInitWithDependencyInjection, clamp, clampRotationToAngle, core, cropImage, depth, extractYaw, getCameraParametersSnapshot, getColorHex, getDeltaTime, getDeviceCameraClipFromView, getDeviceCameraWorldFromClip, getDeviceCameraWorldFromView, getElapsedTime, getUrlParamBool, getUrlParamFloat, getUrlParamInt, getUrlParameter, getVec4ByColorString, getXrCameraLeft, getXrCameraRight, init, initScript, intrinsicsToProjectionMatrix, lerp, loadStereoImageAsTextures, loadingSpinnerManager, lookAtRotation, objectIsDescendantOf, parseBase64DataURL, placeObjectAtIntersectionFacingTarget, print, scene, showOnlyInLeftEye, showOnlyInRightEye, showReticleOnDepthMesh, timer, transformRgbUvToWorld, traverseUtil, uninitScript, urlParams, user, world, xrDepthMeshOptions, xrDepthMeshPhysicsOptions, xrDepthMeshVisualizationOptions, xrDeviceCameraEnvironmentContinuousOptions, xrDeviceCameraEnvironmentOptions, xrDeviceCameraUserContinuousOptions, xrDeviceCameraUserOptions };
+export { AI, AIOptions, AVERAGE_IPD_METERS, ActiveControllers, Agent, AnimatableNumber, AudioListener, AudioPlayer, BACK, BackgroundMusic, CategoryVolumes, Col, Core, CoreSound, DEFAULT_DEVICE_CAMERA_HEIGHT, DEFAULT_DEVICE_CAMERA_WIDTH, DEFAULT_RGB_TO_DEPTH_PARAMS, DEVICE_CAMERA_PARAMETERS, DOWN, Depth, DepthMesh, DepthMeshOptions, DepthOptions, DepthTextures, DetectedObject, DetectedPlane, DeviceCameraOptions, DragManager, DragMode, ExitButton, FORWARD, FreestandingSlider, GazeController, Gemini, GeminiOptions, GenerateSkyboxTool, GestureRecognition, GestureRecognitionOptions, GetWeatherTool, Grid, HAND_BONE_IDX_CONNECTION_MAP, HAND_JOINT_COUNT, HAND_JOINT_IDX_CONNECTION_MAP, HAND_JOINT_NAMES, Handedness, Hands, HandsOptions, HorizontalPager, IconButton, IconView, ImageView, Input, InputOptions, Keycodes, LEFT, LEFT_VIEW_ONLY_LAYER, LabelView, Lighting, LightingOptions, LoadingSpinnerManager, MaterialSymbolsView, MeshScript, ModelLoader, ModelViewer, MouseController, NUM_HANDS, OCCLUDABLE_ITEMS_LAYER, ObjectDetector, ObjectsOptions, OcclusionPass, OcclusionUtils, OpenAI, OpenAIOptions, Options, PageIndicator, Pager, PagerState, Panel, PanelMesh, Physics, PhysicsOptions, PinchOnButtonAction, PlaneDetector, PlanesOptions, RIGHT, RIGHT_VIEW_ONLY_LAYER, Raycaster, Registry, Reticle, ReticleOptions, RotationRaycastMesh, Row, SIMULATOR_HAND_POSE_NAMES, SIMULATOR_HAND_POSE_TO_JOINTS_LEFT, SIMULATOR_HAND_POSE_TO_JOINTS_RIGHT, SOUND_PRESETS, ScreenshotSynthesizer, Script, ScriptMixin, ScriptsManager, ScrollingTroikaTextView, SetSimulatorModeEvent, ShowHandsAction, Simulator, SimulatorCamera, SimulatorControlMode, SimulatorControllerState, SimulatorControls, SimulatorDepth, SimulatorDepthMaterial, SimulatorHandPose, SimulatorHandPoseChangeRequestEvent, SimulatorHands, SimulatorInterface, SimulatorMediaDeviceInfo, SimulatorMode, SimulatorOptions, SimulatorRenderMode, SimulatorScene, SimulatorUser, SimulatorUserAction, SketchPanel, SkyboxAgent, SoundOptions, SoundSynthesizer, SpatialAudio, SpatialPanel, SpeechRecognizer, SpeechRecognizerOptions, SpeechSynthesizer, SpeechSynthesizerOptions, SplatAnchor, StreamState, TextButton, TextScrollerState, TextView, Tool, UI, UI_OVERLAY_LAYER, UP, UX, User, VIEW_DEPTH_GAP, VerticalPager, VideoFileStream, VideoStream, VideoView, View, VolumeCategory, WaitFrame, WalkTowardsPanelAction, World, WorldOptions, XRButton, XRDeviceCamera, XREffects, XRPass, XRTransitionOptions, XR_BLOCKS_ASSETS_PATH, ZERO_VECTOR3, add, ai, callInitWithDependencyInjection, clamp, clampRotationToAngle, core, cropImage, depth, extractYaw, getCameraParametersSnapshot, getColorHex, getDeltaTime, getDeviceCameraClipFromView, getDeviceCameraWorldFromClip, getDeviceCameraWorldFromView, getElapsedTime, getUrlParamBool, getUrlParamFloat, getUrlParamInt, getUrlParameter, getVec4ByColorString, getXrCameraLeft, getXrCameraRight, init, initScript, intrinsicsToProjectionMatrix, lerp, loadStereoImageAsTextures, loadingSpinnerManager, lookAtRotation, objectIsDescendantOf, parseBase64DataURL, placeObjectAtIntersectionFacingTarget, print, scene, showOnlyInLeftEye, showOnlyInRightEye, showReticleOnDepthMesh, timer, transformRgbUvToWorld, traverseUtil, uninitScript, urlParams, user, world, xrDepthMeshOptions, xrDepthMeshPhysicsOptions, xrDepthMeshVisualizationOptions, xrDeviceCameraEnvironmentContinuousOptions, xrDeviceCameraEnvironmentOptions, xrDeviceCameraUserContinuousOptions, xrDeviceCameraUserOptions };
 //# sourceMappingURL=xrblocks.js.map
