@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.10.0
- * @commitid eff7778
- * @builddate 2026-02-26T06:14:04.708Z
+ * @commitid f2d7cdf
+ * @builddate 2026-02-26T18:53:30.582Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -2955,7 +2955,6 @@ class WaitFrame {
     }
 }
 
-const IMMERSIVE_AR = 'immersive-ar';
 // Event type definitions for clarity
 var WebXRSessionEventType;
 (function (WebXRSessionEventType) {
@@ -7631,11 +7630,31 @@ class XRTransitionOptions {
         this.defaultBackgroundColor = 0xffffff;
     }
 }
+const FORM_FACTORS = ['auto', 'xr', 'hud', 'vr', 'desktop', 'mobile'];
 /**
  * A central configuration class for the entire XR Blocks system. It aggregates
  * all settings and provides chainable methods for enabling common features.
  */
 class Options {
+    get formFactor() {
+        return this._formFactor;
+    }
+    /**
+     * Form factor is a preset that configures the experience for a specific
+     * device type. Currently it only controls whether the simulator is enabled
+     * and should always be autostarted.
+     */
+    set formFactor(formFactor) {
+        this._formFactor = formFactor;
+        this.enableSimulator =
+            formFactor === 'desktop' ||
+                formFactor === 'auto' ||
+                formFactor === 'mobile';
+        this.xrButton.alwaysAutostartSimulator = formFactor === 'desktop';
+        if (formFactor === 'vr') {
+            this.enableVR();
+        }
+    }
     /**
      * Constructs the Options object by merging default values with provided
      * custom options.
@@ -7711,7 +7730,26 @@ class Options {
             camera: false,
             microphone: false,
         };
+        this.xrSessionMode = 'immersive-ar';
+        this._formFactor = 'auto';
         deepMerge(this, options);
+        this.parseUrlParams();
+    }
+    parseUrlParams() {
+        const formFactorUrlParam = getUrlParameter('formFactor');
+        if (formFactorUrlParam &&
+            FORM_FACTORS.includes(formFactorUrlParam)) {
+            this.formFactor = formFactorUrlParam;
+        }
+    }
+    /**
+     * Sets the session mode to VR and disables the simulator passthrough scene.
+     */
+    enableVR() {
+        this.xrSessionMode = 'immersive-vr';
+        this.simulator.scenePath = null;
+        this.simulator.scenePlanesPath = null;
+        return this;
     }
     /**
      * Enables a standard set of options for a UI-focused experience.
@@ -15539,7 +15577,7 @@ class Core {
                 this.depth.depthMesh?.initRapierPhysics(this.physics.RAPIER, this.physics.blendedWorld);
             }
         }
-        this.webXRSessionManager = new WebXRSessionManager(this.renderer, this.webXRSettings, IMMERSIVE_AR);
+        this.webXRSessionManager = new WebXRSessionManager(this.renderer, this.webXRSettings, options.xrSessionMode);
         this.webXRSessionManager.addEventListener(WebXRSessionEventType.SESSION_START, (event) => this.onXRSessionStarted(event.session));
         this.webXRSessionManager.addEventListener(WebXRSessionEventType.SESSION_END, this.onXRSessionEnded.bind(this));
         // Sets up xrButton.
