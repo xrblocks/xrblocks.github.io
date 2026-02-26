@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.10.0
- * @commitid 3e5b312
- * @builddate 2026-02-26T20:59:24.334Z
+ * @commitid 6eb9c51
+ * @builddate 2026-02-26T23:50:44.939Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -4434,7 +4434,7 @@ declare class MouseController extends Script<MouseControllerEventMap> implements
     /** A normalized vector representing the default forward direction. */
     forwardVector: THREE.Vector3;
     /** A reference to the main scene camera. */
-    camera: THREE.Camera;
+    camera?: THREE.Camera;
     constructor();
     /**
      * Initialize the MouseController
