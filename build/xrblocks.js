@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.10.0
- * @commitid b7a7673
- * @builddate 2026-03-02T18:29:45.132Z
+ * @commitid 7e7dbd9
+ * @builddate 2026-03-02T18:44:57.617Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -8329,6 +8329,13 @@ function preventDefault(event) {
     event.preventDefault();
 }
 class SimulatorControls {
+    #enabled;
+    get enabled() {
+        return this.#enabled;
+    }
+    set enabled(value) {
+        this.setEnabled(value);
+    }
     /**
      * Create the simulator controls.
      * @param hands - The simulator hands manager.
@@ -8342,6 +8349,7 @@ class SimulatorControls {
         this.pointerDown = false;
         this.downKeys = new Set();
         this.simulatorMode = SimulatorMode.USER;
+        this.#enabled = true;
         this._onPointerDown = this.onPointerDown.bind(this);
         this._onPointerUp = this.onPointerUp.bind(this);
         this._onKeyDown = this.onKeyDown.bind(this);
@@ -8387,17 +8395,25 @@ class SimulatorControls {
         this.simulatorModeControls.update();
     }
     onPointerMove(event) {
+        if (!this.enabled)
+            return;
         this.simulatorModeControls.onPointerMove(event);
     }
     onPointerDown(event) {
+        if (!this.enabled)
+            return;
         this.simulatorModeControls.onPointerDown(event);
         this.pointerDown = true;
     }
     onPointerUp(event) {
+        if (!this.enabled)
+            return;
         this.simulatorModeControls.onPointerUp(event);
         this.pointerDown = false;
     }
     onKeyDown(event) {
+        if (!this.enabled)
+            return;
         // On macOS, keyup events are not fired for keys held when Command (Meta)
         // is pressed. Clear all keys to prevent stuck movement.
         if (event.metaKey ||
@@ -8414,6 +8430,8 @@ class SimulatorControls {
         this.simulatorModeControls.onKeyDown(event);
     }
     onKeyUp(event) {
+        if (!this.enabled)
+            return;
         this.downKeys.delete(event.code);
     }
     onBlur() {
@@ -8436,6 +8454,15 @@ class SimulatorControls {
             }
         });
         this.modeIndicatorElement = element;
+    }
+    setEnabled(value) {
+        if (value == this.#enabled) {
+            return;
+        }
+        this.#enabled = value;
+        if (!value) {
+            this.downKeys.clear();
+        }
     }
 }
 

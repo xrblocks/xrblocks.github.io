@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.10.0
- * @commitid b7a7673
- * @builddate 2026-03-02T18:29:45.132Z
+ * @commitid 7e7dbd9
+ * @builddate 2026-03-02T18:44:57.617Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -5167,6 +5167,7 @@ type SimulatorModeIndicatorElement = HTMLElement & {
     simulatorMode: SimulatorMode;
 };
 declare class SimulatorControls {
+    #private;
     simulatorControllerState: SimulatorControllerState;
     hands: SimulatorHands;
     private userInterface;
@@ -5180,6 +5181,8 @@ declare class SimulatorControls {
     };
     renderer: THREE.WebGLRenderer;
     private simulatorOptions?;
+    get enabled(): boolean;
+    set enabled(value: boolean);
     private _onPointerDown;
     private _onPointerUp;
     private _onKeyDown;
@@ -5213,6 +5216,7 @@ declare class SimulatorControls {
     onBlur(): void;
     setSimulatorMode(mode: SimulatorMode): void;
     setModeIndicatorElement(element: SimulatorModeIndicatorElement): void;
+    setEnabled(value: boolean): void;
 }
 
 declare class SimulatorDepthMaterial extends THREE.MeshBasicMaterial {
