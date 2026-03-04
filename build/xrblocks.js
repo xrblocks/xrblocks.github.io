@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.10.0
- * @commitid 4b25dc9
- * @builddate 2026-03-03T23:46:33.327Z
+ * @commitid 354879a
+ * @builddate 2026-03-04T19:07:46.321Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -1506,6 +1506,7 @@ const SUPPORTED_MODELS = {
 class AI extends Script {
     constructor() {
         super(...arguments);
+        this.editorIcon = 'network_intelligence';
         this.lock = false;
     }
     static { this.dependencies = { aiOptions: AIOptions }; }
@@ -5113,6 +5114,7 @@ class Reticle extends THREE.Mesh {
         }));
         /** Text description of the PanelMesh */
         this.name = 'Reticle';
+        this.editorIcon = 'target';
         /** Prevents the reticle itself from being a target for raycasting. */
         this.ignoreReticleRaycast = true;
         /** The world-space direction vector of the ray that hit the target. */
@@ -5359,6 +5361,9 @@ class MouseController extends Script {
     }; }
     constructor() {
         super();
+        this.type = 'MouseController';
+        this.name = 'Mouse Controller';
+        this.editorIcon = 'mouse';
         /**
          * User data for the controller, including its connection status, unique ID,
          * and selection state (mouse button pressed).
@@ -5439,7 +5444,19 @@ class MouseController extends Script {
     }
 }
 
-class ActiveControllers extends THREE.Object3D {
+class ActiveControllers extends THREE.Group {
+    constructor() {
+        super(...arguments);
+        this.type = 'ActiveControllers';
+        this.name = 'Active Controllers';
+    }
+}
+class Reticles extends THREE.Group {
+    constructor() {
+        super(...arguments);
+        this.type = 'Reticles';
+        this.name = 'Reticles';
+    }
 }
 // Reusable objects for performance.
 const MATRIX4 = new THREE.Matrix4();
@@ -5462,16 +5479,17 @@ class Input {
         this.intersectionsForController = new Map();
         this.intersections = [];
         this.activeControllers = new ActiveControllers();
+        this.reticles = new Reticles();
     }
     /**
      * Initializes an instance with XR controllers, grips, hands, raycaster, and
      * default options. Only called by Core.
      */
-    init({ scene, options, renderer, }) {
-        scene.add(this.activeControllers);
+    init({ scene, systemsGroup, options, renderer, }) {
+        this.scene = scene;
+        systemsGroup.add(this.activeControllers, this.reticles);
         this.controllersEnabled = options.controllers.enabled;
         this.options = options;
-        this.scene = scene;
         const controllers = this.controllers;
         const controllerGrips = this.controllerGrips;
         for (let i = 0; i < NUM_HANDS; ++i) {
@@ -5582,7 +5600,7 @@ class Input {
                 ++id;
             }
             controller.reticle.visible = false;
-            this.scene.add(controller.reticle);
+            this.reticles.add(controller.reticle);
         }
     }
     /**
@@ -5851,6 +5869,8 @@ class Input {
     }
     // Performs the raycast assuming the raycaster is already set up.
     performRaycastOnScene(controller) {
+        if (!this.scene)
+            return;
         if (!this.intersectionsForController.has(controller)) {
             this.intersectionsForController.set(controller, []);
         }
@@ -10305,6 +10325,7 @@ class SimulatorUser extends Script {
     static { this.dependencies = { waitFrame: WaitFrame, registry: Registry }; }
     constructor() {
         super();
+        this.name = 'Simulator User';
         this.journeyId = 0;
     }
     init({ waitFrame, registry }) {
@@ -11165,6 +11186,7 @@ class MeshDetector extends Script {
 class World extends Script {
     constructor() {
         super(...arguments);
+        this.editorIcon = 'sensors';
         /**
          * A Three.js Raycaster for performing intersection tests.
          */
@@ -11295,6 +11317,7 @@ class Simulator extends Script {
     constructor(renderMainScene) {
         super();
         this.renderMainScene = renderMainScene;
+        this.editorIcon = 'simulation';
         this.simulatorScene = new SimulatorScene();
         this.simulatorWorld = new SimulatorWorld();
         this.depth = new SimulatorDepth(this.simulatorScene);
@@ -12463,6 +12486,8 @@ class SpeechSynthesizer extends Script {
 class CoreSound extends Script {
     constructor() {
         super(...arguments);
+        this.type = 'CoreSound';
+        this.name = 'Core Sound';
         this.categoryVolumes = new CategoryVolumes();
         this.soundSynthesizer = new SoundSynthesizer();
         this.listener = new THREE.AudioListener();
@@ -13905,6 +13930,9 @@ class DragManager extends Script {
         this.originalController1MatrixInverse = new THREE.Matrix4();
         this.originalScalingControllerDistance = 0.0;
         this.originalScalingObjectScale = new THREE.Vector3();
+        this.type = 'DragManager';
+        this.name = 'Drag Manager';
+        this.editorIcon = 'drag_pan';
     }
     static { this.dependencies = { input: Input, camera: THREE.Camera }; }
     static { this.IDLE = 'IDLE'; }
@@ -15409,6 +15437,17 @@ class PermissionsManager {
 }
 
 /**
+ * A node to hold all XR Blocks Systems.
+ */
+class XRSystems extends THREE.Group {
+    constructor() {
+        super(...arguments);
+        this.type = 'XRSystems';
+        this.name = 'XR Blocks Systems';
+    }
+}
+
+/**
  * Core is the central engine of the XR Blocks framework, acting as a
  * singleton manager for all XR subsystems. Its primary goal is to abstract
  * low-level WebXR and THREE.js details, providing a simplified and powerful API
@@ -15447,6 +15486,8 @@ class Core {
         this.ui = new UI();
         /** Manages all (spatial) audio playback. */
         this.sound = new CoreSound();
+        /** A container to hold all the systems in the scene hierarchy. */
+        this.xrSystemsGroup = new XRSystems();
         this.renderSceneBound = this.renderScene.bind(this);
         /** Manages the desktop XR simulator. */
         this.simulator = new Simulator(this.renderSceneBound);
@@ -15473,14 +15514,8 @@ class Core {
         }
         Core.instance = this;
         this.scene.name = 'XR Blocks Scene';
-        // Separate calls because spark hijacks THREE.Scene.add and only supports
-        // adding objects one at a time. See
-        // https://github.com/sparkjsdev/spark/blob/0edfc8d9232b8f6eb036d27af57dc40daf94e1f3/src/SparkRenderer.ts#L63
-        this.scene.add(this.user);
-        this.scene.add(this.dragManager);
-        this.scene.add(this.ui);
-        this.scene.add(this.sound);
-        this.scene.add(this.world);
+        this.scene.add(this.xrSystemsGroup);
+        this.xrSystemsGroup.add(this.user, this.dragManager, this.ui, this.sound, this.world);
         this.registry.register(this.registry);
         this.registry.register(this.waitFrame);
         this.registry.register(this.scene);
@@ -15495,6 +15530,7 @@ class Core {
         this.registry.register(this.scriptsManager);
         this.registry.register(this.depth);
         this.registry.register(this.world);
+        this.registry.register(this.xrSystemsGroup);
     }
     /**
      * Initializes the Core system with a given set of options. This includes
@@ -15550,6 +15586,7 @@ class Core {
         if (options.controllers.enabled) {
             this.input.init({
                 scene: this.scene,
+                systemsGroup: this.xrSystemsGroup,
                 options: options,
                 renderer: this.renderer,
             });
@@ -15588,7 +15625,7 @@ class Core {
             this.user.hands = new Hands(this.input.hands);
             if (options.gestures.enabled) {
                 this.gestureRecognition = new GestureRecognition();
-                this.scene.add(this.gestureRecognition);
+                this.xrSystemsGroup.add(this.gestureRecognition);
                 this.registry.register(this.gestureRecognition);
             }
         }
@@ -15637,7 +15674,7 @@ class Core {
         // Sets up AI services.
         if (options.ai.enabled) {
             this.registry.register(this.ai);
-            this.scene.add(this.ai);
+            this.xrSystemsGroup.add(this.ai);
             // Manually init the script in case other scripts rely on it.
             await this.scriptsManager.initScript(this.ai);
         }
@@ -15737,7 +15774,7 @@ class Core {
     }
     async startSimulator() {
         this.xrButton?.domElement.remove();
-        this.scene.add(this.simulator);
+        this.xrSystemsGroup.add(this.simulator);
         await this.scriptsManager.initScript(this.simulator);
         this.onSimulatorStarted();
     }
@@ -17872,5 +17909,5 @@ class VideoFileStream extends VideoStream {
     }
 }
 
-export { AI, AIOptions, AVERAGE_IPD_METERS, ActiveControllers, Agent, AnimatableNumber, AudioListener, AudioPlayer, BACK, BackgroundMusic, CategoryVolumes, Col, Core, CoreSound, DEFAULT_DEVICE_CAMERA_HEIGHT, DEFAULT_DEVICE_CAMERA_WIDTH, DEFAULT_RGB_TO_DEPTH_PARAMS, DEVICE_CAMERA_PARAMETERS, DOWN, Depth, DepthMesh, DepthMeshOptions, DepthOptions, DepthTextures, DetectedObject, DetectedPlane, DeviceCameraOptions, DragManager, DragMode, ExitButton, FORWARD, FreestandingSlider, GazeController, Gemini, GeminiOptions, GenerateSkyboxTool, GestureRecognition, GestureRecognitionOptions, GetWeatherTool, Grid, HAND_BONE_IDX_CONNECTION_MAP, HAND_JOINT_COUNT, HAND_JOINT_IDX_CONNECTION_MAP, HAND_JOINT_NAMES, Handedness, Hands, HandsOptions, HorizontalPager, IconButton, IconView, ImageView, Input, InputOptions, Keycodes, LEFT, LEFT_VIEW_ONLY_LAYER, LabelView, Lighting, LightingOptions, LoadingSpinnerManager, MaterialSymbolsView, MeshScript, ModelLoader, ModelViewer, MouseController, NUM_HANDS, OCCLUDABLE_ITEMS_LAYER, ObjectDetector, ObjectsOptions, OcclusionPass, OcclusionUtils, OpenAI, OpenAIOptions, Options, PageIndicator, Pager, PagerState, Panel, PanelMesh, Physics, PhysicsOptions, PinchOnButtonAction, PlaneDetector, PlanesOptions, RIGHT, RIGHT_VIEW_ONLY_LAYER, Raycaster, Registry, Reticle, ReticleOptions, RotationRaycastMesh, Row, SIMULATOR_HAND_POSE_NAMES, SIMULATOR_HAND_POSE_TO_JOINTS_LEFT, SIMULATOR_HAND_POSE_TO_JOINTS_RIGHT, SOUND_PRESETS, ScreenshotSynthesizer, Script, ScriptMixin, ScriptsManager, ScrollingTroikaTextView, SetSimulatorModeEvent, ShowHandsAction, Simulator, SimulatorCamera, SimulatorControlMode, SimulatorControllerState, SimulatorControls, SimulatorDepth, SimulatorDepthMaterial, SimulatorHandPose, SimulatorHandPoseChangeRequestEvent, SimulatorHands, SimulatorInterface, SimulatorMediaDeviceInfo, SimulatorMode, SimulatorOptions, SimulatorRenderMode, SimulatorScene, SimulatorUser, SimulatorUserAction, SketchPanel, SkyboxAgent, SoundOptions, SoundSynthesizer, SparkRendererHolder, SpatialAudio, SpatialPanel, SpeechRecognizer, SpeechRecognizerOptions, SpeechSynthesizer, SpeechSynthesizerOptions, SplatAnchor, StreamState, TextButton, TextScrollerState, TextView, Tool, UI, UI_OVERLAY_LAYER, UP, UX, User, VIEW_DEPTH_GAP, VerticalPager, VideoFileStream, VideoStream, VideoView, View, VolumeCategory, WaitFrame, WalkTowardsPanelAction, World, WorldOptions, XRButton, XRDeviceCamera, XREffects, XRPass, XRTransitionOptions, XR_BLOCKS_ASSETS_PATH, ZERO_VECTOR3, add, ai, callInitWithDependencyInjection, clamp, clampRotationToAngle, core, cropImage, depth, extractYaw, getCameraParametersSnapshot, getColorHex, getDeltaTime, getDeviceCameraClipFromView, getDeviceCameraWorldFromClip, getDeviceCameraWorldFromView, getElapsedTime, getUrlParamBool, getUrlParamFloat, getUrlParamInt, getUrlParameter, getVec4ByColorString, getXrCameraLeft, getXrCameraRight, init, initScript, intrinsicsToProjectionMatrix, lerp, loadStereoImageAsTextures, loadingSpinnerManager, lookAtRotation, objectIsDescendantOf, parseBase64DataURL, placeObjectAtIntersectionFacingTarget, print, scene, showOnlyInLeftEye, showOnlyInRightEye, showReticleOnDepthMesh, timer, transformRgbUvToWorld, traverseUtil, uninitScript, urlParams, user, world, xrDepthMeshOptions, xrDepthMeshPhysicsOptions, xrDepthMeshVisualizationOptions, xrDeviceCameraEnvironmentContinuousOptions, xrDeviceCameraEnvironmentOptions, xrDeviceCameraUserContinuousOptions, xrDeviceCameraUserOptions };
+export { AI, AIOptions, AVERAGE_IPD_METERS, ActiveControllers, Agent, AnimatableNumber, AudioListener, AudioPlayer, BACK, BackgroundMusic, CategoryVolumes, Col, Core, CoreSound, DEFAULT_DEVICE_CAMERA_HEIGHT, DEFAULT_DEVICE_CAMERA_WIDTH, DEFAULT_RGB_TO_DEPTH_PARAMS, DEVICE_CAMERA_PARAMETERS, DOWN, Depth, DepthMesh, DepthMeshOptions, DepthOptions, DepthTextures, DetectedObject, DetectedPlane, DeviceCameraOptions, DragManager, DragMode, ExitButton, FORWARD, FreestandingSlider, GazeController, Gemini, GeminiOptions, GenerateSkyboxTool, GestureRecognition, GestureRecognitionOptions, GetWeatherTool, Grid, HAND_BONE_IDX_CONNECTION_MAP, HAND_JOINT_COUNT, HAND_JOINT_IDX_CONNECTION_MAP, HAND_JOINT_NAMES, Handedness, Hands, HandsOptions, HorizontalPager, IconButton, IconView, ImageView, Input, InputOptions, Keycodes, LEFT, LEFT_VIEW_ONLY_LAYER, LabelView, Lighting, LightingOptions, LoadingSpinnerManager, MaterialSymbolsView, MeshScript, ModelLoader, ModelViewer, MouseController, NUM_HANDS, OCCLUDABLE_ITEMS_LAYER, ObjectDetector, ObjectsOptions, OcclusionPass, OcclusionUtils, OpenAI, OpenAIOptions, Options, PageIndicator, Pager, PagerState, Panel, PanelMesh, Physics, PhysicsOptions, PinchOnButtonAction, PlaneDetector, PlanesOptions, RIGHT, RIGHT_VIEW_ONLY_LAYER, Raycaster, Registry, Reticle, ReticleOptions, Reticles, RotationRaycastMesh, Row, SIMULATOR_HAND_POSE_NAMES, SIMULATOR_HAND_POSE_TO_JOINTS_LEFT, SIMULATOR_HAND_POSE_TO_JOINTS_RIGHT, SOUND_PRESETS, ScreenshotSynthesizer, Script, ScriptMixin, ScriptsManager, ScrollingTroikaTextView, SetSimulatorModeEvent, ShowHandsAction, Simulator, SimulatorCamera, SimulatorControlMode, SimulatorControllerState, SimulatorControls, SimulatorDepth, SimulatorDepthMaterial, SimulatorHandPose, SimulatorHandPoseChangeRequestEvent, SimulatorHands, SimulatorInterface, SimulatorMediaDeviceInfo, SimulatorMode, SimulatorOptions, SimulatorRenderMode, SimulatorScene, SimulatorUser, SimulatorUserAction, SketchPanel, SkyboxAgent, SoundOptions, SoundSynthesizer, SparkRendererHolder, SpatialAudio, SpatialPanel, SpeechRecognizer, SpeechRecognizerOptions, SpeechSynthesizer, SpeechSynthesizerOptions, SplatAnchor, StreamState, TextButton, TextScrollerState, TextView, Tool, UI, UI_OVERLAY_LAYER, UP, UX, User, VIEW_DEPTH_GAP, VerticalPager, VideoFileStream, VideoStream, VideoView, View, VolumeCategory, WaitFrame, WalkTowardsPanelAction, World, WorldOptions, XRButton, XRDeviceCamera, XREffects, XRPass, XRTransitionOptions, XR_BLOCKS_ASSETS_PATH, ZERO_VECTOR3, add, ai, callInitWithDependencyInjection, clamp, clampRotationToAngle, core, cropImage, depth, extractYaw, getCameraParametersSnapshot, getColorHex, getDeltaTime, getDeviceCameraClipFromView, getDeviceCameraWorldFromClip, getDeviceCameraWorldFromView, getElapsedTime, getUrlParamBool, getUrlParamFloat, getUrlParamInt, getUrlParameter, getVec4ByColorString, getXrCameraLeft, getXrCameraRight, init, initScript, intrinsicsToProjectionMatrix, lerp, loadStereoImageAsTextures, loadingSpinnerManager, lookAtRotation, objectIsDescendantOf, parseBase64DataURL, placeObjectAtIntersectionFacingTarget, print, scene, showOnlyInLeftEye, showOnlyInRightEye, showReticleOnDepthMesh, timer, transformRgbUvToWorld, traverseUtil, uninitScript, urlParams, user, world, xrDepthMeshOptions, xrDepthMeshPhysicsOptions, xrDepthMeshVisualizationOptions, xrDeviceCameraEnvironmentContinuousOptions, xrDeviceCameraEnvironmentOptions, xrDeviceCameraUserContinuousOptions, xrDeviceCameraUserOptions };
 //# sourceMappingURL=xrblocks.js.map
