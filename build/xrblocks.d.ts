@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.10.0
- * @commitid bed18cd
- * @builddate 2026-03-06T23:42:07.202Z
+ * @commitid f02deb4
+ * @builddate 2026-03-07T00:50:02.783Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -1179,6 +1179,7 @@ declare abstract class BaseAIModel {
     abstract init(): Promise<void>;
     abstract isAvailable(): boolean;
     abstract query(_input: object, _tools: []): Promise<GeminiResponse | string | null>;
+    hasApiKey(): Promise<boolean>;
 }
 
 interface GeminiQueryInput {
@@ -1191,6 +1192,7 @@ interface GeminiQueryInput {
     parts?: GoogleGenAITypes.Part[];
     config?: GoogleGenAITypes.LiveConnectConfig;
     data?: GoogleGenAITypes.LiveSendRealtimeInputParameters;
+    useExponentialBackoff?: boolean;
 }
 declare class Gemini extends BaseAIModel {
     protected options: GeminiOptions;
@@ -1215,8 +1217,15 @@ declare class Gemini extends BaseAIModel {
     };
     query(input: GeminiQueryInput | {
         prompt: string;
-    }, _tools?: Tool[]): Promise<GeminiResponse | null>;
+    }): Promise<GeminiResponse | null>;
+    protected queryOnce(input: GeminiQueryInput | {
+        prompt: string;
+    }): Promise<GeminiResponse | null>;
+    protected queryWithExponentialFalloff(input: GeminiQueryInput | {
+        prompt: string;
+    }): Promise<GeminiResponse | null>;
     generate(prompt: string | string[], type?: 'image', systemInstruction?: string, model?: string): Promise<string | undefined>;
+    hasApiKey(): Promise<boolean>;
 }
 
 declare class OpenAI extends BaseAIModel {

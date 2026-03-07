@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.10.0
- * @commitid bed18cd
- * @builddate 2026-03-06T23:42:07.202Z
+ * @commitid f02deb4
+ * @builddate 2026-03-07T00:50:02.783Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -152,7 +152,7 @@ class Agent {
     async run() {
         while (true) {
             const context = this.contextBuilder.build(this.memory, this.tools);
-            const response = await this.ai.model.query({ type: 'text', text: context }, this.tools);
+            const response = await this.ai.model.query({ type: 'text', text: context });
             this.memory.addShortTerm({ role: 'ai', content: JSON.stringify(response) });
             if (response?.toolCall) {
                 console.log(`Executing tool: ${response.toolCall.name}`);
@@ -1145,6 +1145,15 @@ class AIOptions {
 
 class BaseAIModel {
     constructor() { }
+    async hasApiKey() {
+        return false;
+    }
+}
+
+function isRunningInGeminiCanvas() {
+    // Canvas injects several scripts which allow using the free tier of Gemini and Firebase APIs without API keys.
+    return (typeof window
+        .firebaseAuthBridgeScriptLoaded !== 'undefined');
 }
 
 let createPartFromUri;
@@ -1195,7 +1204,8 @@ class Gemini extends BaseAIModel {
             return false;
         }
         if (!this.inited) {
-            this.ai = new GoogleGenAI({ apiKey: this.options.apiKey });
+            // Use a random string as API key to avoid Google GenAI from complaining.
+            this.ai = new GoogleGenAI({ apiKey: this.options.apiKey || 'X' });
             this.inited = true;
         }
         return true;
@@ -1304,7 +1314,17 @@ class Gemini extends BaseAIModel {
             isAvailable: this.isLiveAvailable(),
         };
     }
-    async query(input, _tools = []) {
+    async query(input) {
+        const useExponentialBackoff = 'useExponentialBackoff' in input &&
+            input.useExponentialBackoff !== undefined
+            ? input.useExponentialBackoff
+            : isRunningInGeminiCanvas();
+        if (useExponentialBackoff) {
+            return this.queryWithExponentialFalloff(input);
+        }
+        return this.queryOnce(input);
+    }
+    async queryOnce(input) {
         if (!this.inited) {
             console.warn('Gemini not inited.');
             return null;
@@ -1364,6 +1384,26 @@ class Gemini extends BaseAIModel {
         }
         return { text: response.text || null };
     }
+    // Try to query multiple times with exponential backoff.
+    // Only used within a Gemini Canvas environment.
+    async queryWithExponentialFalloff(input) {
+        const delays = [1000, 2000, 4000, 8000, 16000];
+        let attempt = 0;
+        let lastError = null;
+        while (attempt < delays.length) {
+            try {
+                return await this.queryOnce(input);
+            }
+            catch (error) {
+                console.warn(`Attempt ${attempt + 1} failed:`, error);
+                lastError = error;
+                await new Promise((resolve) => setTimeout(resolve, delays[attempt]));
+                attempt++;
+            }
+        }
+        console.error('Failed to query with exponential backoff:', lastError);
+        return null;
+    }
     async generate(prompt, type = 'image', systemInstruction = 'Generate an image', model = 'gemini-2.5-flash-image') {
         if (!this.isAvailable())
             return;
@@ -1400,6 +1440,9 @@ class Gemini extends BaseAIModel {
                 }
             }
         }
+    }
+    async hasApiKey() {
+        return this.options.apiKey !== '' || isRunningInGeminiCanvas();
     }
 }
 
@@ -1543,11 +1586,11 @@ class AI extends Script {
     }
     async initializeModel(ModelClass, modelOptions) {
         const apiKey = await this.resolveApiKey(modelOptions);
-        if (!apiKey || !this.isValidApiKey(apiKey)) {
+        if ((!apiKey || !this.isValidApiKey(apiKey)) && !this.hasApiKey()) {
             console.error(`No valid API key found for ${this.options.model}`);
             return;
         }
-        modelOptions.apiKey = apiKey;
+        modelOptions.apiKey = apiKey || '';
         this.model = new ModelClass(modelOptions);
         try {
             await this.model.init();
@@ -1691,6 +1734,8 @@ class AI extends Script {
         const modelOptions = this.options[this.options.model];
         if (!modelOptions)
             return false;
+        if (this.model?.hasApiKey ? await this.model.hasApiKey() : false)
+            return true;
         const apiKey = await this.resolveApiKey(modelOptions);
         return apiKey && this.isValidApiKey(apiKey);
     }
