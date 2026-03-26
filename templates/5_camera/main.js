@@ -44,7 +44,7 @@ export class CameraViewManager extends xb.Script {
     this.cameraStream_.addEventListener('statechange', (event) => {
       const cameraStateLabel = {
         initializing: 'Initializing camera...',
-        no_devices_found: 'Camera unsupported on this browser',
+        no_devices_found: 'Camera unsupported on this browser/device',
         error: 'Camera failed to start',
       };
       this.cameraLabel.setText(
