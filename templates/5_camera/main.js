@@ -42,7 +42,14 @@ export class CameraViewManager extends xb.Script {
 
     // Listen for camera state changes to update UI
     this.cameraStream_.addEventListener('statechange', (event) => {
-      this.cameraLabel.setText(event.device?.label || event.state || 'Camera');
+      const cameraStateLabel = {
+        initializing: 'Initializing camera...',
+        no_devices_found: 'Camera unsupported on this browser',
+        error: 'Camera failed to start',
+      };
+      this.cameraLabel.setText(
+        event.device?.label || cameraStateLabel[event.state] || 'Camera'
+      );
       if (event.state === 'streaming') {
         this.videoView.load(this.cameraStream_);
       }
