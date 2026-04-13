@@ -14,9 +14,9 @@
  * limitations under the License.
  *
  * @file xrblocks.js
- * @version v0.11.0
- * @commitid 3b06514
- * @builddate 2026-03-30T15:46:40.788Z
+ * @version v0.12.0
+ * @commitid 5bf6b0d
+ * @builddate 2026-04-13T14:20:39.557Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -4014,6 +4014,9 @@ declare class SimulatorOptions {
     stereo: {
         enabled: boolean;
     };
+    deviceCamera: {
+        enabled: boolean;
+    };
     renderToRenderTexture: boolean;
     blendingMode: 'normal' | 'screen';
     constructor(options?: DeepReadonly<DeepPartial<SimulatorOptions>>);
@@ -5627,9 +5630,11 @@ declare class DetectedMesh extends THREE.Mesh {
     private blendedWorld?;
     private lastChangedTime;
     semanticLabel?: string;
+    get getRigidBody(): RAPIER_NS.RigidBody | undefined;
     constructor(mesh: XRMesh, material: THREE.Material);
     initRapierPhysics(RAPIER: typeof RAPIER_NS, blendedWorld: RAPIER_NS.World): void;
     updateVertices(mesh: XRMesh): void;
+    dispose(): void;
 }
 
 declare class MeshDetector extends Script {
@@ -5644,14 +5649,32 @@ declare class MeshDetector extends Script {
     private renderer;
     private physics?;
     private defaultMaterial;
+    private meshTimedata;
+    private readonly MESH_UPDATE_INTERVAL_MS;
+    private lastMeshUpdateTime;
+    private readonly MESH_STALE_TIME_MS;
+    private readonly CLEANUP_INTERVAL_MS;
+    private readonly kMaxViewDistance;
+    private readonly kFOVCosThreshold;
+    private lastCleanupTime;
+    private frameCount;
     init({ options, renderer, }: {
         options: MeshDetectionOptions;
         renderer: THREE.WebGLRenderer;
     }): void;
     initPhysics(physics: Physics): void;
     updateMeshes(_timestamp: number, frame?: XRFrame): void;
+    private removeMesh;
+    private cleanupStaleMeshes;
     private createMesh;
     private updateMeshPose;
+    private getCameraInfo;
+    private computeMeshBoundingBox;
+    /** Six clip planes from the view-projection matrix (left, right, bottom, top, near, far). */
+    private buildFrustumPlanes;
+    private frustumIntersectsBox;
+    private shouldShowMeshInViewWithFrustum;
+    private shouldShowMeshInViewWithDistance;
 }
 
 /**
@@ -5777,7 +5800,7 @@ declare class Simulator extends Script {
     virtualSceneFullScreenQuad?: FullScreenQuad;
     backgroundVideoQuad?: FullScreenQuad;
     videoElement?: HTMLVideoElement;
-    camera?: SimulatorCamera;
+    simulatorCamera?: SimulatorCamera;
     options: SimulatorOptions;
     renderer: THREE.WebGLRenderer;
     mainCamera: THREE.Camera;

@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en" class="bg-black text-white">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vibe Coding XR & XR Blocks @ ACM CHI 2026</title>
+    <meta name="description" content="Experience Vibe Coding XR at ACM CHI 2026. Accelerating AI + XR prototyping with XR Blocks and Gemini. Explore live demos of spatial applications built with AI." />
+    <meta name="keywords" content="Vibe Coding, XR, WebXR, AI, Gemini, CHI 2026, XR Blocks" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://xrblocks.github.io/chi2026" />
+    <meta property="og:title" content="Vibe Coding XR & XR Blocks @ ACM CHI 2026" />
+    <meta property="og:description" content="Accelerating AI + XR prototyping with XR Blocks and Gemini." />
+    <meta property="og:image" content="https://xrblocks.github.io/chi2026/vibe_coding_xr.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://xrblocks.github.io/chi2026" />
+    <meta property="twitter:title" content="Vibe Coding XR & XR Blocks @ ACM CHI 2026" />
+    <meta property="twitter:description" content="Accelerating AI + XR prototyping with XR Blocks and Gemini." />
+    <meta property="twitter:image" content="https://xrblocks.github.io/chi2026/vibe_coding_xr.png" />
+
+    <link rel="canonical" href="https://xrblocks.github.io/chi2026" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Google Sans', 'sans-serif'],
+            },
+            colors: {
+              gemini: {
+                blue: '#4285F4',
+                purple: '#9b72cb',
+                cyan: '#12d1c9',
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      .glass {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .glass-hover:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+      .text-gradient {
+        background: linear-gradient(to right, #4285f4, #9b72cb, #12d1c9);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      @keyframes gradient {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+      .animate-gradient {
+        background-size: 200% 200%;
+        animation: gradient 15s ease infinite;
+      }
+    </style>
+  </head>
+  <body
+    class="font-sans min-h-screen flex flex-col bg-black bg-gradient-to-br from-slate-950 via-black to-slate-900 animate-gradient"
+  >
+    <!-- Header -->
+    <header
+      class="border-b border-white/5 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"
+      >
+        <div class="flex items-center space-x-3">
+          <img src="chi26.png" alt="Logo" class="h-8 w-auto" />
+          <span class="font-semibold text-lg">Vibe Coding XR</span>
+        </div>
+        <nav class="flex items-center space-x-6">
+          <a
+            id="nav-link-xrblocks"
+            href="https://xrblocks.github.io/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-sm text-slate-400 hover:text-white flex items-center space-x-1"
+          >
+            <span>Learn more about XR Blocks</span>
+            <i data-lucide="external-link" class="w-4 h-4"></i>
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main
+      class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24"
+    >
+      <!-- Hero Section & Video -->
+      <section class="text-center space-y-8">
+        <div class="space-y-4">
+          <div
+            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/5 border border-white/10 text-slate-300"
+          >
+            CHI 2026 Demo @ Google Booth, 10:30-11:15 AM, April 13 2026
+          </div>
+          <h1
+            class="text-5xl font-bold tracking-tight sm:text-6xl text-gradient"
+          >
+            Vibe Coding XR
+          </h1>
+          <p class="text-lg text-slate-400 max-w-3xl mx-auto">
+            Accelerating AI + XR prototyping with XR Blocks and Gemini.
+          </p>
+        </div>
+
+        <!-- YouTube Embed -->
+        <div
+          class="max-w-4xl mx-auto aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-gemini-blue/10"
+        >
+          <iframe
+            class="w-full h-full"
+            src="https://www.youtube.com/embed/nknCzIxHHzw"
+            title="Vibe Coding XR Video"
+            frameborder="0"
+            allow="
+              accelerometer;
+              autoplay;
+              clipboard-write;
+              encrypted-media;
+              gyroscope;
+              picture-in-picture;
+              web-share;
+            "
+            allowfullscreen
+          ></iframe>
+        </div>
+      </section>
+
+      <!-- Featured Demo -->
+      <section class="space-y-8">
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl font-bold">Featured Tool</h2>
+        </div>
+
+        <div
+          class="glass rounded-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-center p-8"
+        >
+          <a
+            href="https://xrblocks.github.io/gem"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="lg:col-span-7 rounded-xl overflow-hidden border border-white/5 aspect-video bg-slate-900 block transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl hover:shadow-gemini-purple/20 cursor-pointer group"
+          >
+            <video
+              autoplay
+              loop
+              muted
+              playsinline
+              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            >
+              <source src="../images/preview5.webm" type="video/webm" />
+              Your browser does not support the video tag.
+            </video>
+          </a>
+          <div class="lg:col-span-5 space-y-6">
+            <div class="space-y-2">
+              <div class="text-sm font-medium text-[#BDD7FF]">
+                AI-Powered Builder
+              </div>
+              <h3 class="text-3xl font-bold">XR Blocks Gem</h3>
+              <p class="text-slate-400 text-sm leading-relaxed">
+                Directly open XR Blocks Gem in Gemini Canvas to start vibe
+                coding your own XR experiences. Simply describe what you want,
+                and watch it come to life in a simulated desktop environment or
+                directly on an Android XR headset.
+              </p>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <a
+                id="link-open-gem"
+                href="https://xrblocks.github.io/gem"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center px-5 py-3 rounded-xl text-sm font-medium bg-white text-slate-950 hover:bg-slate-100 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:shadow-white/5 space-x-2 group"
+              >
+                <span>Open XR Blocks Gem</span>
+                <i data-lucide="arrow-up-right" class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Gallery Grid -->
+      <section class="space-y-8">
+        <div class="space-y-2">
+          <h2 class="text-2xl font-bold">Demonstrations</h2>
+          <p class="text-slate-400 text-sm">
+            Explore what Gemini can build with single prompts.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Math Tutor -->
+          <div
+            class="glass glass-hover rounded-xl overflow-hidden flex flex-col transition-all duration-300"
+          >
+            <a
+              href="https://gemini.google.com/share/c79fc27f19d3"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="aspect-video bg-slate-900 overflow-hidden block group cursor-pointer"
+            >
+              <video
+                autoplay
+                loop
+                muted
+                playsinline
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              >
+                <source src="VibeCodingXR2_Math.mp4" type="video/mp4" />
+              </video>
+            </a>
+            <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
+              <div class="space-y-2">
+                <h3 class="font-semibold text-lg">Math Tutor</h3>
+                <p class="text-slate-400 text-xs leading-relaxed">
+                  Visualizes Euler's theorem in geometry. Explains vertices,
+                  edges, and facets concepts with highlighting using different
+                  examples.
+                </p>
+              </div>
+              <a
+                id="link-demo-math"
+                href="https://gemini.google.com/share/c79fc27f19d3"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-xs text-gemini-blue hover:text-white flex items-center space-x-1 self-start group transition-colors duration-200"
+              >
+                <span>Try it out!</span>
+                <i data-lucide="chevron-right" class="w-3 h-3 transition-transform duration-200 group-hover:translate-x-1"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Physics Lab -->
+          <div
+            class="glass glass-hover rounded-xl overflow-hidden flex flex-col transition-all duration-300"
+          >
+            <a
+              href="https://gemini.google.com/share/612fc3e9168f"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="aspect-video bg-slate-900 overflow-hidden block group cursor-pointer"
+            >
+              <video
+                autoplay
+                loop
+                muted
+                playsinline
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              >
+                <source src="VibeCodingXR3_Physics.mp4" type="video/mp4" />
+              </video>
+            </a>
+            <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
+              <div class="space-y-2">
+                <h3 class="font-semibold text-lg">Physics Lab</h3>
+                <p class="text-slate-400 text-xs leading-relaxed">
+                  An interactive physics experiment: given different objects on
+                  each side of the scale, use different weights to balance the
+                  scale.
+                </p>
+              </div>
+              <a
+                id="link-demo-physics"
+                href="https://gemini.google.com/share/612fc3e9168f"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-xs text-gemini-blue hover:text-white flex items-center space-x-1 self-start group transition-colors duration-200"
+              >
+                <span>Try it out!</span>
+                <i data-lucide="chevron-right" class="w-3 h-3 transition-transform duration-200 group-hover:translate-x-1"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Immersive Chemistry -->
+          <div
+            class="glass glass-hover rounded-xl overflow-hidden flex flex-col transition-all duration-300"
+          >
+            <a
+              href="https://gemini.google.com/share/9a3687b0a3c5"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="aspect-video bg-slate-900 overflow-hidden block group cursor-pointer"
+            >
+              <video
+                autoplay
+                loop
+                muted
+                playsinline
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              >
+                <source src="VibeCodingXR4_Chem.mp4" type="video/mp4" />
+              </video>
+            </a>
+            <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
+              <div class="space-y-2">
+                <h3 class="font-semibold text-lg">Immersive Chemistry</h3>
+                <p class="text-slate-400 text-xs leading-relaxed">
+                  Simulates interactive chemistry experiments: ignite methane,
+                  ethylene, and acetylene to observe different flame colors and
+                  smoke.
+                </p>
+              </div>
+              <a
+                id="link-demo-chemistry"
+                href="https://gemini.google.com/share/9a3687b0a3c5"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-xs text-gemini-blue hover:text-white flex items-center space-x-1 self-start group transition-colors duration-200"
+              >
+                <span>Try it out!</span>
+                <i data-lucide="chevron-right" class="w-3 h-3 transition-transform duration-200 group-hover:translate-x-1"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Schrödinger's Cat -->
+          <div
+            class="glass glass-hover rounded-xl overflow-hidden flex flex-col transition-all duration-300"
+          >
+            <a
+              href="https://gemini.google.com/share/5ba9b0d55a08"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="aspect-video bg-slate-900 overflow-hidden block group cursor-pointer"
+            >
+              <video
+                autoplay
+                loop
+                muted
+                playsinline
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              >
+                <source src="VibeCodingXR5_Scat.mp4" type="video/mp4" />
+              </video>
+            </a>
+            <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
+              <div class="space-y-2">
+                <h3 class="font-semibold text-lg">Schrödinger's Cat</h3>
+                <p class="text-slate-400 text-xs leading-relaxed">
+                  An aesthetically pleasing depiction of Schrödinger's cat in
+                  XR, demonstrating quantum state superposition and collapse.
+                </p>
+              </div>
+              <a
+                id="link-demo-cat"
+                href="https://gemini.google.com/share/5ba9b0d55a08"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-xs text-gemini-blue hover:text-white flex items-center space-x-1 self-start group transition-colors duration-200"
+              >
+                <span>Try it out!</span>
+                <i data-lucide="chevron-right" class="w-3 h-3 transition-transform duration-200 group-hover:translate-x-1"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- XR Sports -->
+          <div
+            class="glass glass-hover rounded-xl overflow-hidden flex flex-col transition-all duration-300"
+          >
+            <a
+              href="https://gemini.google.com/share/95915af5f3c5"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="aspect-video bg-slate-900 overflow-hidden block group cursor-pointer"
+            >
+              <video
+                autoplay
+                loop
+                muted
+                playsinline
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              >
+                <source src="VibeCodingXR6_Volleyball.mp4" type="video/mp4" />
+              </video>
+            </a>
+            <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
+              <div class="space-y-2">
+                <h3 class="font-semibold text-lg">XR Sports</h3>
+                <p class="text-slate-400 text-xs leading-relaxed">
+                  Play volleyball with hands and collide with the environment.
+                  Features textured balls launched from a source ring.
+                </p>
+              </div>
+              <a
+                id="link-demo-sports"
+                href="https://gemini.google.com/share/95915af5f3c5"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-xs text-gemini-blue hover:text-white flex items-center space-x-1 self-start group transition-colors duration-200"
+              >
+                <span>Try it out!</span>
+                <i data-lucide="chevron-right" class="w-3 h-3 transition-transform duration-200 group-hover:translate-x-1"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- XR Dino -->
+          <div
+            class="glass glass-hover rounded-xl overflow-hidden flex flex-col transition-all duration-300"
+          >
+            <a
+              href="https://gemini.google.com/share/742b25b73d0f"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="aspect-video bg-slate-900 overflow-hidden block group cursor-pointer"
+            >
+              <video
+                autoplay
+                loop
+                muted
+                playsinline
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              >
+                <source src="VibeCodingXR7_Dino.mp4" type="video/mp4" />
+              </video>
+            </a>
+            <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
+              <div class="space-y-2">
+                <h3 class="font-semibold text-lg">XR Dino</h3>
+                <p class="text-slate-400 text-xs leading-relaxed">
+                  The classic Chrome Dino game reimagined in XR. Voxelized dino
+                  and obstacles rushing towards the user on a semi-transparent
+                  lane.
+                </p>
+              </div>
+              <a
+                id="link-demo-dino"
+                href="https://gemini.google.com/share/742b25b73d0f"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-xs text-gemini-blue hover:text-white flex items-center space-x-1 self-start group transition-colors duration-200"
+              >
+                <span>Try it out!</span>
+                <i data-lucide="chevron-right" class="w-3 h-3 transition-transform duration-200 group-hover:translate-x-1"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer
+      class="border-t border-white/5 bg-slate-950/80 backdrop-blur-md mt-auto"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between text-xs text-slate-500"
+      >
+        <span>© 2026 Google XR. All rights reserved.</span>
+        <div class="flex space-x-4">
+          <a
+            id="footer-link-xrblocks"
+            href="https://xrblocks.github.io/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:text-white"
+            >XR Blocks</a
+          >
+          <a
+            id="footer-link-googlexr"
+            href="https://research.google/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:text-white"
+            >Google XR</a
+          >
+        </div>
+      </div>
+    </footer>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
