@@ -64,7 +64,6 @@ jobs:
           npm run build
           # Build the docs with the required environment variables.
           XRBLOCKS_BASE_URL=https://xrblocks.github.io/ URL=https://xrblocks.github.io/ BASE_URL=/docs/ npm run build --prefix ./docs
-          ./demos/build_all.sh
         working-directory: ./xrblocks
 
       # Step 6: Stage all artifacts for deployment.
