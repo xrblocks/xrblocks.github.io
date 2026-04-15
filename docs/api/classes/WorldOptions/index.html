@@ -19,8 +19,8 @@
 <link rel="icon" href="/docs/img/web-app-manifest-512x512.png" sizes="512x512" type="image/png">
 <link rel="manifest" href="/docs/img/site.webmanifest">
 <meta name="algolia-site-verification" content="C7A25C1609F793C8"><link rel="stylesheet" href="/docs/assets/css/styles.75fc60c9.css">
-<script src="/docs/assets/js/runtime~main.0bf4c4f5.js" defer="defer"></script>
-<script src="/docs/assets/js/main.90a5714d.js" defer="defer"></script>
+<script src="/docs/assets/js/runtime~main.1e38c7aa.js" defer="defer"></script>
+<script src="/docs/assets/js/main.9bce21f6.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg style="display: none;"><defs>
@@ -57,9 +57,9 @@
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="meshesshowdebugvisualizations">meshes.showDebugVisualizations?<a href="#meshesshowdebugvisualizations" class="hash-link" aria-label="Direct link to meshes.showDebugVisualizations?" title="Direct link to meshes.showDebugVisualizations?" translate="no">​</a></h6>
 <p><code>boolean</code> = <code>false</code></p>
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="objects">objects?<a href="#objects" class="hash-link" aria-label="Direct link to objects?" title="Direct link to objects?" translate="no">​</a></h6>
-<p>{ <code>backendConfig?</code>: { <code>activeBackend?</code>: <code>&quot;gemini&quot;</code> | <code>&quot;mediapipe&quot;</code>; <code>gemini?</code>: { <code>responseSchema?</code>: { <code>items?</code>: ... | ...; <code>type?</code>: ... | ...; }; <code>systemInstruction?</code>: <code>string</code>; }; <code>mediapipe?</code>: { }; }; <code>debugging?</code>: <code>boolean</code>; <code>enable?</code>: () =&gt; <a class="" href="/docs/api/classes/ObjectsOptions/"><code>ObjectsOptions</code></a>; <code>enabled?</code>: <code>boolean</code>; <code>objectImageMargin?</code>: <code>number</code>; <code>showDebugVisualizations?</code>: <code>boolean</code>; } = <code>...</code></p>
+<p>{ <code>backendConfig?</code>: { <code>activeBackend?</code>: <code>&quot;gemini&quot;</code> | <code>&quot;mediapipe&quot;</code>; <code>gemini?</code>: { <code>responseSchema?</code>: { <code>items?</code>: ... | ...; <code>type?</code>: ... | ...; }; <code>systemInstruction?</code>: <code>string</code>; }; <code>mediapipe?</code>: { <code>modelAssetPath?</code>: <code>string</code>; <code>scoreThreshold?</code>: <code>number</code>; <code>wasmFilesUrl?</code>: <code>string</code>; }; }; <code>debugging?</code>: <code>boolean</code>; <code>enable?</code>: () =&gt; <a class="" href="/docs/api/classes/ObjectsOptions/"><code>ObjectsOptions</code></a>; <code>enabled?</code>: <code>boolean</code>; <code>objectImageMargin?</code>: <code>number</code>; <code>showDebugVisualizations?</code>: <code>boolean</code>; } = <code>...</code></p>
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="objectsbackendconfig">objects.backendConfig?<a href="#objectsbackendconfig" class="hash-link" aria-label="Direct link to objects.backendConfig?" title="Direct link to objects.backendConfig?" translate="no">​</a></h6>
-<p>{ <code>activeBackend?</code>: <code>&quot;gemini&quot;</code> | <code>&quot;mediapipe&quot;</code>; <code>gemini?</code>: { <code>responseSchema?</code>: { <code>items?</code>: ... | ...; <code>type?</code>: ... | ...; }; <code>systemInstruction?</code>: <code>string</code>; }; <code>mediapipe?</code>: { }; } = <code>...</code></p>
+<p>{ <code>activeBackend?</code>: <code>&quot;gemini&quot;</code> | <code>&quot;mediapipe&quot;</code>; <code>gemini?</code>: { <code>responseSchema?</code>: { <code>items?</code>: ... | ...; <code>type?</code>: ... | ...; }; <code>systemInstruction?</code>: <code>string</code>; }; <code>mediapipe?</code>: { <code>modelAssetPath?</code>: <code>string</code>; <code>scoreThreshold?</code>: <code>number</code>; <code>wasmFilesUrl?</code>: <code>string</code>; }; } = <code>...</code></p>
 <p>Configuration for the detection backends.</p>
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="objectsbackendconfigactivebackend">objects.backendConfig.activeBackend?<a href="#objectsbackendconfigactivebackend" class="hash-link" aria-label="Direct link to objects.backendConfig.activeBackend?" title="Direct link to objects.backendConfig.activeBackend?" translate="no">​</a></h6>
 <p><code>&quot;gemini&quot;</code> | <code>&quot;mediapipe&quot;</code> = <code>...</code></p>
@@ -75,8 +75,14 @@
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="objectsbackendconfiggeminisysteminstruction">objects.backendConfig.gemini.systemInstruction?<a href="#objectsbackendconfiggeminisysteminstruction" class="hash-link" aria-label="Direct link to objects.backendConfig.gemini.systemInstruction?" title="Direct link to objects.backendConfig.gemini.systemInstruction?" translate="no">​</a></h6>
 <p><code>string</code> = <code>...</code></p>
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="objectsbackendconfigmediapipe">objects.backendConfig.mediapipe?<a href="#objectsbackendconfigmediapipe" class="hash-link" aria-label="Direct link to objects.backendConfig.mediapipe?" title="Direct link to objects.backendConfig.mediapipe?" translate="no">​</a></h6>
-<p>{ } = <code>{}</code></p>
-<p>Placeholder for a future MediaPipe backend configuration.</p>
+<p>{ <code>modelAssetPath?</code>: <code>string</code>; <code>scoreThreshold?</code>: <code>number</code>; <code>wasmFilesUrl?</code>: <code>string</code>; } = <code>...</code></p>
+<p>Configuration for MediaPipe backend.</p>
+<h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="objectsbackendconfigmediapipemodelassetpath">objects.backendConfig.mediapipe.modelAssetPath?<a href="#objectsbackendconfigmediapipemodelassetpath" class="hash-link" aria-label="Direct link to objects.backendConfig.mediapipe.modelAssetPath?" title="Direct link to objects.backendConfig.mediapipe.modelAssetPath?" translate="no">​</a></h6>
+<p><code>string</code> = <code>&#x27;https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite2/int8/latest/efficientdet_lite2.tflite&#x27;</code></p>
+<h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="objectsbackendconfigmediapipescorethreshold">objects.backendConfig.mediapipe.scoreThreshold?<a href="#objectsbackendconfigmediapipescorethreshold" class="hash-link" aria-label="Direct link to objects.backendConfig.mediapipe.scoreThreshold?" title="Direct link to objects.backendConfig.mediapipe.scoreThreshold?" translate="no">​</a></h6>
+<p><code>number</code> = <code>0.5</code></p>
+<h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="objectsbackendconfigmediapipewasmfilesurl">objects.backendConfig.mediapipe.wasmFilesUrl?<a href="#objectsbackendconfigmediapipewasmfilesurl" class="hash-link" aria-label="Direct link to objects.backendConfig.mediapipe.wasmFilesUrl?" title="Direct link to objects.backendConfig.mediapipe.wasmFilesUrl?" translate="no">​</a></h6>
+<p><code>string</code> = <code>&#x27;https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.34/wasm&#x27;</code></p>
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="objectsdebugging">objects.debugging?<a href="#objectsdebugging" class="hash-link" aria-label="Direct link to objects.debugging?" title="Direct link to objects.debugging?" translate="no">​</a></h6>
 <p><code>boolean</code> = <code>false</code></p>
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="objectsenable">objects.enable?<a href="#objectsenable" class="hash-link" aria-label="Direct link to objects.enable?" title="Direct link to objects.enable?" translate="no">​</a></h6>

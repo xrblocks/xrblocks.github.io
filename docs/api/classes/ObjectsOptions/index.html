@@ -19,8 +19,8 @@
 <link rel="icon" href="/docs/img/web-app-manifest-512x512.png" sizes="512x512" type="image/png">
 <link rel="manifest" href="/docs/img/site.webmanifest">
 <meta name="algolia-site-verification" content="C7A25C1609F793C8"><link rel="stylesheet" href="/docs/assets/css/styles.75fc60c9.css">
-<script src="/docs/assets/js/runtime~main.0bf4c4f5.js" defer="defer"></script>
-<script src="/docs/assets/js/main.90a5714d.js" defer="defer"></script>
+<script src="/docs/assets/js/runtime~main.1e38c7aa.js" defer="defer"></script>
+<script src="/docs/assets/js/main.9bce21f6.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg style="display: none;"><defs>
@@ -34,11 +34,11 @@
 <blockquote>
 <p><strong>new ObjectsOptions</strong>(<code>options?</code>): <code>ObjectsOptions</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/world/objects/ObjectsOptions.ts#L45" target="_blank" rel="noopener noreferrer" class="">src/world/objects/ObjectsOptions.ts:45</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/world/objects/ObjectsOptions.ts#L52" target="_blank" rel="noopener noreferrer" class="">src/world/objects/ObjectsOptions.ts:52</a></p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters">Parameters<a href="#parameters" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="options">options?<a href="#options" class="hash-link" aria-label="Direct link to options?" title="Direct link to options?" translate="no">​</a></h5>
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="backendconfig">backendConfig?<a href="#backendconfig" class="hash-link" aria-label="Direct link to backendConfig?" title="Direct link to backendConfig?" translate="no">​</a></h6>
-<p>{ <code>activeBackend?</code>: <code>&quot;gemini&quot;</code> | <code>&quot;mediapipe&quot;</code>; <code>gemini?</code>: { <code>responseSchema?</code>: { <code>items?</code>: { <code>properties?</code>: ... | ...; <code>required?</code>: ... | ...; <code>type?</code>: ... | ...; }; <code>type?</code>: <code>string</code>; }; <code>systemInstruction?</code>: <code>string</code>; }; <code>mediapipe?</code>: { }; } = <code>...</code></p>
+<p>{ <code>activeBackend?</code>: <code>&quot;gemini&quot;</code> | <code>&quot;mediapipe&quot;</code>; <code>gemini?</code>: { <code>responseSchema?</code>: { <code>items?</code>: { <code>properties?</code>: ... | ...; <code>required?</code>: ... | ...; <code>type?</code>: ... | ...; }; <code>type?</code>: <code>string</code>; }; <code>systemInstruction?</code>: <code>string</code>; }; <code>mediapipe?</code>: { <code>modelAssetPath?</code>: <code>string</code>; <code>scoreThreshold?</code>: <code>number</code>; <code>wasmFilesUrl?</code>: <code>string</code>; }; } = <code>...</code></p>
 <p>Configuration for the detection backends.</p>
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="backendconfigactivebackend">backendConfig.activeBackend?<a href="#backendconfigactivebackend" class="hash-link" aria-label="Direct link to backendConfig.activeBackend?" title="Direct link to backendConfig.activeBackend?" translate="no">​</a></h6>
 <p><code>&quot;gemini&quot;</code> | <code>&quot;mediapipe&quot;</code> = <code>...</code></p>
@@ -60,8 +60,14 @@
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="backendconfiggeminisysteminstruction">backendConfig.gemini.systemInstruction?<a href="#backendconfiggeminisysteminstruction" class="hash-link" aria-label="Direct link to backendConfig.gemini.systemInstruction?" title="Direct link to backendConfig.gemini.systemInstruction?" translate="no">​</a></h6>
 <p><code>string</code> = <code>...</code></p>
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="backendconfigmediapipe">backendConfig.mediapipe?<a href="#backendconfigmediapipe" class="hash-link" aria-label="Direct link to backendConfig.mediapipe?" title="Direct link to backendConfig.mediapipe?" translate="no">​</a></h6>
-<p>{ } = <code>{}</code></p>
-<p>Placeholder for a future MediaPipe backend configuration.</p>
+<p>{ <code>modelAssetPath?</code>: <code>string</code>; <code>scoreThreshold?</code>: <code>number</code>; <code>wasmFilesUrl?</code>: <code>string</code>; } = <code>...</code></p>
+<p>Configuration for MediaPipe backend.</p>
+<h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="backendconfigmediapipemodelassetpath">backendConfig.mediapipe.modelAssetPath?<a href="#backendconfigmediapipemodelassetpath" class="hash-link" aria-label="Direct link to backendConfig.mediapipe.modelAssetPath?" title="Direct link to backendConfig.mediapipe.modelAssetPath?" translate="no">​</a></h6>
+<p><code>string</code> = <code>&#x27;https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite2/int8/latest/efficientdet_lite2.tflite&#x27;</code></p>
+<h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="backendconfigmediapipescorethreshold">backendConfig.mediapipe.scoreThreshold?<a href="#backendconfigmediapipescorethreshold" class="hash-link" aria-label="Direct link to backendConfig.mediapipe.scoreThreshold?" title="Direct link to backendConfig.mediapipe.scoreThreshold?" translate="no">​</a></h6>
+<p><code>number</code> = <code>0.5</code></p>
+<h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="backendconfigmediapipewasmfilesurl">backendConfig.mediapipe.wasmFilesUrl?<a href="#backendconfigmediapipewasmfilesurl" class="hash-link" aria-label="Direct link to backendConfig.mediapipe.wasmFilesUrl?" title="Direct link to backendConfig.mediapipe.wasmFilesUrl?" translate="no">​</a></h6>
+<p><code>string</code> = <code>&#x27;https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.34/wasm&#x27;</code></p>
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="debugging">debugging?<a href="#debugging" class="hash-link" aria-label="Direct link to debugging?" title="Direct link to debugging?" translate="no">​</a></h6>
 <p><code>boolean</code> = <code>false</code></p>
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="enable">enable?<a href="#enable" class="hash-link" aria-label="Direct link to enable?" title="Direct link to enable?" translate="no">​</a></h6>
@@ -162,9 +168,21 @@ size.</p>
 </blockquote>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="mediapipe">mediapipe<a href="#mediapipe" class="hash-link" aria-label="Direct link to mediapipe" title="Direct link to mediapipe" translate="no">​</a></h4>
 <blockquote>
-<p><strong>mediapipe</strong>: <code>object</code> = <code>{}</code></p>
+<p><strong>mediapipe</strong>: <code>object</code></p>
 </blockquote>
-<p>Placeholder for a future MediaPipe backend configuration.</p>
+<p>Configuration for MediaPipe backend.</p>
+<h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="mediapipemodelassetpath">mediapipe.modelAssetPath<a href="#mediapipemodelassetpath" class="hash-link" aria-label="Direct link to mediapipe.modelAssetPath" title="Direct link to mediapipe.modelAssetPath" translate="no">​</a></h5>
+<blockquote>
+<p><strong>modelAssetPath</strong>: <code>string</code> = <code>&#x27;https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite2/int8/latest/efficientdet_lite2.tflite&#x27;</code></p>
+</blockquote>
+<h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="mediapipescorethreshold">mediapipe.scoreThreshold<a href="#mediapipescorethreshold" class="hash-link" aria-label="Direct link to mediapipe.scoreThreshold" title="Direct link to mediapipe.scoreThreshold" translate="no">​</a></h5>
+<blockquote>
+<p><strong>scoreThreshold</strong>: <code>number</code> = <code>0.5</code></p>
+</blockquote>
+<h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="mediapipewasmfilesurl">mediapipe.wasmFilesUrl<a href="#mediapipewasmfilesurl" class="hash-link" aria-label="Direct link to mediapipe.wasmFilesUrl" title="Direct link to mediapipe.wasmFilesUrl" translate="no">​</a></h5>
+<blockquote>
+<p><strong>wasmFilesUrl</strong>: <code>string</code> = <code>&#x27;https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.34/wasm&#x27;</code></p>
+</blockquote>
 <hr>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="debugging">debugging<a href="#debugging" class="hash-link" aria-label="Direct link to debugging" title="Direct link to debugging" translate="no">​</a></h3>
 <blockquote>
@@ -196,7 +214,7 @@ size.</p>
 <blockquote>
 <p><strong>enable</strong>(): <code>ObjectsOptions</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/world/objects/ObjectsOptions.ts#L54" target="_blank" rel="noopener noreferrer" class="">src/world/objects/ObjectsOptions.ts:54</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/world/objects/ObjectsOptions.ts#L61" target="_blank" rel="noopener noreferrer" class="">src/world/objects/ObjectsOptions.ts:61</a></p>
 <p>Enables the object detector.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-1">Returns<a href="#returns-1" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>ObjectsOptions</code></p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/api/classes/ObjectDetector/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">ObjectDetector</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/api/classes/OcclusionPass/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">OcclusionPass</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#constructors" class="table-of-contents__link toc-highlight">Constructors</a><ul><li><a href="#constructor" class="table-of-contents__link toc-highlight">Constructor</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#backendconfig" class="table-of-contents__link toc-highlight">backendConfig</a></li><li><a href="#debugging" class="table-of-contents__link toc-highlight">debugging</a></li><li><a href="#enabled" class="table-of-contents__link toc-highlight">enabled</a></li><li><a href="#objectimagemargin" class="table-of-contents__link toc-highlight">objectImageMargin</a></li><li><a href="#showdebugvisualizations" class="table-of-contents__link toc-highlight">showDebugVisualizations</a></li></ul></li><li><a href="#methods" class="table-of-contents__link toc-highlight">Methods</a><ul><li><a href="#enable" class="table-of-contents__link toc-highlight">enable()</a></li></ul></li></ul></div></div></div></div></main></div></div></div></div>
