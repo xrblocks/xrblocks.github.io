@@ -19,7 +19,7 @@
 <link rel="icon" href="/docs/img/web-app-manifest-512x512.png" sizes="512x512" type="image/png">
 <link rel="manifest" href="/docs/img/site.webmanifest">
 <meta name="algolia-site-verification" content="C7A25C1609F793C8"><link rel="stylesheet" href="/docs/assets/css/styles.75fc60c9.css">
-<script src="/docs/assets/js/runtime~main.1e38c7aa.js" defer="defer"></script>
+<script src="/docs/assets/js/runtime~main.3483c54d.js" defer="defer"></script>
 <script src="/docs/assets/js/main.9bce21f6.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -74,20 +74,24 @@
 <blockquote>
 <p><strong>intersectObject</strong>&lt;<code>TIntersected</code>&gt;(<code>object</code>, <code>recursive</code>, <code>intersects</code>): <code>Intersection</code>&lt;<code>TIntersected</code>&gt;[]</p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/components/Raycaster.ts#L53" target="_blank" rel="noopener noreferrer" class="">src/core/components/Raycaster.ts:53</a></p>
-<p>three#Raycaster.intersectObjects</p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/components/Raycaster.ts#L59" target="_blank" rel="noopener noreferrer" class="">src/core/components/Raycaster.ts:59</a></p>
+<p>Intersects a single object with the raycaster, using the custom sort function.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="type-parameters">Type Parameters<a href="#type-parameters" class="hash-link" aria-label="Direct link to Type Parameters" title="Direct link to Type Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="tintersected">TIntersected<a href="#tintersected" class="hash-link" aria-label="Direct link to TIntersected" title="Direct link to TIntersected" translate="no">​</a></h5>
 <p><code>TIntersected</code> <em>extends</em> <a href="https://threejs.org/docs/#api/en/core/Object3D" target="_blank" rel="noopener noreferrer" class=""><code>Object3D</code></a>&lt;<code>Object3DEventMap</code>&gt;</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-2">Parameters<a href="#parameters-2" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="object">object<a href="#object" class="hash-link" aria-label="Direct link to object" title="Direct link to object" translate="no">​</a></h5>
 <p><a href="https://threejs.org/docs/#api/en/core/Object3D" target="_blank" rel="noopener noreferrer" class=""><code>Object3D</code></a></p>
+<p>The object to intersect with.</p>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="recursive">recursive<a href="#recursive" class="hash-link" aria-label="Direct link to recursive" title="Direct link to recursive" translate="no">​</a></h5>
 <p><code>boolean</code> = <code>true</code></p>
+<p>Whether to intersect with the object&#x27;s children.</p>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="intersects">intersects<a href="#intersects" class="hash-link" aria-label="Direct link to intersects" title="Direct link to intersects" translate="no">​</a></h5>
 <p><code>Intersection</code>&lt;<code>TIntersected</code>&gt;[] = <code>[]</code></p>
+<p>The array to store the intersections in.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-2">Returns<a href="#returns-2" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>Intersection</code>&lt;<code>TIntersected</code>&gt;[]</p>
+<p>The intersections found.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="overrides">Overrides<a href="#overrides" class="hash-link" aria-label="Direct link to Overrides" title="Direct link to Overrides" translate="no">​</a></h4>
 <p><code>THREE.Raycaster.intersectObject</code></p>
 <hr>
@@ -95,20 +99,24 @@
 <blockquote>
 <p><strong>intersectObjects</strong>&lt;<code>TIntersected</code>&gt;(<code>objects</code>, <code>recursive</code>, <code>intersects</code>): <code>Intersection</code>&lt;<code>TIntersected</code>&gt;[]</p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/components/Raycaster.ts#L64" target="_blank" rel="noopener noreferrer" class="">src/core/components/Raycaster.ts:64</a></p>
-<p>three#Raycaster.intersectObjects</p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/core/components/Raycaster.ts#L76" target="_blank" rel="noopener noreferrer" class="">src/core/components/Raycaster.ts:76</a></p>
+<p>Intersects multiple objects with the raycaster, using the custom sort function.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="type-parameters-1">Type Parameters<a href="#type-parameters-1" class="hash-link" aria-label="Direct link to Type Parameters" title="Direct link to Type Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="tintersected-1">TIntersected<a href="#tintersected-1" class="hash-link" aria-label="Direct link to TIntersected" title="Direct link to TIntersected" translate="no">​</a></h5>
 <p><code>TIntersected</code> <em>extends</em> <a href="https://threejs.org/docs/#api/en/core/Object3D" target="_blank" rel="noopener noreferrer" class=""><code>Object3D</code></a>&lt;<code>Object3DEventMap</code>&gt;</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-3">Parameters<a href="#parameters-3" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="objects">objects<a href="#objects" class="hash-link" aria-label="Direct link to objects" title="Direct link to objects" translate="no">​</a></h5>
 <p><a href="https://threejs.org/docs/#api/en/core/Object3D" target="_blank" rel="noopener noreferrer" class=""><code>Object3D</code></a>&lt;<code>Object3DEventMap</code>&gt;[]</p>
+<p>The objects to intersect with.</p>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="recursive-1">recursive<a href="#recursive-1" class="hash-link" aria-label="Direct link to recursive" title="Direct link to recursive" translate="no">​</a></h5>
 <p><code>boolean</code> = <code>true</code></p>
+<p>Whether to intersect with the objects&#x27; children.</p>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="intersects-1">intersects<a href="#intersects-1" class="hash-link" aria-label="Direct link to intersects" title="Direct link to intersects" translate="no">​</a></h5>
 <p><code>Intersection</code>&lt;<code>TIntersected</code>&gt;[] = <code>[]</code></p>
+<p>The array to store the intersections in.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-3">Returns<a href="#returns-3" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>Intersection</code>&lt;<code>TIntersected</code>&gt;[]</p>
+<p>The intersections found.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="overrides-1">Overrides<a href="#overrides-1" class="hash-link" aria-label="Direct link to Overrides" title="Direct link to Overrides" translate="no">​</a></h4>
 <p><code>THREE.Raycaster.intersectObjects</code></p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/api/classes/PlanesOptions/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">PlanesOptions</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/api/classes/Registry/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Registry</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#extends" class="table-of-contents__link toc-highlight">Extends</a></li><li><a href="#constructors" class="table-of-contents__link toc-highlight">Constructors</a><ul><li><a href="#constructor" class="table-of-contents__link toc-highlight">Constructor</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#sortfunction" class="table-of-contents__link toc-highlight">sortFunction()</a></li></ul></li><li><a href="#methods" class="table-of-contents__link toc-highlight">Methods</a><ul><li><a href="#intersectobject" class="table-of-contents__link toc-highlight">intersectObject()</a></li><li><a href="#intersectobjects" class="table-of-contents__link toc-highlight">intersectObjects()</a></li></ul></li></ul></div></div></div></div></main></div></div></div></div>
 </body>

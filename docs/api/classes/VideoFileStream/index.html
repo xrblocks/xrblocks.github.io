@@ -19,7 +19,7 @@
 <link rel="icon" href="/docs/img/web-app-manifest-512x512.png" sizes="512x512" type="image/png">
 <link rel="manifest" href="/docs/img/site.webmanifest">
 <meta name="algolia-site-verification" content="C7A25C1609F793C8"><link rel="stylesheet" href="/docs/assets/css/styles.75fc60c9.css">
-<script src="/docs/assets/js/runtime~main.1e38c7aa.js" defer="defer"></script>
+<script src="/docs/assets/js/runtime~main.3483c54d.js" defer="defer"></script>
 <script src="/docs/assets/js/main.9bce21f6.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -146,7 +146,7 @@
 <blockquote>
 <p><strong>dispose</strong>(): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/video/VideoStream.ts#L284" target="_blank" rel="noopener noreferrer" class="">src/video/VideoStream.ts:284</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/video/VideoStream.ts#L286" target="_blank" rel="noopener noreferrer" class="">src/video/VideoStream.ts:286</a></p>
 <p>Disposes of all resources used by this stream.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-2">Returns<a href="#returns-2" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
@@ -156,13 +156,14 @@
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="getsnapshot">getSnapshot()<a href="#getsnapshot" class="hash-link" aria-label="Direct link to getSnapshot()" title="Direct link to getSnapshot()" translate="no">​</a></h3>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="call-signature">Call Signature<a href="#call-signature" class="hash-link" aria-label="Direct link to Call Signature" title="Direct link to Call Signature" translate="no">​</a></h4>
 <blockquote>
-<p><strong>getSnapshot</strong>(<code>_</code>): <a href="https://developer.mozilla.org/docs/Web/API/ImageData" target="_blank" rel="noopener noreferrer" class=""><code>ImageData</code></a></p>
+<p><strong>getSnapshot</strong>(<code>options</code>): <a href="https://developer.mozilla.org/docs/Web/API/ImageData" target="_blank" rel="noopener noreferrer" class=""><code>ImageData</code></a></p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/video/VideoStream.ts#L187" target="_blank" rel="noopener noreferrer" class="">src/video/VideoStream.ts:187</a></p>
 <p>Captures the current video frame.</p>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-1">Parameters<a href="#parameters-1" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h5>
-<h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="_">_<a href="#_" class="hash-link" aria-label="Direct link to _" title="Direct link to _" translate="no">​</a></h6>
+<h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="options-1">options<a href="#options-1" class="hash-link" aria-label="Direct link to options" title="Direct link to options" translate="no">​</a></h6>
 <p><a class="" href="/docs/api/type-aliases/VideoStreamGetSnapshotImageDataOptions/"><code>VideoStreamGetSnapshotImageDataOptions</code></a></p>
+<p>The options for the snapshot.</p>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-3">Returns<a href="#returns-3" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h5>
 <p><a href="https://developer.mozilla.org/docs/Web/API/ImageData" target="_blank" rel="noopener noreferrer" class=""><code>ImageData</code></a></p>
 <p>The captured data.</p>
@@ -170,13 +171,14 @@
 <p><a class="" href="/docs/api/classes/VideoStream/"><code>VideoStream</code></a>.<a class="" href="/docs/api/classes/VideoStream/#getsnapshot"><code>getSnapshot</code></a></p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="call-signature-1">Call Signature<a href="#call-signature-1" class="hash-link" aria-label="Direct link to Call Signature" title="Direct link to Call Signature" translate="no">​</a></h4>
 <blockquote>
-<p><strong>getSnapshot</strong>(<code>_</code>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener noreferrer" class=""><code>Promise</code></a>&lt;<code>null</code> | <code>string</code>&gt;</p>
+<p><strong>getSnapshot</strong>(<code>options</code>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener noreferrer" class=""><code>Promise</code></a>&lt;<code>null</code> | <code>string</code>&gt;</p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/video/VideoStream.ts#L188" target="_blank" rel="noopener noreferrer" class="">src/video/VideoStream.ts:188</a></p>
 <p>Captures the current video frame.</p>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-2">Parameters<a href="#parameters-2" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h5>
-<h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="_-1">_<a href="#_-1" class="hash-link" aria-label="Direct link to _" title="Direct link to _" translate="no">​</a></h6>
+<h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="options-2">options<a href="#options-2" class="hash-link" aria-label="Direct link to options" title="Direct link to options" translate="no">​</a></h6>
 <p><a class="" href="/docs/api/type-aliases/VideoStreamGetSnapshotBase64Options/"><code>VideoStreamGetSnapshotBase64Options</code></a></p>
+<p>The options for the snapshot.</p>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-4">Returns<a href="#returns-4" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h5>
 <p><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener noreferrer" class=""><code>Promise</code></a>&lt;<code>null</code> | <code>string</code>&gt;</p>
 <p>The captured data.</p>
@@ -184,13 +186,14 @@
 <p><a class="" href="/docs/api/classes/VideoStream/"><code>VideoStream</code></a>.<a class="" href="/docs/api/classes/VideoStream/#getsnapshot"><code>getSnapshot</code></a></p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="call-signature-2">Call Signature<a href="#call-signature-2" class="hash-link" aria-label="Direct link to Call Signature" title="Direct link to Call Signature" translate="no">​</a></h4>
 <blockquote>
-<p><strong>getSnapshot</strong>(<code>_</code>): <a href="https://threejs.org/docs/#api/en/textures/Texture" target="_blank" rel="noopener noreferrer" class=""><code>Texture</code></a></p>
+<p><strong>getSnapshot</strong>(<code>options</code>): <a href="https://threejs.org/docs/#api/en/textures/Texture" target="_blank" rel="noopener noreferrer" class=""><code>Texture</code></a></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/video/VideoStream.ts#L189" target="_blank" rel="noopener noreferrer" class="">src/video/VideoStream.ts:189</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/video/VideoStream.ts#L191" target="_blank" rel="noopener noreferrer" class="">src/video/VideoStream.ts:191</a></p>
 <p>Captures the current video frame.</p>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-3">Parameters<a href="#parameters-3" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h5>
-<h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="_-2">_<a href="#_-2" class="hash-link" aria-label="Direct link to _" title="Direct link to _" translate="no">​</a></h6>
+<h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="options-3">options<a href="#options-3" class="hash-link" aria-label="Direct link to options" title="Direct link to options" translate="no">​</a></h6>
 <p><a class="" href="/docs/api/type-aliases/VideoStreamGetSnapshotTextureOptions/"><code>VideoStreamGetSnapshotTextureOptions</code></a></p>
+<p>The options for the snapshot.</p>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-5">Returns<a href="#returns-5" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h5>
 <p><a href="https://threejs.org/docs/#api/en/textures/Texture" target="_blank" rel="noopener noreferrer" class=""><code>Texture</code></a></p>
 <p>The captured data.</p>
@@ -198,13 +201,14 @@
 <p><a class="" href="/docs/api/classes/VideoStream/"><code>VideoStream</code></a>.<a class="" href="/docs/api/classes/VideoStream/#getsnapshot"><code>getSnapshot</code></a></p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="call-signature-3">Call Signature<a href="#call-signature-3" class="hash-link" aria-label="Direct link to Call Signature" title="Direct link to Call Signature" translate="no">​</a></h4>
 <blockquote>
-<p><strong>getSnapshot</strong>(<code>_</code>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener noreferrer" class=""><code>Promise</code></a>&lt;<code>null</code> | <a href="https://developer.mozilla.org/docs/Web/API/Blob" target="_blank" rel="noopener noreferrer" class=""><code>Blob</code></a>&gt;</p>
+<p><strong>getSnapshot</strong>(<code>options</code>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener noreferrer" class=""><code>Promise</code></a>&lt;<code>null</code> | <a href="https://developer.mozilla.org/docs/Web/API/Blob" target="_blank" rel="noopener noreferrer" class=""><code>Blob</code></a>&gt;</p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/video/VideoStream.ts#L190" target="_blank" rel="noopener noreferrer" class="">src/video/VideoStream.ts:190</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/video/VideoStream.ts#L192" target="_blank" rel="noopener noreferrer" class="">src/video/VideoStream.ts:192</a></p>
 <p>Captures the current video frame.</p>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-4">Parameters<a href="#parameters-4" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h5>
-<h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="_-3">_<a href="#_-3" class="hash-link" aria-label="Direct link to _" title="Direct link to _" translate="no">​</a></h6>
+<h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="options-4">options<a href="#options-4" class="hash-link" aria-label="Direct link to options" title="Direct link to options" translate="no">​</a></h6>
 <p><a class="" href="/docs/api/type-aliases/VideoStreamGetSnapshotBlobOptions/"><code>VideoStreamGetSnapshotBlobOptions</code></a></p>
+<p>The options for the snapshot.</p>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-6">Returns<a href="#returns-6" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h5>
 <p><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener noreferrer" class=""><code>Promise</code></a>&lt;<code>null</code> | <a href="https://developer.mozilla.org/docs/Web/API/Blob" target="_blank" rel="noopener noreferrer" class=""><code>Blob</code></a>&gt;</p>
 <p>The captured data.</p>
@@ -656,7 +660,7 @@ represents, e.g. View, ModelView.</p>
 <blockquote>
 <p><code>protected</code> <strong>stop_</strong>(): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/video/VideoStream.ts#L265" target="_blank" rel="noopener noreferrer" class="">src/video/VideoStream.ts:265</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/video/VideoStream.ts#L267" target="_blank" rel="noopener noreferrer" class="">src/video/VideoStream.ts:267</a></p>
 <p>Stops the current video stream tracks.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="returns-38">Returns<a href="#returns-38" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
