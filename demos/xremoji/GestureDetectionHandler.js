@@ -6,6 +6,9 @@ import {WebGPUBackend} from '@tensorflow/tfjs-backend-webgpu';
 import {loadLiteRt, setWebGpuDevice} from '@litertjs/core';
 import {runWithTfjsTensors} from '@litertjs/tfjs-interop';
 
+const MODEL_PATH =
+  'https://cdn.jsdelivr.net/gh/xrblocks/assets@main/tflite_models/gestures/xr_emoji.tflite';
+
 //
 // Constants for a custom gesture model
 //
@@ -102,7 +105,7 @@ class LatestTaskQueue {
 export class GestureDetectionHandler {
   constructor() {
     // model
-    this.modelPath = './custom_gestures_model.tflite';
+    this.modelPath = MODEL_PATH;
     this.modelState = 'None';
 
     //
