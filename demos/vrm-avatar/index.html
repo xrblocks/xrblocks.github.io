@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>VRM Avatar: Point to Walk | XR Blocks</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="https://xrblocks.github.io/css/xr.css"
+    />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "@dimforge/rapier3d-simd-compat": "https://cdn.jsdelivr.net/npm/@dimforge/rapier3d-simd-compat@0.19.2/rapier.mjs",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
+          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
+          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
+          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
+          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
+          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
+          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
+          "lit/": "https://esm.run/lit@3/",
+          "@pixiv/three-vrm": "https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@3/lib/three-vrm.module.min.js",
+          "xrblocks": "../../build/xrblocks.js",
+          "xrblocks/addons/": "../../build/addons/"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <script type="module">
+      // Provides 2D simulator UI on desktop — always import first.
+      import 'xrblocks/addons/simulator/SimulatorAddons.js';
+
+      import * as THREE from 'three';
+      import * as xb from 'xrblocks';
+
+      import {VRMAvatarScript} from './VRMAvatarScript.js';
+
+      // ---------------------------------------------------------------------------
+      // Asset URLs — swap these for your own VRM / FBX files.
+      // VRM: the sample model bundled in the three-vrm repository.
+      // FBX: free Mixamo downloads (no character needed, just animations).
+      // ---------------------------------------------------------------------------
+      const VRM_URL =
+        'https://cdn.jsdelivr.net/gh/pixiv/three-vrm@3.5.1/packages/three-vrm-animation/examples/models/VRM1_Constraint_Twist_Sample.vrm';
+      const IDLE_URL = 'animations/Idle.fbx'; // ← put your Mixamo idle FBX here
+      const WALK_URL = 'animations/Walking.fbx'; // ← put your Mixamo walk FBX here
+
+      // ---------------------------------------------------------------------------
+      // Minimal scene setup (lights + ground grid for visual reference)
+      // ---------------------------------------------------------------------------
+      class SceneSetup extends xb.Script {
+        init() {
+          this.add(new THREE.HemisphereLight(0xffffff, 0x666666, 3));
+
+          const dirLight = new THREE.DirectionalLight(0xffffff, 2);
+          dirLight.position.set(1, 3, 1).normalize();
+          this.add(dirLight);
+
+          // Ground grid for spatial reference in the simulator.
+          const grid = new THREE.GridHelper(10, 20, 0x888888, 0x444444);
+          grid.position.y = 0;
+          this.add(grid);
+        }
+      }
+
+      // ---------------------------------------------------------------------------
+      // Entry point
+      // ---------------------------------------------------------------------------
+      document.addEventListener('DOMContentLoaded', async () => {
+        xb.add(new SceneSetup());
+
+        xb.add(
+          new VRMAvatarScript({
+            vrmUrl: VRM_URL,
+            idleUrl: IDLE_URL,
+            walkUrl: WALK_URL,
+
+            rotateLerp: 0.08,
+          })
+        );
+
+        const options = new xb.Options();
+        options.enableDepth();
+        options.setAppTitle('VRM Avatar Companion');
+
+        await xb.init(options);
+      });
+    </script>
+  </body>
+</html>
