@@ -10,15 +10,92 @@ export const ForestScene = {
   haloOuter: 'vec3(0.85, 1.00, 0.55)',
 
   helpers: /* glsl */ `
-    // A vertical tree-trunk silhouette.
+    // Vertical-cylinder ray test (axis = Y).
+    float rayCylinderY(vec3 ro, vec3 rd, vec2 c, float r,
+                       float yMin, float yMax) {
+      vec2 d = rd.xz;
+      vec2 oc = ro.xz - c;
+      float a = dot(d, d);
+      if (a < 1e-6) return -1.0;
+      float b = dot(oc, d);
+      float disc = b * b - a * (dot(oc, oc) - r * r);
+      if (disc < 0.0) return -1.0;
+      float t = (-b - sqrt(disc)) / a;
+      if (t < 0.0) return -1.0;
+      float hy = ro.y + rd.y * t;
+      if (hy < yMin || hy > yMax) return -1.0;
+      return t;
+    }
+
+    // Same 18-tree forest as ForestImmersive: 8 inner ring (4-7m),
+    // 10 outer ring (8-13m). Eye at y=0, ground at y=-1.6.
+    // Returns vec4(rgb, hitT) or vec4(0,0,0,-1) on miss.
+    vec4 forestTrees3D(vec3 ro, vec3 rd) {
+      const float GY = -1.6;
+      float bestT = 1e9; int bestId = 0; vec2 bestPos = vec2(0.0);
+      float bestScale = 1.0;
+      for (int i = 0; i < 18; i++) {
+        float fi = float(i);
+        float ringT = (fi < 8.0) ? fi / 8.0 : (fi - 8.0) / 10.0;
+        float ang = ringT * 6.28318 + hash(vec2(fi, 1.7)) * 0.6;
+        float radius = (fi < 8.0)
+            ? mix(4.0, 7.0, hash(vec2(fi, 3.3)))
+            : mix(8.0, 13.0, hash(vec2(fi, 5.1)));
+        vec2 pos = vec2(cos(ang), sin(ang)) * radius;
+        float scale = 1.6 + hash(vec2(fi, 9.7)) * 1.4;
+        float lAng = hash(vec2(fi, 13.1)) * 6.28318;
+        float lAmt = (hash(vec2(fi, 17.3)) - 0.3) * 0.4 * scale;
+        vec2 lean = vec2(cos(lAng), sin(lAng)) * lAmt;
+        float sway = sin(uTime * 0.5 + hash(vec2(fi, 21.7)) * 6.28) * 0.12;
+        float trunkTopY = GY + 1.4 * scale;
+        float t = rayCylinderY(ro, rd, pos, 0.10 * scale, GY, trunkTopY);
+        if (t > 0.0 && t < bestT) {
+          bestT = t; bestId = 1; bestPos = pos; bestScale = scale;
+        }
+        for (int k = 0; k < 4; k++) {
+          float fk = float(k);
+          float cy = trunkTopY + (0.4 + fk * 0.55) * scale;
+          float rVar = 0.85 + 0.3 * hash(vec2(pos.x * 7.3 + fk, pos.y * 3.1));
+          float cr = (0.95 - fk * 0.18) * scale * rVar;
+          float hFrac = (fk + 1.0) / 4.0;
+          vec2 off = lean * hFrac + vec2(sway) * hFrac;
+          float ts = raySphere(ro, rd, vec3(pos.x + off.x, cy, pos.y + off.y), cr);
+          if (ts > 0.0 && ts < bestT) {
+            bestT = ts; bestId = 2; bestPos = pos; bestScale = scale;
+          }
+        }
+      }
+      if (bestId == 0) return vec4(0.0, 0.0, 0.0, -1.0);
+      vec3 hp = ro + rd * bestT;
+      vec3 col;
+      if (bestId == 1) {
+        float bark = fbm(vec2(hp.y * 6.0,
+                        atan(hp.z - bestPos.y, hp.x - bestPos.x) * 4.0));
+        col = mix(vec3(0.030, 0.022, 0.015),
+                  vec3(0.075, 0.055, 0.035), bark);
+      } else {
+        vec3 trunkTop = vec3(bestPos.x, GY + 1.4 * bestScale, bestPos.y);
+        vec3 n = normalize(hp - trunkTop);
+        float topLight = max(n.y, 0.0);
+        float needles = fbm(hp.xz * 6.0 + hp.y * 3.0);
+        vec3 base = mix(vec3(0.025, 0.050, 0.028),
+                        vec3(0.055, 0.100, 0.050), needles);
+        float breathe = 0.92 + 0.08 * sin(uTime * 0.6
+          + bestPos.x * 1.3 + bestPos.y * 0.9);
+        col = base * (0.45 + topLight * 0.7) * breathe;
+      }
+      float fog = smoothstep(3.0, 16.0, bestT);
+      col = mix(col, vec3(0.10, 0.08, 0.18), fog * 0.6);
+      return vec4(col, bestT);
+    }
+
+    // A vertical tree-trunk silhouette (kept for legacy; unused).
     float treeMask(vec2 p, float cx, float w, float h, float baseY) {
       float taper = w * (1.0 - smoothstep(baseY, baseY + h, p.y) * 0.6);
       float trunk = smoothstep(taper, taper * 0.85, abs(p.x - cx))
                   * step(baseY, p.y) * step(p.y, baseY + h);
-      // Triangular pine canopy on top.
       float dx = abs(p.x - cx);
       float canopyTop = baseY + h + 0.25;
-      float canopySlope = (canopyTop - (baseY + h * 0.4)) / (w * 4.0);
       float canopy = step(p.y, canopyTop - dx / (w * 4.0))
                    * step(baseY + h * 0.4, p.y);
       return clamp(trunk + canopy, 0.0, 1.0);
@@ -60,38 +137,72 @@ export const ForestScene = {
       col += vec3(0.95, 0.95, 1.0) * (s1 + s2 * 0.6) * upper * 0.9;
     }
 
-    // ---- Distant tree silhouettes (back row, hazy) ----
+    // ---- 3D ground (matches immersive: y=-1.6 plane) ----
     {
-      for (int i = 0; i < 9; i++) {
-        float fi = float(i);
-        float cx = (fi - 4.0) * 0.25 + sin(fi * 1.7) * 0.05;
-        float w = 0.020 + hash(vec2(fi, 1.1)) * 0.010;
-        float h = 0.30 + hash(vec2(fi, 7.7)) * 0.10;
-        float baseY = -0.4;
-        float t = treeMask(pBack, cx, w, h, baseY);
-        col = mix(col, vec3(0.05, 0.07, 0.12), t * 0.85);
+      vec3 ro = uCamLocal;
+      float gy = -1.6;
+      if (rd.y < -0.001 && ro.y > gy) {
+        float t = (gy - ro.y) / rd.y;
+        if (t > 0.0 && t < 200.0) {
+          vec3 gp = ro + rd * t;
+          float gn = fbm(gp.xz * 0.4);
+          vec3 ground = mix(vec3(0.03, 0.04, 0.02),
+                            vec3(0.08, 0.07, 0.04), gn);
+          // Creek — winding stream on the forest floor
+          float creekPath = sin(gp.z * 0.7 + 1.5) * 1.8
+                          + sin(gp.z * 0.3) * 2.5;
+          float creekDist = abs(gp.x - creekPath);
+          float creekW = 0.35 + 0.1 * sin(gp.z * 1.2);
+          float creek = smoothstep(creekW, creekW * 0.4, creekDist);
+          if (creek > 0.01) {
+            vec2 flowUV = gp.xz + vec2(0.0, uTime * 0.2);
+            float ripple = fbm(flowUV * 4.0);
+            vec3 water = mix(vec3(0.03, 0.05, 0.12),
+                             vec3(0.06, 0.10, 0.20), ripple);
+            water += vec3(0.04, 0.03, 0.08) * ripple;
+            ground = mix(ground, water, creek);
+          }
+          float fog = smoothstep(0.0, 25.0, t);
+          col = mix(ground, col, fog * 0.7);
+        }
       }
     }
 
-    // ---- Mid-ground trees (denser, darker) ----
+    // ---- 3D raycast trees (same 18-tree layout as the immersive) ----
     {
-      for (int i = 0; i < 7; i++) {
-        float fi = float(i);
-        float cx = (fi - 3.0) * 0.32 + sin(fi * 2.3) * 0.08;
-        float w = 0.030 + hash(vec2(fi, 3.1)) * 0.015;
-        float h = 0.45 + hash(vec2(fi, 9.7)) * 0.15;
-        float baseY = -0.6;
-        float t = treeMask(pMid, cx, w, h, baseY);
-        col = mix(col, vec3(0.02, 0.04, 0.06), t);
-      }
+      vec3 ro = uCamLocal;
+      vec4 trees = forestTrees3D(ro, rd);
+      if (trees.a > 0.0) col = trees.rgb;
     }
 
-    // Forest floor.
-    if (pMid.y < -0.55) {
-      float floorN = fbm(vec2(pMid.x * 4.0, pMid.y * 4.0));
-      vec3 floorCol = mix(vec3(0.04, 0.06, 0.04),
-                          vec3(0.10, 0.12, 0.06), floorN);
-      col = mix(col, floorCol, smoothstep(-0.55, -1.0, pMid.y));
+    // Moonbeams — soft volumetric light shafts through canopy gaps
+    {
+      vec3 mRo = uCamLocal;
+      vec3 mLD = normalize(vec3(-0.45, -0.75, 0.55));
+      for (int b = 0; b < 3; b++) {
+        float fb = float(b);
+        vec3 bO = vec3(sin(fb * 2.4 + 0.8) * 3.5,
+                       3.9,
+                       cos(fb * 2.4 + 0.8) * 3.0);
+        vec3 w = mRo - bO;
+        float dd = dot(rd, mLD);
+        float den = 1.0 - dd * dd;
+        if (den > 0.001) {
+          float sC = (dd * dot(w, mLD) - dot(w, rd)) / den;
+          float tC = (dot(w, mLD) - dd * dot(w, rd)) / den;
+          if (sC > 0.5 && tC > 0.0) {
+            vec3 pR = mRo + rd * sC;
+            vec3 pB = bO + mLD * tC;
+            float dist = length(pR - pB);
+            float beam = smoothstep(0.6, 0.0, dist) * 0.12;
+            beam *= smoothstep(0.0, 1.5, tC) * smoothstep(8.0, 5.0, tC);
+            beam *= smoothstep(-1.6, -1.0, pR.y)
+                  * smoothstep(4.0, 1.5, pR.y);
+            beam *= smoothstep(20.0, 2.0, sC);
+            col += vec3(0.50, 0.55, 0.75) * beam;
+          }
+        }
+      }
     }
 
     // Ground mist rolling in (always on, animated).

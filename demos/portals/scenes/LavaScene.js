@@ -19,9 +19,166 @@ export const LavaScene = {
       float surf = top + jagged;
       return step(p.y, surf) * step(c.y - 0.05, p.y);
     }
+
+    // Ray vs axis-aligned ellipsoid.
+    float rayEllipL(vec3 oc, vec3 rd, vec3 ax) {
+      vec3 ocS = oc / ax;
+      vec3 rdS = rd / ax;
+      float a = dot(rdS, rdS);
+      float b = dot(ocS, rdS);
+      float c = dot(ocS, ocS) - 1.0;
+      float d = b * b - a * c;
+      if (d < 0.0) return -1.0;
+      return (-b - sqrt(d)) / a;
+    }
+
+    float fbm3L(vec3 p) {
+      float v = 0.0;
+      float a = 0.5;
+      for (int i = 0; i < 4; i++) {
+        v += a * fbm(p.xy + p.z * 1.3);
+        p *= 2.07;
+        a *= 0.5;
+      }
+      return v;
+    }
+
+    // Ray vs truncated cone (volcano with flat-top crater).
+    // base: world position of base; topY: height to crater plateau;
+    // bottomR: base radius; topR: crater radius.
+    vec4 volcanoCone(vec3 ro, vec3 rd, vec3 base, float topY,
+                      float bottomR, float topR, float t) {
+      vec3 sunDir = normalize(vec3(0.3, 0.6, -0.7));
+      float craterOffset = topR * topY / max(bottomR - topR, 0.001);
+      vec3 apex = base + vec3(0.0, topY + craterOffset, 0.0);
+      float tanT = bottomR / (topY + craterOffset);
+      float tan2 = tanT * tanT;
+      vec3 oc = ro - apex;
+      float a = rd.x * rd.x + rd.z * rd.z - tan2 * rd.y * rd.y;
+      float b = oc.x * rd.x + oc.z * rd.z - tan2 * oc.y * rd.y;
+      float c = oc.x * oc.x + oc.z * oc.z - tan2 * oc.y * oc.y;
+      float tCone = 1e9;
+      if (abs(a) > 1e-5) {
+        float disc = b * b - a * c;
+        if (disc > 0.0) {
+          float sq = sqrt(disc);
+          float t0 = (-b - sq) / a;
+          float t1 = (-b + sq) / a;
+          for (int k = 0; k < 2; k++) {
+            float ti = (k == 0) ? t0 : t1;
+            if (ti > 0.5 && ti < tCone) {
+              float py = ro.y + rd.y * ti;
+              if (py >= base.y && py <= base.y + topY) tCone = ti;
+            }
+          }
+        }
+      }
+      float tPlat = 1e9;
+      if (abs(rd.y) > 1e-5) {
+        float plateauY = base.y + topY;
+        float tp = (plateauY - ro.y) / rd.y;
+        if (tp > 0.5) {
+          vec3 hp = ro + rd * tp;
+          float r = length(hp.xz - apex.xz);
+          if (r <= topR) tPlat = tp;
+        }
+      }
+      float tBest = min(tCone, tPlat);
+      if (tBest >= 1e9) return vec4(0.0, 0.0, 0.0, 1e9);
+      bool hitPlat = (tPlat <= tCone);
+      vec3 hp = ro + rd * tBest;
+      vec3 nrm;
+      if (hitPlat) {
+        nrm = vec3(0.0, 1.0, 0.0);
+      } else {
+        vec3 op = hp - apex;
+        nrm = normalize(vec3(op.x, -tan2 * op.y, op.z));
+      }
+      vec3 col;
+      if (hitPlat) {
+        float r = length(hp.xz - apex.xz) / topR;
+        float crustNoise = fbm3L(hp * 1.8 + vec3(0.0, t * 0.15, 0.0));
+        float fissure = fbm3L(hp * 3.5 + vec3(t * 0.25, 0.0, t * 0.2));
+        float crackMask = smoothstep(0.48, 0.60, fissure);
+        vec3 crust = mix(vec3(0.06, 0.03, 0.02),
+                         vec3(0.16, 0.08, 0.05), crustNoise);
+        vec3 hotLava = mix(vec3(1.00, 0.55, 0.10),
+                           vec3(1.00, 0.95, 0.55),
+                           smoothstep(0.55, 0.75, fissure));
+        col = mix(crust, hotLava, crackMask);
+        col *= mix(1.4, 0.85, r);
+      } else {
+        float h = clamp((hp.y - base.y) / topY, 0.0, 1.0);
+        float ang = atan(hp.x - apex.x, hp.z - apex.z);
+        float strata = fbm3L(vec3(ang * 1.5, h * 6.0, 0.0));
+        float pebble = fbm3L(hp * 3.5);
+        vec3 darkRock = vec3(0.07, 0.04, 0.03);
+        vec3 midRock = vec3(0.20, 0.11, 0.07);
+        vec3 ashRock = vec3(0.32, 0.26, 0.22);
+        vec3 rock = mix(darkRock, midRock, strata);
+        rock = mix(rock, ashRock, smoothstep(0.55, 0.95, h) * 0.55);
+        rock = mix(rock * 0.85, rock * 1.15, pebble);
+        float chan = abs(fract(ang * 1.9 + fbm3L(hp * 0.6) * 0.4) - 0.5);
+        float channelMask = smoothstep(0.04, 0.0, chan)
+                          * smoothstep(0.15, 0.65, h);
+        float trickle = fbm(vec2(ang * 8.0, h * 4.5 - t * 0.18));
+        channelMask *= smoothstep(0.35, 0.75, trickle);
+        vec3 lavaHot = mix(vec3(0.85, 0.18, 0.04),
+                           vec3(1.00, 0.70, 0.20),
+                           smoothstep(0.6, 1.0, h));
+        col = mix(rock, lavaHot, channelMask);
+        float rimGlow = smoothstep(0.88, 1.0, h);
+        col += vec3(1.00, 0.50, 0.10) * rimGlow * 0.55;
+        float lamb = max(dot(nrm, sunDir), 0.0);
+        float ao = mix(0.6, 1.0, h);
+        col = col * (0.22 + lamb * 0.95) * ao;
+        float rimL = pow(1.0 - max(dot(nrm, -rd), 0.0), 2.5);
+        col += vec3(0.55, 0.28, 0.18) * rimL * 0.20;
+        col += lavaHot * channelMask * 0.55;
+      }
+      return vec4(col, tBest);
+    }
+
+    // Foreground lava rocks scattered around the user.
+    vec4 lavaRocks3D(vec3 ro, vec3 rd, float t) {
+      vec3 sunDir = normalize(vec3(0.3, 0.6, -0.7));
+      float bestT = 1e9;
+      vec3 bestCol = vec3(0.0);
+      vec3 bestN = vec3(0.0);
+      for (int i = 0; i < 8; i++) {
+        float fi = float(i);
+        float ang = fi * 0.91;
+        float dist = 4.5 + mod(fi * 1.7, 4.0);
+        vec3 base = vec3(cos(ang) * dist, -1.6, sin(ang) * dist);
+        float ry = 0.35 + 0.18 * sin(fi * 2.3);
+        vec3 ax = vec3(0.7 + 0.2 * cos(fi * 1.7), ry,
+                        0.6 + 0.2 * sin(fi * 1.7));
+        vec3 ctr = base + vec3(0.0, ry, 0.0);
+        float th = rayEllipL(ro - ctr, rd, ax);
+        if (th > 0.3 && th < bestT) {
+          bestT = th;
+          vec3 hp = ro + rd * th - ctr;
+          bestN = normalize(hp / (ax * ax));
+          float n = fbm3L(hp * 4.0 + fi);
+          vec3 rock = mix(vec3(0.06, 0.03, 0.02),
+                          vec3(0.18, 0.09, 0.07), n);
+          float crack = smoothstep(0.55, 0.7,
+                                    fbm(hp.xz * 9.0 + t * 0.2));
+          crack *= max(-bestN.y, 0.0);
+          bestCol = mix(rock, vec3(1.0, 0.42, 0.08), crack * 0.6);
+        }
+      }
+      if (bestT >= 1e9) return vec4(0.0, 0.0, 0.0, 1e9);
+      float lamb = max(dot(bestN, sunDir), 0.0);
+      float rim = pow(1.0 - max(dot(bestN, -rd), 0.0), 2.5);
+      vec3 col = bestCol * (0.30 + lamb * 0.85)
+               + vec3(1.0, 0.5, 0.2) * rim * 0.18;
+      return vec4(col, bestT);
+    }
   `,
 
   body: /* glsl */ `
+    vec3 ro = uCamLocal;
     // Stereo parallax layers.
     vec2 pFar  = parallaxP(p, rd, 0.35);
     vec2 pBack = parallaxP(p, rd, 0.22);
@@ -48,19 +205,104 @@ export const LavaScene = {
       col += vec3(1.0, 0.8, 0.5) * spark * 0.6;
     }
 
-    // ---- Distant volcano on the horizon (centered) ----
-    vec2 volcCenter = vec2(0.0, -0.4);
+    // ---- 3D raycast volcanoes (parallax correctly with head movement) ----
+    float opaqueT = 1e9;
+    vec3 opaqueCol = vec3(0.0);
+    vec4 v1Hit = volcanoCone(ro, rd, vec3(2.0, -1.6, -16.0), 6.0,
+                              8.5, 2.6, uTime);
+    if (v1Hit.w < opaqueT) {
+      opaqueT = v1Hit.w;
+      opaqueCol = v1Hit.rgb;
+    }
+    vec4 v2Hit = volcanoCone(ro, rd, vec3(-15.0, -1.6, 8.0), 4.2,
+                              6.0, 1.8, uTime);
+    if (v2Hit.w < opaqueT) {
+      opaqueT = v2Hit.w;
+      opaqueCol = v2Hit.rgb;
+    }
+    vec4 rocksHit = lavaRocks3D(ro, rd, uTime);
+    if (rocksHit.w < opaqueT) {
+      opaqueT = rocksHit.w;
+      opaqueCol = rocksHit.rgb;
+    }
+    if (opaqueT < 1e8) {
+      // Light atmospheric fog only; keep the volcano shape readable.
+      float fogF = smoothstep(8.0, 80.0, opaqueT);
+      col = mix(opaqueCol, col, fogF * 0.25);
+    }
+
+    // ---- Animated ash plume + lava spurts above main volcano apex ----
+    {
+      vec3 apexW = vec3(2.0, 4.4, -16.0);
+      // Sample kNumSlices horizontal slices from the crater upward; each
+      // slice tests distance from the vertical column through the apex.
+      const int kNumSlices = 14;
+      for (int i = 0; i < kNumSlices; i++) {
+        float h = float(i) * 0.65;
+        float ty = apexW.y + h;
+        if (abs(rd.y) < 0.001) continue;
+        float ti = (ty - ro.y) / rd.y;
+        if (ti < 0.5 || ti > opaqueT) continue;
+        vec3 p = ro + rd * ti;
+        vec2 d = p.xz - apexW.xz;
+        float r = length(d);
+        float radius = 1.6 + h * 0.55;
+        float mask = smoothstep(radius, radius * 0.35, r);
+        float n = fbm3L(vec3(d.x * 0.45, h * 0.6 - uTime * 0.5,
+                              d.y * 0.45));
+        // Cooler grey/brown ash higher up; warmer near the base.
+        vec3 ashHot = vec3(0.55, 0.30, 0.18);
+        vec3 ashCold = vec3(0.20, 0.16, 0.18);
+        vec3 ashCol = mix(ashHot, ashCold, smoothstep(0.0, 6.0, h));
+        ashCol = mix(ashCol * 0.4, ashCol, n);
+        col += ashCol * mask * (0.06 + n * 0.10);
+        // Hot orange glow at the base of the plume.
+        if (h < 1.5) {
+          col += vec3(1.0, 0.55, 0.20) * mask * (1.5 - h) * 0.07;
+        }
+      }
+      // Lava spurts: 5 glowing bombs arc up out of the crater on staggered
+      // timers, then fall back. Each is a small bright sphere.
+      for (int b = 0; b < 5; b++) {
+        float fb = float(b);
+        float cycle = 2.6 + fb * 0.31;
+        float phase = mod(uTime + fb * 0.7, cycle) / cycle;
+        // Random launch direction, stable per cycle index.
+        float ck = floor((uTime + fb * 0.7) / cycle);
+        float ang = hash(vec2(fb, ck)) * 6.28318;
+        float spread = 0.5 + hash(vec2(fb + 3.1, ck)) * 0.8;
+        float peakH = 2.5 + hash(vec2(fb + 7.7, ck)) * 2.0;
+        // Parabolic trajectory.
+        vec3 dir = vec3(cos(ang) * spread, 0.0, sin(ang) * spread);
+        vec3 pos = apexW + dir * phase
+                 + vec3(0.0, peakH * 4.0 * phase * (1.0 - phase), 0.0);
+        // Ray-sphere test.
+        vec3 oc2 = ro - pos;
+        float rad = 0.18;
+        float bSp = dot(oc2, rd);
+        float cSp = dot(oc2, oc2) - rad * rad;
+        float disc = bSp * bSp - cSp;
+        if (disc > 0.0) {
+          float ts = -bSp - sqrt(disc);
+          if (ts > 0.5 && ts < opaqueT) {
+            // Hot at launch, cools as it arcs.
+            vec3 lavaC = mix(vec3(1.0, 0.95, 0.55),
+                             vec3(0.95, 0.30, 0.05), phase);
+            col = mix(col, lavaC * 1.6, 0.95);
+          }
+        }
+        // Glowing trail behind the bomb.
+        vec3 tp = ro + rd * max(dot(pos - ro, rd), 0.5);
+        float trail = exp(-length(tp - pos) * 4.0)
+                    * smoothstep(0.0, 0.6, phase);
+        col += vec3(1.0, 0.55, 0.20) * trail * 0.4;
+      }
+    }
+
+    // 2D effects anchored above the main 3D volcano's projected apex.
+    vec2 volcCenter = vec2(0.10, -0.20);
     float volcW = 0.8;
     float volcH = 0.55;
-    float volc = volcanoMask(pBack, volcCenter, volcW, volcH);
-    if (volc > 0.0) {
-      // Dark rocky body with occasional glowing cracks.
-      vec3 rock = vec3(0.10, 0.05, 0.04);
-      float cracks = ridgedFbm(vec2(pBack.x * 18.0, pBack.y * 22.0));
-      cracks = smoothstep(0.55, 0.85, cracks);
-      vec3 lavaCrack = vec3(1.00, 0.45, 0.10);
-      col = mix(rock, lavaCrack, cracks * 0.6);
-    }
 
     // ---- Lava river running across the foreground ----
     {
@@ -78,17 +320,6 @@ export const LavaScene = {
       // Heat haze glow around it.
       float glow = smoothstep(0.30, 0.0, abs(pNear.y - riverY)) * step(pNear.y, -0.30);
       col += vec3(1.0, 0.45, 0.10) * glow * 0.35;
-    }
-
-    // ---- Glowing crater pulse (volcano top) ----
-    {
-      float craterY = volcCenter.y + volcH;
-      float craterDist = length(vec2(pBack.x * 1.2, pBack.y - craterY));
-      float pulse = 0.7 + 0.3 * sin(uTime * 2.0);
-      float craterGlow = smoothstep(0.20, 0.0, craterDist) * pulse;
-      col += vec3(1.0, 0.55, 0.10) * craterGlow * 1.2;
-      float craterCore = smoothstep(0.05, 0.0, craterDist);
-      col += vec3(1.0, 0.95, 0.65) * craterCore * 1.8;
     }
 
     // ---- Always-on rising embers ----
@@ -113,78 +344,12 @@ export const LavaScene = {
     }
 
     // ---- Volcanic ash plume rising from crater (always on) ----
-    {
-      vec2 plumeCenter = vec2(0.0, volcCenter.y + volcH);
-      vec2 dp = pBack - plumeCenter;
-      // Plume fans out as it rises.
-      float widen = max(dp.y, 0.0) * 0.6 + 0.05;
-      float plumeMask = smoothstep(widen, widen * 0.6, abs(dp.x))
-                      * smoothstep(1.5, 0.0, dp.y)
-                      * step(0.0, dp.y);
-      float plumeNoise = warpedFbm(vec2(dp.x * 3.0, dp.y * 2.5 - uTime * 0.4));
-      vec3 plumeCol = mix(vec3(0.10, 0.05, 0.10),
-                          vec3(0.55, 0.30, 0.20), plumeNoise);
-      col = mix(col, plumeCol, plumeMask * (0.4 + plumeNoise * 0.6));
-      // Hot base of plume glows.
-      float baseGlow = smoothstep(0.4, 0.0, dp.y) * step(0.0, dp.y) * plumeMask;
-      col += vec3(1.0, 0.55, 0.20) * baseGlow * 0.6;
-    }
+    // Removed: 2D screen-space plume no longer aligns with the 3D volcano apex.
+    // The 3D cone reads on its own; immersive view has its own properly-anchored
+    // sky-projected plume.
 
-    // ---- Eruption every 9s (mega blast) ----
-    {
-      float cycle = 9.0;
-      float k = floor(uTime / cycle);
-      float local = uTime - k * cycle;
-      float blast = smoothstep(0.0, 0.2, local) * smoothstep(2.5, 0.3, local);
-      vec2 cr = vec2(0.0, volcCenter.y + volcH);
-      float dr = length(pBack - cr);
-      // Bright dome expanding out of crater.
-      float dome = smoothstep(0.0, 1.5, local) * 0.5;
-      float front = smoothstep(0.04, 0.0, abs(dr - dome))
-                  * step(0.0, pBack.y - cr.y);
-      col += vec3(1.0, 0.75, 0.30) * front * blast * 2.0;
-      // Bright flash on whole crater.
-      float flash = smoothstep(0.4, 0.0, dr) * blast;
-      col += vec3(1.0, 0.95, 0.55) * flash * 1.2;
-    }
-
-    // ---- Lava bombs every 5s arcing across sky ----
-    {
-      float cycle = 5.0;
-      float k = floor(uTime / cycle);
-      float local = uTime - k * cycle;
-      for (int i = 0; i < 4; i++) {
-        float fi = float(i);
-        float dly = fi * 0.8;
-        float life = local - dly;
-        if (life > 0.0 && life < cycle - dly) {
-          // Parabolic arc from crater to a random landing point.
-          float landX = (hash(vec2(k, fi + 11.7)) - 0.5) * 1.8;
-          vec2 c0 = vec2(0.0, volcCenter.y + volcH);
-          vec2 c1 = vec2(landX, -0.55);
-          float u = life / 1.8;
-          if (u <= 1.0) {
-            vec2 pos = mix(c0, c1, u);
-            pos.y += sin(u * 3.14159) * (0.35 + fi * 0.05);
-            float dr = length(pMid - pos);
-            float bomb = smoothstep(0.02, 0.0, dr);
-            col += vec3(1.0, 0.85, 0.30) * bomb * 2.5;
-            // Trailing smoke.
-            for (int j = 0; j < 6; j++) {
-              float fj = float(j);
-              float u2 = u - fj * 0.04;
-              if (u2 > 0.0) {
-                vec2 pos2 = mix(c0, c1, u2);
-                pos2.y += sin(u2 * 3.14159) * (0.35 + fi * 0.05);
-                float td = length(pMid - pos2);
-                float trail = smoothstep(0.012 + fj * 0.003, 0.0, td);
-                col += vec3(0.85, 0.45, 0.20) * trail * (1.0 - fj * 0.15);
-              }
-            }
-          }
-        }
-      }
-    }
+    // Removed: 2D screen-space mega-blast dome — the 3D bombs already convey
+    // eruption energy and the flat semicircle didn't sit naturally on the cone.
 
     // ---- Volcanic lightning in ash plume every 7s ----
     {

@@ -4,10 +4,12 @@
 export const CosmicScene = {
   name: 'Cosmic',
 
-  ringCool: 'vec3(0.35, 0.7, 1.0)',
-  ringWarm: 'vec3(1.0, 0.55, 0.9)',
-  haloInner: 'vec3(0.4, 0.7, 1.0)',
-  haloOuter: 'vec3(1.0, 0.6, 0.9)',
+  ringCool: 'vec3(0.55, 0.85, 1.30)',
+  ringWarm: 'vec3(1.30, 0.70, 1.15)',
+  ringColorExpr:
+    'hsv2rgb(vec3(fract(vUv.x * 1.0 + uTime * 0.08), 0.85, 1.0)) * (0.9 + band * 0.6)',
+  haloInner: 'vec3(0.65, 0.90, 1.40)',
+  haloOuter: 'vec3(1.30, 0.75, 1.20)',
 
   helpers: /* glsl */ `
     vec3 shadePlanet(vec3 n, vec3 lightDir, vec3 viewDir,
@@ -78,16 +80,21 @@ export const CosmicScene = {
       vec3 lightDirPlanet = normalize(sunPos - planetPos);
       vec3 lightDirMoon   = normalize(sunPos - moonPos);
       vec3 lightDirGas    = normalize(sunPos - gasPos);
+      vec3 limbCenter = vec3(-3.5, -5.5, -3.5);
+      float limbRadius = 5.5;
+      vec3 lightDirLimb = normalize(sunPos - limbCenter);
 
       float tBest = 1e9; int hitId = 0;
       float tP = raySphere(ro, rd, planetPos, planetRad);
       float tM = raySphere(ro, rd, moonPos, moonRad);
       float tS = raySphere(ro, rd, sunPos, sunRad);
       float tG = raySphere(ro, rd, gasPos, gasRad);
+      float tLB = raySphere(ro, rd, limbCenter, limbRadius);
       if (tP > 0.0 && tP < tBest) { tBest = tP; hitId = 1; }
       if (tM > 0.0 && tM < tBest) { tBest = tM; hitId = 2; }
       if (tS > 0.0 && tS < tBest) { tBest = tS; hitId = 3; }
       if (tG > 0.0 && tG < tBest) { tBest = tG; hitId = 4; }
+      if (tLB > 0.0 && tLB < tBest) { tBest = tLB; hitId = 5; }
 
       vec3 rgb = vec3(0.0);
       float a = 0.0;
@@ -127,6 +134,47 @@ export const CosmicScene = {
             if (!behind) {
               rgb += ringCol * bands * shade * 1.6;
               a = max(a, bands * 0.95);
+            }
+          }
+        }
+      }
+
+      // Horizon gas-giant limb ring.
+      {
+        vec3 limbRingN = normalize(vec3(-0.25, 0.90, 0.15));
+        float lrd = dot(rd, limbRingN);
+        if (abs(lrd) > 1e-3) {
+          float tLR = dot(limbCenter - ro, limbRingN) / lrd;
+          if (tLR > 0.0) {
+            bool behindLimb = (tLB > 0.0 && tLR > tLB);
+            bool behindObj = (hitId != 5 && hitId > 0 && tLR > tBest);
+            if (!behindLimb && !behindObj) {
+              vec3 rp = ro + rd * tLR - limbCenter;
+              float rr = length(rp);
+              float lInner = limbRadius * 1.15;
+              float lOuter = limbRadius * 1.8;
+              if (rr > lInner && rr < lOuter) {
+                float u = (rr - lInner) / (lOuter - lInner);
+                float ang = atan(rp.z, rp.x) + t * 0.03;
+                float rb = fbm(vec2(u * 50.0, 0.0)) * 0.5
+                         + fbm(vec2(u * 150.0, 5.1)) * 0.3
+                         + fbm(vec2(u * 350.0, 2.2)) * 0.2;
+                rb = smoothstep(0.25, 0.75, rb);
+                float rGap1 = smoothstep(0.40, 0.43, u) - smoothstep(0.43, 0.47, u);
+                float rGap2 = smoothstep(0.65, 0.67, u) - smoothstep(0.67, 0.70, u);
+                rb *= 1.0 - clamp(rGap1 + rGap2, 0.0, 1.0);
+                float rDust = fbm(vec2(ang * 50.0, u * 25.0));
+                rb *= 0.5 + rDust * 0.7;
+                rb *= smoothstep(0.0, 0.05, u) * smoothstep(1.0, 0.95, u);
+                vec3 lrCol = mix(vec3(0.65, 0.80, 0.95),
+                                 vec3(0.85, 0.95, 1.05), u);
+                vec3 lrHit = ro + rd * tLR;
+                vec3 toL = normalize(sunPos - lrHit);
+                float shT = raySphere(lrHit, toL, limbCenter, limbRadius * 1.01);
+                float shade = (shT > 0.0) ? 0.30 : 1.0;
+                rgb += lrCol * rb * shade * 1.4;
+                a = max(a, rb * 0.9);
+              }
             }
           }
         }
@@ -216,6 +264,27 @@ export const CosmicScene = {
         rgb = base * (0.35 + lambert * 0.95)
             + vec3(1.0, 0.75, 0.55) * rim * 0.55;
         a = 1.0;
+      } else if (hitId == 5) {
+        vec3 hp = ro + rd * tBest;
+        vec3 n = normalize(hp - limbCenter);
+        float lon = atan(n.z, n.x) + t * 0.02;
+        float lat = asin(clamp(n.y, -1.0, 1.0));
+        float bandN = fbm(vec2(lat * 8.0, lon * 0.3 + t * 0.03));
+        float bands = sin(lat * 20.0 + bandN * 4.0) * 0.5 + 0.5;
+        vec3 limbA = vec3(0.30, 0.55, 0.85);
+        vec3 limbB = vec3(0.15, 0.30, 0.55);
+        vec3 limbC = vec3(0.65, 0.85, 1.00);
+        vec3 base = mix(limbA, limbB, bands);
+        base = mix(base, limbC, smoothstep(0.6, 0.9,
+                   fbm(vec2(lon * 1.5 + t * 0.06, lat * 1.5))) * 0.5);
+        float storm = smoothstep(0.35, 0.0,
+            length(vec2(lon - 2.0, lat + 0.15) * vec2(1.0, 1.5)));
+        base = mix(base, vec3(0.90, 0.95, 1.00), storm * 0.5);
+        float lambert = max(dot(n, lightDirLimb), 0.0);
+        float rim = pow(1.0 - max(dot(n, -rd), 0.0), 3.0);
+        rgb = base * (0.20 + lambert * 0.80)
+            + vec3(0.55, 0.80, 1.00) * rim * 0.65;
+        a = 1.0;
       }
       return vec4(rgb, a);
     }
@@ -250,19 +319,47 @@ export const CosmicScene = {
 
   body: /* glsl */ `
     vec2 nUv = p * 1.4;
-    float n1 = warpedFbm(nUv * 1.0 + vec2(uTime * 0.03, -uTime * 0.02));
-    float n2 = fbm(nUv * 2.8 - vec2(uTime * 0.05,  uTime * 0.04));
-    float n3 = ridgedFbm(nUv * 4.0 + vec2(-uTime * 0.04, uTime * 0.03));
-    float density = pow(n1 * 0.55 + n2 * 0.45, 1.6);
-    float wisps = pow(n3, 2.2);
     vec3 nebulaA = vec3(0.05, 0.08, 0.30);
     vec3 nebulaB = vec3(0.55, 0.18, 0.70);
     vec3 nebulaC = vec3(0.95, 0.45, 0.25);
     vec3 nebulaD = vec3(0.35, 0.85, 1.00);
-    col = mix(nebulaA, nebulaB, smoothstep(0.15, 0.7, n1));
-    col = mix(col, nebulaC, smoothstep(0.55, 1.0, n2) * 0.9);
-    col = mix(col, nebulaD, wisps * 0.6);
-    col *= 0.15 + density * 2.4;
+    col = vec3(0.005, 0.005, 0.02);
+    // Near depth layer — large soft structures
+    {
+      vec2 nuv = nUv * 0.7;
+      float ln1 = warpedFbm(nuv + vec2(uTime * 0.03, -uTime * 0.02));
+      float ln2 = fbm(nuv * 2.8 - vec2(uTime * 0.05, uTime * 0.04));
+      float ld = pow(ln1 * 0.55 + ln2 * 0.45, 1.6);
+      vec3 lc = mix(nebulaA, nebulaB, smoothstep(0.15, 0.7, ln1));
+      lc = mix(lc, nebulaC, smoothstep(0.55, 1.0, ln2) * 0.9);
+      lc *= 0.15 + ld * 2.4;
+      col = mix(col, lc, ld * 0.35);
+    }
+    // Mid depth layer — primary detail (original scale)
+    {
+      float n1 = warpedFbm(nUv + vec2(uTime * 0.03, -uTime * 0.02));
+      float n2 = fbm(nUv * 2.8 - vec2(uTime * 0.05, uTime * 0.04));
+      float n3 = ridgedFbm(nUv * 4.0 + vec2(-uTime * 0.04, uTime * 0.03));
+      float density = pow(n1 * 0.55 + n2 * 0.45, 1.6);
+      float wisps = pow(n3, 2.2);
+      vec3 mc = mix(nebulaA, nebulaB, smoothstep(0.15, 0.7, n1));
+      mc = mix(mc, nebulaC, smoothstep(0.55, 1.0, n2) * 0.9);
+      mc = mix(mc, nebulaD, wisps * 0.6);
+      mc *= 0.15 + density * 2.4;
+      col = mix(col, mc, clamp(density * 0.7, 0.0, 1.0));
+    }
+    // Far depth layer — distant haze
+    {
+      vec2 nuv = nUv * 1.8;
+      float fn1 = fbm(nuv * 1.2 + vec2(uTime * 0.02, -uTime * 0.015));
+      float fn3 = ridgedFbm(nuv * 3.0 + vec2(-uTime * 0.03, uTime * 0.02));
+      float fDensity = pow(fn1, 1.8);
+      float fWisps = pow(fn3, 2.2);
+      vec3 fc = mix(nebulaA, nebulaB, smoothstep(0.2, 0.75, fn1));
+      fc = mix(fc, nebulaD, fWisps * 0.5);
+      fc *= 0.1 + fDensity * 1.8;
+      col = mix(col, fc, clamp(fDensity * 0.4, 0.0, 1.0));
+    }
     col = mix(vec3(0.005, 0.005, 0.02), col, 0.92);
 
     vec4 sceneRgba = cosmicRaymarch(p, uTime);
