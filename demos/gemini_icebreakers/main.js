@@ -11,6 +11,8 @@ const options = new xb.Options({
 });
 options.enableAI();
 options.enableCamera();
+// Request microphone permission before entering XR.
+options.permissions.microphone = true;
 
 async function start() {
   xb.add(new GeminiIcebreakers());
