@@ -19,7 +19,7 @@
 <link rel="icon" href="/docs/img/web-app-manifest-512x512.png" sizes="512x512" type="image/png">
 <link rel="manifest" href="/docs/img/site.webmanifest">
 <meta name="algolia-site-verification" content="C7A25C1609F793C8"><link rel="stylesheet" href="/docs/assets/css/styles.75fc60c9.css">
-<script src="/docs/assets/js/runtime~main.96c04769.js" defer="defer"></script>
+<script src="/docs/assets/js/runtime~main.f04cd71c.js" defer="defer"></script>
 <script src="/docs/assets/js/main.29e59a97.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -33,7 +33,7 @@
 <blockquote>
 <p><strong>new SimulatorOptions</strong>(<code>options?</code>): <code>SimulatorOptions</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L73" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:73</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L74" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:74</a></p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters">Parameters<a href="#parameters" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="options">options?<a href="#options" class="hash-link" aria-label="Direct link to options?" title="Direct link to options?" translate="no">​</a></h5>
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="blendingmode">blendingMode?<a href="#blendingmode" class="hash-link" aria-label="Direct link to blendingMode?" title="Direct link to blendingMode?" translate="no">​</a></h6>
@@ -87,9 +87,11 @@
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="modeindicatorelement">modeIndicator.element?<a href="#modeindicatorelement" class="hash-link" aria-label="Direct link to modeIndicator.element?" title="Direct link to modeIndicator.element?" translate="no">​</a></h6>
 <p><code>string</code> = <code>&#x27;xrblocks-simulator-mode-indicator&#x27;</code></p>
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="modeindicatorenabled">modeIndicator.enabled?<a href="#modeindicatorenabled" class="hash-link" aria-label="Direct link to modeIndicator.enabled?" title="Direct link to modeIndicator.enabled?" translate="no">​</a></h6>
-<p><code>boolean</code> = <code>true</code></p>
+<p><code>boolean</code> = <code>false</code></p>
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="modetoggle">modeToggle?<a href="#modetoggle" class="hash-link" aria-label="Direct link to modeToggle?" title="Direct link to modeToggle?" translate="no">​</a></h6>
-<p>{ <code>toggleKey?</code>: <code>null</code> | <a class="" href="/docs/api/enumerations/Keycodes/"><code>Keycodes</code></a>; <code>toggleOrder?</code>: { <code>Hands?</code>: <a class="" href="/docs/api/enumerations/SimulatorMode/"><code>SimulatorMode</code></a>; <code>Navigation?</code>: <a class="" href="/docs/api/enumerations/SimulatorMode/"><code>SimulatorMode</code></a>; <code>User?</code>: <a class="" href="/docs/api/enumerations/SimulatorMode/"><code>SimulatorMode</code></a>; }; } = <code>...</code></p>
+<p>{ <code>enabled?</code>: <code>boolean</code>; <code>toggleKey?</code>: <code>null</code> | <a class="" href="/docs/api/enumerations/Keycodes/"><code>Keycodes</code></a>; <code>toggleOrder?</code>: { <code>Hands?</code>: <a class="" href="/docs/api/enumerations/SimulatorMode/"><code>SimulatorMode</code></a>; <code>Navigation?</code>: <a class="" href="/docs/api/enumerations/SimulatorMode/"><code>SimulatorMode</code></a>; <code>User?</code>: <a class="" href="/docs/api/enumerations/SimulatorMode/"><code>SimulatorMode</code></a>; }; } = <code>...</code></p>
+<h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="modetoggleenabled">modeToggle.enabled?<a href="#modetoggleenabled" class="hash-link" aria-label="Direct link to modeToggle.enabled?" title="Direct link to modeToggle.enabled?" translate="no">​</a></h6>
+<p><code>boolean</code> = <code>false</code></p>
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="modetoggletogglekey">modeToggle.toggleKey?<a href="#modetoggletogglekey" class="hash-link" aria-label="Direct link to modeToggle.toggleKey?" title="Direct link to modeToggle.toggleKey?" translate="no">​</a></h6>
 <p><code>null</code> | <a class="" href="/docs/api/enumerations/Keycodes/"><code>Keycodes</code></a> = <code>...</code></p>
 <h6 class="anchor anchorTargetStickyNavbar_Vzrq" id="modetoggletoggleorder">modeToggle.toggleOrder?<a href="#modetoggletoggleorder" class="hash-link" aria-label="Direct link to modeToggle.toggleOrder?" title="Direct link to modeToggle.toggleOrder?" translate="no">​</a></h6>
@@ -119,7 +121,7 @@
 <blockquote>
 <p><strong>blendingMode</strong>: <code>&quot;normal&quot;</code> | <code>&quot;screen&quot;</code> = <code>&#x27;normal&#x27;</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L71" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:71</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L72" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:72</a></p>
 <hr>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="defaulthand">defaultHand<a href="#defaulthand" class="hash-link" aria-label="Direct link to defaultHand" title="Direct link to defaultHand" translate="no">​</a></h3>
 <blockquote>
@@ -137,7 +139,7 @@
 <blockquote>
 <p><strong>deviceCamera</strong>: <code>object</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L62" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:62</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L63" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:63</a></p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="enabled">enabled<a href="#enabled" class="hash-link" aria-label="Direct link to enabled" title="Direct link to enabled" translate="no">​</a></h4>
 <blockquote>
 <p><strong>enabled</strong>: <code>boolean</code> = <code>true</code></p>
@@ -147,7 +149,7 @@
 <blockquote>
 <p><strong>geminiLivePanel</strong>: <code>object</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L55" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:55</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L56" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:56</a></p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="element">element<a href="#element" class="hash-link" aria-label="Direct link to element" title="Direct link to element" translate="no">​</a></h4>
 <blockquote>
 <p><strong>element</strong>: <code>string</code> = <code>&#x27;xrblocks-simulator-geminilive&#x27;</code></p>
@@ -161,7 +163,7 @@
 <blockquote>
 <p><strong>handPosePanel</strong>: <code>object</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L51" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:51</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L52" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:52</a></p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="element-1">element<a href="#element-1" class="hash-link" aria-label="Direct link to element" title="Direct link to element" translate="no">​</a></h4>
 <blockquote>
 <p><strong>element</strong>: <code>string</code> = <code>&#x27;xrblocks-simulator-hand-pose-panel&#x27;</code></p>
@@ -211,7 +213,7 @@
 <blockquote>
 <p><strong>instructions</strong>: <code>object</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L46" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:46</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L47" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:47</a></p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="custominstructions">customInstructions<a href="#custominstructions" class="hash-link" aria-label="Direct link to customInstructions" title="Direct link to customInstructions" translate="no">​</a></h4>
 <blockquote>
 <p><strong>customInstructions</strong>: <a class="" href="/docs/api/interfaces/SimulatorCustomInstruction/"><code>SimulatorCustomInstruction</code></a>[]</p>
@@ -229,14 +231,14 @@
 <blockquote>
 <p><strong>modeIndicator</strong>: <code>object</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L42" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:42</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L43" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:43</a></p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="element-3">element<a href="#element-3" class="hash-link" aria-label="Direct link to element" title="Direct link to element" translate="no">​</a></h4>
 <blockquote>
 <p><strong>element</strong>: <code>string</code> = <code>&#x27;xrblocks-simulator-mode-indicator&#x27;</code></p>
 </blockquote>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="enabled-4">enabled<a href="#enabled-4" class="hash-link" aria-label="Direct link to enabled" title="Direct link to enabled" translate="no">​</a></h4>
 <blockquote>
-<p><strong>enabled</strong>: <code>boolean</code> = <code>true</code></p>
+<p><strong>enabled</strong>: <code>boolean</code> = <code>false</code></p>
 </blockquote>
 <hr>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="modetoggle">modeToggle<a href="#modetoggle" class="hash-link" aria-label="Direct link to modeToggle" title="Direct link to modeToggle" translate="no">​</a></h3>
@@ -244,6 +246,10 @@
 <p><strong>modeToggle</strong>: <code>object</code></p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L38" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:38</a></p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="enabled-5">enabled<a href="#enabled-5" class="hash-link" aria-label="Direct link to enabled" title="Direct link to enabled" translate="no">​</a></h4>
+<blockquote>
+<p><strong>enabled</strong>: <code>boolean</code> = <code>false</code></p>
+</blockquote>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="togglekey">toggleKey<a href="#togglekey" class="hash-link" aria-label="Direct link to toggleKey" title="Direct link to toggleKey" translate="no">​</a></h4>
 <blockquote>
 <p><strong>toggleKey</strong>: <code>null</code> | <a class="" href="/docs/api/enumerations/Keycodes/"><code>Keycodes</code></a></p>
@@ -269,7 +275,7 @@
 <blockquote>
 <p><strong>renderToRenderTexture</strong>: <code>boolean</code> = <code>true</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L69" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:69</a></p>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L70" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:70</a></p>
 <hr>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="scenepath">scenePath<a href="#scenepath" class="hash-link" aria-label="Direct link to scenePath" title="Direct link to scenePath" translate="no">​</a></h3>
 <blockquote>
@@ -287,8 +293,8 @@
 <blockquote>
 <p><strong>stereo</strong>: <code>object</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L59" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:59</a></p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="enabled-5">enabled<a href="#enabled-5" class="hash-link" aria-label="Direct link to enabled" title="Direct link to enabled" translate="no">​</a></h4>
+<p>Defined in: <a href="https://github.com/google/xrblocks/blob/main/src/simulator/SimulatorOptions.ts#L60" target="_blank" rel="noopener noreferrer" class="">src/simulator/SimulatorOptions.ts:60</a></p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="enabled-6">enabled<a href="#enabled-6" class="hash-link" aria-label="Direct link to enabled" title="Direct link to enabled" translate="no">​</a></h4>
 <blockquote>
 <p><strong>enabled</strong>: <code>boolean</code> = <code>false</code></p>
 </blockquote>
