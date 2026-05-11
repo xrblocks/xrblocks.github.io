@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function () {
   options.hands.enabled = true;
   options.hands.visualization = true;
   options.hands.visualizeMeshes = true;
-  options.simulator.scenePath = null; // Prevent simulator scene from loading.
+  options.simulator.environments = []; // Prevent simulator scene from loading.
 
   xb.add(new WalkthroughManager());
   xb.init(options);

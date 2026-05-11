@@ -80,7 +80,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   options.reticles.enabled = false;
   options.simulator.instructions.enabled = false;
   options.simulator.handPosePanel.enabled = false;
-  options.simulator.modeIndicator.enabled = false;
   options.simulator.renderToRenderTexture = false;
   xb.add(new GlassesUISample());
   await xb.init(options);
