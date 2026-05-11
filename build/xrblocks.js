@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.13.0
- * @commitid 43ca70e
- * @builddate 2026-05-11T22:29:31.208Z
+ * @commitid 6e0a5ea
+ * @builddate 2026-05-11T22:53:09.341Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -8488,6 +8488,7 @@ class Options {
      */
     enableCamera(facingMode = 'environment') {
         this.permissions.camera = true;
+        this.permissions.microphone = true;
         this.deviceCamera = new DeviceCameraOptions(facingMode === 'environment'
             ? xrDeviceCameraEnvironmentOptions
             : xrDeviceCameraUserOptions);
