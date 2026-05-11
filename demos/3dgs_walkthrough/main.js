@@ -57,7 +57,7 @@ class WalkthroughManager extends xb.Script {
     // the simulator can toggle encodeLinear for correct color space.
     const sparkRenderer = new SparkRenderer({
       renderer: xb.core.renderer,
-      maxStdDev: Math.sqrt(5),
+      maxStdDev: Math.sqrt(4),
     });
     xb.core.registry.register(new xb.SparkRendererHolder(sparkRenderer));
     xb.add(sparkRenderer);
