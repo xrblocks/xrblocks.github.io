@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.13.0
- * @commitid 9b22e09
- * @builddate 2026-05-12T00:39:48.217Z
+ * @commitid 07e6c1a
+ * @builddate 2026-05-12T17:31:09.161Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -1110,8 +1110,8 @@ function parseBase64DataURL(dataURL) {
     }
 }
 
-const GEMINI_DEFAULT_FLASH_MODEL = 'gemini-2.5-flash';
-const GEMINI_DEFAULT_LIVE_MODEL = 'gemini-2.5-flash-native-audio-preview-12-2025';
+const GEMINI_DEFAULT_FLASH_MODEL = 'gemini-3-flash-preview';
+const GEMINI_DEFAULT_LIVE_MODEL = 'gemini-3.1-flash-live-preview';
 class GeminiOptions {
     constructor() {
         this.apiKey = '';
