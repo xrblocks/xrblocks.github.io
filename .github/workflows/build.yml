@@ -22,13 +22,13 @@ jobs:
     steps:
       # Step 1: Check out the current repository. This is where the workflow file lives.
       - name: Checkout the current repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # Step 2: Check out the external private repository 'google/xrblocks'.
       # A deploy key stored as a secret is used for authentication.
       # The contents are placed in a subdirectory named 'xrblocks'.
       - name: Checkout google/xrblocks
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: google/xrblocks
           ssh-key: ${{ secrets.READ_XRBLOCKS_SSH_KEY }}
@@ -39,7 +39,7 @@ jobs:
       # It caches the global npm cache directory for faster dependency installation
       # on subsequent runs.
       - name: Setup Node.js v22
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '22'
           cache: 'npm'
