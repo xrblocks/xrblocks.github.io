@@ -77,6 +77,15 @@ jobs:
           cp -r ./xrblocks/demos ./build/
           cp -r ./xrblocks/samples ./build/
           cp -r ./xrblocks/templates ./build/
+          # Mirror addon sample folders (e.g. netblocks picker + basic samples)
+          # so their HTML is reachable at the same /src/addons/<addon>/samples/
+          # paths the samples use in local dev.
+          for d in ./xrblocks/src/addons/*/samples; do
+            [ -d "$d" ] || continue
+            addon=$(basename "$(dirname "$d")")
+            mkdir -p "./build/src/addons/$addon"
+            cp -r "$d" "./build/src/addons/$addon/"
+          done
 
       # Step 7: Deploy the staged artifacts to the 'build' branch.
       # The peaceiris/actions-gh-pages action handles committing and pushing
