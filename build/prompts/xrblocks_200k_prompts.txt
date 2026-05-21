@@ -28,18 +28,19 @@ Create the app following user's request: <my_xr_experience>, following the XR Bl
      - "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
      - "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
      - "lit/": "https://esm.run/lit@3/",
-     - "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/xrblocks.js"
-     - "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.10.0/build/addons/"
+     - "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js"
+     - "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/"
 
 3. **Coding Standards:**
    - **Class Structure:** logic must be inside `class MyScript extends xb.Script`.
    - **Lifecycle:** Use `init()` for setup and `update()` for the loop. Do NOT use `requestAnimationFrame` manually; `xb.Script` handles this.
    - **Interactions:** Use `onSelectStart`, `onSelectEnd`, `onSelecting` methods within the class.
    - **Coordinates:** `y` is up. `z` is forward/backward. Initialize objects at `z = -this.user.objectDistance`.
-   - **Spatial UI:** Use XR Blocks's 3D UI instead of 2D overlay divs.
+   - **Spatial UI:** Use XR Blocks's 3D UI instead of 2D overlay divs. Follow `Sample: uiblocks` for advanced UI.
 
 4. **Specific XR Features:**
-   - **Text:** Use `troika-three-text` (Pattern: `1_ui`).
+   - **Text:** Use `troika-three-text` (Pattern: `1_ui`) for simple UI.
+   - **Advanced UI** Follow `Sample: uiblocks` when authoring medium and complex spatial UI.
    - **Models:** Wrap 3D models in `xb.ModelViewer`.
    - **AI:** If using Gemini/AI, use const API_KEY = "", and link the API key to the `ai` module so Gemini Canvas auto-populates it.
 
@@ -71,8 +72,8 @@ File: `templates/0_basic/index.html`
         "imports": {
           "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
           "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/"
         }
       }
     </script>
@@ -163,8 +164,8 @@ File: `templates/1_ui/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/"
         }
       }
     </script>
@@ -281,8 +282,8 @@ File: `templates/2_hands/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/"
         }
       }
     </script>
@@ -471,8 +472,8 @@ File: `templates/3_depth/index.html`
           "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/"
         }
       }
     </script>
@@ -565,8 +566,8 @@ File: `templates/4_stereo/index.html`
           "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/"
         }
       }
     </script>
@@ -659,8 +660,8 @@ File: `templates/5_camera/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/"
         }
       }
     </script>
@@ -712,7 +713,14 @@ export class CameraViewManager extends xb.Script {
 
     // Listen for camera state changes to update UI
     this.cameraStream_.addEventListener('statechange', (event) => {
-      this.cameraLabel.setText(event.device?.label || event.state || 'Camera');
+      const cameraStateLabel = {
+        initializing: 'Initializing camera...',
+        no_devices_found: 'Camera unsupported on this browser/device',
+        error: 'Camera failed to start',
+      };
+      this.cameraLabel.setText(
+        event.device?.label || cameraStateLabel[event.state] || 'Camera'
+      );
       if (event.state === 'streaming') {
         this.videoView.load(this.cameraStream_);
       }
@@ -778,8 +786,8 @@ File: `templates/6_ai/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/",
           "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
@@ -943,8 +951,8 @@ File: `templates/7_ai_live/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/",
           "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
@@ -1213,8 +1221,8 @@ File: `templates/8_objects/index.html`
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
           "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/",
           "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
@@ -1285,8 +1293,8 @@ document.addEventListener('DOMContentLoaded', function () {
 ```
 
 
-### Template: 9_xr-toggle
-File: `templates/9_xr-toggle/index.html`
+### Template: 9_xr_toggle
+File: `templates/9_xr_toggle/index.html`
 ```html
 <!doctype html>
 <html lang="en">
@@ -1308,8 +1316,8 @@ File: `templates/9_xr-toggle/index.html`
           "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/"
         }
       }
     </script>
@@ -1404,8 +1412,8 @@ File: `templates/meshes/index.html`
           "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/"
         }
       }
     </script>
@@ -1456,8 +1464,8 @@ File: `templates/planes/index.html`
           "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/"
         }
       }
     </script>
@@ -1513,8 +1521,8 @@ File: `templates/uikit/index.html`
           "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.56/dist/index.min.js",
           "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.12.1/dist/signals-core.mjs",
           "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/"
         }
       }
     </script>
@@ -1709,8 +1717,8 @@ File: `samples/depthmesh/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/"
         }
       }
     </script>
@@ -1823,8 +1831,8 @@ File: `samples/gestures_custom/index.html`
           "@litertjs/wasm-utils": "https://unpkg.com/@litertjs/wasm-utils@0.2.1",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/"
         }
       }
     </script>
@@ -2266,57 +2274,6 @@ export class CustomGestureDemo extends xb.Script {
 ```
 
 
-### Sample: mesh_detection
-File: `samples/mesh_detection/index.html`
-```html
-<!doctype html>
-<html lang="en">
-  <head>
-    <title>Mesh Detection | XR Blocks Template</title>
-
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no"
-    />
-
-<link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
-    <script>
-      window.litDisableBundleWarning = true;
-    </script>
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
-          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
-          "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/"
-        }
-      }
-    </script>
-  </head>
-
-  <body>
-    <script type="module">
-import 'xrblocks/addons/simulator/SimulatorAddons.js';
-
-import * as xb from 'xrblocks';
-
-document.addEventListener('DOMContentLoaded', async function () {
-  const options = new xb.Options();
-  options.world.enableMeshDetection();
-  options.world.meshes.showDebugVisualizations = true;
-  await xb.init(options);
-});
-
-</script>
-  </body>
-</html>
-
-```
-
-
 ### Sample: modelviewer
 File: `samples/modelviewer/index.html`
 ```html
@@ -2346,9 +2303,9 @@ File: `samples/modelviewer/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/",
-          "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/0.1.10/spark.module.js"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/",
+          "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/2.0.0/spark.module.js"
         }
       }
     </script>
@@ -2538,8 +2495,8 @@ File: `samples/paint/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/"
         }
       }
     </script>
@@ -2674,8 +2631,8 @@ File: `samples/reticle/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/"
         }
       }
     </script>
@@ -2772,7 +2729,7 @@ File: `samples/sound/index.html`
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
           "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js"
         }
       }
     </script>
@@ -3166,7 +3123,7 @@ File: `samples/ui/index.html`
           "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
           "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js"
         }
       }
     </script>
@@ -3644,6 +3601,220 @@ File: `samples/ui/index.html`
 ```
 
 
+### Sample: uiblocks
+File: `samples/uiblocks/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>UI Blocks Integration Sample | XR Blocks</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/": "https://cdn.jsdelivr.net/npm/three@0.182.0/",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/",
+          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
+          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
+          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
+          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
+          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
+          "@pmndrs/uikit": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit@1.0.56/dist/index.min.js",
+          "@pmndrs/uikit-pub-sub": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit-pub-sub@1.0.56/dist/index.min.js",
+          "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.56/dist/index.min.js",
+          "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.12.1/dist/signals-core.mjs",
+          "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js",
+          "uiblocks": "../../build/addons/uiblocks/src/index.js",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <script type="module">
+      import {reversePainterSortStable} from '@pmndrs/uikit';
+      import * as THREE from 'three';
+      import {
+        UICore,
+        UIPanel,
+        UIText,
+        UIImage,
+        UIIcon,
+        ManipulationBehavior,
+        raycastSortFunction,
+      } from 'uiblocks';
+      import * as xb from 'xrblocks';
+
+      class MainScript extends xb.Script {
+        constructor() {
+          super();
+          this.uiCore = new UICore(this);
+        }
+
+        async init() {
+          const renderer = xb.core.renderer;
+          renderer.localClippingEnabled = true;
+          renderer.setTransparentSort(reversePainterSortStable);
+
+          if (xb.core.input.raycaster) {
+            xb.core.input.raycaster.sortFunction = raycastSortFunction;
+          }
+
+          this.add(new THREE.HemisphereLight(0xffffff, 0x666666, 3));
+
+          this.createUI();
+        }
+
+        createUI() {
+          const card = this.uiCore.createCard({
+            name: 'ProfileCard',
+            sizeX: 1.2,
+            sizeY: 1.0,
+            position: new THREE.Vector3(0, 1.5, -1.5),
+            behaviors: [
+              new ManipulationBehavior({
+                draggable: true,
+                manipulationMargin: 100,
+                manipulationCornerRadius: 60,
+              }),
+            ],
+          });
+
+          const panel = new UIPanel({
+            width: '100%',
+            height: '100%',
+            fillColor: 'rgba(5, 5, 5, 0.6)',
+            innerShadowColor: 'rgba(150, 150, 150, 0.05)',
+            innerShadowBlur: 96,
+            strokeWidth: 4,
+            strokeColor: {
+              gradientType: 'linear',
+              rotation: 90,
+              stops: [
+                {position: 0, color: 'rgba(255, 255, 255, 0.5)'},
+                {position: 0.5, color: 'rgba(255, 255, 255, 0.25)'},
+                {position: 1, color: 'rgba(255, 255, 255, 0.35)'},
+              ],
+            },
+            cornerRadius: 50,
+            padding: 50,
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            gap: 50,
+          });
+          card.add(panel);
+
+          const title = new UIText('Welcome to UI Blocks', {
+            fontSize: 64,
+            fontWeight: 'bold',
+            color: '#4796e3',
+          });
+          panel.add(title);
+
+          const image = new UIImage('https://picsum.photos/id/10/400/300', {
+            width: 400,
+            height: 300,
+            borderRadius: 40,
+          });
+          panel.add(image);
+
+          const iconPanel = new UIPanel({
+            flexDirection: 'row',
+            gap: 60,
+            width: '100%',
+            height: 120,
+            justifyContent: 'center',
+            alignItems: 'center',
+          });
+
+          const createIconBtn = (iconName, color) => {
+            let isHovered = false;
+
+            const button = new UIPanel({
+              width: 160,
+              height: 160,
+              cornerRadius: 40,
+              fillColor: '#444444',
+              justifyContent: 'center',
+              alignItems: 'center',
+              onHoverEnter: () => {
+                isHovered = true;
+                button.setFillColor('#666666');
+              },
+              onHoverExit: () => {
+                isHovered = false;
+                button.setFillColor('#444444');
+              },
+              onClick: () => {
+                const flashGradient = {
+                  gradientType: 'linear',
+                  rotation: 90,
+                  stops: [
+                    {position: 0, color: '#4796E3'},
+                    {position: 0.5, color: '#9177C7'},
+                    {position: 1, color: '#CA6673'},
+                  ],
+                };
+
+                button.setFillColor(flashGradient);
+
+                setTimeout(() => {
+                  if (isHovered) button.setFillColor('#666666');
+                  else button.setFillColor('#444444');
+                }, 200);
+              },
+            });
+
+            const icon = new UIIcon(iconName, {
+              width: 80,
+              height: 80,
+              color: color,
+            });
+            button.add(icon);
+
+            return button;
+          };
+
+          iconPanel.add(createIconBtn('favorite', 'white'));
+          iconPanel.add(createIconBtn('star', 'white'));
+          panel.add(iconPanel);
+
+          const desc = new UIText(
+            'This sample card is built using uiblocks, featuring a panel, image, icons, and text. See more samples under the uiblocks folder.',
+            {
+              fontSize: 48,
+              color: 'white',
+              textAlign: 'center',
+              width: '100%',
+              flexShrink: 1,
+            }
+          );
+          panel.add(desc);
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const options = new xb.Options();
+        options.enableUI();
+        options.setAppTitle('uiblocks Sample');
+        xb.add(new MainScript());
+        xb.init(options);
+      });
+    </script>
+  </body>
+</html>
+
+```
+
+
 ### Demo: ballpit
 File: `demos/ballpit/index.html`
 ```html
@@ -3673,8 +3844,8 @@ File: `demos/ballpit/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/"
         }
       }
     </script>
@@ -4075,8 +4246,8 @@ export class BallShooter extends xb.Script {
 ```
 
 
-### Demo: gemini-icebreakers
-File: `demos/gemini-icebreakers/index.html`
+### Demo: gemini_icebreakers
+File: `demos/gemini_icebreakers/index.html`
 ```html
 <!doctype html>
 <html lang="en">
@@ -4103,8 +4274,8 @@ File: `demos/gemini-icebreakers/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/",
           "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
@@ -4131,6 +4302,8 @@ const options = new xb.Options({
 });
 options.enableAI();
 options.enableCamera();
+// Request microphone permission before entering XR.
+options.permissions.microphone = true;
 
 async function start() {
   xb.add(new GeminiIcebreakers());
@@ -4146,7 +4319,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </html>
 
 ```
-File: `demos/gemini-icebreakers/EarthAnimation.js`
+File: `demos/gemini_icebreakers/EarthAnimation.js`
 ```javascript
 /**
  * Animates the earth model.
@@ -4168,7 +4341,7 @@ export class EarthAnimation {
 }
 
 ```
-File: `demos/gemini-icebreakers/GeminiIcebreakers.js`
+File: `demos/gemini_icebreakers/GeminiIcebreakers.js`
 ```javascript
 import * as THREE from 'three';
 import * as xb from 'xrblocks';
@@ -4559,7 +4732,7 @@ export class GeminiIcebreakers extends xb.Script {
 }
 
 ```
-File: `demos/gemini-icebreakers/TranscriptionManager.js`
+File: `demos/gemini_icebreakers/TranscriptionManager.js`
 ```javascript
 export class TranscriptionManager {
   constructor(responseDisplay) {
@@ -4638,7 +4811,7 @@ export class TranscriptionManager {
 }
 
 ```
-File: `demos/gemini-icebreakers/materials/LinearGradientMaterial.js`
+File: `demos/gemini_icebreakers/materials/LinearGradientMaterial.js`
 ```javascript
 import * as THREE from 'three';
 
@@ -4732,8 +4905,8 @@ File: `demos/occlusion/index.html`
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
           "@material/web/": "https://esm.run/@material/web/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/"
         }
       }
     </script>
@@ -5007,8 +5180,8 @@ File: `demos/rain/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/"
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/"
         }
       }
     </script>
@@ -5664,8 +5837,8 @@ File: `demos/xrpoet/index.html`
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/xrblocks.js",
-          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.11.0/build/addons/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.14.1/build/addons/",
           "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
         }
       }
@@ -5707,6 +5880,7 @@ document.addEventListener('DOMContentLoaded', function () {
 File: `demos/xrpoet/PoemGenerator.js`
 ```javascript
 import * as xb from 'xrblocks';
+import {TorusKnotLoadingAnimation} from './TorusKnotLoadingAnimation.js';
 
 export class PoemGenerator extends xb.Script {
   constructor() {
@@ -5714,6 +5888,10 @@ export class PoemGenerator extends xb.Script {
     this.panel = null;
     this.isProcessing = false;
     this.responseDisplay = null;
+    this.button = null;
+    this.loadingSpinner = null;
+    this.poemGenerated = false;
+    this.hasError = false;
   }
 
   init() {
@@ -5755,45 +5933,155 @@ export class PoemGenerator extends xb.Script {
       backgroundColor: '#00000000',
       showEdge: false,
     });
-    buttonPanel.addGrid().addIconButton({
+    this.button = buttonPanel.addGrid().addIconButton({
       text: 'photo_camera',
       fontSize: 0.6,
       backgroundColor: '#FFFFFF',
       defaultOpacity: 0.2,
       hoverOpacity: 0.8,
       selectedOpacity: 1.0,
-    }).onTriggered = () => this.captureAndGeneratePoem();
+    });
+    this.button.onTriggered = () => this.captureAndGeneratePoem();
 
     if (this.deviceCamera) {
       this.videoView.load(this.deviceCamera);
     }
+
+    // Create 3D loading spinner
+    this.loadingSpinner = new TorusKnotLoadingAnimation();
+    this.panel.add(this.loadingSpinner);
   }
 
   async captureAndGeneratePoem() {
     if (this.isProcessing || !this.ai?.isAvailable()) return;
-    this.isProcessing = true;
 
-    const snapshot = this.deviceCamera.getSnapshot({outputFormat: 'base64'});
-    if (!snapshot) {
-      throw new Error('Failed to capture video snapshot.');
+    this.isProcessing = true;
+    this.hasError = false;
+
+    // Disable button
+    if (this.button) {
+      this.button.disabled = true;
     }
-    const {strippedBase64, mimeType} = xb.parseBase64DataURL(snapshot);
-    const image = {inlineData: {mimeType: mimeType, data: strippedBase64}};
-    const question =
-      'Can you write a 12 lined, lighthearted poem about what you see?';
-    const parts = [image, {text: question}];
+
+    // Show loading spinner
+    if (this.loadingSpinner) {
+      this.loadingSpinner.show();
+    }
 
     try {
+      const snapshot = await this.deviceCamera.getSnapshot({
+        outputFormat: 'base64',
+      });
+      if (!snapshot) {
+        throw new Error('Failed to capture video snapshot.');
+      }
+      const {strippedBase64, mimeType} = xb.parseBase64DataURL(snapshot);
+      const image = {inlineData: {mimeType: mimeType, data: strippedBase64}};
+      const question =
+        'Can you write a 12 lined, lighthearted poem about what you see?';
+      const parts = [image, {text: question}];
+
       const response = await this.ai.query({
         type: 'multiPart',
         parts: parts,
       });
-      this.responseDisplay.addText(`${response.text}\n\n`);
+      this.responseDisplay.setText(`${response.text}\n\n`);
+      this.poemGenerated = true;
     } catch (error) {
-      this.responseDisplay.addText(`Error: ${error.message}\n\n`);
+      this.responseDisplay.setText(`Error: ${error.message}\n\n`);
+      this.hasError = true;
+    } finally {
+      this.isProcessing = false;
+      // Re-enable button
+      if (this.button) {
+        this.button.disabled = false;
+        this.button.update();
+      }
+    }
+  }
+
+  update() {
+    if (this.loadingSpinner) {
+      this.loadingSpinner.update(this.isProcessing);
+    }
+  }
+}
+
+```
+File: `demos/xrpoet/TorusKnotLoadingAnimation.js`
+```javascript
+import * as THREE from 'three';
+
+export class TorusKnotLoadingAnimation extends THREE.Points {
+  ignoreReticleRaycast = true;
+
+  constructor() {
+    const baseGeometry = new THREE.TorusKnotGeometry(0.15, 0.04, 200, 40);
+    const positions = baseGeometry.attributes.position.array;
+    const particleCount = positions.length / 3;
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+    const colors = new Float32Array(particleCount * 3);
+    const color = new THREE.Color();
+
+    for (let i = 0; i < particleCount; i++) {
+      const x = positions[i * 3];
+      const y = positions[i * 3 + 1];
+
+      // Mix cyan and magenta based on position
+      const mixRatio = (Math.sin(x * 10) + Math.cos(y * 10) + 2) / 4;
+      color.setHSL(0.6 + mixRatio * 0.3, 0.8, 0.6);
+
+      colors[i * 3] = color.r;
+      colors[i * 3 + 1] = color.g;
+      colors[i * 3 + 2] = color.b;
     }
 
-    this.isProcessing = false;
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+    const material = new THREE.PointsMaterial({
+      size: 0.005,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0, // Start at 0 for fade in
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+
+    super(geometry, material);
+
+    this.position.set(0, 0, 0.1); // Slightly in front
+    this.visible = false;
+  }
+
+  update(isProcessing) {
+    if (this.visible) {
+      const elapsedTime = performance.now() * 0.001;
+
+      // Rotate on Z-axis for a flat, 2D spirograph feel
+      this.rotation.z = elapsedTime * 0.4;
+
+      // Subtle breathing/pulsing effect
+      const scale = 1 + Math.sin(elapsedTime * 2) * 0.05;
+      this.scale.setScalar(scale);
+
+      // Handle fade in/out
+      if (isProcessing) {
+        this.material.opacity = Math.min(this.material.opacity + 0.02, 0.8);
+      } else {
+        this.material.opacity = Math.max(this.material.opacity - 0.02, 0);
+        if (this.material.opacity === 0) {
+          this.visible = false;
+        }
+      }
+    }
+  }
+
+  show() {
+    this.material.opacity = 0;
+    this.visible = true;
   }
 }
 
