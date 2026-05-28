@@ -59,9 +59,12 @@ export class ModelViewerScene extends xb.Script {
   placeObject(model) {
     if (!this.sessionStarted || this.placedObjects.has(model)) return;
     this.placedObjects.add(model);
-    return xb.world.placeOnHorizontalSurface(model, {
-      seconds: 30,
-    });
+    return xb.world.placeOnHorizontalSurface(
+      model,
+      /*timeout*/ {
+        seconds: 30,
+      }
+    );
   }
 
   createModelFromObject() {
@@ -69,9 +72,9 @@ export class ModelViewerScene extends xb.Script {
     const torusMesh = new THREE.Mesh(
       new THREE.TorusKnotGeometry(0.1, 0.03, 100, 16),
       new THREE.MeshPhongMaterial({
-        color: 0x00f5d4,
-        shininess: 100,
-        specular: 0xffffff,
+        color: 0x34a853,
+        shininess: 30,
+        specular: 0x888888,
       })
     );
     this.torusMesh = torusMesh;
@@ -112,9 +115,7 @@ export class ModelViewerScene extends xb.Script {
       },
       renderer: xb.core.renderer,
     });
-    model.position.set(0.2, 0.5, -1.5);
-    this.loadedObjects.push(model);
-    this.placeObject(model);
+    model.position.set(0.9, 0.68, -0.95);
   }
 
   async createModelFromSplat() {
