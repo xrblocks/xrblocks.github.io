@@ -10,15 +10,16 @@ const PROPRIETARY_ASSETS_BASE_URL =
   'https://cdn.jsdelivr.net/gh/xrblocks/proprietary-assets@main/';
 
 export class ModelViewerScene extends xb.Script {
-  constructor() {
-    super();
-  }
+  loadedObjects = [];
+  placedObjects = new Set();
+  sessionStarted = false;
+  torusMesh = null;
 
   async init() {
     xb.core.input.addReticles();
     this.addLights();
     this.createModelFromObject();
-    await Promise.all([
+    return Promise.all([
       this.createModelFromGLTF(),
       this.createModelFromAnimatedGLTF(),
       this.createModelFromSplat(),
@@ -33,19 +34,55 @@ export class ModelViewerScene extends xb.Script {
     this.add(light);
   }
 
+  update() {
+    if (this.torusMesh) {
+      this.torusMesh.rotation.x += 0.015;
+      this.torusMesh.rotation.y += 0.015;
+    }
+  }
+
+  onSimulatorStarted() {
+    this.onXRSessionStarted();
+  }
+
+  onXRSessionStarted() {
+    this.sessionStarted = true;
+    this.placeLoadedObjects();
+  }
+
+  placeLoadedObjects() {
+    for (const model of this.loadedObjects) {
+      this.placeObject(model);
+    }
+  }
+
+  placeObject(model) {
+    if (!this.sessionStarted || this.placedObjects.has(model)) return;
+    this.placedObjects.add(model);
+    return xb.world.placeOnHorizontalSurface(model, {
+      seconds: 30,
+    });
+  }
+
   createModelFromObject() {
     const model = new xb.ModelViewer({});
-    model.add(
-      new THREE.Mesh(
-        new THREE.CylinderGeometry(0.15, 0.15, 0.4),
-        new THREE.MeshPhongMaterial({color: 0xdb5461})
-      )
+    const torusMesh = new THREE.Mesh(
+      new THREE.TorusKnotGeometry(0.1, 0.03, 100, 16),
+      new THREE.MeshPhongMaterial({
+        color: 0x00f5d4,
+        shininess: 100,
+        specular: 0xffffff,
+      })
     );
+    this.torusMesh = torusMesh;
+    model.add(torusMesh);
     model.setupBoundingBox();
     model.setupRaycastCylinder();
     model.setupPlatform();
-    model.position.set(-0.15, 0.75, -1.65);
+    model.position.set(-0.6, 0.5, -1.5);
     this.add(model);
+    this.loadedObjects.push(model);
+    this.placeObject(model);
   }
 
   async createModelFromGLTF() {
@@ -59,7 +96,9 @@ export class ModelViewerScene extends xb.Script {
       },
       renderer: xb.core.renderer,
     });
-    model.position.set(0, 0.78, -1.1);
+    model.position.set(-0.2, 0.5, -1.5);
+    this.loadedObjects.push(model);
+    this.placeObject(model);
   }
 
   async createModelFromAnimatedGLTF() {
@@ -73,7 +112,9 @@ export class ModelViewerScene extends xb.Script {
       },
       renderer: xb.core.renderer,
     });
-    model.position.set(0.9, 0.68, -0.95);
+    model.position.set(0.2, 0.5, -1.5);
+    this.loadedObjects.push(model);
+    this.placeObject(model);
   }
 
   async createModelFromSplat() {
@@ -86,8 +127,9 @@ export class ModelViewerScene extends xb.Script {
         rotation: {x: 0, y: 180, z: 0},
       },
     });
-    model.position.set(0.4, 0.78, -1.1);
-    model.rotation.set(0, -Math.PI / 6, 0);
+    model.position.set(0.6, 0.5, -1.5);
+    this.loadedObjects.push(model);
+    this.placeObject(model);
   }
 
   async createModelInPanel() {
