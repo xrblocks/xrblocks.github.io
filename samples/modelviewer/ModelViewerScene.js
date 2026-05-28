@@ -136,8 +136,8 @@ export class ModelViewerScene extends xb.Script {
   async createModelInPanel() {
     const panel = new xb.SpatialPanel({
       backgroundColor: '#00000000',
-      width: 0.5,
-      height: 0.25,
+      width: 0.6,
+      height: 0.6,
       useDefaultPosition: false,
     });
     panel.isRoot = true;
@@ -158,5 +158,13 @@ export class ModelViewerScene extends xb.Script {
       setupPlatform: false,
       renderer: xb.core.renderer,
     });
+    // Position and scale the model to fill a 1x1x1 space uniformly, centered on the panel.
+    const size = new THREE.Vector3();
+    model.bbox.getSize(size);
+    const maxDim = Math.max(size.x, size.y, size.z);
+    if (maxDim > 0) {
+      model.scale.setScalar(1 / maxDim);
+      model.position.set(0, -(size.y / 2) / maxDim, 0);
+    }
   }
 }
