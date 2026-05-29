@@ -7,6 +7,8 @@ import { CardStack } from 'xrblocks/addons/glasses/ui/CardStack.js';
 import { CardManager } from 'xrblocks/addons/glasses/ui/CardManager.js';
 import { GlassesRenderer } from 'xrblocks/addons/glasses/ui/GlassesRenderer.js';
 
+// prettier-ignore
+const EMOJIS = ['🚀', '😂', '🔥', '💡', '🎉', '🤖', '✨', '🦖', '🍕', '🌍', '🍔', '👾', '🎨', '🎸', '🎲', '🥑'];
 class GlassesUISample extends xb.Script {
     runningInXr = false;
     systemUiGroup = new THREE.Group();
@@ -35,8 +37,10 @@ class GlassesUISample extends xb.Script {
     createNewCard() {
         this.cardNumber++;
         const { cardBodySignal, cardTitleSignal } = this.cardManager.createNewCard();
-        cardTitleSignal.value = `Card ${this.cardNumber}`;
-        cardBodySignal.value = `This is card ${this.cardNumber}.`;
+        const randomEmoji1 = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+        const randomEmoji2 = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+        cardTitleSignal.value = `Card ${this.cardNumber} ${randomEmoji1}`;
+        cardBodySignal.value = `This is card ${this.cardNumber} ${randomEmoji2}.`;
     }
     onRightXrCamera(rightCamera) {
         this.runningInXr = true;
