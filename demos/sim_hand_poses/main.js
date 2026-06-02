@@ -22,10 +22,14 @@ Rotations are applied onto a flat neutral hand pose.
 Rotations are applied through forward kinematics.
 Format: {"joint-name":[x,y,z]} where x/y/z are euler angle radians.
 For long fingers:
-x: flexion/extension. Negative curls toward palm, positive extends away.
-y: abduction/adduction. Negative spreads toward thumb, positive away.
-z: twist. Negative twists away from thumb, positive toward thumb.
-Prefer not to change the thumb metacarpal joint.
+x: flexion/extension. Positive flexes toward palm, negative extends away.
+y: abduction/adduction. Positive spreads away from the middle-finger axis, negative adducts toward it.
+z: axial roll. Positive rolls toward thumb, negative rolls away from thumb.
+For the middle finger, y is radial/ulnar deviation: positive moves toward index/thumb, negative toward ring/pinky.
+For the thumb:
+x: positive flexes across palm, negative extends/repositions.
+y: positive abducts away from palm, negative adducts back toward palm.
+z: positive rolls into opposition/internal rotation, negative repositions/external rotation away.
 Include every non-tip WebXR joint listed below. Use [0,0,0] for neutral joints:
 ${ROTATION_JOINT_NAMES.join(', ')}
 `;
@@ -71,6 +75,15 @@ function cleanRotationsForJson(rotations) {
     cleanRotations[jointName] = rotation.map(toFixedNumber);
   }
   return cleanRotations;
+}
+
+function copyRotations(target, source) {
+  for (const jointName of ROTATION_JOINT_NAMES) {
+    const rotation = source[jointName] ?? [0, 0, 0];
+    target[jointName][0] = rotation[0];
+    target[jointName][1] = rotation[1];
+    target[jointName][2] = rotation[2];
+  }
 }
 
 function cleanJointsForJson(joints) {
@@ -380,6 +393,17 @@ class ManualSimHandScene extends xb.Script {
   }
 }
 
+class DisplayedPoseSync extends xb.Script {
+  constructor(syncDisplayedPose) {
+    super();
+    this._syncDisplayedPose = syncDisplayedPose;
+  }
+
+  update() {
+    this._syncDisplayedPose();
+  }
+}
+
 class GestureHUD extends xb.Script {
   init() {
     this._active = {
@@ -498,19 +522,35 @@ async function start() {
 
   let updateJsonViews = () => {};
 
+  const getActiveHandRotations = () => {
+    const activeHandIndex =
+      xb.core.simulator.controls.simulatorControllerState
+        .currentControllerIndex;
+    return activeHandIndex === 0
+      ? xb.core.simulator.hands.leftHandCurrentRotations
+      : xb.core.simulator.hands.rightHandCurrentRotations;
+  };
+
+  const getDisplayedJoints = (bones) =>
+    bones.map((bone) => ({
+      t: bone.position.toArray(),
+      r: bone.quaternion.toArray(),
+      s: bone.scale.toArray(),
+    }));
+
   const applyHandRotations = () => {
     xb.core.simulator.hands.setLeftHandRotations(handRotations);
     xb.core.simulator.hands.setRightHandRotations(handRotations);
     updateJsonViews();
   };
 
-  const syncControlsToRotations = () => {
+  const syncControlsToRotations = (rotations = getActiveHandRotations()) => {
     for (const input of document.querySelectorAll(
       '.manual-sim-hand-slider input[type="range"]'
     )) {
       const axisIndex = ['x', 'y', 'z'].indexOf(input.dataset.axis);
       const degrees = Math.round(
-        handRotations[input.dataset.joint][axisIndex] / DEG_TO_RAD
+        (rotations[input.dataset.joint]?.[axisIndex] ?? 0) / DEG_TO_RAD
       );
       input.value = String(degrees);
       input.nextElementSibling.value = String(degrees);
@@ -519,6 +559,7 @@ async function start() {
 
   updateJsonViews = createSidebar(
     (jointName, axis, value) => {
+      copyRotations(handRotations, getActiveHandRotations());
       handRotations[jointName][['x', 'y', 'z'].indexOf(axis)] = value;
       applyHandRotations();
     },
@@ -526,19 +567,27 @@ async function start() {
       for (const rotation of Object.values(handRotations)) {
         rotation.fill(0);
       }
-      syncControlsToRotations();
+      syncControlsToRotations(handRotations);
       applyHandRotations();
     },
     () => ({
       raw: {
-        left: cleanJointsForJson(xb.core.simulator.hands.leftHandTargetJoints),
+        left: cleanJointsForJson(
+          getDisplayedJoints(xb.core.simulator.hands.leftHandBones)
+        ),
         right: cleanJointsForJson(
-          xb.core.simulator.hands.rightHandTargetJoints
+          getDisplayedJoints(xb.core.simulator.hands.rightHandBones)
         ),
       },
-      rotations: cleanRotationsForJson(handRotations),
+      rotations: cleanRotationsForJson(getActiveHandRotations()),
     })
   );
+
+  const syncDisplayedPose = () => {
+    syncControlsToRotations();
+    updateJsonViews();
+  };
+  xb.add(new DisplayedPoseSync(syncDisplayedPose));
 
   createPromptBubble(async (description) => {
     xb.core.options.ai.gemini.config = {
@@ -558,7 +607,7 @@ async function start() {
       handRotations[jointName][1] = generatedRotation[1];
       handRotations[jointName][2] = generatedRotation[2];
     }
-    syncControlsToRotations();
+    syncControlsToRotations(handRotations);
     applyHandRotations();
   });
 }
