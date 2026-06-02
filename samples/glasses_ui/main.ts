@@ -54,7 +54,7 @@ class GlassesUISample extends xb.Script {
     const randomEmoji1 = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
     const randomEmoji2 = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
     cardTitleSignal.value = `Card ${this.cardNumber} ${randomEmoji1}`;
-    cardBodySignal.value = `This is card ${this.cardNumber} ${randomEmoji2}.`;
+    cardBodySignal.value = `This is \ncard ${this.cardNumber} ${randomEmoji2}.`;
   }
 
   private onRightXrCamera(rightCamera: THREE.Camera) {
