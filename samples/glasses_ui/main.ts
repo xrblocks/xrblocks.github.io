@@ -7,6 +7,7 @@ import {SystemUI} from 'xrblocks/addons/glasses/ui/SystemUI.js';
 import {CardStack} from 'xrblocks/addons/glasses/ui/CardStack.js';
 import {CardManager} from 'xrblocks/addons/glasses/ui/CardManager.js';
 import {GlassesRenderer} from 'xrblocks/addons/glasses/ui/GlassesRenderer.js';
+import {GlassesModelManager} from 'xrblocks/addons/glasses/ui/GlassesModelManager.js';
 
 // prettier-ignore
 const EMOJIS = ['🚀', '😂', '🔥', '💡', '🎉', '🤖', '✨', '🦖', '🍕', '🌍', '🍔', '👾', '🎨', '🎸', '🎲', '🥑'];
@@ -15,7 +16,7 @@ class GlassesUISample extends xb.Script {
   private runningInXr = false;
   private systemUiGroup = new THREE.Group();
   private systemUi!: SystemUI;
-
+  private glassesModelManager = new GlassesModelManager();
   private glassesRenderer?: GlassesRenderer;
 
   // Card Display.
@@ -37,6 +38,7 @@ class GlassesUISample extends xb.Script {
       })
     );
 
+    this.add(this.glassesModelManager);
     this.add(this.cardManager);
 
     this.createNewCard();
