@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.15.0
- * @commitid 2395de6
- * @builddate 2026-06-05T20:10:19.864Z
+ * @commitid 9a82053
+ * @builddate 2026-06-05T20:51:05.424Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -1302,7 +1302,7 @@ declare class AI extends Script {
     resolveApiKey(modelOptions: ModelOptions): Promise<string | null>;
     isValidApiKey(key: string): boolean | "";
     isAvailable(): boolean | undefined;
-    query(input: {
+    query(input: GeminiQueryInput | {
         prompt: string;
     }, tools?: never[]): Promise<GeminiResponse | string | null>;
     startLiveSession(config?: GoogleGenAITypes.LiveConnectConfig, model?: string): Promise<GoogleGenAITypes.Session>;
