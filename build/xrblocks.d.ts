@@ -14,9 +14,9 @@
  * limitations under the License.
  *
  * @file xrblocks.js
- * @version v0.15.0
- * @commitid b4a1bcb
- * @builddate 2026-06-05T23:37:17.725Z
+ * @version v0.16.0
+ * @commitid fb71314
+ * @builddate 2026-06-11T16:29:51.253Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -167,6 +167,7 @@ interface Controller extends THREE.Object3D<ControllerEventMap> {
     reticle?: Reticle;
     gamepad?: Gamepad;
     inputSource?: Partial<XRInputSource>;
+    updatePose?(): void;
 }
 interface ControllerEvent {
     type: keyof ControllerEventMap;
@@ -4033,7 +4034,8 @@ declare enum Keycodes {
 declare enum SimulatorMode {
     USER = "User",
     POSE = "Navigation",
-    CONTROLLER = "Hands"
+    CONTROLLER = "Hands",
+    POINTER_LOCK = "PointerLock"
 }
 interface SimulatorCustomInstruction {
     header: string | TemplateResult;
@@ -4068,6 +4070,7 @@ declare class SimulatorOptions {
             User: SimulatorMode;
             Navigation: SimulatorMode;
             Hands: SimulatorMode;
+            PointerLock: SimulatorMode;
         };
     };
     simulatorSettingsPanel: {
@@ -4076,6 +4079,7 @@ declare class SimulatorOptions {
     };
     instructions: {
         enabled: boolean;
+        showAutomatically: boolean;
         element: string;
         customInstructions: SimulatorCustomInstruction[];
     };
@@ -4541,6 +4545,7 @@ declare class GamepadController extends Script<GamepadControllerEventMap> implem
     captureNextButtonPress(callback: (buttonIndex: number) => void): void;
     cancelCapture(): void;
     get captureActive(): boolean;
+    updatePose(): void;
     update(): void;
     callSelectStart(): void;
     callSelectEnd(): void;
@@ -4660,6 +4665,7 @@ declare class GazeController extends Script<GazeControllerEventMap> implements C
      * It handles syncing the controller with the camera and manages the gaze
      * selection logic.
      */
+    updatePose(): void;
     update(): void;
     /**
      * Updates the reticle's scale and shader uniforms to provide visual feedback
@@ -4731,6 +4737,7 @@ declare class MouseController extends Script<MouseControllerEventMap> implements
     forwardVector: THREE.Vector3;
     /** A reference to the main scene camera. */
     camera?: THREE.Camera;
+    private lastNormalizedMouse;
     constructor();
     /**
      * Initialize the MouseController
@@ -4738,6 +4745,8 @@ declare class MouseController extends Script<MouseControllerEventMap> implements
     init({ camera }: {
         camera: THREE.Camera;
     }): void;
+    /** Updates the mouse position/rotation using camera state. */
+    updatePose(): void;
     /**
      * The main update loop, called every frame.
      * If connected, it syncs the controller's origin point with the camera's
@@ -4934,6 +4943,9 @@ declare class Input {
     updateReticleFromIntersections(controller: Controller): void;
     enableGazeController(): void;
     disableGazeController(): void;
+    private registerController;
+    enableController(controller: Controller): void;
+    disableController(controller: Controller): void;
     disableControllers(): void;
     enableControllers(): void;
     performRaycastOnScene(controller: Controller): void;
@@ -5484,6 +5496,7 @@ declare class SimulatorControlMode {
     camera: THREE.Camera;
     input: Input;
     timer: THREE.Timer;
+    domElement?: HTMLCanvasElement;
     /**
      * Create a SimulatorControlMode
      */
@@ -5491,10 +5504,11 @@ declare class SimulatorControlMode {
     /**
      * Initialize the simulator control mode.
      */
-    init({ camera, input, timer, }: {
+    init({ camera, input, timer, domElement, }: {
         camera: THREE.Camera;
         input: Input;
         timer: THREE.Timer;
+        domElement?: HTMLCanvasElement;
     }): void;
     onPointerDown(_: MouseEvent): void;
     onPointerUp(_: MouseEvent): void;
@@ -5555,6 +5569,7 @@ interface ISimulatorSettingsPanelElement extends HTMLElement {
     environments: SimulatorEnvironment[];
     activeEnvironmentIndex: number;
     simulatorMode: SimulatorMode;
+    instructionsEnabled?: boolean;
 }
 
 declare class SimulatorControls {
@@ -6584,16 +6599,6 @@ declare class IconButton extends TextView {
      */
     init(_?: object): Promise<void>;
     /**
-  
-    /**
-     * Handles behavior when the cursor hovers over the button.
-     */
-    onHoverOver(): void;
-    /**
-     * Handles behavior when the cursor moves off the button.
-     */
-    onHoverOut(): void;
-    /**
      * Updates the button's visual state based on hover and selection status.
      */
     update(): void;
@@ -6737,6 +6742,11 @@ declare class TextButton extends TextView {
      * Initializes the text object after async dependencies are loaded.
      */
     init(): Promise<void>;
+    /**
+     * Updates the text color and background opacity for the hover and selection
+     * states. The background never drops below its idle opacity, so buttons with
+     * an opaque background only change text color.
+     */
     update(): void;
 }
 
@@ -7452,14 +7462,14 @@ declare class Core {
     simulator: Simulator;
     /** Manages drag-and-drop interactions. */
     dragManager: DragManager;
-    /** Manages drag-and-drop interactions. */
+    /** Manages real-world understanding: planes, meshes, objects, and sounds. */
     world: World;
     /** A shared texture loader. */
     textureLoader: THREE.TextureLoader;
     private webXRSettings;
     /** Whether the XR simulator is currently active. */
     simulatorRunning: boolean;
-    renderer: THREE.WebGLRenderer;
+    private _renderer?;
     options: Options;
     deviceCamera?: XRDeviceCamera;
     depth: Depth;
@@ -7476,6 +7486,12 @@ declare class Core {
     renderSceneOverride?: (renderer: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera) => void;
     webXRSessionManager?: WebXRSessionManager;
     permissionsManager: PermissionsManager;
+    /**
+     * The WebGL renderer, created during {@link Core.init}. Reading it before
+     * `init()` has run returns `undefined` and logs a one-time warning.
+     */
+    get renderer(): THREE.WebGLRenderer;
+    set renderer(renderer: THREE.WebGLRenderer);
     /**
      * Core is a singleton manager that manages all XR "blocks".
      * It initializes core components and abstractions like the scene, camera,
@@ -7937,10 +7953,53 @@ declare class SetSimulatorModeEvent extends Event {
     constructor(simulatorMode: SimulatorMode);
 }
 
+declare class ShowSimulatorInstructionsEvent extends Event {
+    static type: string;
+    constructor();
+}
+
 declare function applySimulatorHandPoseRotationConstraints(rotations: SimulatorHandPoseRotations): SimulatorHandPoseRotations;
 declare function resolveSimulatorHandPoseRotations(handedness: Handedness, rotations: SimulatorHandPoseRotations, applyConstraints?: boolean): SimulatorHandPoseJoints;
 
 declare const SIMULATOR_HAND_POSE_ROTATIONS: Readonly<Record<SimulatorHandPose, SimulatorHandPoseRotations>>;
+
+interface SimulatorPointerLockControllerEventMap extends THREE.Object3DEventMap {
+    connected: {
+        target: SimulatorPointerLockController;
+    };
+    disconnected: {
+        target: SimulatorPointerLockController;
+    };
+    selectstart: {
+        target: SimulatorPointerLockController;
+    };
+    selectend: {
+        target: SimulatorPointerLockController;
+    };
+}
+declare class SimulatorPointerLockController extends Script<SimulatorPointerLockControllerEventMap> implements Controller {
+    static dependencies: {
+        camera: typeof THREE.Camera;
+    };
+    type: string;
+    name: string;
+    userData: {
+        id: number;
+        connected: boolean;
+        selected: boolean;
+    };
+    reticle: Reticle;
+    camera: THREE.Camera;
+    init({ camera }: {
+        camera: THREE.Camera;
+    }): void;
+    updatePose(): void;
+    update(): void;
+    callSelectStart(): void;
+    callSelectEnd(): void;
+    connect(): void;
+    disconnect(): void;
+}
 
 declare class PinchOnButtonAction extends SimulatorUserAction {
     private target;
@@ -8887,5 +8946,5 @@ declare class VideoFileStream extends VideoStream<VideoFileStreamDetails> {
     setSource(videoFile: string | File): Promise<void>;
 }
 
-export { AI, AIOptions, AVERAGE_IPD_METERS, ActiveControllers, Agent, AnimatableNumber, AudioListener, AudioPlayer, BACK, BackgroundMusic, CategoryVolumes, Col, Core, CoreSound, DEFAULT_DEVICE_CAMERA_HEIGHT, DEFAULT_DEVICE_CAMERA_WIDTH, DEFAULT_RGB_TO_DEPTH_PARAMS, DEVICE_CAMERA_PARAMETERS, DOWN, Depth, DepthMesh, DepthMeshOptions, DepthOptions, DepthTextures, DetectedObject, DetectedPlane, DeviceCameraOptions, DragManager, DragMode, ExitButton, FINGER_ORDER, FORWARD, FreestandingSlider, GEMINI_DEFAULT_FLASH_MODEL, GEMINI_DEFAULT_IMAGE_MODEL, GEMINI_DEFAULT_LIVE_MODEL, GamepadBindings, GamepadController, GazeController, Gemini, GeminiOptions, GenerateSkyboxTool, GestureRecognition, GestureRecognitionOptions, GetWeatherTool, Grid, HAND_BONE_IDX_CONNECTION_MAP, HAND_INDEX_TO_LABEL, HAND_JOINT_COUNT, HAND_JOINT_IDX_CONNECTION_MAP, HAND_JOINT_NAMES, Handedness, Hands, HandsOptions, HeuristicGestureRecognizer, HorizontalPager, IconButton, IconView, ImageView, Input, InputOptions, Keycodes, LEFT, LEFT_VIEW_ONLY_LAYER, LabelView, Lighting, LightingOptions, LoadingSpinnerManager, MaterialSymbolsView, MediaPipeHandContext, MediaPipeHandPoseEstimator, MeshScript, ModelLoader, ModelViewer, MouseController, NUM_HANDS, OCCLUDABLE_ITEMS_LAYER, ObjectDetector, ObjectsOptions, OcclusionPass, OcclusionUtils, OpenAI, OpenAIOptions, Options, PageIndicator, Pager, PagerState, Panel, PanelMesh, Physics, PhysicsOptions, PinchOnButtonAction, PlaneDetector, PlanesOptions, RIGHT, RIGHT_VIEW_ONLY_LAYER, Raycaster, Registry, Reticle, ReticleOptions, Reticles, RotationRaycastMesh, Row, SIMULATOR_HAND_COMMON_BIOMECHANICAL_CONSTRAINTS_DEGREES, SIMULATOR_HAND_POSE_NAMES, SIMULATOR_HAND_POSE_ROTATIONS, SOUND_PRESETS, ScreenshotSynthesizer, Script, ScriptMixin, ScriptsManager, ScriptsManagerEventType, ScrollingTroikaTextView, SetSimulatorEnvironmentEvent, SetSimulatorModeEvent, ShowHandsAction, Simulator, SimulatorCamera, SimulatorControlMode, SimulatorControllerState, SimulatorControls, SimulatorDepth, SimulatorDepthMaterial, SimulatorHandPose, SimulatorHandPoseChangeRequestEvent, SimulatorHands, SimulatorInterface, SimulatorMediaDeviceInfo, SimulatorMode, SimulatorOptions, SimulatorRenderMode, SimulatorScene, SimulatorUser, SimulatorUserAction, SketchPanel, SkyboxAgent, SoundOptions, SoundSynthesizer, SparkRendererHolder, SpatialAudio, SpatialPanel, SpeechRecognizer, SpeechRecognizerOptions, SpeechSynthesizer, SpeechSynthesizerOptions, SplatAnchor, StreamState, StrokeRecognizer, StylizedFace, TensorFlowHandPoseEstimator, TextButton, TextScrollerState, TextView, Tool, UI, UIKitOptions, UI_OVERLAY_LAYER, UP, UX, User, VIEW_DEPTH_GAP, VerticalPager, VideoFileStream, VideoStream, VideoView, View, VolumeCategory, WaitFrame, WalkTowardsPanelAction, WebXRHandContext, WebXRHandPoseEstimator, World, WorldOptions, XRButton, XRDeviceCamera, XREffects, XRPass, XRTransitionOptions, XR_BLOCKS_ASSETS_PATH, ZERO_VECTOR3, ZERO_VISEME, add, ai, applySimulatorHandPoseRotationConstraints, average, callInitWithDependencyInjection, camera, clamp, clamp01, clampRotationToAngle, core, cropImage, depth, estimateHandScale, extractYaw, getAdjacentFingerSpreads, getBoneVectors, getCameraParametersSnapshot, getColorHex, getDeltaTime, getDeviceCameraClipFromView, getDeviceCameraWorldFromClip, getDeviceCameraWorldFromView, getElapsedTime, getFingerBendAngles, getFingerCurl, getFingerDirection, getFingerJoint, getFingerPalmAlignment, getFingerSpread, getFingerStraightness, getFingertipDistance, getFingertipPalmDistance, getPalmNormal, getPalmPose, getPalmRight, getPalmUp, getPalmWidth, getRelativeBoneAngles, getThumbBendAngles, getThumbCurl, getThumbDirection, getThumbOpposition, getThumbStraightness, getThumbVerticalDirection, getUrlParamBool, getUrlParamFloat, getUrlParamInt, getUrlParameter, getVec4ByColorString, getXrCameraLeft, getXrCameraRight, init, initScript, input, intrinsicsToProjectionMatrix, lerp, loadStereoImageAsTextures, loadingSpinnerManager, lookAtRotation, objectIsDescendantOf, parseBase64DataURL, parseSimulatorHandPoseRotations, placeObjectAtIntersectionFacingTarget, print, resolveSimulatorHandPoseRotations, scene, showOnlyInLeftEye, showOnlyInRightEye, showReticleOnDepthMesh, sound, timer, transformRgbUvToWorld, traverseUtil, uninitScript, urlParams, user, world, xrDepthMeshOptions, xrDepthMeshPhysicsOptions, xrDepthMeshVisualizationOptions, xrDeviceCameraEnvironmentContinuousOptions, xrDeviceCameraEnvironmentOptions, xrDeviceCameraUserContinuousOptions, xrDeviceCameraUserOptions };
-export type { AIModel, AgentLifecycleCallbacks, AudioListenerOptions, AudioPlayerOptions, CameraParametersSnapshot, CameraSnapshot, ColOptions, Constructor, DeepPartial, DeepReadonly, DepthArray, DeviceCameraParameters, DigitName, Draggable, FingerName, FormFactor, GLTFData, GamepadAction, GeminiQueryInput, GestureConfiguration, GestureDetectionResult, GestureEvent, GestureEventDetail, GestureEventType, GestureHandedness, GestureRecognizer, GestureScoreMap, GetWeatherArgs, GridOptions, HandContext, HandLabel, HasDraggingMode, HasIgnoreReticleRaycast, HeuristicGestureDetector, ISimulatorSettingsPanelElement, IconButtonOptions, IconViewOptions, ImageViewOptions, Injectable, InjectableConstructor, JointName, JointPositions, KeyEvent, KeysJson, LabelViewOptions, LipMetrics, LiveSessionState, MaterialSymbolsViewOptions, MaybeHasIgnoreReticleRaycast, MediaOrSimulatorMediaDeviceInfo, MediaPipeHandLandmark, ModelClass, ModelLoaderLoadGLTFOptions, ModelLoaderLoadOptions, ModelOptions, NormalizedDetectedObject, ObjectGrabEvent, ObjectTouchEvent, OrbiterOptions, PagerOptions, PalmPose, PanelFadeState, PanelOptions, PlaySoundOptions, PoseEstimator, RAPIERCompat, RgbToDepthParams, RowOptions, ScriptsManagerEventMap, ScrollingTroikaTextViewOptions, SelectEvent, Shader, ShaderUniforms, SimulatorCustomInstruction, SimulatorEnvironment, SimulatorHandJointRotationArray, SimulatorHandPoseHTMLElement, SimulatorHandPoseJoints, SimulatorHandPoseRotationConstraintsDegrees, SimulatorHandPoseRotationRangeDegrees, SimulatorHandPoseRotations, SimulatorPlane, SimulatorPlaneType, SpatialPanelOptions, SplatData, StrokeEventMap, StylizedFaceOptions, TextButtonOptions, TextViewOptions, ToolCall, ToolOptions, ToolResult, ToolSchema, UIJsonNode, UIJsonNodeOptions, VideoFileStreamOptions, VideoStreamDetails, VideoStreamEventMap, VideoStreamGetSnapshotBase64Options, VideoStreamGetSnapshotBlobOptions, VideoStreamGetSnapshotImageDataOptions, VideoStreamGetSnapshotOptions, VideoStreamGetSnapshotTextureOptions, VideoStreamOptions, VideoViewOptions, ViewOptions, VisemeWeights, WeatherData, WebXRJointRotations };
+export { AI, AIOptions, AVERAGE_IPD_METERS, ActiveControllers, Agent, AnimatableNumber, AudioListener, AudioPlayer, BACK, BackgroundMusic, CategoryVolumes, Col, Core, CoreSound, DEFAULT_DEVICE_CAMERA_HEIGHT, DEFAULT_DEVICE_CAMERA_WIDTH, DEFAULT_RGB_TO_DEPTH_PARAMS, DEVICE_CAMERA_PARAMETERS, DOWN, Depth, DepthMesh, DepthMeshOptions, DepthOptions, DepthTextures, DetectedObject, DetectedPlane, DeviceCameraOptions, DragManager, DragMode, ExitButton, FINGER_ORDER, FORWARD, FreestandingSlider, GEMINI_DEFAULT_FLASH_MODEL, GEMINI_DEFAULT_IMAGE_MODEL, GEMINI_DEFAULT_LIVE_MODEL, GamepadBindings, GamepadController, GazeController, Gemini, GeminiOptions, GenerateSkyboxTool, GestureRecognition, GestureRecognitionOptions, GetWeatherTool, Grid, HAND_BONE_IDX_CONNECTION_MAP, HAND_INDEX_TO_LABEL, HAND_JOINT_COUNT, HAND_JOINT_IDX_CONNECTION_MAP, HAND_JOINT_NAMES, Handedness, Hands, HandsOptions, HeuristicGestureRecognizer, HorizontalPager, IconButton, IconView, ImageView, Input, InputOptions, Keycodes, LEFT, LEFT_VIEW_ONLY_LAYER, LabelView, Lighting, LightingOptions, LoadingSpinnerManager, MaterialSymbolsView, MediaPipeHandContext, MediaPipeHandPoseEstimator, MeshScript, ModelLoader, ModelViewer, MouseController, NUM_HANDS, OCCLUDABLE_ITEMS_LAYER, ObjectDetector, ObjectsOptions, OcclusionPass, OcclusionUtils, OpenAI, OpenAIOptions, Options, Orbiter, PageIndicator, Pager, PagerState, Panel, PanelMesh, Physics, PhysicsOptions, PinchOnButtonAction, PlaneDetector, PlanesOptions, RIGHT, RIGHT_VIEW_ONLY_LAYER, Raycaster, Registry, Reticle, ReticleOptions, Reticles, RotationRaycastMesh, Row, SIMULATOR_HAND_COMMON_BIOMECHANICAL_CONSTRAINTS_DEGREES, SIMULATOR_HAND_POSE_NAMES, SIMULATOR_HAND_POSE_ROTATIONS, SOUND_PRESETS, ScreenshotSynthesizer, Script, ScriptMixin, ScriptsManager, ScriptsManagerEventType, ScrollingTroikaTextView, SetSimulatorEnvironmentEvent, SetSimulatorModeEvent, ShowHandsAction, ShowSimulatorInstructionsEvent, Simulator, SimulatorCamera, SimulatorControlMode, SimulatorControllerState, SimulatorControls, SimulatorDepth, SimulatorDepthMaterial, SimulatorHandPose, SimulatorHandPoseChangeRequestEvent, SimulatorHands, SimulatorInterface, SimulatorMediaDeviceInfo, SimulatorMode, SimulatorOptions, SimulatorPointerLockController, SimulatorRenderMode, SimulatorScene, SimulatorUser, SimulatorUserAction, SketchPanel, SkyboxAgent, SoundOptions, SoundSynthesizer, SparkRendererHolder, SpatialAudio, SpatialPanel, SpeechRecognizer, SpeechRecognizerOptions, SpeechSynthesizer, SpeechSynthesizerOptions, SplatAnchor, StreamState, StrokeRecognizer, StylizedFace, TensorFlowHandPoseEstimator, TextButton, TextScrollerState, TextView, Tool, UI, UIKitOptions, UI_OVERLAY_LAYER, UP, UX, User, VIEW_DEPTH_GAP, VerticalPager, VideoFileStream, VideoStream, VideoView, View, VolumeCategory, WaitFrame, WalkTowardsPanelAction, WebXRHandContext, WebXRHandPoseEstimator, World, WorldOptions, XRButton, XRDeviceCamera, XREffects, XRPass, XRTransitionOptions, XR_BLOCKS_ASSETS_PATH, ZERO_VECTOR3, ZERO_VISEME, add, ai, applySimulatorHandPoseRotationConstraints, average, callInitWithDependencyInjection, camera, clamp, clamp01, clampRotationToAngle, core, cropImage, depth, estimateHandScale, extractYaw, getAdjacentFingerSpreads, getBoneVectors, getCameraParametersSnapshot, getColorHex, getDeltaTime, getDeviceCameraClipFromView, getDeviceCameraWorldFromClip, getDeviceCameraWorldFromView, getElapsedTime, getFingerBendAngles, getFingerCurl, getFingerDirection, getFingerJoint, getFingerPalmAlignment, getFingerSpread, getFingerStraightness, getFingertipDistance, getFingertipPalmDistance, getPalmNormal, getPalmPose, getPalmRight, getPalmUp, getPalmWidth, getRelativeBoneAngles, getThumbBendAngles, getThumbCurl, getThumbDirection, getThumbOpposition, getThumbStraightness, getThumbVerticalDirection, getUrlParamBool, getUrlParamFloat, getUrlParamInt, getUrlParameter, getVec4ByColorString, getXrCameraLeft, getXrCameraRight, init, initScript, input, intrinsicsToProjectionMatrix, lerp, loadStereoImageAsTextures, loadingSpinnerManager, lookAtRotation, objectIsDescendantOf, parseBase64DataURL, parseSimulatorHandPoseRotations, placeObjectAtIntersectionFacingTarget, print, resolveSimulatorHandPoseRotations, scene, showOnlyInLeftEye, showOnlyInRightEye, showReticleOnDepthMesh, sound, timer, transformRgbUvToWorld, traverseUtil, uninitScript, urlParams, user, world, xrDepthMeshOptions, xrDepthMeshPhysicsOptions, xrDepthMeshVisualizationOptions, xrDeviceCameraEnvironmentContinuousOptions, xrDeviceCameraEnvironmentOptions, xrDeviceCameraUserContinuousOptions, xrDeviceCameraUserOptions };
+export type { AIModel, AgentLifecycleCallbacks, AudioListenerOptions, AudioPlayerOptions, CameraParametersSnapshot, CameraSnapshot, ColOptions, Constructor, DeepPartial, DeepReadonly, DepthArray, DeviceCameraParameters, DigitName, Draggable, FingerName, FormFactor, GLTFData, GamepadAction, GeminiQueryInput, GestureConfiguration, GestureDetectionResult, GestureEvent, GestureEventDetail, GestureEventType, GestureHandedness, GestureRecognizer, GestureScoreMap, GetWeatherArgs, GridOptions, HandContext, HandLabel, HasDraggingMode, HasIgnoreReticleRaycast, HeuristicGestureDetector, ISimulatorSettingsPanelElement, IconButtonOptions, IconViewOptions, ImageViewOptions, Injectable, InjectableConstructor, JointName, JointPositions, KeyEvent, KeysJson, LabelViewOptions, LipMetrics, LiveSessionState, MaterialSymbolsViewOptions, MaybeHasIgnoreReticleRaycast, MediaOrSimulatorMediaDeviceInfo, MediaPipeHandLandmark, ModelClass, ModelLoaderLoadGLTFOptions, ModelLoaderLoadOptions, ModelOptions, NormalizedDetectedObject, ObjectGrabEvent, ObjectTouchEvent, OrbiterOptions, OrbiterPosition, PagerOptions, PalmPose, PanelFadeState, PanelOptions, PlaySoundOptions, PoseEstimator, RAPIERCompat, RgbToDepthParams, RowOptions, ScriptsManagerEventMap, ScrollingTroikaTextViewOptions, SelectEvent, Shader, ShaderUniforms, SimulatorCustomInstruction, SimulatorEnvironment, SimulatorHandJointRotationArray, SimulatorHandPoseHTMLElement, SimulatorHandPoseJoints, SimulatorHandPoseRotationConstraintsDegrees, SimulatorHandPoseRotationRangeDegrees, SimulatorHandPoseRotations, SimulatorPlane, SimulatorPlaneType, SpatialPanelOptions, SplatData, StrokeEventMap, StylizedFaceOptions, TextButtonOptions, TextViewOptions, ToolCall, ToolOptions, ToolResult, ToolSchema, UIJsonNode, UIJsonNodeOptions, VideoFileStreamOptions, VideoStreamDetails, VideoStreamEventMap, VideoStreamGetSnapshotBase64Options, VideoStreamGetSnapshotBlobOptions, VideoStreamGetSnapshotImageDataOptions, VideoStreamGetSnapshotOptions, VideoStreamGetSnapshotTextureOptions, VideoStreamOptions, VideoViewOptions, ViewOptions, VisemeWeights, WeatherData, WebXRJointRotations };
