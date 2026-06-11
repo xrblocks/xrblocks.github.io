@@ -38,10 +38,10 @@ jobs:
       # This is done only ONCE for the entire job, making the workflow more efficient.
       # It caches the global npm cache directory for faster dependency installation
       # on subsequent runs.
-      - name: Setup Node.js v22
+      - name: Setup Node.js v24
         uses: actions/setup-node@v6
         with:
-          node-version: '22'
+          node-version: '24'
           cache: 'npm'
           # We point to BOTH package-lock.json files to ensure the cache is
           # invalidated if dependencies in either the main project or the docs change.
