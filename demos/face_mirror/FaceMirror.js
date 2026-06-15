@@ -374,22 +374,35 @@ export class FaceMirror extends xb.Script {
         width: 180,
       });
       const track = new UIPanel({
-        flex: 1,
+        flexGrow: 1,
+        flexShrink: 1,
         height: 10,
-        fillColor: 'rgba(255, 255, 255, 0.08)',
+        fillColor: 'rgba(255, 255, 255, 0.15)',
         cornerRadius: 5,
+        flexDirection: 'row',
+        alignItems: 'stretch',
       });
+      // Bar value drawn as a flex-grow pair: the fill grows by `value`
+      // and the spacer grows by `1 - value`, so they always split the
+      // track exactly and the fill anchors to the left edge. Avoids
+      // percentage-width quirks we kept hitting trying to do the
+      // CSS-style `width: 50%` thing.
       const fill = new UIPanel({
-        width: '0%',
+        flexGrow: 0,
         height: '100%',
         fillColor: '#4796e3',
         cornerRadius: 5,
       });
+      const spacer = new UIPanel({
+        flexGrow: 1,
+        height: '100%',
+      });
       track.add(fill);
+      track.add(spacer);
       row.add(label);
       row.add(track);
       hudPanel.add(row);
-      this.spatialBars.set(name, fill);
+      this.spatialBars.set(name, {fill, spacer});
     }
     this.hudCard.add(hudPanel);
   }
@@ -482,22 +495,36 @@ export class FaceMirror extends xb.Script {
   }
 
   updateBars(face) {
+    if (!this.lastBarValues) this.lastBarValues = new Map();
     for (const name of FEATURED_BLENDSHAPES) {
       const v = face.getBlendshape(name);
       const pct = (v * 100).toFixed(0) + '%';
       const htmlFill = this.barEls.get(name);
       if (htmlFill) htmlFill.style.width = pct;
-      const spatialFill = this.spatialBars.get(name);
-      if (spatialFill) spatialFill.setProperties({width: pct});
+      // Skip writing to the uikit panels when the value hasn't moved
+      // by more than 0.5%. Each setProperties triggers a layout pass
+      // via the yoga wasm bridge; on a 12-bar HUD that's ~24 layouts
+      // per detection at ~30fps. With this gate a held expression
+      // (eyes blink, brows neutral) collapses to one or two writes.
+      const prev = this.lastBarValues.get(name);
+      if (prev !== undefined && Math.abs(v - prev) < 0.005) continue;
+      this.lastBarValues.set(name, v);
+      const spatial = this.spatialBars.get(name);
+      if (spatial) {
+        spatial.fill.setProperties({flexGrow: v});
+        spatial.spacer.setProperties({flexGrow: 1 - v});
+      }
     }
   }
 
   resetBars() {
+    if (this.lastBarValues) this.lastBarValues.clear();
     for (const fill of this.barEls.values()) {
       fill.style.width = '0%';
     }
-    for (const fill of this.spatialBars.values()) {
-      fill.setProperties({width: '0%'});
+    for (const spatial of this.spatialBars.values()) {
+      spatial.fill.setProperties({flexGrow: 0});
+      spatial.spacer.setProperties({flexGrow: 1});
     }
   }
 }
