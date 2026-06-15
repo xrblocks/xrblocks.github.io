@@ -5,7 +5,6 @@ import {installWebcamFallback} from './WebcamFallback.js';
 
 const options = new xb.Options();
 options.enableFaceDetection();
-
 options.setAppTitle('Face Landmarker Mirror');
 options.setAppDescription(
   'Tracks the 478 MediaPipe face landmarks and 52 blendshapes in real time, ' +
