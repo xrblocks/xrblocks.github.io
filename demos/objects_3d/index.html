@@ -38,7 +38,7 @@
           "@mediapipe/tasks-vision": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.34/vision_bundle.mjs",
           "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm",
           "@huggingface/transformers": "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.0",
-          "three-mesh-bvh": "https://cdn.jsdelivr.net/npm/three-mesh-bvh@0.9.0/build/index.module.js"
+          "three-mesh-bvh": "https://cdn.jsdelivr.net/npm/three-mesh-bvh@0.9.10/build/index.module.js"
         }
       }
     </script>
@@ -265,23 +265,25 @@
         RawImage,
         SamModel,
       } from '@huggingface/transformers';
-      import {
-        acceleratedRaycast,
-        computeBoundsTree,
-        disposeBoundsTree,
-      } from 'three-mesh-bvh';
 
-      // Wire three-mesh-bvh into THREE so any Mesh.raycast() goes through the
-      // BVH-accelerated path. Each per-detection sampleDepthInMask fires
-      // ~1000 stride-sampled rays at the depth mesh; the stock raycaster is
-      // O(triangles) per ray (full mesh walk), BVH is O(log triangles), which
-      // is the difference between ~3 s of raycast time per Detect press and
-      // ~30 ms. We call computeBoundsTree() once per detect on the cloned
-      // depth-mesh geometry (cheap because depth meshes are small) and
+      // Route Mesh.raycast() through the BVH-accelerated path via the SDK
+      // helper (xb.applyBVH / xb.enableAcceleratedRaycast, added in the
+      // utils/BVHRaycast module) instead of patching the THREE prototypes
+      // inline. Each per-detection sampleDepthInMask fires ~1000
+      // stride-sampled rays at the depth mesh; the stock raycaster is
+      // O(triangles) per ray (full mesh walk), BVH is O(log triangles),
+      // which is the difference between ~3 s of raycast time per Detect
+      // press and ~30 ms. enableAcceleratedRaycast() dynamically imports
+      // three-mesh-bvh (resolved from this demo's importmap) and installs
+      // computeBoundsTree / disposeBoundsTree on BufferGeometry; kick it
+      // off here so it's ready well before the first press. We then call
+      // computeBoundsTree() once per detect on the cloned depth-mesh
+      // geometry (cheap because depth meshes are small) and
       // disposeBoundsTree() in the finally to release the index.
-      THREE.Mesh.prototype.raycast = acceleratedRaycast;
-      THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
-      THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
+      // detect() awaits this promise before building the per-press tree,
+      // so a press that lands before the import resolves waits it out
+      // rather than silently falling back to the stock raycaster.
+      const bvhReady = xb.enableAcceleratedRaycast().catch(() => false);
 
       // Cache transformers.js model downloads in the browser so repeat runs
       // don't re-fetch the SAM weights.
@@ -624,8 +626,10 @@
         // Build a BVH index on the cloned geometry. This is the speedup
         // that turns per-press depth raycasts from ~3 s into ~30 ms for a
         // typical ~10 k-triangle depth mesh. The index is disposed in the
-        // detect() finally block along with the geometry.
-        clonedGeom.computeBoundsTree();
+        // detect() finally block along with the geometry. Guarded in case
+        // enableAcceleratedRaycast() hasn't resolved yet: raycasts still
+        // work without the BVH, just slower.
+        if (clonedGeom.computeBoundsTree) clonedGeom.computeBoundsTree();
         const snap = new THREE.Mesh(
           clonedGeom,
           new THREE.MeshBasicMaterial({visible: false})
@@ -1806,6 +1810,13 @@
         frozenCam.userData.snapAspect = snapAspect;
         // Snapshot the depth mesh in the same tick as the camera freeze
         // so all three (pixels, camera, depth geometry) are coherent.
+        // Make sure the BVH prototype patch is installed before we build
+        // the per-press bounds tree. Kicked off at init so this is almost
+        // always already resolved; a very early press waits the dynamic
+        // import out here instead of racing it. Resolves false (not throw)
+        // if three-mesh-bvh is unreachable, in which case computeBoundsTree
+        // stays unpatched and the build below is skipped.
+        await bvhReady;
         const frozenDepthMesh = snapshotDepthMesh();
         if (!frozenDepthMesh) {
           setStatus('no depth mesh');
