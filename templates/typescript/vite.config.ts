@@ -14,7 +14,6 @@ export default defineConfig({
       'troika-three-text',
       'rapier3d',
       'three-mesh-bvh',
-      'temporal-polyfill',
     ],
   },
   build: {
@@ -31,7 +30,6 @@ export default defineConfig({
         'troika-three-text',
         'rapier3d',
         'three-mesh-bvh',
-        'temporal-polyfill',
       ],
     },
   },
