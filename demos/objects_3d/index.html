@@ -27,9 +27,9 @@
           "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
           "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
           "lit/": "https://esm.run/lit@3/",
-          "@pmndrs/uikit": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit@1.0.56/dist/index.min.js",
-          "@pmndrs/uikit-pub-sub": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit-pub-sub@1.0.56/dist/index.min.js",
-          "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.56/dist/index.min.js",
+          "@pmndrs/uikit": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit@1.0.64/dist/index.min.js",
+          "@pmndrs/uikit-pub-sub": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit-pub-sub@1.0.64/dist/index.min.js",
+          "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.64/dist/index.min.js",
           "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.12.1/dist/signals-core.mjs",
           "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js",
           "uiblocks": "../../build/addons/uiblocks/src/index.js",
@@ -249,7 +249,7 @@
       import * as THREE from 'three';
       import * as xb from 'xrblocks';
       import {
-        HeadLeashBehavior,
+        ManipulationBehavior,
         UICore,
         UIIcon,
         UIPanel,
@@ -2202,15 +2202,9 @@
           this.uiCore = new UICore(this);
           const card = this.uiCore.createCard({
             name: 'Objects3dControlCard',
+            position: new THREE.Vector3(0, 1.4, -1.0),
             sizeX: 0.62,
             sizeY: 0.42,
-            behaviors: [
-              new HeadLeashBehavior({
-                offset: new THREE.Vector3(0, -0.25, -0.9),
-                posLerp: 0.1,
-                rotLerp: 0.1,
-              }),
-            ],
           });
           const panel = new UIPanel({
             width: '100%',
@@ -2298,6 +2292,9 @@
           panel.add(buttonRow);
           panel.add(pickerRow);
           card.add(panel);
+          card.addBehavior(
+            new ManipulationBehavior({draggable: true, faceCamera: true})
+          );
         }
 
         // Detect / clear: icon + caption stacked so XR users get the same
@@ -2318,6 +2315,7 @@
             alignItems: 'center',
             justifyContent: 'center',
             gap: 8,
+            renderOrder: 10,
             onHoverEnter: () => btn.setFillColor(hover),
             onHoverExit: () => btn.setFillColor(idle),
             onClick: () => {
@@ -2327,13 +2325,20 @@
             },
           });
           btn.add(
-            new UIIcon(iconName, {color: 'white', width: 22, height: 22})
+            new UIIcon(iconName, {
+              color: 'white',
+              width: 22,
+              height: 22,
+              renderOrder: 12,
+            })
           );
           btn.add(
             new UIText(label, {
               fontSize: 14,
               color: '#ffffff',
               fontWeight: 'bold',
+              depthTest: false,
+              renderOrder: 100,
             })
           );
           return btn;
@@ -2384,6 +2389,7 @@
             alignItems: 'center',
             justifyContent: 'center',
             gap: 2,
+            renderOrder: 10,
             onHoverEnter: () => btn.setFillColor(hover),
             onHoverExit: () => btn.setFillColor(idle),
             onClick: () => {
@@ -2397,6 +2403,8 @@
               fontSize: 10,
               color: '#888888',
               textAlign: 'center',
+              depthTest: false,
+              renderOrder: 100,
             })
           );
           btn.add(
@@ -2405,6 +2413,8 @@
               color: '#ffffff',
               fontWeight: 'bold',
               textAlign: 'center',
+              depthTest: false,
+              renderOrder: 100,
             })
           );
           return btn;
