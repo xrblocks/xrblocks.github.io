@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.16.0
- * @commitid 8656cff
- * @builddate 2026-06-16T18:44:52.467Z
+ * @commitid 79ef2fe
+ * @builddate 2026-06-17T03:19:33.344Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -4151,6 +4151,12 @@ declare class ObjectsOptions {
         activeBackend: "gemini" | "mediapipe";
         gemini: {
             systemInstruction: string;
+            /**
+             * Extra Gemini generation config merged into the per-call config (over
+             * the SDK defaults). Use to pin sampling parameters such as
+             * `temperature: 0` for deterministic detections.
+             */
+            generationConfig: Record<string, unknown>;
             responseSchema: {
                 type: string;
                 items: {
