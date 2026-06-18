@@ -27,9 +27,8 @@ class SceneSetup extends xb.Script {
     dirLight.position.set(1, 3, 1).normalize();
     this.add(dirLight);
 
-    const grid = new THREE.GridHelper(10, 20, 0x888888, 0x444444);
-    grid.position.y = 0;
-    this.add(grid);
+    // No floor grid: a screen-spanning GridHelper caused severe close-range lag
+    // in XR (see demos/vrm-avatar) and looks out of place against passthrough.
   }
 }
 
