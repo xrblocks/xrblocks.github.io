@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.16.0
- * @commitid aeffd86
- * @builddate 2026-06-19T01:37:40.898Z
+ * @commitid fcb802f
+ * @builddate 2026-06-22T15:40:18.591Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -19133,7 +19133,10 @@ class LoadingSpinner extends HTMLElement {
         shadowRoot.innerHTML = LoadingSpinner.innerHTML;
     }
 }
-customElements.define('xb-blocks-loading-spinner', LoadingSpinner);
+// Prevents errors in headless environments where the spinner isn't actually used.
+if (!customElements.get('xb-blocks-loading-spinner')) {
+    customElements.define('xb-blocks-loading-spinner', LoadingSpinner);
+}
 // Creates a new Loading spinner and attaches it to document.body.
 function createLoadingSpinner() {
     return document.body.appendChild(document.createElement('xb-blocks-loading-spinner'));
@@ -19690,6 +19693,8 @@ class Core {
             }
             // Traverse the scene to find all scripts.
             this.scriptsManager.syncScriptsWithScene(this.scene);
+            // Force matrix updates since there is no active renderer render loop in headless/test environments.
+            this.scene.updateMatrixWorld(true);
             // Updates reticles and UIs.
             this.scriptsManager.resetUX();
             this.input.update();
