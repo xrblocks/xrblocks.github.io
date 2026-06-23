@@ -1,0 +1,1130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>World Companion | XR Blocks</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link type="text/css" rel="stylesheet" href="../../samples/main.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/": "https://cdn.jsdelivr.net/npm/three@0.184.0/",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
+          "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
+          "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
+          "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
+          "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
+          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
+          "lit/": "https://esm.run/lit@3/",
+          "@pmndrs/uikit": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit@1.0.64/dist/index.min.js",
+          "@pmndrs/uikit-pub-sub": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit-pub-sub@1.0.64/dist/index.min.js",
+          "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.64/dist/index.min.js",
+          "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.12.1/dist/signals-core.mjs",
+          "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js",
+          "uiblocks": "../../build/addons/uiblocks/src/index.js",
+          "xrblocks": "../../build/xrblocks.js",
+          "xrblocks/addons/": "../../build/addons/",
+          "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm",
+          "marked": "https://esm.sh/marked@14",
+          "dompurify": "https://esm.sh/dompurify@3"
+        }
+      }
+    </script>
+    <style>
+      .panel {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background: rgba(20, 20, 20, 0.85);
+        padding: 14px 18px;
+        border-radius: 12px;
+        font-family: system-ui, sans-serif;
+        color: #eee;
+        max-width: 540px;
+        width: 92%;
+      }
+      .panel button {
+        padding: 9px 14px;
+        border-radius: 8px;
+        border: 1px solid #444;
+        background: #2a2a2a;
+        color: white;
+        cursor: pointer;
+        font-size: 14px;
+        text-transform: none;
+      }
+      .panel button:hover:not(:disabled) {
+        background: #3a3a3a;
+      }
+      .panel button:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+      .panel .row {
+        display: flex;
+        gap: 8px;
+      }
+      .panel .start {
+        background: #2e7d32;
+      }
+      .panel .stop {
+        background: #c0392b;
+      }
+      .panel .transcript {
+        height: 80px;
+        overflow-y: auto;
+        font-size: 13px;
+        line-height: 1.4;
+        padding: 8px 10px;
+        background: #111;
+        border-radius: 8px;
+      }
+      .panel .transcript p,
+      .panel .transcript ul,
+      .panel .transcript ol {
+        margin: 0 0 0.4em 0;
+      }
+      .panel .transcript ul,
+      .panel .transcript ol {
+        padding-left: 1.2em;
+      }
+      .panel .transcript .turn {
+        margin: 0 0 0.5em 0;
+      }
+      .panel .transcript .turn .who {
+        font-weight: 600;
+        margin-right: 4px;
+      }
+      .panel .transcript .turn.user .who {
+        color: #6cb6ff;
+      }
+      .panel .transcript .turn.model .who {
+        color: #7ee787;
+      }
+      .panel .transcript .turn.user {
+        color: #cfd8e3;
+      }
+      .panel .transcript:empty::before {
+        content: 'Press Start, then talk to the companion. It can see what the camera sees.';
+        color: #888;
+        font-style: italic;
+      }
+      .panel .status {
+        font-size: 12px;
+        color: #aaa;
+      }
+      .key-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: system-ui, sans-serif;
+        color: #eee;
+      }
+      .key-card {
+        background: #1a1a1a;
+        padding: 24px 28px;
+        border-radius: 12px;
+        max-width: 440px;
+        width: 90%;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      }
+      .key-card h2 {
+        margin: 0 0 8px;
+        font-size: 18px;
+      }
+      .key-card p {
+        margin: 0 0 16px;
+        font-size: 13px;
+        color: #aaa;
+        line-height: 1.4;
+      }
+      .key-card a {
+        color: #4a90e2;
+      }
+      .key-card input {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #555;
+        background: #111;
+        color: #eee;
+        font-size: 14px;
+        box-sizing: border-box;
+        margin-bottom: 12px;
+      }
+      .key-card button {
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: none;
+        background: #4a90e2;
+        color: white;
+        cursor: pointer;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="keyOverlay" class="key-overlay" style="display: none">
+      <div class="key-card">
+        <h2>Gemini API key</h2>
+        <p>
+          This demo needs a Gemini API key with Live API access. Get one from
+          <a
+            href="https://aistudio.google.com/app/apikey"
+            target="_blank"
+            rel="noopener"
+            >aistudio.google.com</a
+          >. The key is saved in your browser's localStorage and only sent to
+          Google.
+        </p>
+        <input id="keyInput" type="password" placeholder="AIza..." />
+        <button id="keySave">save and reload</button>
+      </div>
+    </div>
+
+    <script>
+      // Resolve gemini key: ?key= URL param > localStorage > ./keys.json > overlay.
+      (async function () {
+        const STORAGE_KEY = 'gemini-api-key';
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('key')) {
+          window.localStorage.setItem(STORAGE_KEY, params.get('key'));
+          return;
+        }
+        const stored = window.localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          params.set('key', stored);
+          const newUrl =
+            window.location.pathname +
+            '?' +
+            params.toString() +
+            window.location.hash;
+          window.history.replaceState(null, '', newUrl);
+          return;
+        }
+        try {
+          const res = await fetch('./keys.json', {cache: 'no-store'});
+          if (res.ok) {
+            const k = (await res.json()).key;
+            if (k) {
+              window.localStorage.setItem(STORAGE_KEY, k);
+              params.set('key', k);
+              window.location.search = '?' + params.toString();
+              return;
+            }
+          }
+        } catch (_) {
+          // no keys.json, fall through to overlay
+        }
+        const overlay = document.getElementById('keyOverlay');
+        const input = document.getElementById('keyInput');
+        const save = document.getElementById('keySave');
+        overlay.style.display = 'flex';
+        const submit = () => {
+          const k = input.value.trim();
+          if (!k) return;
+          window.localStorage.setItem(STORAGE_KEY, k);
+          params.set('key', k);
+          window.location.search = '?' + params.toString();
+        };
+        save.addEventListener('click', submit);
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') submit();
+        });
+        input.focus();
+      })();
+    </script>
+
+    <div class="panel" id="panel">
+      <div class="row">
+        <button class="start" id="start">Start companion</button>
+        <button class="stop" id="stop" disabled>Stop</button>
+        <button id="clear">Clear labels</button>
+      </div>
+      <div class="transcript" id="transcript"></div>
+      <div class="status" id="status">idle</div>
+    </div>
+
+    <script type="module">
+      import * as THREE from 'three';
+      import * as xb from 'xrblocks';
+      import 'xrblocks/addons/simulator/SimulatorAddons.js';
+      import {GeminiManager} from 'xrblocks/addons/ai/GeminiManager.js';
+      import {
+        ManipulationBehavior,
+        UICore,
+        UIIcon,
+        UIPanel,
+        UIText,
+      } from 'uiblocks';
+      import {Text} from 'troika-three-text';
+      import {marked} from 'marked';
+      import DOMPurify from 'dompurify';
+
+      const startBtn = document.getElementById('start');
+      const stopBtn = document.getElementById('stop');
+      const clearBtn = document.getElementById('clear');
+      const transcriptEl = document.getElementById('transcript');
+      const statusEl = document.getElementById('status');
+
+      const labels = new THREE.Group();
+      // The Gemini Live + camera-streaming session driver (addons/ai). Created
+      // and registered before xb.init so its init() can wire up ai + camera.
+      let geminiManager = null;
+      let turns = [];
+      let xrStatusText = null;
+
+      // System instruction / persona handed to the Live session on start.
+      const COMPANION_PROMPT =
+        'You are a helpful AR companion. The user is wearing a headset ' +
+        'and you receive their camera every second. Keep replies short ' +
+        'and conversational. Only call placeLabel when the user explicitly ' +
+        'asks you to label, point to, or mark something, never proactively ' +
+        'label things you happen to see. When the user asks you to label or ' +
+        'mark objects, call placeLabel for every item they named in one ' +
+        'call. Do not decide for yourself whether something is in view: the ' +
+        'tool runs object detection and reports which items it placed and ' +
+        'which it could not find, so always attempt them and base your reply ' +
+        'on that result rather than refusing up front. Use lookCloser when ' +
+        "the user asks about what they're pointing at. When you tell the " +
+        'user you are about to label, point to, or mark something, you must ' +
+        'call placeLabel in the same turn, never promise to do it later or ' +
+        'in a follow-up message. Never say tool names, function calls, tool ' +
+        'results, JSON, brackets, or field names like "anchored", "style", ' +
+        '"items", or "text" out loud or in your reply. After a tool runs, ' +
+        'reply with only a short natural sentence based on the outcome, for ' +
+        'example "Done" or "I couldn\'t find the lamp".';
+
+      const embedCache = new Map();
+      // Cosine threshold for the SEMANTIC_SIMILARITY embeddings. Calibrated so
+      // related furniture words (chair/stool, chair/sofa, light/ceiling lamp)
+      // match while unrelated ones (chair/window, lamp/sofa) don't.
+      const SIM_THRESHOLD = 0.87;
+      // Discard a label if the matched object is more than this many metres from
+      // the camera (filters far-wall false matches). Tune for room size.
+      const MAX_ANCHOR_DIST = 8;
+      function cosine(a, b) {
+        if (!a || !b || a.length !== b.length) return 0;
+        let dot = 0,
+          na = 0,
+          nb = 0;
+        for (let i = 0; i < a.length; i++) {
+          dot += a[i] * b[i];
+          na += a[i] * a[i];
+          nb += b[i] * b[i];
+        }
+        const denom = Math.sqrt(na) * Math.sqrt(nb);
+        return denom ? dot / denom : 0;
+      }
+      async function embed(text) {
+        const k = (text || '').toLowerCase().trim();
+        if (!k) return null;
+        if (embedCache.has(k)) {
+          const v = embedCache.get(k);
+          return v instanceof Promise ? await v : v;
+        }
+        const ai = xb.core.ai?.model?.ai;
+        if (!ai?.models?.embedContent) return null;
+        const promise = ai.models
+          .embedContent({
+            model: 'gemini-embedding-001',
+            contents: k,
+            config: {taskType: 'SEMANTIC_SIMILARITY'},
+          })
+          .then((r) => {
+            const vec = r.embeddings?.[0]?.values || null;
+            if (vec) embedCache.set(k, vec);
+            else embedCache.delete(k);
+            return vec;
+          })
+          .catch(() => {
+            embedCache.delete(k);
+            return null;
+          });
+        embedCache.set(k, promise);
+        return await promise;
+      }
+      function simSync(a, b) {
+        const va = embedCache.get((a || '').toLowerCase().trim());
+        const vb = embedCache.get((b || '').toLowerCase().trim());
+        if (!va || !vb) return 0;
+        if (va instanceof Promise || vb instanceof Promise) return 0;
+        return cosine(va, vb);
+      }
+
+      function setStatus(s) {
+        statusEl.textContent = s;
+        if (xrStatusText) xrStatusText.setText(s.replace(/…/g, '...'));
+      }
+      function renderTranscript() {
+        transcriptEl.innerHTML = DOMPurify.sanitize(
+          turns
+            .filter((t) => t.text.trim())
+            .map((t) => {
+              const who = t.role === 'user' ? 'You' : 'Companion';
+              const body =
+                t.role === 'user'
+                  ? t.text.replace(/[&<>]/g, (c) => {
+                      return {'&': '&amp;', '<': '&lt;', '>': '&gt;'}[c];
+                    })
+                  : marked.parseInline(t.text);
+              return (
+                `<p class="turn ${t.role}"><span class="who">${who}:</span> ` +
+                `${body}</p>`
+              );
+            })
+            .join('')
+        );
+        transcriptEl.scrollTop = transcriptEl.scrollHeight;
+      }
+      // Appends a streamed transcript chunk, starting a fresh bubble whenever
+      // the speaker changes or the previous turn was finalized.
+      function appendTurn(role, chunk) {
+        let last = turns[turns.length - 1];
+        if (!last || last.role !== role || last.done) {
+          last = {role, text: '', done: false};
+          turns.push(last);
+        }
+        last.text += chunk;
+        renderTranscript();
+      }
+      function finalizeTurns() {
+        turns.forEach((t) => (t.done = true));
+      }
+
+      function makeTools() {
+        const placeLabel = new xb.Tool({
+          name: 'placeLabel',
+          description:
+            'Drop one or more labels. Pass items[] to mark several things at ' +
+            'once (e.g. ["mug","laptop","keys"]). Each item is anchored to a ' +
+            'matching detected object; if no match is found the item is ' +
+            'skipped (no marker placed) and reported back with ' +
+            '`anchored: false, reason: "not_found"` so you can tell the user ' +
+            'you could not see it. Choose a style per item: "dot" for casual ' +
+            'noting, "arrow" when pointing something out, "pulse" for small ' +
+            'or hard-to-spot things.',
+          parameters: {
+            type: 'OBJECT',
+            properties: {
+              items: {
+                type: 'ARRAY',
+                description:
+                  'Labels to place. Use multiple entries to mark several ' +
+                  'objects at once instead of calling the tool repeatedly.',
+                items: {
+                  type: 'OBJECT',
+                  properties: {
+                    text: {
+                      type: 'STRING',
+                      description: 'Short label, ~3 words.',
+                    },
+                    style: {
+                      type: 'STRING',
+                      enum: ['dot', 'arrow', 'pulse'],
+                      description: 'Marker style. Defaults to dot.',
+                    },
+                  },
+                  required: ['text'],
+                },
+              },
+              text: {
+                type: 'STRING',
+                description:
+                  'Single-label shortcut. Prefer items[] for one or more.',
+              },
+              style: {
+                type: 'STRING',
+                enum: ['dot', 'arrow', 'pulse'],
+                description: 'Style for the single-label shortcut.',
+              },
+            },
+          },
+          onTriggered: async ({items, text, style}) => {
+            const stripQuotes = (k) => k.replace(/^['"]+|['"]+$/g, '');
+            const normItem = (it) => {
+              if (typeof it === 'string') {
+                const s = it.trim();
+                // Accept a bare label ("mug") or a JSON object string.
+                if (s.startsWith('{') || s.startsWith('[')) {
+                  try {
+                    it = JSON.parse(s);
+                  } catch {
+                    return null;
+                  }
+                } else {
+                  return s ? {text: s} : null;
+                }
+              }
+              if (!it || typeof it !== 'object') return null;
+              const out = {};
+              for (const [k, v] of Object.entries(it)) {
+                out[stripQuotes(k)] = v;
+              }
+              return out;
+            };
+            let list = Array.isArray(items)
+              ? items.map(normItem).filter(Boolean)
+              : [];
+            if (text) list.push({text, style});
+            if (!list.length) {
+              return {success: false, error: 'no items provided'};
+            }
+
+            const callKey = list
+              .map((it) => (it.text || '').toLowerCase().trim())
+              .sort()
+              .join('|');
+            const now = performance.now();
+            if (
+              placeLabel._lastKey === callKey &&
+              now - (placeLabel._lastAt || 0) < 2000
+            ) {
+              return (
+                placeLabel._lastResult || {
+                  success: true,
+                  data: {placed: [], detected: []},
+                }
+              );
+            }
+            placeLabel._lastKey = callKey;
+            placeLabel._lastAt = now;
+
+            // Object detection is non-deterministic and sometimes returns a
+            // sparse or unrelated set (e.g. just ["coffee table"]). Reuse a
+            // recent detection so a rapid second placeLabel doesn't re-roll the
+            // detector and contradict an earlier good result.
+            const DETECTION_TTL = 3500;
+            let detected = [];
+            const detCache = placeLabel._detCache;
+            if (
+              detCache &&
+              now - detCache.at < DETECTION_TTL &&
+              detCache.objects.length
+            ) {
+              detected = detCache.objects;
+            } else {
+              try {
+                if (xb.core.world?.objects) {
+                  detected = await xb.core.world.objects.runDetection();
+                }
+              } catch (e) {
+                console.warn('[placeLabel] detection threw', e);
+              }
+              // Keep the richer of fresh vs a still-recent cached detection so
+              // a degenerate re-detection doesn't clobber a good one.
+              if (
+                detCache &&
+                now - detCache.at < DETECTION_TTL &&
+                detCache.objects.length > detected.length
+              ) {
+                detected = detCache.objects;
+              } else {
+                placeLabel._detCache = {at: now, objects: detected};
+              }
+            }
+            // The detector returns names with leading articles ("the chair")
+            // and trailing location phrases ("art piece on the left"), which
+            // read badly as labels and weaken the embedding match. Trim both
+            // down to the core object name.
+            const cleanLabel = (s) =>
+              (s || '')
+                .replace(/^\s*(the|a|an)\s+/i, '')
+                .replace(
+                  /\s+(on|in|at|near|by|under|over|above|below|behind|beside)\s+(the|a|an)\s+.+$/i,
+                  ''
+                )
+                .trim();
+            detected.forEach((d) => {
+              if (d && d.label) d.label = cleanLabel(d.label);
+            });
+
+            const STOPWORDS = new Set([
+              'the',
+              'a',
+              'an',
+              'of',
+              'on',
+              'in',
+              'with',
+              'and',
+              'to',
+              'for',
+              'piece',
+              'item',
+              'thing',
+              'object',
+              'another',
+              'other',
+              'that',
+              'this',
+              'these',
+              'those',
+              'same',
+              'left',
+              'right',
+              'middle',
+              'small',
+              'large',
+              'big',
+              'tiny',
+              'white',
+              'black',
+              'red',
+              'blue',
+              'green',
+              'yellow',
+              'gray',
+              'grey',
+              'brown',
+              'tall',
+              'short',
+              'wide',
+            ]);
+            const tokens = (s) =>
+              (s || '')
+                .toLowerCase()
+                .split(/[^a-z0-9]+/)
+                .filter((t) => t && !STOPWORDS.has(t));
+            // Reduce a phrase to its core noun(s) for embedding, so modifiers
+            // ("another chair", "green chair") match the same as "chair".
+            const core = (s) =>
+              tokens(s).join(' ') || (s || '').toLowerCase().trim();
+
+            const embedTargets = new Set();
+            list.forEach((it) => it?.text && embedTargets.add(core(it.text)));
+            detected.forEach(
+              (d) => d?.label && embedTargets.add(core(d.label))
+            );
+            labels.children.forEach(
+              (g) => g.userData.text && embedTargets.add(core(g.userData.text))
+            );
+            await Promise.all([...embedTargets].map((t) => embed(t)));
+            if (xrStatusText) {
+              const want = list.map((it) => it.text).join(', ');
+              const got = detected.map((d) => d.label).join(', ') || '(none)';
+              xrStatusText.setText(`want: ${want} | got: ${got}`);
+            }
+
+            const expand = (s) => {
+              const t = (s || '').toLowerCase().trim();
+              return t ? [t] : [];
+            };
+            const used = new Set();
+            // True when a detection already has a label near it, so a request
+            // to mark "another" one prefers a different, unlabeled object.
+            const LABELED_DIST = 0.4;
+            const isLabeled = (d) =>
+              !!d.position &&
+              labels.children.some(
+                (g) => g.position.distanceTo(d.position) <= LABELED_DIST
+              );
+            const findMatchIn = (text, candidates) => {
+              const needles = expand(text);
+              if (!needles.length) return null;
+              const free = candidates.filter((d) => !used.has(d));
+              for (const needle of needles) {
+                const exact =
+                  free.find((d) => d.label?.toLowerCase().includes(needle)) ||
+                  free.find((d) =>
+                    needle.includes(d.label?.toLowerCase() || '\0')
+                  );
+                if (exact) return exact;
+              }
+              const wantTokens = new Set(tokens(text));
+              const tokenMatch =
+                wantTokens.size === 0
+                  ? null
+                  : free.find((d) => {
+                      for (const t of tokens(d.label)) {
+                        if (wantTokens.has(t)) return true;
+                      }
+                      return false;
+                    }) || null;
+              if (tokenMatch) return tokenMatch;
+              let best = null;
+              let bestSim = SIM_THRESHOLD;
+              for (const d of free) {
+                const s = simSync(core(text), core(d.label));
+                if (s > bestSim) {
+                  bestSim = s;
+                  best = d;
+                }
+              }
+              return best;
+            };
+            // Prefer an unlabeled object; fall back to any match (e.g. when the
+            // user re-references the one thing already marked).
+            const findMatch = (text) =>
+              findMatchIn(
+                text,
+                detected.filter((d) => !isLabeled(d))
+              ) || findMatchIn(text, detected);
+            const camForRange = xb.core.camera;
+            const camPosForRange = new THREE.Vector3();
+            if (camForRange) camForRange.getWorldPosition(camPosForRange);
+            const snapRaycaster = new THREE.Raycaster();
+            const snapToDepth = (target) => {
+              const depthMesh = xb.core.depth?.depthMesh;
+              if (!depthMesh) return null;
+              const dir = target.clone().sub(camPosForRange).normalize();
+              snapRaycaster.set(camPosForRange, dir);
+              snapRaycaster.far = MAX_ANCHOR_DIST;
+              const hits = [];
+              depthMesh.raycast(snapRaycaster, hits);
+              return hits.length ? hits[0].point.clone() : null;
+            };
+            const batchKey = `b${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+            const placed = [];
+            list.forEach((item, i) => {
+              let match = findMatch(item.text);
+              const initialMatch = match;
+              if (match && camForRange) {
+                const d = camPosForRange.distanceTo(match.position);
+                if (d > MAX_ANCHOR_DIST) {
+                  const snapped = snapToDepth(match.position);
+                  if (snapped) {
+                    match = {...match, position: snapped};
+                  } else {
+                    match = null;
+                  }
+                }
+              }
+              const itemStyle = item.style || 'dot';
+              if (match) {
+                used.add(match);
+                placeMarker(
+                  match.position,
+                  match.label || item.text,
+                  itemStyle,
+                  batchKey
+                );
+                placed.push({
+                  placed: match.label,
+                  requested: item.text,
+                  style: itemStyle,
+                  anchored: true,
+                });
+              } else {
+                placed.push({
+                  requested: item.text,
+                  style: itemStyle,
+                  anchored: false,
+                  reason: 'not_found',
+                });
+              }
+            });
+            const result = {
+              success: true,
+              data: {
+                placed,
+                detected: detected.map((d) => d.label),
+              },
+            };
+            placeLabel._lastResult = result;
+            return result;
+          },
+        });
+
+        const lookCloser = new xb.Tool({
+          name: 'lookCloser',
+          description:
+            "Find which object the user's reticle is currently aimed at. " +
+            "Returns the object name, or 'nothing' if the reticle is in empty space.",
+          onTriggered: async () => {
+            try {
+              const target = xb.core.user.getReticleTarget(0);
+              return {
+                success: true,
+                data: {target: target?.name || target?.type || 'nothing'},
+              };
+            } catch (err) {
+              console.warn('[lookCloser] error', err);
+              return {success: false, error: err.message};
+            }
+          },
+        });
+
+        return [placeLabel, lookCloser];
+      }
+
+      function placeMarker(position, text, style, batchKey) {
+        // Dedupe by world position: the same physical spot only gets one
+        // label (re-labelling moves/updates it), but two different objects of
+        // the same kind keep their own labels. Skip same-batch labels so a
+        // single multi-item request doesn't merge its own items together.
+        const DEDUP_DIST = 0.4;
+        const candidates = labels.children.filter(
+          (g) => !batchKey || g.userData.batchKey !== batchKey
+        );
+        let existing = null;
+        let bestDist = DEDUP_DIST;
+        for (const g of candidates) {
+          const dist = g.position.distanceTo(position);
+          if (dist <= bestDist) {
+            bestDist = dist;
+            existing = g;
+          }
+        }
+        if (existing) {
+          if (existing.userData.style !== style) {
+            labels.remove(existing);
+          } else {
+            existing.position.copy(position);
+            existing.userData.t0 = performance.now() / 1000;
+            existing.userData.text = text;
+            const labelChild = existing.children.find(
+              (c) => c.isText || c.text
+            );
+            if (labelChild && 'text' in labelChild) {
+              labelChild.text = text;
+              labelChild.sync && labelChild.sync();
+            }
+            return;
+          }
+        }
+
+        const group = new THREE.Group();
+        group.position.copy(position);
+        group.userData.style = style;
+        group.userData.text = text;
+        group.userData.t0 = performance.now() / 1000;
+        group.userData.batchKey = batchKey;
+        if (style === 'arrow') {
+          const arrow = buildArrow();
+          arrow.position.set(0, 0.25, 0);
+          group.add(arrow);
+          group.userData.arrow = arrow;
+        } else if (style === 'pulse') {
+          const ring = buildPulseRing();
+          group.add(ring);
+          group.userData.ring = ring;
+        } else {
+          const sphere = new THREE.Mesh(
+            new THREE.SphereGeometry(0.04, 16, 16),
+            new THREE.MeshBasicMaterial({color: 0xffd54f})
+          );
+          group.add(sphere);
+        }
+        const label = new Text();
+        label.text = text;
+        label.fontSize = 0.05;
+        label.color = 0xffffff;
+        label.outlineWidth = 0.004;
+        label.outlineColor = 0x000000;
+        label.anchorX = 'center';
+        label.anchorY = 'bottom';
+        label.position.set(0, style === 'arrow' ? 0.4 : 0.06, 0);
+        label.depthOffset = -1;
+        label.renderOrder = 999;
+        label.material.depthTest = false;
+        label.material.depthWrite = false;
+        label.material.transparent = true;
+        group.add(label);
+        label.sync();
+        labels.add(group);
+      }
+
+      function buildArrow() {
+        const group = new THREE.Group();
+        const mat = new THREE.MeshBasicMaterial({color: 0x42a5f5});
+        const stem = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.012, 0.012, 0.12, 12),
+          mat
+        );
+        stem.position.y = 0.08;
+        const tip = new THREE.Mesh(
+          new THREE.ConeGeometry(0.035, 0.06, 16),
+          mat
+        );
+        tip.position.y = 0;
+        tip.rotation.x = Math.PI;
+        group.add(stem);
+        group.add(tip);
+        return group;
+      }
+
+      function buildPulseRing() {
+        const ring = new THREE.Mesh(
+          new THREE.RingGeometry(0.05, 0.06, 32),
+          new THREE.MeshBasicMaterial({
+            color: 0xff8a65,
+            transparent: true,
+            opacity: 0.9,
+            side: THREE.DoubleSide,
+          })
+        );
+        ring.rotation.x = -Math.PI / 2;
+        return ring;
+      }
+
+      const _camWorldPos = new THREE.Vector3();
+      function animateMarkers() {
+        const now = performance.now() / 1000;
+        const cam = xb.core.camera;
+        if (cam) cam.getWorldPosition(_camWorldPos);
+        for (const g of labels.children) {
+          const dt = now - (g.userData.t0 || now);
+          if (g.userData.style === 'arrow' && g.userData.arrow) {
+            g.userData.arrow.position.y = 0.25 + Math.sin(dt * 3) * 0.02;
+          } else if (g.userData.style === 'pulse' && g.userData.ring) {
+            const phase = (dt % 1.5) / 1.5;
+            const s = 1 + phase * 3;
+            g.userData.ring.scale.setScalar(s);
+            g.userData.ring.material.opacity = 0.9 * (1 - phase);
+          }
+          if (cam) {
+            for (const c of g.children) {
+              if (typeof c.text === 'string') {
+                // Troika Text reads from its local -Z side, so aim that at
+                // the camera with a plain lookAt.
+                c.lookAt(_camWorldPos);
+              }
+            }
+          }
+        }
+        requestAnimationFrame(animateMarkers);
+      }
+      requestAnimationFrame(animateMarkers);
+
+      // Guards against a second start while the first is still opening (the
+      // XR and DOM buttons can both fire before isAIRunning flips true).
+      let starting = false;
+      async function start() {
+        if (starting || geminiManager.isAIRunning) return;
+        starting = true;
+        startBtn.disabled = true;
+        setStatus('opening session...');
+        turns = [];
+        transcriptEl.innerHTML = '';
+        try {
+          // Clear any leftover labels from prior session to avoid stacking.
+          clearLabels();
+          await geminiManager.startGeminiLive({
+            liveParams: {
+              systemInstruction: {parts: [{text: COMPANION_PROMPT}]},
+            },
+            tools: makeTools(),
+            // Stream raw passthrough frames (not a render of virtual content),
+            // downscaled to keep bandwidth and latency low.
+            captureMode: 'camera',
+            camera: {fps: 1, width: 640, height: 480},
+          });
+          setStatus('listening');
+          stopBtn.disabled = false;
+        } catch (err) {
+          setStatus('error: ' + err.message);
+          startBtn.disabled = false;
+          console.error(err);
+        } finally {
+          starting = false;
+        }
+      }
+
+      async function stop() {
+        // Don't let a stop (e.g. the always-enabled XR button) race a start in
+        // progress; stopGeminiLive would no-op while isAIRunning is still false
+        // and the pending start would complete anyway.
+        if (starting) return;
+        stopBtn.disabled = true;
+        setStatus('stopping...');
+        try {
+          await geminiManager.stopGeminiLive();
+        } finally {
+          startBtn.disabled = false;
+          setStatus('idle');
+        }
+      }
+
+      function clearLabels() {
+        // Dispose each label's geometry/material, then detach them all.
+        // labels.clear() removes every child and resets its parent, so there's
+        // no need to pop() and remove() each one.
+        for (const c of labels.children) {
+          c.traverse((n) => {
+            n.geometry?.dispose();
+            n.material?.dispose();
+          });
+        }
+        labels.clear();
+      }
+
+      startBtn.addEventListener('click', start);
+      stopBtn.addEventListener('click', stop);
+      clearBtn.addEventListener('click', clearLabels);
+
+      const options = new xb.Options();
+      options.enableUI();
+      options.enableAI();
+      options.enableCamera();
+      options.enableDepth();
+      options.depth.depthMesh.updateFullResolutionGeometry = true;
+      options.depth.depthMesh.renderShadow = true;
+      options.depth.depthTexture.enabled = false;
+      options.depth.matchDepthView = false;
+      options.enableObjectDetection();
+      options.world.objects.backendConfig.activeBackend = 'gemini';
+      options.world.objects.showDebugVisualizations = false;
+      options.reticles.enabled = true;
+      options.setAppTitle('World Companion');
+
+      geminiManager = new GeminiManager();
+      // The companion replies in audio; the spoken text + the user's own
+      // recognized speech come back as transcription events, which we render
+      // as a two-sided transcript. turnComplete separates exchanges.
+      geminiManager.addEventListener('outputTranscription', (e) =>
+        appendTurn('model', e.message)
+      );
+      geminiManager.addEventListener('inputTranscription', (e) =>
+        appendTurn('user', e.message)
+      );
+      geminiManager.addEventListener('turnComplete', () => finalizeTurns());
+      // Reset the controls if the session ends on its own (server-side close)
+      // so it doesn't stay stuck showing "listening" with Stop enabled.
+      geminiManager.addEventListener('close', () => {
+        if (starting) return;
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        setStatus('disconnected');
+      });
+      xb.add(geminiManager);
+
+      // Immersive control panel built with uiblocks (preferred over the older
+      // xb.SpatialPanel). Mirrors the DOM controls and shows live status. An
+      // xb.Script so UICore gets its lifecycle hooks; draggable so users can
+      // place it anywhere.
+      class WorldCompanionPanel extends xb.Script {
+        init() {
+          this.uiCore = new UICore(this);
+          const card = this.uiCore.createCard({
+            name: 'WorldCompanionControlCard',
+            position: new THREE.Vector3(0, 1.3, -0.8),
+            sizeX: 0.56,
+            sizeY: 0.2,
+          });
+          const panel = new UIPanel({
+            width: '100%',
+            height: '100%',
+            fillColor: 'rgba(10, 12, 16, 0.94)',
+            strokeWidth: 2,
+            strokeColor: 'rgba(126, 231, 135, 0.45)',
+            cornerRadius: 18,
+            padding: 14,
+            flexDirection: 'column',
+            gap: 8,
+            alignItems: 'stretch',
+            justifyContent: 'center',
+          });
+          const titleText = new UIText('WORLD COMPANION', {
+            fontSize: 18,
+            fontWeight: 'bold',
+            color: '#7ee787',
+            textAlign: 'center',
+            width: '100%',
+          });
+          xrStatusText = new UIText('idle', {
+            fontSize: 12,
+            color: '#8b97a7',
+            textAlign: 'center',
+            width: '100%',
+          });
+          const separator = new UIPanel({
+            width: '100%',
+            height: 1,
+            fillColor: 'rgba(255, 255, 255, 0.10)',
+          });
+          const buttonRow = new UIPanel({
+            width: '100%',
+            flexDirection: 'row',
+            gap: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+          });
+          buttonRow.add(this.makeXrButton('mic', 'talk', start));
+          buttonRow.add(this.makeXrButton('stop', 'stop', stop));
+          buttonRow.add(
+            this.makeXrButton('delete_sweep', 'clear', clearLabels)
+          );
+          panel.add(titleText);
+          panel.add(xrStatusText);
+          panel.add(separator);
+          panel.add(buttonRow);
+          card.add(panel);
+          card.addBehavior(
+            new ManipulationBehavior({draggable: true, faceCamera: true})
+          );
+        }
+
+        // Icon + caption button mirroring a DOM control. renderOrder/depthTest
+        // pin the label and icon on top of the fill so they read from every
+        // angle (the uiblocks button fill otherwise draws over nested text).
+        makeXrButton(iconName, label, onClick) {
+          const idle = '#2a2a2a';
+          const hover = '#3a3a3a';
+          const btn = new UIPanel({
+            paddingTop: 8,
+            paddingBottom: 8,
+            paddingLeft: 16,
+            paddingRight: 16,
+            cornerRadius: 12,
+            fillColor: idle,
+            strokeWidth: 1,
+            strokeColor: '#444444',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 8,
+            renderOrder: 10,
+            onHoverEnter: () => btn.setFillColor(hover),
+            onHoverExit: () => btn.setFillColor(idle),
+            onClick: () => {
+              btn.setFillColor('#4796e3');
+              setTimeout(() => btn.setFillColor(idle), 180);
+              onClick();
+            },
+          });
+          btn.add(
+            new UIIcon(iconName, {
+              color: 'white',
+              width: 22,
+              height: 22,
+              renderOrder: 12,
+            })
+          );
+          btn.add(
+            new UIText(label, {
+              fontSize: 14,
+              color: '#ffffff',
+              fontWeight: 'bold',
+              depthTest: false,
+              renderOrder: 100,
+            })
+          );
+          return btn;
+        }
+      }
+      xb.add(new WorldCompanionPanel());
+
+      xb.init(options);
+      xb.core.scene.add(labels);
+    </script>
+  </body>
+</html>
