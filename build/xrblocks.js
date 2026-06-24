@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.16.0
- * @commitid 479bd10
- * @builddate 2026-06-23T03:56:42.991Z
+ * @commitid 115e130
+ * @builddate 2026-06-24T01:40:35.319Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -3033,7 +3033,7 @@ class ScreenshotSynthesizer {
         }
         const mainRenderTargetSingleViewWidth = isRenderingStereo
             ? mainRenderTargetSize.x / 2
-            : mainRenderTargetSize.y;
+            : mainRenderTargetSize.x;
         const scaledHeight = Math.round(mainRenderTargetSize.y *
             (this.renderTargetWidth / mainRenderTargetSingleViewWidth));
         if (!this.virtualRealRenderTarget ||
