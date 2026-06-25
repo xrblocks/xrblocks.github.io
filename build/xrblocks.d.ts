@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.16.0
- * @commitid 9465db0
- * @builddate 2026-06-25T16:31:48.472Z
+ * @commitid 6f69287
+ * @builddate 2026-06-25T16:38:21.816Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -5607,8 +5607,9 @@ declare class SimulatorHands {
      */
     init({ input }: {
         input: Input;
-    }): void;
-    loadMeshes(): void;
+    }): Promise<void>;
+    loadMeshes(): Promise<[void, void]>;
+    private loadHandMesh;
     setLeftHandLerpPose(pose: SimulatorHandPose): void;
     setRightHandLerpPose(pose: SimulatorHandPose): void;
     /** Applies semantic biomechanical rotations from SimulatorHandPoseRotations. */
