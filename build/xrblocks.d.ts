@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.19.0
- * @commitid b6e8351
- * @builddate 2026-08-07T14:55:50.780Z
+ * @commitid 7f552a4
+ * @builddate 2026-08-07T21:55:01.454Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -8941,6 +8941,7 @@ declare class Core {
     depth: Depth;
     lighting?: Lighting;
     physics?: Physics;
+    private physicsIntervalId?;
     xrButton?: XRButton;
     effects?: XREffects;
     ai: AI;
