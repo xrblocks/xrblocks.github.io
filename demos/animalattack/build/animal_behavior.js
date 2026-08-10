@@ -38,9 +38,6 @@ const BOB_SINE_MULT = 3.0;
 const BOB_AMP = 0.005;
 const FALL_SPEED = 12.0;
 const FALL_GROUND_OFFSET = 1.5;
-const DISTANCE_SCALE_START = 2.0;
-const DISTANCE_SCALE_MULT = 0.6;
-const DISTANCE_SCALE_MAX = 6.0;
 const BREATH_FREQ = 4;
 const BREATH_AMP = 0.03;
 const TALK_FREQ = 20;
@@ -62,13 +59,10 @@ const sharedRaycaster = new THREE.Raycaster();
 /** Defines and updates behavioral states like wandering, falling, and dragging for animals. */
 class AnimalBehavior {
     /** Updates the transformation of an animal being actively dragged by the user. */
-    static updateDragTransform(isDragging, draggedAnimal, dragSource, raycaster, pointer, camera, depthMesh, dragDistance) {
+    static updateDragTransform(isDragging, draggedAnimal, dragSource, raycaster, camera, depthMesh, dragDistance) {
         if (!isDragging || !draggedAnimal || !camera)
             return;
-        if (dragSource === 'desktop') {
-            raycaster.setFromCamera(pointer, camera);
-        }
-        else if (dragSource instanceof THREE.Object3D) {
+        if (dragSource) {
             dragSource.updateMatrixWorld(true);
             InteractionUtils.setRaycasterFromXRController(raycaster, dragSource);
         }
@@ -300,16 +294,11 @@ class AnimalBehavior {
         }
     }
     /** Applies a subtle scale oscillation to animals to simulate breathing or talking. */
-    static updateBreathing(spawnedAnimals, time, animalModels, isDragging, camera) {
+    static updateBreathing(spawnedAnimals, time, animalModels, isDragging) {
         for (const modelViewer of spawnedAnimals.values()) {
-            const { userData, position, scale } = modelViewer;
+            const { userData, scale } = modelViewer;
             const animalData = animalModels[userData.typeIndex];
-            let distanceScale = 1.0;
-            if (camera && position.y > ACTIVE_Y_THRESHOLD) {
-                const dist = position.distanceTo(camera.position);
-                distanceScale = Math.min(1.0 + Math.max(0, dist - DISTANCE_SCALE_START) * DISTANCE_SCALE_MULT, DISTANCE_SCALE_MAX);
-            }
-            const baseScale = animalData.scale * distanceScale;
+            const baseScale = animalData.scale;
             const breath = baseScale +
                 Math.sin(time * BREATH_FREQ + userData.animalIndex) *
                     (baseScale * BREATH_AMP);

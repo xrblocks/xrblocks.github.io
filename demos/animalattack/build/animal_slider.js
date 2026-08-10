@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { createSpatialPanel } from './spatial_action_panel.js';
+import * as xb from 'xrblocks';
 
 const PANEL_WIDTH = 1.2;
 const PANEL_HEIGHT = 0.6;
@@ -7,88 +7,113 @@ const PANEL_POS_X = 0;
 const PANEL_POS_Y = 2.2;
 const PANEL_POS_Z = -1;
 const PANEL_ROT_X = Math.PI / 8;
-const ROW_WEIGHT = 1.0;
-const BTN_COL_WEIGHT = 0.25;
-const SPACE_COL_WEIGHT = 0.5;
-const ICON_FONT_SIZE = 0.6;
-const ICON_FONT_COLOR = '#ffffff';
-const MESH_WIDTH = 0.4;
-const MESH_HEIGHT = 0.4;
-const ALPHA_TEST = 0.1;
+const IMAGE_SIZE = 280;
+const MESH_WIDTH = 0.28;
+const MESH_HEIGHT = 0.28;
 const Z_OFFSET = 0.01;
 /** UI component that presents a slider interface for selecting animal models. */
 class AnimalSlider {
     models;
     currentIndex = 0;
     paletteItems = [];
-    textures;
     panel;
     prevBtn;
     nextBtn;
-    sliderMaterial;
+    animalImage;
+    animalName;
     sliderMesh;
     constructor(scene, models) {
         this.models = models;
-        this.textures = models.map(({ img }) => new THREE.TextureLoader().load(img));
         this.panel = AnimalSlider.createPanel();
-        scene.add(this.panel);
-        this.setupGrid();
-        this.setupMesh();
+        this.prevBtn = this.createSlideButton('arrow_back', 'Previous animal', -1);
+        this.nextBtn = this.createSlideButton('arrow_forward', 'Next animal', 1);
+        this.animalImage = new xb.UIImage({
+            src: models[0].img,
+            ariaLabel: models[0].name,
+            style: {
+                width: IMAGE_SIZE,
+                height: IMAGE_SIZE,
+                objectFit: 'contain',
+            },
+        });
+        this.animalName = new xb.UIText({
+            text: models[0].name,
+            style: { fontSize: 28, fontWeight: 'bold', textAlign: 'center' },
+        });
+        const controls = new xb.UIPanel({
+            style: {
+                width: '100%',
+                flexGrow: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: 16,
+            },
+        });
+        controls.add(this.prevBtn, this.animalImage, this.nextBtn);
+        this.panel.add(this.animalName, controls);
+        this.sliderMesh = this.createPaletteHitbox();
+        scene.add(this.panel, this.sliderMesh);
     }
     /** Creates the base spatial panel for the slider. */
     static createPanel() {
-        return createSpatialPanel(PANEL_WIDTH, PANEL_HEIGHT, new THREE.Vector3(PANEL_POS_X, PANEL_POS_Y, PANEL_POS_Z), PANEL_ROT_X);
-    }
-    /** Initializes the UI grid and buttons for the slider. */
-    setupGrid() {
-        const grid = this.panel.addGrid();
-        const sliderRow = grid.addRow({ weight: ROW_WEIGHT });
-        this.prevBtn = sliderRow.addCol({ weight: BTN_COL_WEIGHT }).addIconButton({
-            text: 'arrow_back',
-            fontSize: ICON_FONT_SIZE,
-            fontColor: ICON_FONT_COLOR,
+        const panel = new xb.UICard({
+            size: { width: PANEL_WIDTH, height: PANEL_HEIGHT },
         });
-        sliderRow.addCol({ weight: SPACE_COL_WEIGHT }); // Restored exactly to 0.5 to fix the gap.
-        this.nextBtn = sliderRow.addCol({ weight: BTN_COL_WEIGHT }).addIconButton({
-            text: 'arrow_forward',
-            fontSize: ICON_FONT_SIZE,
-            fontColor: ICON_FONT_COLOR,
-        });
-        this.prevBtn.onTriggered = () => this.slide(-1);
-        this.nextBtn.onTriggered = () => this.slide(1);
-        this.panel.updateLayouts();
+        panel.name = 'Animal picker';
+        panel.position.set(PANEL_POS_X, PANEL_POS_Y, PANEL_POS_Z);
+        panel.rotation.x = PANEL_ROT_X;
+        return panel;
     }
-    /** Initializes the 3D mesh used to display the current animal texture. */
-    setupMesh() {
-        const geometry = new THREE.PlaneGeometry(MESH_WIDTH, MESH_HEIGHT);
-        this.sliderMaterial = new THREE.MeshBasicMaterial({
+    createSlideButton(icon, ariaLabel, direction) {
+        return new xb.UIButton({
+            icon,
+            ariaLabel,
+            onClick: () => this.slide(direction),
+            style: { width: 120, height: 100 },
+        });
+    }
+    /** Creates an invisible surface for dragging the selected animal. */
+    createPaletteHitbox() {
+        const mesh = new THREE.Mesh(new THREE.PlaneGeometry(MESH_WIDTH, MESH_HEIGHT), new THREE.MeshBasicMaterial({
+            colorWrite: false,
+            depthWrite: false,
             transparent: true,
-            alphaTest: ALPHA_TEST,
+            opacity: 0,
             side: THREE.DoubleSide,
-        });
-        this.sliderMesh = new THREE.Mesh(geometry, this.sliderMaterial);
-        this.sliderMesh.position.set(0, 0, Z_OFFSET);
-        this.sliderMesh.userData = {
+        }));
+        mesh.name = 'Animal palette drag surface';
+        mesh.position.copy(this.panel.position);
+        mesh.quaternion.copy(this.panel.quaternion);
+        mesh.translateZ(Z_OFFSET);
+        mesh.userData = {
             isPaletteItem: true,
             animalIndex: this.currentIndex,
         };
-        this.panel.add(this.sliderMesh);
-        this.paletteItems.push(this.sliderMesh);
-        this.sliderMaterial.map = this.textures[this.currentIndex];
+        this.paletteItems.push(mesh);
+        return mesh;
+    }
+    /** Returns whether a target is one of the slider buttons. */
+    isControlTarget(target) {
+        let current = target;
+        while (current) {
+            if (current === this.prevBtn || current === this.nextBtn)
+                return true;
+            current = current.parent ?? undefined;
+        }
+        return false;
     }
     /** Shifts the slider selection by the given direction offset. */
     slide(direction) {
         this.currentIndex = AnimalSlider.getWrappedIndex(this.currentIndex, direction, this.models.length);
-        this.sliderMaterial.map = this.textures[this.currentIndex];
+        const model = this.models[this.currentIndex];
+        this.animalImage.src = model.img;
+        this.animalName.text = model.name;
         this.sliderMesh.userData.animalIndex = this.currentIndex;
     }
     /** Calculates a safely wrapped array index to handle circular scrolling. */
     static getWrappedIndex(currentIndex, direction, totalLength) {
         return THREE.MathUtils.euclideanModulo(currentIndex + direction, totalLength);
-    }
-    /** Retrieves the meshes that should be interactable within this UI. */
-    getHitboxes() {
-        return [this.prevBtn, this.nextBtn, this.sliderMesh];
     }
     /** Retrieves the draggable/spawning elements from the slider. */
     getPaletteItems() {

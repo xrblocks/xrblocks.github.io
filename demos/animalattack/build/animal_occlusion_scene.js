@@ -40,10 +40,9 @@ const sharedVectorC = new THREE.Vector3();
 const sharedVectorD = new THREE.Vector3();
 /** Main scene controller for the Animal Attack interactive application. */
 class AnimalOcclusionScene extends xb.Script {
-    pointer = new THREE.Vector2();
+    static dependencies = { camera: THREE.Camera, depth: xb.Depth };
     raycaster = new THREE.Raycaster();
     spawnedAnimals = new Map();
-    mixers = [];
     draggedAnimal = null;
     isDragging = false;
     dragSource = null;
@@ -55,9 +54,12 @@ class AnimalOcclusionScene extends xb.Script {
     particleSystem = new ParticleSystem(this);
     sliderUI;
     weaponUI;
-    async init() {
+    camera;
+    depth;
+    async init({ camera, depth }) {
+        this.camera = camera;
+        this.depth = depth;
         this.addLights();
-        xb.showReticleOnDepthMesh(true);
         this.sliderUI = new AnimalSlider(this, ANIMAL_MODELS);
         this.weaponUI = new WeaponToolUI(this, (enabled) => {
             this.weaponsEnabled = enabled;
@@ -70,7 +72,6 @@ class AnimalOcclusionScene extends xb.Script {
                 this.explodeAllAnimals();
             }
         });
-        this.setupSimulatorEvents();
         this.preloadAllAnimals();
     }
     /** Initializes and loads all animal 3D models hidden from view. */
@@ -78,17 +79,16 @@ class AnimalOcclusionScene extends xb.Script {
         let globalId = 0;
         for (const [typeIndex, animalData] of ANIMAL_MODELS.entries()) {
             const modelViewer = new xb.ModelViewer({
+                manipulation: false,
+                occlusion: true,
                 castShadow: true,
                 receiveShadow: true,
             });
-            // @ts-expect-error - Accessing private property to drastically improve raycast performance
-            modelViewer.raycastToChildren = false;
-            modelViewer.layers.enable(xb.OCCLUDABLE_ITEMS_LAYER);
             modelViewer.userData = { animalIndex: globalId, typeIndex };
             modelViewer.position.set(0, HIDDEN_Y_POSITION, 0);
             this.add(modelViewer);
             this.spawnedAnimals.set(globalId, modelViewer);
-            this.loadAnimalGLTF(modelViewer, globalId, animalData);
+            void this.loadAnimalModel(modelViewer, animalData);
             globalId++;
         }
     }
@@ -113,33 +113,19 @@ class AnimalOcclusionScene extends xb.Script {
         }
     }
     /** Asynchronously loads a GLTF model and configures its animations and materials. */
-    async loadAnimalGLTF(modelViewer, _index, animalData) {
+    async loadAnimalModel(modelViewer, animalData) {
         try {
-            const { scale: s, rotY, path, file, tint } = animalData;
-            await modelViewer.loadGLTFModel({
-                data: {
-                    scale: { x: s, y: s, z: s },
-                    rotation: { x: 0, y: rotY, z: 0 },
-                    path,
-                    model: file,
-                },
-                setupRaycastBox: true,
-                renderer: xb.core.renderer,
-                onSceneLoaded: (scene) => {
-                    const mv = modelViewer;
-                    const anim = mv.gltf?.animations?.[0];
-                    if (anim) {
-                        const mixer = new THREE.AnimationMixer(scene);
-                        mixer.clipAction(anim).play();
-                        this.mixers.push(mixer);
-                    }
-                },
+            const { scale, rotY, path, file, tint } = animalData;
+            await modelViewer.load({
+                url: file,
+                path,
+                scale,
+                rotation: { x: 0, y: THREE.MathUtils.degToRad(rotY), z: 0 },
             });
             modelViewer.traverse((child) => {
                 const mesh = child;
                 if (mesh.isMesh) {
-                    mesh.layers.enable(xb.OCCLUDABLE_ITEMS_LAYER);
-                    if (tint) {
+                    if (tint !== undefined) {
                         if (Array.isArray(mesh.material)) {
                             mesh.material = mesh.material.map((mat) => {
                                 const newMat = mat.clone();
@@ -168,11 +154,9 @@ class AnimalOcclusionScene extends xb.Script {
             this.destroyAnimal(this.draggedAnimal.userData.animalIndex);
             return;
         }
-        if (xb.core.camera) {
-            const target = xb.core.camera.position.clone();
-            target.y = this.draggedAnimal.position.y;
-            this.draggedAnimal.lookAt(target);
-        }
+        const target = this.camera.position.clone();
+        target.y = this.draggedAnimal.position.y;
+        this.draggedAnimal.lookAt(target);
         this.draggedAnimal.userData.anchorPosition ??= new THREE.Vector3();
         this.draggedAnimal.userData.anchorPosition.copy(this.draggedAnimal.position);
         this.draggedAnimal.userData.homeAnchor =
@@ -185,7 +169,7 @@ class AnimalOcclusionScene extends xb.Script {
     fireWeapon(aimingRaycaster, visualSourcePoint) {
         const types = ['laser', 'ball', 'fire', 'tornado'];
         const actualWeaponType = types[randInt(types.length)];
-        const { hitAnimalId, isEnvHit, point } = InteractionUtils.getWeaponEndPoint(aimingRaycaster, this.spawnedAnimals, xb.core.depth?.depthMesh);
+        const { hitAnimalId, isEnvHit, point } = InteractionUtils.getWeaponEndPoint(aimingRaycaster, this.spawnedAnimals, this.depth.depthMesh);
         if (hitAnimalId !== undefined) {
             this.destroyAnimal(hitAnimalId);
         }
@@ -218,60 +202,12 @@ class AnimalOcclusionScene extends xb.Script {
                 this.destroyAnimal(index);
         }
     }
-    /** Binds necessary DOM events for desktop simulation. */
-    setupSimulatorEvents() {
-        window.addEventListener('pointerdown', this.onPointerDown.bind(this), { capture: true });
-        window.addEventListener('pointermove', this.onPointerMove.bind(this), { capture: true });
-        window.addEventListener('pointerup', this.onPointerUp.bind(this), { capture: true });
-        window.addEventListener('contextmenu', (e) => e.preventDefault());
-    }
-    /** Computes the normalized device coordinates of the mouse pointer. */
-    updatePointer(event) {
-        if (event.clientX === undefined || event.clientY === undefined)
-            return false;
-        this.pointer.set((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1);
-        return true;
-    }
-    /** Evaluates raycaster intersections against UI elements. */
-    handleUIHits(raycaster, event) {
-        const uiHits = raycaster.intersectObjects([...this.sliderUI.getHitboxes(), ...this.weaponUI.getHitboxes()], true);
-        const isPaletteHit = uiHits.some((hit) => {
-            let obj = hit.object;
-            while (obj) {
-                if (obj.userData?.isPaletteItem)
-                    return true;
-                obj = obj.parent;
-            }
-            return false;
-        });
-        const isUIHit = uiHits.length > 0;
-        const handled = isUIHit && !isPaletteHit;
-        if (handled) {
-            // Let the native xb.UI handle the button triggers natively if possible, but also intercept custom trigger events on explicit bgMeshes.
-            const interactiveHit = uiHits.find((hit) => typeof hit.object.userData?.onTrigger === 'function');
-            if (interactiveHit) {
-                interactiveHit.object.userData.onTrigger();
-                event?.stopPropagation();
-            }
-        }
-        return { handled, isPaletteHit };
-    }
     /** Processes the start of a user interaction, handling UI clicks, weapons, or dragging. */
-    handleInteractionStart(raycaster, sourceObject, event) {
-        const { handled, isPaletteHit } = this.handleUIHits(raycaster, event);
-        if (handled)
-            return;
-        event?.stopPropagation();
+    handleInteractionStart(raycaster, sourceObject) {
+        const isPaletteHit = raycaster.intersectObjects(this.sliderUI.getPaletteItems(), false)
+            .length > 0;
         if (this.weaponsEnabled && !isPaletteHit) {
-            const visualOrigin = sharedVectorA;
-            visualOrigin.set(0, 0, 0);
-            if (sourceObject === 'desktop') {
-                this.weaponUI.getSourceIcon().updateWorldMatrix(true, false);
-                this.weaponUI.getSourceIcon().getWorldPosition(visualOrigin);
-            }
-            else if (sourceObject instanceof THREE.Object3D) {
-                visualOrigin.setFromMatrixPosition(sourceObject.matrixWorld);
-            }
+            const visualOrigin = sharedVectorA.setFromMatrixPosition(sourceObject.matrixWorld);
             this.fireWeapon(raycaster, visualOrigin);
             return;
         }
@@ -281,15 +217,14 @@ class AnimalOcclusionScene extends xb.Script {
         if (!hit)
             return;
         this.dragSource = sourceObject;
-        const origin = sourceObject === 'desktop'
-            ? (xb.core.camera?.position ?? sharedVectorB.set(0, 0, 0))
-            : sharedVectorB.setFromMatrixPosition(sourceObject.matrixWorld);
+        const origin = sharedVectorB.setFromMatrixPosition(sourceObject.matrixWorld);
         this.dragDistance = hit.point.distanceTo(origin);
         const targetId = hit.object.userData
             ?.isPaletteItem
             ? this.getAvailableAnimalFromPalette(hit.object.userData.animalIndex)
             : hit.object.userData.animalIndex;
-        this.startDraggingAnimal(targetId, hit.point);
+        if (targetId !== undefined)
+            this.startDraggingAnimal(targetId, hit.point);
     }
     /** Finds a hidden, available animal instance matching the requested type index. */
     getAvailableAnimalFromPalette(typeIndex) {
@@ -298,50 +233,25 @@ class AnimalOcclusionScene extends xb.Script {
             a.position.set(0, HIDDEN_Y_POSITION, 0);
             a.userData.hasTarget = false;
         }
-        return pool[0][0];
+        return pool[0]?.[0];
     }
-    /** Mouse down event handler for desktop interaction. */
-    onPointerDown(event) {
-        if (xb.core.renderer?.xr?.isPresenting)
-            return;
-        if (!xb.core.camera || !this.updatePointer(event))
-            return;
-        this.raycaster.setFromCamera(this.pointer, xb.core.camera);
-        this.handleInteractionStart(this.raycaster, 'desktop', event);
-    }
-    /** Mouse move event handler for tracking drag movement on desktop. */
-    onPointerMove(event) {
-        if (xb.core.renderer?.xr?.isPresenting)
-            return;
-        if (this.isDragging)
-            this.updatePointer(event);
-    }
-    /** Mouse up event handler to conclude a desktop drag operation. */
-    onPointerUp(event) {
-        if (xb.core.renderer?.xr?.isPresenting)
-            return;
-        if (event.button === 0 && this.isDragging) {
-            if (xb.core.camera) {
-                this.updatePointer(event);
-                this.raycaster.setFromCamera(this.pointer, xb.core.camera);
-            }
-            this.dropAnimal(this.raycaster);
-        }
-    }
-    /** XR controller select start handler for grabbing or interacting. */
+    /** Handles mouse, hand-ray, and controller selection through the shared input API. */
     onSelectStart(event) {
-        const controller = event.target;
-        if (controller) {
+        if (this.sliderUI.isControlTarget(event.target) ||
+            this.weaponUI.isControlTarget(event.target)) {
+            return;
+        }
+        const controller = event.source.controller;
+        controller.updateMatrixWorld(true);
+        InteractionUtils.setRaycasterFromXRController(this.raycaster, controller);
+        this.handleInteractionStart(this.raycaster, controller);
+    }
+    /** Releases a dragged animal when the selecting source is released. */
+    onSelectEnd(event) {
+        const controller = event.source.controller;
+        if (this.dragSource === controller) {
             controller.updateMatrixWorld(true);
             InteractionUtils.setRaycasterFromXRController(this.raycaster, controller);
-            this.handleInteractionStart(this.raycaster, controller, null);
-        }
-    }
-    /** XR controller select end handler for releasing objects. */
-    onSelectEnd(event) {
-        if (this.dragSource === event.target && event.target) {
-            event.target.updateMatrixWorld(true);
-            InteractionUtils.setRaycasterFromXRController(this.raycaster, event.target);
             this.dropAnimal(this.raycaster);
         }
     }
@@ -355,22 +265,20 @@ class AnimalOcclusionScene extends xb.Script {
             const animal = this.spawnedAnimals.get(index);
             if (animal) {
                 sharedVectorA.set(0, SPAWN_HEIGHT_BASE, -2);
-                if (xb.core.camera) {
-                    sharedVectorB
-                        .set(0, 0, -1)
-                        .applyQuaternion(xb.core.camera.quaternion)
-                        .setY(0)
-                        .normalize();
-                    sharedVectorC.set(0, 1, 0);
-                    sharedVectorD.crossVectors(sharedVectorB, sharedVectorC).normalize();
-                    sharedVectorA
-                        .copy(xb.core.camera.position)
-                        .addScaledVector(sharedVectorB, SPAWN_OFFSET_FORWARD)
-                        .addScaledVector(sharedVectorD, (Math.random() - 0.5) * SPAWN_OFFSET_RIGHT_SPREAD)
-                        .addScaledVector(sharedVectorB, (Math.random() - 0.5) * SPAWN_OFFSET_FORWARD_SPREAD);
-                    sharedVectorA.y +=
-                        SPAWN_HEIGHT_BASE + Math.random() * SPAWN_HEIGHT_SPREAD;
-                }
+                sharedVectorB
+                    .set(0, 0, -1)
+                    .applyQuaternion(this.camera.quaternion)
+                    .setY(0)
+                    .normalize();
+                sharedVectorC.set(0, 1, 0);
+                sharedVectorD.crossVectors(sharedVectorB, sharedVectorC).normalize();
+                sharedVectorA
+                    .copy(this.camera.position)
+                    .addScaledVector(sharedVectorB, SPAWN_OFFSET_FORWARD)
+                    .addScaledVector(sharedVectorD, (Math.random() - 0.5) * SPAWN_OFFSET_RIGHT_SPREAD)
+                    .addScaledVector(sharedVectorB, (Math.random() - 0.5) * SPAWN_OFFSET_FORWARD_SPREAD);
+                sharedVectorA.y +=
+                    SPAWN_HEIGHT_BASE + Math.random() * SPAWN_HEIGHT_SPREAD;
                 animal.position.copy(sharedVectorA);
                 Object.assign(animal.userData, {
                     isFalling: true,
@@ -380,46 +288,33 @@ class AnimalOcclusionScene extends xb.Script {
                 if (!animal.userData.homeAnchor) {
                     animal.userData.homeAnchor = new THREE.Vector3();
                 }
-                if (xb.core.camera) {
-                    animal.userData.homeAnchor.copy(xb.core.camera.position).setY(0);
-                }
-                else {
-                    animal.userData.homeAnchor.set(0, 0, 0);
-                }
+                animal.userData.homeAnchor.copy(this.camera.position).setY(0);
             }
         }
     }
     /** Main frame loop for ticking logic, animations, and particle systems. */
     update() {
-        try {
-            const deltaTime = xb.getDeltaTime();
-            const time = performance.now() * MS_TO_SEC_MULTIPLIER;
-            if (this.rainActive) {
-                this.rainTimer = (this.rainTimer || 0) + deltaTime;
-                const dropInterval = this.firstRainDropPending
-                    ? RAIN_DROP_INTERVAL_INITIAL
-                    : RAIN_DROP_INTERVAL_NORMAL;
-                if (this.rainTimer > dropInterval) {
-                    this.rainTimer = 0;
-                    this.firstRainDropPending = false;
-                    this.spawnRainAnimal();
-                }
+        const deltaTime = xb.getDeltaTime();
+        const time = performance.now() * MS_TO_SEC_MULTIPLIER;
+        if (this.rainActive) {
+            this.rainTimer += deltaTime;
+            const dropInterval = this.firstRainDropPending
+                ? RAIN_DROP_INTERVAL_INITIAL
+                : RAIN_DROP_INTERVAL_NORMAL;
+            if (this.rainTimer > dropInterval) {
+                this.rainTimer = 0;
+                this.firstRainDropPending = false;
+                this.spawnRainAnimal();
             }
-            else {
-                this.firstRainDropPending = true;
-            }
-            for (const mixer of this.mixers)
-                mixer.update(deltaTime);
-            this.particleSystem.update(deltaTime);
-            const { camera, depth } = xb.core;
-            AnimalBehavior.updateFalling(this.spawnedAnimals, depth?.depthMesh, this.particleSystem, camera, deltaTime, this.draggedAnimal);
-            AnimalBehavior.updateDragTransform(this.isDragging, this.draggedAnimal, this.dragSource, this.raycaster, this.pointer, camera, depth?.depthMesh, this.dragDistance);
-            AnimalBehavior.updateWandering(this.spawnedAnimals, depth?.depthMesh, deltaTime, time, this.draggedAnimal, camera);
-            AnimalBehavior.updateBreathing(this.spawnedAnimals, time, ANIMAL_MODELS, this.isDragging, camera);
         }
-        catch (e) {
-            console.error('Safely caught loop error to prevent crash: ', e);
+        else {
+            this.firstRainDropPending = true;
         }
+        this.particleSystem.update(deltaTime);
+        AnimalBehavior.updateFalling(this.spawnedAnimals, this.depth.depthMesh, this.particleSystem, this.camera, deltaTime, this.draggedAnimal);
+        AnimalBehavior.updateDragTransform(this.isDragging, this.draggedAnimal, this.dragSource, this.raycaster, this.camera, this.depth.depthMesh, this.dragDistance);
+        AnimalBehavior.updateWandering(this.spawnedAnimals, this.depth.depthMesh, deltaTime, time, this.draggedAnimal, this.camera);
+        AnimalBehavior.updateBreathing(this.spawnedAnimals, time, ANIMAL_MODELS, this.isDragging);
     }
 }
 
