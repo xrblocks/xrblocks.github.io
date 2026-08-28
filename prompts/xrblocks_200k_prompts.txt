@@ -2,41 +2,98 @@
 Act as an expert Creative Technologist specialized in three.js, WebXR, and the **XR Blocks (xrblocks)** library.
 
 # Context
-You are authoring professional WebXR experiences in AI Studio. You must strictly adhere to the XR Blocks framework architecture.
+You are authoring single-file WebXR experiences. You must strictly adhere to the XR Blocks framework architecture.
 
 # User Request
 Create the app following user's request: <my_xr_experience>, following the XR Blocks golden examples.
 
 # Engineering Guidelines (Strict)
 
-1. **Architecture:**
-   - Logic must be inside standard ES modules extending `xb.Script` or `xb.MeshScript`.
-   - XR Blocks manages WebXR sessions, rendering loops, input handling, and built-in spatial UI updates.
+1. **Architecture (Single File):**
+   - Output a SINGLE `index.html` file.
+   - Application logic must be in standard ES classes extending `xb.Script` (or `xb.MeshScript`) inside `<script type="module">`.
+   - Initialize the app using `xb.add(new MyScript()); await xb.init(new xb.Options());` (or synchronous `xb.init(options)`).
+   - XR Blocks manages WebXR sessions, window resizing, spatial input raycasting, desktop simulation, and the render loop.
+   - Do NOT call `requestAnimationFrame` manually.
+   - CSS link tag must use: `<link rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />`.
 
-2. **Dependency Management:**
-   - Use specific versions in `package.json` matching v0.21.1 (`xrblocks@0.21.1`, `@pmndrs/uikit@1.0.64`, `@preact/signals-core@1.14.0`, `lit@3.3.1`, `three@0.184.0`).
+2. **Dependency Management (Critical):**
+   - Use the specific versions below in `<script type="importmap">`. Do NOT hallucinate newer versions.
+   - **Reference Map:**
+     - "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js"
+     - "three/": "https://cdn.jsdelivr.net/npm/three@0.184.0/"
+     - "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/"
+     - "@pmndrs/uikit": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit@1.0.64/dist/index.min.js"
+     - "@pmndrs/uikit-pub-sub": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit-pub-sub@1.0.64/dist/index.min.js"
+     - "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.64/dist/index.min.js"
+     - "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.14.0/dist/signals-core.mjs"
+     - "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js"
+     - "lit": "https://esm.sh/lit@3.3.1"
+     - "lit/": "https://esm.sh/lit@3.3.1/"
+     - "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js"
+     - "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/addons/"
 
 3. **Coding Standards:**
-   - **Class Structure:** logic must extend `xb.Script` or `xb.MeshScript`.
-   - **Lifecycle:** Use `init()` for setup and `update()` for frame updates. Release resources in `dispose()`.
-   - **Built-in Spatial UI:** Import spatial UI controls directly from `'xrblocks'` (`UICard`, `UIOverlay`, `UIPanel`, `UIButton`, `UIText`, `UIImage`, `UISlider`, `UIIcon`).
-   - **Interactions & Raycast Filtering:** Configure spatial behavior with `object.xb = { manipulation: true }`. Read targeted model via `event.target` and controller via `event.source.controller`. Control propagation using `event.stopPropagation()`. Set `object.xb.pointerEvents = 'none'` for pass-through visual objects (ignored by reticles), or `object.xb.interactionEnabled = false` for static ray barriers.
-   - **Placement:** Use helper scripts (`xb.FollowHead`, `xb.FaceCamera`, `xb.Orbit`).
-   - **3D Models:** Wrap models in `xb.ModelViewer`.
-   - **Simulator Options:** Do not modify default simulator settings, unless the demo is entirely about hand gestures (like rock-paper-scissors).
+   - **Class Structure:** Application logic must extend `xb.Script` or `xb.MeshScript`.
+   - **Lifecycle:** Use `init()` for spatial setup and `update(delta)` for frame animations. Release resources in `dispose()`.
+   - **Built-in Spatial UI:**
+     - UI components are exported under `xb.` (`xb.UICard`, `xb.UIOverlay`, `xb.UIPanel`, `xb.UIButton`, `xb.UIText`, `xb.UIImage`, `xb.UISlider`, `xb.UIIcon`).
+     - Top-level containers: `xb.UICard` (world space container with physical dimensions in meters, e.g. `size: {width: 0.6, height: 0.4}`) or `xb.UIOverlay` (view space HUD).
+     - Component layout and visual properties go inside `style`: e.g. `new xb.UIText({ text: 'Hello', style: { fontSize: 24, color: '#ffffff' } })`.
+   - **Object Interaction & Manipulation:**
+     - Configure interactions directly on 3D objects using `object.xb`: e.g. `object.xb = { manipulation: true, pointerEvents: 'auto', reticleMode: 'auto' }`.
+     - Event targeted callbacks: `onObjectSelectStart(event)`, `onObjectSelectEnd(event)`, `onObjectTouchStart(event)`, `onObjectTouchEnd(event)`, `onObjectManipulate(event)`.
+     - Access targeted object using `event.target` and physical input ray/controller via `event.source.controller`.
+     - Call `event.stopPropagation()` to stop bubbling. Do NOT `return true`.
+     - **Pass-through visual elements (ignored by reticles & input rays):** set `object.xb.pointerEvents = 'none'`.
+     - **Static ray barriers (stops reticles physically without event callbacks):** set `object.xb.interactionEnabled = false`.
+   - **Spatial Placement & Behaviors:**
+     - Attach placement scripts directly as child objects: `xb.FollowHead`, `xb.FaceCamera`, `xb.FollowObject`, `xb.Orbit`, `xb.VisibilityTransition`.
+     - Surface placement: `xb.world.placeOnHorizontalSurface(object)`.
+   - **3D Asset Loading:** Wrap spatial 3D models with `xb.ModelViewer({ origin: 'bottom-center', manipulation: true })` and call `await viewer.load({ url: '...' })`.
+   - **AI Integration:** Enable AI with `options.enableAI()`, set `options.ai.promptForApiKey = true;`, and query model via `await xb.ai.query(...)`.
+   - **Simulator Options:** Do not modify default desktop simulator settings unless the the demo is mainly about hand gestures (like rock paper scissors game).
 
-4. **Planning:**
-   - Before generating code, briefly outline the application class hierarchy and data flow.
+4. **Coordinates & World Placement:**
+   - Units are in meters. `y` is up, `z` is forward/backward.
+   - User head position defaults to `(0, 1.6, 0)`. Position primary interactive objects near `z = -1.0` to `-1.5` meters at height `y = 1.3` to `1.5` meters.
+
+5. **Planning:**
+   - Before generating code, briefly outline the `xb.Script` class structure, member variables, and the `init()` vs `update()` logic flow.
 
 # Reference Examples
 Here are some XRBlocks **templates, samples, demos, and gallery examples**...
 
 
 ### Template: 00_basic
-File: `templates/00_basic/main.js`
-```javascript
+File: `templates/00_basic/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Basic | XR Blocks Template</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <script type="module">
 import * as THREE from 'three';
 import * as xb from 'xrblocks';
+
 
 class BasicScene extends xb.Script {
   init() {
@@ -78,13 +135,51 @@ document.addEventListener('DOMContentLoaded', () => {
   xb.init(new xb.Options());
 });
 
+</script>
+  </body>
+</html>
+
 ```
 
 
 ### Template: 01_spatial_ui
-File: `templates/01_spatial_ui/main.js`
-```javascript
+File: `templates/01_spatial_ui/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Spatial UI | XR Blocks Template</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/": "https://cdn.jsdelivr.net/npm/three@0.184.0/",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "@pmndrs/uikit": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit@1.0.64/dist/index.min.js",
+          "@pmndrs/uikit-pub-sub": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit-pub-sub@1.0.64/dist/index.min.js",
+          "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.64/dist/index.min.js",
+          "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.14.0/dist/signals-core.mjs",
+          "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js",
+          "lit": "https://esm.sh/lit@3.3.1",
+          "lit/": "https://esm.sh/lit@3.3.1/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <script type="module">
 import * as xb from 'xrblocks';
+
 
 class SpatialUiScene extends xb.Script {
   init() {
@@ -200,14 +295,46 @@ class SpatialUiScene extends xb.Script {
 xb.add(new SpatialUiScene());
 xb.init(new xb.Options());
 
+</script>
+  </body>
+</html>
+
 ```
 
 
 ### Template: 02_object_interaction
-File: `templates/02_object_interaction/main.js`
-```javascript
+File: `templates/02_object_interaction/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Object Interaction | XR Blocks Template</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "lit": "https://esm.sh/lit@3.3.1",
+          "lit/": "https://esm.sh/lit@3.3.1/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <script type="module">
 import * as THREE from 'three';
 import * as xb from 'xrblocks';
+
 
 class ObjectInteraction extends xb.MeshScript {
   constructor() {
@@ -264,14 +391,44 @@ options.simulator.defaultMode = xb.SimulatorMode.CONTROLLER;
 xb.add(new ObjectInteraction());
 xb.init(options);
 
+</script>
+  </body>
+</html>
+
 ```
 
 
 ### Template: 03_spatial_placement
-File: `templates/03_spatial_placement/main.js`
-```javascript
+File: `templates/03_spatial_placement/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Spatial Placement | XR Blocks Template</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <script type="module">
 import * as THREE from 'three';
 import * as xb from 'xrblocks';
+
 
 const BASE_HEIGHT = 0.018;
 const CONE_HEIGHT = 0.08;
@@ -382,14 +539,42 @@ options.reticles.projectOnDepthMesh = true;
 xb.add(new SpatialPlacement());
 xb.init(options);
 
+</script>
+  </body>
+</html>
+
 ```
 
 
 ### Template: 04_stereo
-File: `templates/04_stereo/main.js`
-```javascript
+File: `templates/04_stereo/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Stereo | XR Blocks Template</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <script type="module">
 import * as THREE from 'three';
 import * as xb from 'xrblocks';
+
 
 const stereoTextureFile = 'SV_20241216_144600.webp';
 
@@ -436,13 +621,51 @@ document.addEventListener('DOMContentLoaded', () => {
   xb.init(options);
 });
 
+</script>
+  </body>
+</html>
+
 ```
 
 
 ### Template: 05_camera_view
-File: `templates/05_camera_view/main.js`
-```javascript
+File: `templates/05_camera_view/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Camera View | XR Blocks Template</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/": "https://cdn.jsdelivr.net/npm/three@0.184.0/",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "@pmndrs/uikit": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit@1.0.64/dist/index.min.js",
+          "@pmndrs/uikit-pub-sub": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit-pub-sub@1.0.64/dist/index.min.js",
+          "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.64/dist/index.min.js",
+          "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.14.0/dist/signals-core.mjs",
+          "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js",
+          "lit": "https://esm.sh/lit@3.3.1",
+          "lit/": "https://esm.sh/lit@3.3.1/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <script type="module">
 import * as xb from 'xrblocks';
+
 
 const EMPTY_IMAGE =
   'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
@@ -554,13 +777,44 @@ options.enableCamera();
 xb.add(new CameraView());
 xb.init(options);
 
+</script>
+  </body>
+</html>
+
 ```
 
 
 ### Template: 06_ai_query
-File: `templates/06_ai_query/main.js`
-```javascript
+File: `templates/06_ai_query/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Query | XR Blocks Template</title>
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/": "https://cdn.jsdelivr.net/npm/three@0.184.0/",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js",
+          "@pmndrs/uikit": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit@1.0.64/dist/index.min.js",
+          "@pmndrs/uikit-pub-sub": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit-pub-sub@1.0.64/dist/index.min.js",
+          "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.64/dist/index.min.js",
+          "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.14.0/dist/signals-core.mjs",
+          "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js",
+          "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <script type="module">
 import * as xb from 'xrblocks';
+
 
 class AiQueryScene extends xb.Script {
   init() {
@@ -663,15 +917,46 @@ options.ai.promptForApiKey = true;
 xb.add(new AiQueryScene());
 await xb.init(options);
 
+</script>
+  </body>
+</html>
+
 ```
 
 
 ### Template: 07_ai_live_assistant
-File: `templates/07_ai_live_assistant/LiveAssistant.js`
-```javascript
+File: `templates/07_ai_live_assistant/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Live Assistant | XR Blocks Template</title>
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/": "https://cdn.jsdelivr.net/npm/three@0.184.0/",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js",
+          "@pmndrs/uikit": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit@1.0.64/dist/index.min.js",
+          "@pmndrs/uikit-pub-sub": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit-pub-sub@1.0.64/dist/index.min.js",
+          "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.64/dist/index.min.js",
+          "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.14.0/dist/signals-core.mjs",
+          "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js",
+          "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <script type="module">
 import * as xb from 'xrblocks';
 
-export class LiveAssistant {
+// --- Inlined from ./LiveAssistant.js ---
+class LiveAssistant {
   constructor(onStatus, onTranscript, onStopped) {
     this.onStatus = onStatus;
     this.onTranscript = onTranscript;
@@ -798,12 +1083,7 @@ export class LiveAssistant {
   }
 }
 
-```
-File: `templates/07_ai_live_assistant/main.js`
-```javascript
-import * as xb from 'xrblocks';
 
-import {LiveAssistant} from './LiveAssistant.js';
 
 class LiveAssistantScene extends xb.Script {
   init() {
@@ -884,56 +1164,41 @@ options.ai.promptForApiKey = true;
 xb.add(new LiveAssistantScene());
 await xb.init(options);
 
-```
-
-
-### Template: 08_scene_understanding
-File: `templates/08_scene_understanding/main.js`
-```javascript
-import * as xb from 'xrblocks';
-
-class SceneUnderstanding extends xb.Script {
-  onXRSessionStarted() {
-    void this.scan();
-  }
-
-  onSimulatorStarted() {
-    void this.scan();
-  }
-
-  async scan() {
-    console.log('Scanning scene…');
-    try {
-      const objects = await xb.world.objects.runDetection();
-      console.log(`Found ${objects.length} objects.`, objects);
-      console.table(objects.map(({label}) => ({label})));
-    } catch (error) {
-      console.error('Scene scan failed.', error);
-    }
-  }
-}
-
-const options = new xb.Options();
-options.enableCamera('environment');
-options.enableDepth();
-options.enableObjectDetection();
-options.world.objects.backendConfig.activeBackend = 'mediapipe';
-options.world.objects.simulatorOverride = true;
-options.world.objects.showDebugVisualizations = new URLSearchParams(
-  window.location.search
-).has('debug');
-
-xb.add(new SceneUnderstanding());
-await xb.init(options);
+</script>
+  </body>
+</html>
 
 ```
 
 
 ### Template: 09_xr_modes
-File: `templates/09_xr_modes/main.js`
-```javascript
+File: `templates/09_xr_modes/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>XR Modes | XR Blocks Template</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <script type="module">
 import * as THREE from 'three';
 import * as xb from 'xrblocks';
+
 
 /**
  * Demonstrates how to use the XRTransition component to smoothly switch
@@ -988,16 +1253,48 @@ document.addEventListener('DOMContentLoaded', function () {
   xb.init(options);
 });
 
+</script>
+  </body>
+</html>
+
 ```
 
 
 ### Template: 12_hand_gestures
-File: `templates/12_hand_gestures/GestureInspector.js`
-```javascript
-import * as THREE from 'three';
-import * as xb from 'xrblocks';
+File: `templates/12_hand_gestures/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Hand Gestures | XR Blocks Template</title>
 
-export class GestureInspector extends xb.Script {
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "lit": "https://esm.sh/lit@3.3.1",
+          "lit/": "https://esm.sh/lit@3.3.1/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <script type="module">
+import * as xb from 'xrblocks';
+import * as THREE from 'three';
+
+// --- Inlined from ./GestureInspector.js ---
+class GestureInspector extends xb.Script {
   init() {
     this.add(new THREE.HemisphereLight(0xffffff, 0x1b243d, 2));
     this.feedback = new THREE.Mesh(
@@ -1034,12 +1331,7 @@ export class GestureInspector extends xb.Script {
   }
 }
 
-```
-File: `templates/12_hand_gestures/main.js`
-```javascript
-import * as xb from 'xrblocks';
 
-import {GestureInspector} from './GestureInspector.js';
 
 const options = new xb.Options();
 options.enableGestures();
@@ -1057,127 +1349,64 @@ document.addEventListener('DOMContentLoaded', async () => {
   await xb.init(options);
 });
 
+</script>
+  </body>
+</html>
+
 ```
 
 
 ### Sample: advanced/ballpit
-File: `samples/advanced/ballpit/BallPit.js`
-```javascript
-import * as THREE from 'three';
+File: `samples/advanced/ballpit/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Ballpit | XR Blocks</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "@dimforge/rapier3d-simd-compat": "https://cdn.jsdelivr.net/npm/@dimforge/rapier3d-simd-compat@0.19.2/rapier.mjs",
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/": "https://cdn.jsdelivr.net/npm/three@0.184.0/",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "lit": "https://esm.sh/lit@3.3.1",
+          "lit/": "https://esm.sh/lit@3.3.1/",
+          "@pmndrs/uikit": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit@1.0.64/dist/index.min.js",
+          "@pmndrs/uikit-pub-sub": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit-pub-sub@1.0.64/dist/index.min.js",
+          "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.64/dist/index.min.js",
+          "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.14.0/dist/signals-core.mjs",
+          "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/addons/"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <div
+      class="background-image"
+      style="background-image: url('textures/background.webp')"
+    ></div>
+    <script type="module">
+import RAPIER from '@dimforge/rapier3d-simd-compat';
 import * as xb from 'xrblocks';
+import * as THREE from 'three';
 import {palette} from 'xrblocks/addons/utils/Palette.js';
 
-import {BallShooter} from './BallShooter.js';
-
-const kTimeLiveMs = xb.getUrlParamInt('timeLiveMs', 3000);
-const kDefalteMs = xb.getUrlParamInt('defalteMs', 200);
-const kLightX = xb.getUrlParamFloat('lightX', 0);
-const kLightY = xb.getUrlParamFloat('lightY', 500);
-const kLightZ = xb.getUrlParamFloat('lightZ', -10);
-const kRadius = xb.getUrlParamFloat('radius', 0.08);
-const kBallsPerSecond = xb.getUrlParamFloat('ballsPerSecond', 30);
-const kVelocityScale = xb.getUrlParamInt('velocityScale', 1.0);
-const kNumSpheres = 100;
-
-export class BallPit extends xb.Script {
-  constructor() {
-    super();
-    this.ballShooter = new BallShooter({
-      numBalls: kNumSpheres,
-      radius: kRadius,
-      palette: palette,
-      liveDuration: kTimeLiveMs,
-      deflateDuration: kDefalteMs,
-    });
-    this.add(this.ballShooter);
-    this.addLights();
-
-    this.lastBallCreatedTimeForController = new Map();
-    this.pointer = new THREE.Vector2();
-    this.velocity = new THREE.Vector3();
-  }
-
-  update() {
-    super.update();
-    for (const controller of xb.core.input.controllers) {
-      this.controllerUpdate(controller);
-    }
-  }
-
-  // Adds hemisphere light for ambient lighting and directional light.
-  addLights() {
-    this.add(new THREE.HemisphereLight(0xbbbbbb, 0x888888, 3));
-    const light = new THREE.DirectionalLight(0xffffff, 2);
-    light.position.set(kLightX, kLightY, kLightZ);
-    light.castShadow = true;
-    light.shadow.mapSize.width = 2048; // Default is usually 1024
-    light.shadow.mapSize.height = 2048; // Default is usually 1024
-    this.add(light);
-  }
-
-  // Calculates pointer position in normalized device coordinates.
-  updatePointerPosition(event) {
-    // (-1 to +1) for both components
-    this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-    this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    // scale pointer.x from [-1, 0] to [-1, 1]
-    this.pointer.x = 1 + 2 * this.pointer.x;
-  }
-
-  onPointerDown(event) {
-    this.updatePointerPosition(event);
-    const cameras = xb.core.renderer.xr.getCamera().cameras;
-    if (cameras.length == 0) return;
-    const camera = cameras[0];
-    // Spawn a ball slightly in front of the camera.
-    const position = new THREE.Vector3(0.0, 0.0, -0.2)
-      .applyQuaternion(camera.quaternion)
-      .add(camera.position);
-    const matrix = new THREE.Matrix4();
-    matrix.setPosition(position.x, position.y, position.z);
-    // Convert pointer position to angle based on the camera.
-    const vector = new THREE.Vector4(this.pointer.x, this.pointer.y, 1.0, 1);
-    const inverseProjectionMatrix = camera.projectionMatrix.clone().invert();
-    vector.applyMatrix4(inverseProjectionMatrix);
-    vector.multiplyScalar(1 / vector.w);
-    this.velocity.copy(vector);
-    this.velocity.normalize().multiplyScalar(4.0);
-    this.velocity.applyQuaternion(camera.quaternion);
-    this.ballShooter.spawnBallAt(position, this.velocity);
-  }
-
-  controllerUpdate(controller) {
-    const now = performance.now();
-    if (!this.lastBallCreatedTimeForController.has(controller)) {
-      this.lastBallCreatedTimeForController.set(controller, -99);
-    }
-    if (
-      controller.userData.selected &&
-      now - this.lastBallCreatedTimeForController.get(controller) >=
-        1000 / kBallsPerSecond
-    ) {
-      // Place this 8 cm in front of the hands.
-      const newPosition = new THREE.Vector3(0.0, 0.0, -0.08)
-        .applyQuaternion(controller.quaternion)
-        .add(controller.position);
-
-      this.velocity.set(0, 0, -5.0 * kVelocityScale);
-      this.velocity.applyQuaternion(controller.quaternion);
-
-      this.ballShooter.spawnBallAt(newPosition, this.velocity);
-
-      this.lastBallCreatedTimeForController.set(controller, now);
-    }
-  }
-}
-
-```
-File: `samples/advanced/ballpit/BallShooter.js`
-```javascript
-import * as THREE from 'three';
-import * as xb from 'xrblocks';
-
-export class BallShooter extends xb.Script {
+// --- Inlined from ./BallPit.js ---
+// --- Inlined from ./BallShooter.js ---
+class BallShooter extends xb.Script {
   constructor({
     numBalls = 100,
     radius = 0.08,
@@ -1395,13 +1624,110 @@ export class BallShooter extends xb.Script {
   }
 }
 
-```
-File: `samples/advanced/ballpit/main.js`
-```javascript
-import RAPIER from '@dimforge/rapier3d-simd-compat';
-import * as xb from 'xrblocks';
 
-import {BallPit} from './BallPit.js';
+
+const kTimeLiveMs = xb.getUrlParamInt('timeLiveMs', 3000);
+const kDefalteMs = xb.getUrlParamInt('defalteMs', 200);
+const kLightX = xb.getUrlParamFloat('lightX', 0);
+const kLightY = xb.getUrlParamFloat('lightY', 500);
+const kLightZ = xb.getUrlParamFloat('lightZ', -10);
+const kRadius = xb.getUrlParamFloat('radius', 0.08);
+const kBallsPerSecond = xb.getUrlParamFloat('ballsPerSecond', 30);
+const kVelocityScale = xb.getUrlParamInt('velocityScale', 1.0);
+const kNumSpheres = 100;
+class BallPit extends xb.Script {
+  constructor() {
+    super();
+    this.ballShooter = new BallShooter({
+      numBalls: kNumSpheres,
+      radius: kRadius,
+      palette: palette,
+      liveDuration: kTimeLiveMs,
+      deflateDuration: kDefalteMs,
+    });
+    this.add(this.ballShooter);
+    this.addLights();
+
+    this.lastBallCreatedTimeForController = new Map();
+    this.pointer = new THREE.Vector2();
+    this.velocity = new THREE.Vector3();
+  }
+
+  update() {
+    super.update();
+    for (const controller of xb.core.input.controllers) {
+      this.controllerUpdate(controller);
+    }
+  }
+
+  // Adds hemisphere light for ambient lighting and directional light.
+  addLights() {
+    this.add(new THREE.HemisphereLight(0xbbbbbb, 0x888888, 3));
+    const light = new THREE.DirectionalLight(0xffffff, 2);
+    light.position.set(kLightX, kLightY, kLightZ);
+    light.castShadow = true;
+    light.shadow.mapSize.width = 2048; // Default is usually 1024
+    light.shadow.mapSize.height = 2048; // Default is usually 1024
+    this.add(light);
+  }
+
+  // Calculates pointer position in normalized device coordinates.
+  updatePointerPosition(event) {
+    // (-1 to +1) for both components
+    this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+    this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    // scale pointer.x from [-1, 0] to [-1, 1]
+    this.pointer.x = 1 + 2 * this.pointer.x;
+  }
+
+  onPointerDown(event) {
+    this.updatePointerPosition(event);
+    const cameras = xb.core.renderer.xr.getCamera().cameras;
+    if (cameras.length == 0) return;
+    const camera = cameras[0];
+    // Spawn a ball slightly in front of the camera.
+    const position = new THREE.Vector3(0.0, 0.0, -0.2)
+      .applyQuaternion(camera.quaternion)
+      .add(camera.position);
+    const matrix = new THREE.Matrix4();
+    matrix.setPosition(position.x, position.y, position.z);
+    // Convert pointer position to angle based on the camera.
+    const vector = new THREE.Vector4(this.pointer.x, this.pointer.y, 1.0, 1);
+    const inverseProjectionMatrix = camera.projectionMatrix.clone().invert();
+    vector.applyMatrix4(inverseProjectionMatrix);
+    vector.multiplyScalar(1 / vector.w);
+    this.velocity.copy(vector);
+    this.velocity.normalize().multiplyScalar(4.0);
+    this.velocity.applyQuaternion(camera.quaternion);
+    this.ballShooter.spawnBallAt(position, this.velocity);
+  }
+
+  controllerUpdate(controller) {
+    const now = performance.now();
+    if (!this.lastBallCreatedTimeForController.has(controller)) {
+      this.lastBallCreatedTimeForController.set(controller, -99);
+    }
+    if (
+      controller.userData.selected &&
+      now - this.lastBallCreatedTimeForController.get(controller) >=
+        1000 / kBallsPerSecond
+    ) {
+      // Place this 8 cm in front of the hands.
+      const newPosition = new THREE.Vector3(0.0, 0.0, -0.08)
+        .applyQuaternion(controller.quaternion)
+        .add(controller.position);
+
+      this.velocity.set(0, 0, -5.0 * kVelocityScale);
+      this.velocity.applyQuaternion(controller.quaternion);
+
+      this.ballShooter.spawnBallAt(newPosition, this.velocity);
+
+      this.lastBallCreatedTimeForController.set(controller, now);
+    }
+  }
+}
+
+
 
 const depthMeshColliderUpdateFps = xb.getUrlParamFloat(
   'depthMeshColliderUpdateFps',
@@ -1436,15 +1762,55 @@ document.addEventListener('DOMContentLoaded', function () {
   start();
 });
 
+</script>
+  </body>
+</html>
+
 ```
 
 
 ### Sample: advanced/paint
-File: `samples/advanced/paint/main.js`
-```javascript
+File: `samples/advanced/paint/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Paint | XR Blocks</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/": "https://cdn.jsdelivr.net/npm/three@0.184.0/",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "lit": "https://esm.sh/lit@3.3.1",
+          "lit/": "https://esm.sh/lit@3.3.1/",
+          "@pmndrs/uikit": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit@1.0.64/dist/index.min.js",
+          "@pmndrs/uikit-pub-sub": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit-pub-sub@1.0.64/dist/index.min.js",
+          "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.64/dist/index.min.js",
+          "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.14.0/dist/signals-core.mjs",
+          "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/addons/"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <script type="module">
 import * as THREE from 'three';
 import {TubePainter} from 'three/addons/misc/TubePainter.js';
 import * as xb from 'xrblocks';
+
 
 /**
  * A remixed version of three.js's examples/webxr_xr_paint.html in XR Blocks.
@@ -1537,608 +1903,58 @@ function start() {
 
 document.addEventListener('DOMContentLoaded', start);
 
-```
-
-
-### Sample: advanced/rain
-File: `samples/advanced/rain/RainParticles.js`
-```javascript
-import * as THREE from 'three';
-
-const kMaxAnimationFrames = 15;
-const kAnimationSpeed = 2.0;
-const DEBUG_SINGLE = false;
-// const DEBUG_SINGLE = true;
-
-function clamp(x, a, b) {
-  return Math.min(Math.max(x, a), b);
-}
-
-export class RainParticles extends THREE.Object3D {
-  constructor() {
-    super();
-    // Sets the number of particles and defines the range of the raindrop
-    // effect.
-    this.particleCount = DEBUG_SINGLE ? 1 : 200;
-    this.RANGE = 4;
-    this.raycaster = new THREE.Raycaster();
-
-    // Initializes arrays for fall speeds, animation weights, and visibility
-    // states of each particle.
-    this.velocities = new Float32Array(this.particleCount);
-    this.particleWeights = new Float32Array(this.particleCount);
-    this.particleVisibility = new Float32Array(this.particleCount);
-
-    // Placeholder for the InstancedMesh representing the raindrop particles.
-    this.raindropMesh = null;
-  }
-
-  /**
-   * Initializes raindrop particles with a shader material and instanced
-   * geometry. Loads the texture and sets up the particle mesh and instanced
-   * attributes.
-   */
-  init() {
-    const textureLoader = new THREE.TextureLoader();
-    textureLoader.load('textures/rain_sprite_sheet.png', (raindropTexture) => {
-      // Creates a custom shader material for the raindrop particles.
-      const raindropMaterial = this.createRaindropMaterial(raindropTexture);
-
-      // Creates a simple plane geometry for each raindrop particle.
-      const raindropGeometry = new THREE.PlaneGeometry(0.1, 0.1);
-
-      // Initializes an InstancedMesh with the defined geometry and material.
-      this.raindropMesh = new THREE.InstancedMesh(
-        raindropGeometry,
-        raindropMaterial,
-        this.particleCount
-      );
-
-      // Populates the particle mesh with initial positions and properties.
-      this.initializeParticles();
-
-      // Adds instanced attributes for weight and visibility to control raindrop
-      // animation and rendering.
-      this.raindropMesh.geometry.setAttribute(
-        'aWeight',
-        new THREE.InstancedBufferAttribute(this.particleWeights, 1).setUsage(
-          THREE.DynamicDrawUsage
-        )
-      );
-      this.raindropMesh.geometry.setAttribute(
-        'aVisibility',
-        new THREE.InstancedBufferAttribute(this.particleVisibility, 1).setUsage(
-          THREE.DynamicDrawUsage
-        )
-      );
-
-      // Flags the instance matrix for an initial update and adds the raindrop
-      // mesh to the scene.
-      this.raindropMesh.instanceMatrix.needsUpdate = true;
-      this.add(this.raindropMesh);
-    });
-  }
-
-  /**
-   * Creates and returns a custom shader material for the raindrop particles.
-   * Uses a texture and sets up uniforms for the camera position to handle
-   * billboard rotation.
-   */
-  createRaindropMaterial(texture) {
-    return new THREE.ShaderMaterial({
-      uniforms: {
-        uTexture: {value: texture},
-        uCameraPosition: {value: new THREE.Vector3()},
-        uCameraRotationMatrix: {value: new THREE.Matrix4()},
-      },
-      vertexShader: `
-        attribute float aWeight;
-        attribute float aVisibility;
-        varying float vWeight;
-        varying float vVisibility;
-        varying vec2 vUv;
-        uniform vec3 uCameraPosition;
-        uniform mat4 uCameraRotationMatrix;
-
-        const float PI = 3.14159265359;
-
-
-        void main() {
-          vUv = uv;
-          vWeight = aWeight;
-          vVisibility = aVisibility;
-
-          // Get the world position of the instance
-          vec4 worldPosition = instanceMatrix * vec4(0.0, 0.0, 0.0, 1.0);
-
-          vec3 rotatedPosition;
-
-          if (vWeight < 1.5) {
-            // Compute vector from particle to camera, projected onto XZ plane
-            vec3 toCamera = uCameraPosition - worldPosition.xyz;
-            toCamera.y = 0.0; // Ignore vertical component
-            toCamera = normalize(toCamera);
-
-            // Compute the angle to rotate around Y-axis
-            float angle = atan(toCamera.x, toCamera.z);
-
-            // Create rotation matrix around Y-axis
-            mat3 rotationMatrix = mat3(
-              cos(angle), 0.0, -sin(angle),
-              0.0,        1.0,  0.0,
-              sin(angle), 0.0,  cos(angle)
-            );
-
-            // Apply rotation to vertex position
-            rotatedPosition = rotationMatrix * position;
-          } else {
-            // Rotate the particle to face positive Y-axis
-            // This is a rotation of -90 degrees around X-axis
-            float angle = 0.5 * PI; // -90 degrees in radians
-
-            // Create rotation matrix around X-axis
-            mat3 rotationMatrix = mat3(
-              1.0,       0.0,        0.0,
-              0.0, cos(angle), -sin(angle),
-              0.0, sin(angle),  cos(angle)
-            );
-
-            // Apply rotation to vertex position
-            rotatedPosition = rotationMatrix * position;
-          }
-
-          // Apply instance transformations
-          vec4 finalPosition = instanceMatrix * vec4(rotatedPosition, 1.0);
-
-          // Transform to clip space
-          gl_Position = projectionMatrix * viewMatrix * finalPosition;
-        }
-
-      `,
-      fragmentShader: `
-        uniform sampler2D uTexture;
-        varying vec2 vUv;
-        varying float vWeight;
-        varying float vVisibility;
-
-        void main() {
-          const float kAnimationSpeed = 2.0;
-          vec2 uv = vUv * 0.25;  // Assumes a 4x4 texture grid.
-          float frame = floor(vWeight / kAnimationSpeed);
-          float xIndex = mod(frame, 4.0);
-          float yIndex = floor(frame / 4.0);
-          uv += vec2(xIndex, 3.0 - yIndex) * 0.25;  // Maps frame index to UV coordinates.
-          vec4 texColor = texture2D(uTexture, uv);
-          gl_FragColor = vec4(pow(texColor.rgb, vec3(0.5)), texColor.a * vVisibility * 0.8 - step(vWeight, 0.5) * 0.2);  // Applies visibility factor.
-          // gl_FragColor = vec4(0.5, 0.5, 0.0, 1.0);  // Applies visibility factor.
-        }
-      `,
-      transparent: true,
-      // side: THREE.DoubleSide,
-    });
-  }
-
-  /**
-   * Initializes the positions and properties for each particle.
-   * Assigns random positions, fall speeds, and visibility states to each
-   * particle instance.
-   */
-  initializeParticles() {
-    const dummy = new THREE.Object3D();
-    for (let i = 0; i < this.particleCount; i++) {
-      // Assigns random initial position within the defined range.
-      dummy.position.set(
-        Math.random() * this.RANGE * 2 - this.RANGE,
-        Math.random() * this.RANGE * 2,
-        Math.random() * this.RANGE * 2 - this.RANGE
-      );
-
-      if (DEBUG_SINGLE) {
-        dummy.position.set(0, 1.2, -1);
-      }
-
-      // Updates the instance matrix with the dummy object's position.
-      dummy.updateMatrix();
-      this.raindropMesh.setMatrixAt(i, dummy.matrix);
-
-      // Sets random fall speed and initial visibility for each particle.
-      this.velocities[i] = Math.random() * 0.05 + 0.2;
-      // this.velocities[i] = 0.1;
-      this.particleWeights[i] = 0;
-      this.particleVisibility[i] = 1;
-    }
-  }
-
-  /**
-   * Updates particle positions and visibility on each frame.
-   * Adjusts particle weights, visibility, and repositions particles as they
-   * "fall."
-   */
-  update(camera, xrDepth) {
-    if (!this.raindropMesh) return;
-    const depthMesh = xrDepth.depthMesh;
-
-    const dummy = new THREE.Object3D();
-    const particleWeightsAttribute =
-      this.raindropMesh.geometry.attributes.aWeight;
-    const particleVisibilityAttribute =
-      this.raindropMesh.geometry.attributes.aVisibility;
-    // const nextDummy = new THREE.Object3D();
-
-    // Compute the camera's rotation excluding Y-axis rotation (yaw)
-    const cameraEuler = new THREE.Euler().setFromQuaternion(
-      camera.quaternion,
-      'YXZ'
-    );
-    const cameraEulerNoYaw = new THREE.Euler(
-      cameraEuler.x, // pitch
-      0, // yaw
-      cameraEuler.z, // roll
-      'YXZ'
-    );
-    const cameraRotationMatrix = new THREE.Matrix4().makeRotationFromEuler(
-      cameraEulerNoYaw
-    );
-    const inverseCameraRotationMatrix = cameraRotationMatrix.clone().invert();
-
-    // Update the uniform with the inverse rotation matrix
-    this.raindropMesh.material.uniforms.uCameraRotationMatrix.value.copy(
-      inverseCameraRotationMatrix
-    );
-
-    for (let i = 0; i < this.raindropMesh.count; ++i) {
-      // Gets the current transformation matrix of the particle instance.
-      this.raindropMesh.getMatrixAt(i, dummy.matrix);
-      dummy.matrix.decompose(dummy.position, dummy.quaternion, dummy.scale);
-
-      // Proceeds the raindrop.
-      if (this.particleWeights[i] < 0.5) {
-        dummy.position.y -= this.velocities[i];
-      }
-
-      // Computes screen position and depth for visibility checks.
-      const screenPos = dummy.position.clone().project(camera);
-
-      // Check if the point is within the visible NDC range.
-      // const isWithinFoV = screenPos.x >= -1 && screenPos.x <= 1 &&
-      //     screenPos.y >= -1 && screenPos.y <= 1 && screenPos.z >= 0 &&
-      //     screenPos.z <= 1;
-
-      const isWithinFoV =
-        screenPos.x >= -0.8 &&
-        screenPos.x <= 0.6 &&
-        screenPos.y >= -1.0 &&
-        screenPos.y <= 1.0 &&
-        screenPos.z >= 0 &&
-        screenPos.z <= 1;
-
-      let isOccluded = false;
-      let maxVisibility = 1.0;
-      let deltaDepth = 0.0;
-
-      const isHigh = dummy.position.y > 2.0;
-
-      if (isWithinFoV) {
-        const depth = xrDepth.getDepth(
-          (screenPos.x + 1) / 2,
-          (screenPos.y + 1) / 2
-        );
-
-        // Transform the point to camera space.
-        const pointInCameraSpace = dummy.position
-          .clone()
-          .applyMatrix4(camera.matrixWorldInverse);
-
-        // The z-coordinate in camera space is the perpendicular distance to the
-        // camera plane
-        const distanceToCameraPlane = -pointInCameraSpace.z;
-
-        isOccluded = depth == 0 || depth < distanceToCameraPlane;
-        deltaDepth = Math.abs(distanceToCameraPlane - depth);
-        // console.log(
-        //     'occluded: ' + isOccluded, 'isWithinFoV: ' + isWithinFoV, depth,
-        //     distanceToCameraPlane);
-
-        if (
-          this.particleWeights[i] == 0 &&
-          this.particleVisibility[i] > 0.5 &&
-          isOccluded &&
-          !isHigh
-        ) {
-          this.particleWeights[i] = 1;
-
-          if (depth < 0.3) {
-            // maxVisibility *= 0.2 + depth;
-            maxVisibility = 0.0;
-          } else if (depth > 2.0) {
-            maxVisibility *= 0.5 + (4.0 - depth) / 4.0;
-          }
-          // console.log('hit ', dummy.position.y, depth,
-          // distanceToCameraPlane);
-        }
-      }
-
-      if (isWithinFoV) {
-        // console.log(
-        //     depth, distanceToCameraPlane, pointInCameraSpace.z,
-        //     dummy.position);
-
-        this.particleVisibility[i] =
-          isOccluded && !isHigh
-            ? clamp(0.6 - deltaDepth, 0.0, 0.6)
-            : maxVisibility;
-      } else {
-        this.particleVisibility[i] = 0.0;
-      }
-
-      // Hits the floor.
-      if (dummy.position.y < 0) {
-        dummy.position.y = 0;
-        if (this.particleWeights[i] < 0.5) {
-          this.particleWeights[i] = 1;
-        }
-
-        this.particleVisibility[i] =
-          isOccluded && !isHigh ? 0.0 : maxVisibility;
-      }
-
-      if (this.particleWeights[i] > 0) {
-        this.particleWeights[i] += 1;
-      }
-
-      // Global minimum test.
-      if (depthMesh.minDepth < 0.1) {
-        this.particleVisibility[i] = 0.0;
-      }
-
-      // this.particleVisibility[i] = 1.0;
-
-      // if (this.particleVisibility[i] > 0.5) {
-      //   console.log(
-      //       'current: w', this.particleWeights[i], 'v',
-      //       this.particleVisibility[i], dummy.position.y,
-      //       this.velocities[i]);
-      // }
-
-      if (this.particleWeights[i] > kMaxAnimationFrames * kAnimationSpeed) {
-        // Resets particle position and animation weight upon animation
-        // completion.
-        // console.log('reset', dummy.position.y, this.velocities[i]);
-        this.respawnPrticle(dummy, i, camera, depthMesh);
-      }
-
-      // if (depth > 1) {
-      //   depth *= 1.1;
-      // }
-      // TODO: use a slerp.
-      // Sets visibility based on the distance to the screen and depth.
-
-      // this.particleVisibility[i] = (this.particleWeights[i] > 0.0) ? 0.6 :
-      // 0.9;
-
-      // Occlusion
-      // if (distanceToScreen > depth + 0.5) {
-      //   this.particleVisibility[i] = 0.0;
-      // }
-
-      // if (depth < 0.3) {
-      //   if (distanceToScreen > 0.5) {
-      //     this.particleVisibility[i] = 1.0;
-      //   } else {
-      //     this.particleVisibility[i] = 0.4;
-      //     this.particleWeights[i] += 1;
-      //   }
-      // }
-
-      // if (distanceToScreen < 0.5) {
-      //   this.particleVisibility[i] = 0.0;
-      // }
-
-      // this.particleVisibility[i] = 1.0;
-
-      // if (this.particleWeights[i] == 0) {
-      //   dummy.scale.set(1, 1, 1);
-      // } else {
-      //   dummy.scale.set(0.5, 0.5, 0.5);
-      // }
-
-      // console.log(
-      //     'current: w', this.particleWeights[i], 'v',
-      //     this.particleVisibility[i], 'y', dummy.position,
-      //     this.velocities[i]);
-
-      // Updates weight attribute for the shader.
-      particleVisibilityAttribute.setX(i, this.particleVisibility[i]);
-      particleWeightsAttribute.setX(i, this.particleWeights[i]);
-      dummy.updateMatrix();
-      this.raindropMesh.setMatrixAt(i, dummy.matrix);
-    }
-
-    // Marks mesh attributes for update and updates camera position uniform.
-    this.raindropMesh.instanceMatrix.needsUpdate = true;
-    particleWeightsAttribute.needsUpdate = true;
-    particleVisibilityAttribute.needsUpdate = true;
-    this.raindropMesh.material.uniforms.uCameraPosition.value.copy(
-      camera.position
-    );
-  }
-
-  /**
-   * Resets a particle's position and animation weight upon reaching the ground.
-   */
-  respawnPrticle(dummy, index, camera, depthMesh) {
-    let u = Math.random();
-    let v = Math.random();
-    const half = Math.random();
-    // const vertex = depthMesh.getPosition(u, v);
-    let vertex;
-    let inited = false;
-    let threshold = 0.05;
-    if (depthMesh.minDepth < 0.16) {
-      threshold = depthMesh.minDepth * 0.01;
-    }
-
-    threshold = 0.1;
-
-    if (Math.random() < threshold) {
-      u = u * 0.8 + 0.1;
-      v = v * 0.8 + 0.1;
-      this.raycaster.setFromCamera(
-        {x: u * 2.0 - 1.0, y: v * 2.0 - 1.0},
-        camera
-      );
-      const intersections = this.raycaster.intersectObject(depthMesh);
-      if (intersections.length > 0) {
-        vertex = intersections[0].point;
-        inited = true;
-      }
-    }
-
-    if (!inited) {
-      const theta = u * 2 * Math.PI;
-      let radius = Math.sqrt(v) * this.RANGE + 0.2;
-      if (half < 0.5) {
-        radius = Math.sqrt(v) * 0.7 + 0.3;
-      } else if (half < 0.7) {
-        radius = Math.sqrt(v) * 1.5 + 0.3;
-      }
-
-      vertex = {
-        x: radius * Math.cos(theta),
-        z: radius * Math.sin(theta),
-        y: 4.0,
-      };
-    } else {
-      // if (half < 0.5) {
-      //   vertex = vertex.clone().lerp(camera.position, 0.5);
-      //   dummy.position.set(vertex.x, 4.0, vertex.z);
-      //   inited = false;
-      // }
-    }
-
-    vertex = DEBUG_SINGLE ? new THREE.Vector3(-1, 4, -1) : vertex;
-
-    dummy.position.set(vertex.x, vertex.y, vertex.z);
-    dummy.rotation.set(0, 0, 0);
-    this.particleWeights[index] = inited ? 1.0 : 0.0;
-
-    // // Generate a random angle.
-    // const theta = Math.random() * 2 * Math.PI;
-    // // Generate a random radius with uniform distribution.
-    // const radius = Math.sqrt(Math.random()) * this.RANGE;
-    // // Calculate x and z positions.
-    // const x = radius * Math.cos(theta);
-    // const z = radius * Math.sin(theta);
-    // const y = 4.0;
-
-    // // Set the new position and reset other properties
-    // dummy.position.set(x, y, z);
-    // dummy.rotation.set(0, 0, 0);
-    // this.particleWeights[index] = 0;
-  }
-}
-
-```
-File: `samples/advanced/rain/RainScene.js`
-```javascript
-import * as xb from 'xrblocks';
-import * as THREE from 'three';
-import {VolumetricCloud} from 'xrblocks/addons/volumes/VolumetricCloud.js';
-
-import {RainParticles} from './RainParticles.js';
-
-const ASSETS_PATH = 'https://cdn.jsdelivr.net/gh/xrblocks/assets@main/';
-
-export class RainScene extends xb.Script {
-  rainParticles = new RainParticles();
-  cloud = new VolumetricCloud();
-
-  listener = null;
-  rainSound = null;
-  audioRequested = false;
-
-  init() {
-    this.add(this.rainParticles);
-    this.rainParticles.init();
-    this.add(this.cloud);
-
-    this.listener = new THREE.AudioListener();
-    xb.core.camera.add(this.listener);
-
-    this.rainSound = new THREE.Audio(this.listener);
-    const audioLoader = new THREE.AudioLoader();
-    audioLoader.load(ASSETS_PATH + 'demos/rain/rain.opus', (buffer) => {
-      this.rainSound.setBuffer(buffer);
-      this.rainSound.setLoop(true);
-      this.rainSound.setVolume(0.5);
-      if (this.audioRequested) this.startAudio();
-    });
-
-    const startButton = document.getElementById('startButton');
-    if (startButton) {
-      startButton.addEventListener('click', () => {
-        this.audioRequested = true;
-        this.startAudio();
-        document.getElementById('overlay')?.remove();
-      });
-    }
-  }
-
-  startAudio() {
-    if (this.listener.context.state === 'suspended') {
-      this.listener.context.resume();
-    }
-
-    if (this.rainSound.buffer && !this.rainSound.isPlaying) {
-      this.rainSound.play();
-    }
-  }
-
-  update() {
-    const leftCamera = xb.getXrCameraLeft() || xb.core.camera;
-    this.rainParticles.update(leftCamera, xb.core.depth);
-    this.cloud.update(xb.core.camera, xb.core.depth);
-  }
-}
-
-```
-File: `samples/advanced/rain/main.js`
-```javascript
-import * as xb from 'xrblocks';
-
-import {RainScene} from './RainScene.js';
-
-const depthMeshColliderUpdateFps = xb.getUrlParamFloat(
-  'depthMeshColliderUpdateFps',
-  30
-);
-
-const options = new xb.Options();
-options.reticles.enabled = false;
-options.depth = new xb.DepthOptions(xb.xrDepthMeshPhysicsOptions);
-options.depth.depthMesh.colliderUpdateFps = depthMeshColliderUpdateFps;
-options.setAppTitle('Rain');
-options.setAppDescription('Bring rain and volumetric clouds into your space.');
-
-// Initializes the scene, camera, xrRenderer, controls, and XR button.
-async function start() {
-  const rainScene = new RainScene();
-  xb.add(rainScene);
-  await xb.init(options);
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  start();
-});
+</script>
+  </body>
+</html>
 
 ```
 
 
 ### Sample: spatial_ui/modelviewer
-File: `samples/spatial_ui/modelviewer/ModelViewerScene.js`
-```javascript
-import * as THREE from 'three';
+File: `samples/spatial_ui/modelviewer/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Model Viewer | XR Blocks</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/": "https://cdn.jsdelivr.net/npm/three@0.184.0/",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "@pmndrs/uikit": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit@1.0.64/dist/index.min.js",
+          "@pmndrs/uikit-pub-sub": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit-pub-sub@1.0.64/dist/index.min.js",
+          "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.64/dist/index.min.js",
+          "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.14.0/dist/signals-core.mjs",
+          "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js",
+          "lit": "https://esm.sh/lit@3.3.1",
+          "lit/": "https://esm.sh/lit@3.3.1/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/addons/",
+          "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/2.1.0/spark.module.js"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <div class="background-image" style="background-color: #000000"></div>
+    <script type="module">
 import * as xb from 'xrblocks';
+import * as THREE from 'three';
+
+// --- Inlined from ./ModelViewerScene.js ---
 
 const kLightX = xb.getUrlParamFloat('lightX', 0);
 const kLightY = xb.getUrlParamFloat('lightY', 500);
@@ -2147,8 +1963,7 @@ const kLightZ = xb.getUrlParamFloat('lightZ', -10);
 const ASSETS_BASE_URL = 'https://cdn.jsdelivr.net/gh/xrblocks/assets@main/';
 const PROPRIETARY_ASSETS_BASE_URL =
   'https://cdn.jsdelivr.net/gh/xrblocks/proprietary-assets@main/';
-
-export class ModelViewerScene extends xb.Script {
+class ModelViewerScene extends xb.Script {
   loadedObjects = [];
   placedObjects = new Set();
   sessionStarted = false;
@@ -2295,12 +2110,7 @@ export class ModelViewerScene extends xb.Script {
   }
 }
 
-```
-File: `samples/spatial_ui/modelviewer/main.js`
-```javascript
-import * as xb from 'xrblocks';
 
-import {ModelViewerScene} from './ModelViewerScene.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const modelViewerScene = new ModelViewerScene();
@@ -2321,6 +2131,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   await xb.init(options);
 });
 
+</script>
+  </body>
+</html>
+
 ```
 
 
@@ -2336,7 +2150,7 @@ File: `samples/spatial_ui/ui/index.html`
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <link rel="stylesheet" href="../../main.css" />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
     <script>
       window.litDisableBundleWarning = true;
     </script>
@@ -2660,12 +2474,58 @@ File: `samples/spatial_ui/ui/index.html`
 
 
 ### Sample: xr_ai/gemini_icebreakers
-File: `samples/xr_ai/gemini_icebreakers/EarthAnimation.js`
-```javascript
+File: `samples/xr_ai/gemini_icebreakers/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Gemini Icebreakers | XR Blocks</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/": "https://cdn.jsdelivr.net/npm/three@0.184.0/",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "lit": "https://esm.sh/lit@3.3.1",
+          "lit/": "https://esm.sh/lit@3.3.1/",
+          "@pmndrs/uikit": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit@1.0.64/dist/index.min.js",
+          "@pmndrs/uikit-pub-sub": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit-pub-sub@1.0.64/dist/index.min.js",
+          "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.64/dist/index.min.js",
+          "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.14.0/dist/signals-core.mjs",
+          "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/addons/",
+          "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai/+esm"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <div
+      id="background-image"
+      class="background-image"
+      style="background-image: url('textures/background.webp')"
+    ></div>
+    <script type="module">
+import * as xb from 'xrblocks';
+import * as THREE from 'three';
+
+// --- Inlined from ./GeminiIcebreakers.js ---
+// --- Inlined from ./EarthAnimation.js ---
 /**
  * Animates the earth model.
  */
-export class EarthAnimation {
+class EarthAnimation {
   model = null;
   speed = 0.2;
 
@@ -2678,14 +2538,81 @@ export class EarthAnimation {
   }
 }
 
-```
-File: `samples/xr_ai/gemini_icebreakers/GeminiIcebreakers.js`
-```javascript
-import * as THREE from 'three';
-import * as xb from 'xrblocks';
 
-import {EarthAnimation} from './EarthAnimation.js';
-import {TranscriptionManager} from './TranscriptionManager.js';
+// --- Inlined from ./TranscriptionManager.js ---
+class TranscriptionManager {
+  constructor(responseDisplay) {
+    this.responseDisplay = responseDisplay;
+    this.currentInputText = '';
+    this.currentOutputText = '';
+    this.conversationHistory = [];
+  }
+
+  handleInputTranscription(text) {
+    if (!text) return;
+    this.currentInputText += text;
+    this.updateLiveDisplay();
+  }
+
+  handleOutputTranscription(text) {
+    if (!text) return;
+    this.currentOutputText += text;
+    this.updateLiveDisplay();
+  }
+
+  finalizeTurn() {
+    if (this.currentInputText.trim()) {
+      this.conversationHistory.push({
+        speaker: 'You',
+        text: this.currentInputText.trim(),
+      });
+    }
+    if (this.currentOutputText.trim()) {
+      this.conversationHistory.push({
+        speaker: 'AI',
+        text: this.currentOutputText.trim(),
+      });
+    }
+    this.currentInputText = '';
+    this.currentOutputText = '';
+    this.updateFinalDisplay();
+  }
+
+  updateLiveDisplay() {
+    let displayText = '';
+    for (const entry of this.conversationHistory.slice(-2)) {
+      displayText += `${entry.speaker}: ${entry.text}\n\n`;
+    }
+    if (this.currentInputText.trim()) {
+      displayText += `You: ${this.currentInputText}`;
+    }
+    if (this.currentOutputText.trim()) {
+      if (this.currentInputText.trim()) displayText += '\n\n';
+      displayText += `AI: ${this.currentOutputText}`;
+    }
+    this.render(displayText);
+  }
+
+  updateFinalDisplay() {
+    let displayText = '';
+    for (const entry of this.conversationHistory) {
+      displayText += `${entry.speaker}: ${entry.text}\n\n`;
+    }
+    this.render(displayText);
+  }
+
+  clear() {
+    this.currentInputText = '';
+    this.currentOutputText = '';
+    this.conversationHistory = [];
+  }
+
+  render(text) {
+    if (this.responseDisplay) this.responseDisplay.text = text.trim();
+  }
+}
+
+
 
 const ASSETS_BASE_URL = 'https://cdn.jsdelivr.net/gh/xrblocks/assets@main/';
 const PROPRIETARY_ASSETS_BASE_URL =
@@ -2836,8 +2763,7 @@ function wrapCanvasText(context, text, maxWidth) {
   if (line) lines.push(line);
   return lines.length > 0 ? lines : [''];
 }
-
-export class GeminiIcebreakers extends xb.Script {
+class GeminiIcebreakers extends xb.Script {
   constructor() {
     super();
     this.journeyIndex = 0;
@@ -3201,87 +3127,7 @@ export class GeminiIcebreakers extends xb.Script {
   }
 }
 
-```
-File: `samples/xr_ai/gemini_icebreakers/TranscriptionManager.js`
-```javascript
-export class TranscriptionManager {
-  constructor(responseDisplay) {
-    this.responseDisplay = responseDisplay;
-    this.currentInputText = '';
-    this.currentOutputText = '';
-    this.conversationHistory = [];
-  }
 
-  handleInputTranscription(text) {
-    if (!text) return;
-    this.currentInputText += text;
-    this.updateLiveDisplay();
-  }
-
-  handleOutputTranscription(text) {
-    if (!text) return;
-    this.currentOutputText += text;
-    this.updateLiveDisplay();
-  }
-
-  finalizeTurn() {
-    if (this.currentInputText.trim()) {
-      this.conversationHistory.push({
-        speaker: 'You',
-        text: this.currentInputText.trim(),
-      });
-    }
-    if (this.currentOutputText.trim()) {
-      this.conversationHistory.push({
-        speaker: 'AI',
-        text: this.currentOutputText.trim(),
-      });
-    }
-    this.currentInputText = '';
-    this.currentOutputText = '';
-    this.updateFinalDisplay();
-  }
-
-  updateLiveDisplay() {
-    let displayText = '';
-    for (const entry of this.conversationHistory.slice(-2)) {
-      displayText += `${entry.speaker}: ${entry.text}\n\n`;
-    }
-    if (this.currentInputText.trim()) {
-      displayText += `You: ${this.currentInputText}`;
-    }
-    if (this.currentOutputText.trim()) {
-      if (this.currentInputText.trim()) displayText += '\n\n';
-      displayText += `AI: ${this.currentOutputText}`;
-    }
-    this.render(displayText);
-  }
-
-  updateFinalDisplay() {
-    let displayText = '';
-    for (const entry of this.conversationHistory) {
-      displayText += `${entry.speaker}: ${entry.text}\n\n`;
-    }
-    this.render(displayText);
-  }
-
-  clear() {
-    this.currentInputText = '';
-    this.currentOutputText = '';
-    this.conversationHistory = [];
-  }
-
-  render(text) {
-    if (this.responseDisplay) this.responseDisplay.text = text.trim();
-  }
-}
-
-```
-File: `samples/xr_ai/gemini_icebreakers/main.js`
-```javascript
-import * as xb from 'xrblocks';
-
-import {GeminiIcebreakers} from './GeminiIcebreakers.js';
 
 const options = new xb.Options();
 options.enableAI();
@@ -3299,577 +3145,68 @@ async function start() {
 
 document.addEventListener('DOMContentLoaded', () => void start());
 
-```
-
-
-### Sample: xr_ai/gemini_xrobject
-File: `samples/xr_ai/gemini_xrobject/ObjectQuestionCard.js`
-```javascript
-import * as xb from 'xrblocks';
-
-class HoldToAskButton extends xb.UIButton {
-  constructor(label, onActivate, onDeactivate) {
-    super({
-      label,
-      icon: 'mic',
-      ariaLabel: `Hold to ask a question about ${label}`,
-      style: {
-        width: '100%',
-        height: '100%',
-        borderRadius: 18,
-        fontSize: 24,
-        fontWeight: 'bold',
-        ':active': {
-          backgroundColor: '#4970ff',
-          color: '#ffffff',
-        },
-      },
-    });
-    this.objectLabel = label;
-    this.onActivate = onActivate;
-    this.onDeactivate = onDeactivate;
-    this.pressed = false;
-  }
-
-  onObjectSelectStart(event) {
-    this.activate(event);
-    event.stopPropagation();
-  }
-
-  onObjectSelectEnd(event) {
-    this.deactivate(event);
-    event.stopPropagation();
-  }
-
-  onObjectTouchStart(event) {
-    this.activate(event);
-    event.stopPropagation();
-  }
-
-  onObjectTouchEnd(event) {
-    this.deactivate(event);
-    event.stopPropagation();
-  }
-
-  activate(event) {
-    if (this.pressed) return;
-    this.setActive(true);
-    this.onActivate?.(event);
-  }
-
-  deactivate(event) {
-    if (!this.pressed) return;
-    this.setActive(false);
-    this.onDeactivate?.(event);
-  }
-
-  setActive(active) {
-    this.pressed = active;
-    this.label = active ? 'Listening' : this.objectLabel;
-  }
-}
-
-/** A detected object label that acts as a press-and-hold voice button. */
-export class ObjectQuestionCard extends xb.UICard {
-  constructor(detectedObject, onActivate, onDeactivate) {
-    const button = new HoldToAskButton(
-      detectedObject.label,
-      onActivate,
-      onDeactivate
-    );
-    super({
-      size: {width: 0.28, height: 0.09},
-      style: {padding: 0, borderRadius: 18},
-      children: [button],
-    });
-
-    this.object = detectedObject;
-    this.button = button;
-    this.position.copy(detectedObject.position);
-    this.position.y += 0.08;
-    this.add(new xb.FaceCamera({mode: 'spherical', smoothing: 1}));
-    this.name = `${detectedObject.label} question button`;
-  }
-
-  owns(target) {
-    return target === this || target === this.button;
-  }
-
-  setActive(active) {
-    this.button.setActive(active);
-  }
-}
-
-```
-File: `samples/xr_ai/gemini_xrobject/XRObjectManager.js`
-```javascript
-import * as THREE from 'three';
-import * as xb from 'xrblocks';
-
-import {ObjectQuestionCard} from './ObjectQuestionCard.js';
-
-const LONG_SELECT_DELAY_MS = 1000;
-const HOLD_INDICATOR_RADIUS = 0.028;
-
-/**
- * Manages the lifecycle of object detection, user interaction via voice, and
- * the visualization of detected objects as interactive cards. This class
- * serves as the main application logic for the demo.
- * @extends {xb.Script}
- */
-export class XRObjectManager extends xb.Script {
-  static dependencies = {
-    ai: xb.AI,
-    aiOptions: xb.AIOptions,
-    sound: xb.CoreSound,
-    user: xb.User,
-    world: xb.World,
-  };
-
-  /**
-   * Initializes properties and configures the AI model for user queries.
-   */
-  constructor() {
-    super();
-    this.activeCard = null;
-    this.detecting = false;
-    this.longSelectTimeout = null;
-    this.holdStartedAt = null;
-    this.holdSource = null;
-    this.cards = new Set();
-    this.onSpeechResult = (event) => this.handleSpeechResult(event);
-    this.onSpeechEnd = () => {
-      this.activeCard?.setActive(false);
-      this.activeCard = null;
-    };
-
-    this.holdIndicatorGeometry = new THREE.SphereGeometry(
-      HOLD_INDICATOR_RADIUS,
-      32,
-      32
-    );
-    this.holdIndicatorOuterMaterial = new THREE.MeshBasicMaterial({
-      color: 0x4970ff,
-      transparent: true,
-      opacity: 0.3,
-      depthTest: false,
-      depthWrite: false,
-    });
-    this.holdIndicatorInnerMaterial = new THREE.MeshBasicMaterial({
-      color: 0x4970ff,
-      transparent: true,
-      opacity: 0.6,
-      depthTest: false,
-      depthWrite: false,
-    });
-    this.holdIndicatorOuter = new THREE.Mesh(
-      this.holdIndicatorGeometry,
-      this.holdIndicatorOuterMaterial
-    );
-    this.holdIndicatorInner = new THREE.Mesh(
-      this.holdIndicatorGeometry,
-      this.holdIndicatorInnerMaterial
-    );
-    this.holdIndicatorOuter.xb = {pointerEvents: 'none'};
-    this.holdIndicatorInner.xb = {pointerEvents: 'none'};
-    this.holdIndicatorOuter.renderOrder = 1000;
-    this.holdIndicatorInner.renderOrder = 1001;
-    this.holdIndicatorWorldPosition = new THREE.Vector3();
-    this.holdIndicatorLocalPosition = new THREE.Vector3();
-
-    this.userQueryConfig = {
-      systemInstruction: `You're an informative and helpful AI assistant specializing in identifying and describing objects within images. Your primary goal is to provide detailed yet concise answers to user questions, making a best effort to respond even if you're not entirely sure or the image quality is poor. When describing objects, strive for maximum detail without being verbose, focusing on key characteristics. Please ignore any hands or other human body parts present in the image. User queries will always be structured like this: {object: '...', question: '...'}`,
-      responseMimeType: 'application/json',
-      responseSchema: {
-        type: 'OBJECT',
-        required: ['answer'],
-        properties: {
-          answer: {type: 'STRING'},
-        },
-      },
-    };
-  }
-
-  onSelectStart(event) {
-    this.cancelLongSelect();
-    this.removeHoldIndicator();
-    if (this.isQuestionCardTarget(event.target)) return;
-    this.holdSource = event.source;
-    this.holdStartedAt = performance.now();
-    this.createHoldIndicator();
-    this.longSelectTimeout = setTimeout(() => {
-      this.longSelectTimeout = null;
-      this.holdIndicatorInner.scale.setScalar(1);
-      this.sound.soundSynthesizer.playPresetTone('ACTIVATE');
-      void this.queryObjectDetection();
-    }, LONG_SELECT_DELAY_MS);
-  }
-
-  onSelectEnd() {
-    this.cancelLongSelect();
-    this.removeHoldIndicator();
-  }
-
-  cancelLongSelect() {
-    if (this.longSelectTimeout === null) return;
-    clearTimeout(this.longSelectTimeout);
-    this.longSelectTimeout = null;
-  }
-
-  update() {
-    if (this.holdStartedAt === null) return;
-    if (!this.holdIndicatorOuter.parent) this.createHoldIndicator();
-    this.updateHoldIndicatorPosition();
-    const progress = Math.min(
-      (performance.now() - this.holdStartedAt) / LONG_SELECT_DELAY_MS,
-      1
-    );
-    this.holdIndicatorInner.scale.setScalar(progress * progress);
-  }
-
-  createHoldIndicator() {
-    this.holdIndicatorInner.scale.setScalar(0.01);
-    this.add(this.holdIndicatorOuter, this.holdIndicatorInner);
-    this.updateHoldIndicatorPosition();
-  }
-
-  updateHoldIndicatorPosition() {
-    if (!this.holdSource) return;
-    const handedness =
-      this.holdSource.handedness === 'left'
-        ? xb.Handedness.LEFT
-        : this.holdSource.handedness === 'right'
-          ? xb.Handedness.RIGHT
-          : xb.Handedness.NONE;
-    const indexTip =
-      handedness === xb.Handedness.NONE
-        ? undefined
-        : this.user.hands?.getIndexTip(handedness);
-    if (indexTip) {
-      indexTip.getWorldPosition(this.holdIndicatorWorldPosition);
-    } else {
-      this.holdIndicatorWorldPosition.set(0, 0, -0.08);
-      this.holdSource.controller.localToWorld(this.holdIndicatorWorldPosition);
-    }
-    this.holdIndicatorLocalPosition.copy(this.holdIndicatorWorldPosition);
-    this.worldToLocal(this.holdIndicatorLocalPosition);
-    this.holdIndicatorOuter.position.copy(this.holdIndicatorLocalPosition);
-    this.holdIndicatorInner.position.copy(this.holdIndicatorLocalPosition);
-  }
-
-  removeHoldIndicator() {
-    this.holdIndicatorOuter.removeFromParent();
-    this.holdIndicatorInner.removeFromParent();
-    this.holdStartedAt = null;
-    this.holdSource = null;
-  }
-
-  /**
-   * Sets up listeners for the speech recognizer.
-   * @override
-   */
-  init({ai, aiOptions, sound, user, world}) {
-    this.ai = ai;
-    this.aiOptions = aiOptions;
-    this.sound = sound;
-    this.user = user;
-    this.world = world;
-    this.add(this.createInstructions());
-
-    if (this.sound.speechRecognizer) {
-      this.sound.speechRecognizer.addEventListener(
-        'result',
-        this.onSpeechResult
-      );
-      this.sound.speechRecognizer.addEventListener('end', this.onSpeechEnd);
-    } else {
-      console.error('Speech recognizer not available at init.');
-    }
-  }
-
-  /**
-   * Processes the final transcript from a speech recognition event and queries
-   * the AI with the user's question about the currently active object.
-   * @param {Event} event - The speech recognition result event.
-   */
-  handleSpeechResult(event) {
-    const {transcript, isFinal} = event;
-
-    // We only use the final output to construct the query.
-    if (!isFinal) {
-      return;
-    }
-
-    if (!this.activeCard) {
-      console.warn('Speech result received, but no active card is set.');
-      return;
-    }
-
-    // Check if the active card has an image to query against.
-    if (!this.activeCard.object.image) {
-      const warningMsg =
-        "I don't have a specific image for that object, so I can't answer questions about it.";
-      console.warn(warningMsg);
-      this.sound.speechSynthesizer?.speak(warningMsg);
-      return;
-    }
-
-    const prompt = {
-      question: transcript,
-      object: this.activeCard.object.label,
-    };
-    this.queryObjectInformation(
-      JSON.stringify(prompt),
-      this.activeCard.object.image
-    )
-      .then((response) => {
-        try {
-          this.sound.speechSynthesizer?.speak(response);
-        } catch (error) {
-          console.error('Could not speak the object response:', error);
-        }
-      })
-      .catch((error) => {
-        const errorMsg =
-          "I'm sorry, I had trouble processing that request. Please try again.";
-        console.error('Failed to get information about the object:', error);
-        this.sound.speechSynthesizer?.speak(errorMsg);
-      });
-  }
-
-  /**
-   * Triggers the `ObjectDetector` to find objects in the scene and creates an
-   * interactive card for each detected object.
-   */
-  async queryObjectDetection() {
-    if (this.detecting) return;
-    if (!this.world.objects) {
-      console.error(
-        'ObjectDetector is not available. Ensure it is enabled in the options.'
-      );
-      return;
-    }
-
-    this.detecting = true;
-    try {
-      const detectedObjects = await this.world.objects.runDetection();
-      this.clearCards();
-      for (const detectedObject of detectedObjects) {
-        this.createQuestionCard(detectedObject);
-      }
-    } catch (error) {
-      console.error('Object detection failed:', error);
-    } finally {
-      this.detecting = false;
-    }
-  }
-
-  /**
-   * Sends a user's question and the cropped image of a detected object to the
-   * AI for a descriptive answer.
-   * @param {string} textPrompt - The JSON string containing the question and
-   * object label.
-   * @param {string} objectImageBase64 - The base64-encoded image of the
-   * object.
-   * @return {Promise<string>} A promise that resolves with the AI's response.
-   */
-  async queryObjectInformation(textPrompt, objectImageBase64) {
-    if (!this.ai.isAvailable()) {
-      const errorMsg = 'Gemini is unavailable for object query.';
-      console.error(errorMsg);
-      throw new Error(errorMsg);
-    }
-
-    const originalConfig = this.aiOptions.gemini.config;
-    this.aiOptions.gemini.config = this.userQueryConfig;
-    const {mimeType, strippedBase64} = xb.parseBase64DataURL(objectImageBase64);
-
-    try {
-      const response = await this.ai.query({
-        type: 'multiPart',
-        parts: [
-          {inlineData: {mimeType, data: strippedBase64}},
-          {text: textPrompt},
-        ],
-      });
-      const text = typeof response === 'string' ? response : response?.text;
-      if (!text) throw new Error('Gemini returned an empty object response.');
-      const parsedResponse = JSON.parse(text);
-      if (typeof parsedResponse.answer !== 'string') {
-        throw new Error('Gemini returned an invalid object response.');
-      }
-      return parsedResponse.answer;
-    } finally {
-      this.aiOptions.gemini.config = originalConfig;
-    }
-  }
-
-  /**
-   * Handles the start of a card press, activating speech recognition.
-   */
-  onCardPressStart(card) {
-    if (this.sound.speechSynthesizer?.isSpeaking) {
-      card.setActive(false);
-      return;
-    }
-
-    this.activeCard = card;
-    this.activeCard.setActive(true);
-    this.sound.speechRecognizer?.start();
-  }
-
-  /**
-   * Handles the end of a card press, stopping speech recognition.
-   */
-  onCardPressEnd() {
-    this.sound.speechRecognizer?.stop();
-  }
-
-  /**
-   * Creates a voice button for a detected object and adds it to the scene.
-   * @param {xb.DetectedObject} detectedObject - The object data from the
-   * ObjectDetector.
-   */
-  createQuestionCard(detectedObject) {
-    let card;
-    card = new ObjectQuestionCard(
-      detectedObject,
-      () => this.onCardPressStart(card),
-      () => this.onCardPressEnd()
-    );
-
-    this.cards.add(card);
-    this.add(card);
-  }
-
-  isQuestionCardTarget(target) {
-    for (const card of this.cards) {
-      if (card.owns(target)) return true;
-    }
-    return false;
-  }
-
-  clearCards() {
-    for (const card of this.cards) card.removeFromParent();
-    this.cards.clear();
-    this.activeCard = null;
-  }
-
-  createInstructions() {
-    const overlay = new xb.UIOverlay({
-      pointerEvents: 'none',
-      style: {
-        width: 720,
-        position: 'absolute',
-        left: '50%',
-        bottom: 32,
-        transform: {translateX: '-50%'},
-        flexDirection: 'column',
-        gap: 8,
-      },
-      children: [
-        new xb.UIText({
-          text: 'XR OBJECTS',
-          pointerEvents: 'none',
-          style: {
-            fontSize: 24,
-            fontWeight: 'bold',
-            textAlign: 'center',
-          },
-        }),
-        new xb.UIText({
-          text: 'Hold a pinch or press on empty space for one second to scan. Then point at an object button, hold while you ask a question, and release to stop listening.',
-          pointerEvents: 'none',
-          style: {
-            fontSize: 20,
-            lineHeight: 1.4,
-            textAlign: 'center',
-          },
-        }),
-      ],
-    });
-    overlay.name = 'XR Objects instructions';
-    return overlay;
-  }
-
-  dispose() {
-    this.cancelLongSelect();
-    this.removeHoldIndicator();
-    this.sound?.speechRecognizer?.removeEventListener(
-      'result',
-      this.onSpeechResult
-    );
-    this.sound?.speechRecognizer?.removeEventListener('end', this.onSpeechEnd);
-    this.sound?.speechRecognizer?.stop();
-    this.clearCards();
-    this.holdIndicatorGeometry.dispose();
-    this.holdIndicatorOuterMaterial.dispose();
-    this.holdIndicatorInnerMaterial.dispose();
-  }
-}
-
-```
-File: `samples/xr_ai/gemini_xrobject/main.js`
-```javascript
-import * as xb from 'xrblocks';
-
-import {XRObjectManager} from './XRObjectManager.js';
-
-const options = new xb.Options();
-options.enableCamera();
-options.deviceCamera.videoConstraints = {
-  width: {ideal: 1280},
-  height: {ideal: 720},
-  facingMode: 'environment',
-};
-options.reticles.enabled = true;
-options.reticles.projectOnDepthMesh = true;
-options.reticles.defaultRenderDistance = 8;
-options.controllers.visualizeRays = false;
-options.enableObjectDetection();
-options.enableDepth();
-options.depth.depthMesh.updateFullResolutionGeometry = true;
-options.depth.depthMesh.renderShadow = true;
-options.depth.depthTexture.enabled = false;
-options.depth.matchDepthView = false;
-options.enableHands();
-options.hands.visualization = false;
-options.hands.visualizeMeshes = false;
-options.sound.speechSynthesizer.enabled = true;
-options.sound.speechRecognizer.enabled = true;
-options.sound.speechRecognizer.playSimulatorActivationSounds = true;
-
-// options.ai.gemini.config is dynamic and defined in XRObjectManager.
-options.enableAI();
-options.ai.promptForApiKey = true;
-options.world.objects.backendConfig.activeBackend = 'gemini';
-options.world.objects.showDebugVisualizations = false;
-options.setAppTitle('Gemini XR-Objects');
-options.setAppDescription(
-  'Recognize objects with Gemini and ask questions about them. Perform a long pinch / press to start!'
-);
-options.xrButton.showEnterSimulatorButton = true;
-options.simulator.defaultMode = xb.SimulatorMode.CONTROLLER;
-
-document.addEventListener('DOMContentLoaded', () => {
-  xb.add(new XRObjectManager());
-  xb.init(options);
-});
+</script>
+  </body>
+</html>
 
 ```
 
 
 ### Sample: xr_interaction/hand_gestures
-File: `samples/xr_interaction/hand_gestures/HandGestureDemo.js`
-```javascript
-// Imports LiteRt: https://ai.google.dev/edge/litert/web/get_started
+File: `samples/xr_interaction/hand_gestures/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Custom Hand Gestures | XR Blocks</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/": "https://cdn.jsdelivr.net/npm/three@0.184.0/",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "@pmndrs/uikit": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit@1.0.64/dist/index.min.js",
+          "@pmndrs/uikit-pub-sub": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit-pub-sub@1.0.64/dist/index.min.js",
+          "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.64/dist/index.min.js",
+          "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.14.0/dist/signals-core.mjs",
+          "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js",
+          "@tensorflow/tfjs-core": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core/+esm",
+          "@tensorflow/tfjs": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/+esm",
+          "@tensorflow/tfjs-backend-webgpu": "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgpu/+esm",
+          "@litertjs/core": "https://unpkg.com/@litertjs/core@0.2.1",
+          "@litertjs/tfjs-interop": "https://unpkg.com/@litertjs/tfjs-interop@1.0.1",
+          "@litertjs/wasm-utils": "https://unpkg.com/@litertjs/wasm-utils@0.2.1",
+          "lit": "https://esm.sh/lit@3.3.1",
+          "lit/": "https://esm.sh/lit@3.3.1/",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/addons/"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <script type="module">
+import * as xb from 'xrblocks';
 import {loadLiteRt, setWebGpuDevice} from '@litertjs/core';
 import {runWithTfjsTensors} from '@litertjs/tfjs-interop';
-// TensorFlow.js + WebGPU backend
 import * as tf from '@tensorflow/tfjs';
-import '@tensorflow/tfjs-backend-webgpu';
 import * as THREE from 'three';
-import * as xb from 'xrblocks';
+
+// --- Inlined from ./HandGestureDemo.js ---
+// Imports LiteRt: https://ai.google.dev/edge/litert/web/get_started
+// TensorFlow.js + WebGPU backend
+import '@tensorflow/tfjs-backend-webgpu';
 
 const GESTURE_LABELS = [
   'OTHER',
@@ -3908,8 +3245,7 @@ const GESTURE_IMAGES = [
 ];
 
 const UNKNOWN_GESTURE = 8;
-
-export class CustomGestureRecognizer {
+class CustomGestureRecognizer {
   constructor() {
     this.modelPath =
       'https://cdn.jsdelivr.net/gh/xrblocks/assets@main/tflite_models/gestures/xr_emoji.tflite';
@@ -4042,7 +3378,7 @@ export class CustomGestureRecognizer {
  * A demo scene that uses a custom ML model to detect and display static hand
  * gestures for both hands in real-time.
  */
-export class HandGestureDemo extends xb.Script {
+class HandGestureDemo extends xb.Script {
   constructor(gestureRecognizer) {
     super();
     this.gestureRecognizer = gestureRecognizer;
@@ -4230,12 +3566,7 @@ export class HandGestureDemo extends xb.Script {
   }
 }
 
-```
-File: `samples/xr_interaction/hand_gestures/main.js`
-```javascript
-import * as xb from 'xrblocks';
 
-import {CustomGestureRecognizer, HandGestureDemo} from './HandGestureDemo.js';
 
 const options = new xb.Options();
 const gestureRecognizer = new CustomGestureRecognizer();
@@ -4255,14 +3586,52 @@ async function start() {
 
 document.addEventListener('DOMContentLoaded', start);
 
+</script>
+  </body>
+</html>
+
 ```
 
 
 ### Sample: xr_realism/depthmesh
-File: `samples/xr_realism/depthmesh/main.js`
-```javascript
+File: `samples/xr_realism/depthmesh/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Depth Mesh | XR Blocks</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/": "https://cdn.jsdelivr.net/npm/three@0.184.0/",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "lit": "https://esm.sh/lit@3.3.1",
+          "lit/": "https://esm.sh/lit@3.3.1/",
+          "@pmndrs/uikit": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit@1.0.64/dist/index.min.js",
+          "@pmndrs/uikit-pub-sub": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit-pub-sub@1.0.64/dist/index.min.js",
+          "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.64/dist/index.min.js",
+          "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.14.0/dist/signals-core.mjs",
+          "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/addons/"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <script type="module">
 import * as THREE from 'three';
 import * as xb from 'xrblocks';
+
 
 class DepthMeshVisualizer extends xb.Script {
   constructor() {
@@ -4343,21 +3712,66 @@ document.addEventListener('DOMContentLoaded', function () {
   xb.init(options);
 });
 
+</script>
+  </body>
+</html>
+
 ```
 
 
 ### Sample: xr_realism/occlusion
-File: `samples/xr_realism/occlusion/OcclusionScene.js`
-```javascript
-import * as THREE from 'three';
+File: `samples/xr_realism/occlusion/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Occlusion | XR Blocks</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script>
+      window.litDisableBundleWarning = true;
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/": "https://cdn.jsdelivr.net/npm/three@0.184.0/",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "lit": "https://esm.sh/lit@3.3.1",
+          "lit/": "https://esm.sh/lit@3.3.1/",
+          "@pmndrs/uikit": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit@1.0.64/dist/index.min.js",
+          "@pmndrs/uikit-pub-sub": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit-pub-sub@1.0.64/dist/index.min.js",
+          "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.64/dist/index.min.js",
+          "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.14.0/dist/signals-core.mjs",
+          "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/addons/"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <div
+      class="background-image"
+      style="background-image: url('textures/background.webp')"
+    ></div>
+    <script type="module">
 import * as xb from 'xrblocks';
+import * as THREE from 'three';
+
+// --- Inlined from ./OcclusionScene.js ---
 
 const CAT_SOURCE = {
   url: 'models/Cat/cat.gltf',
   path: xb.XR_BLOCKS_ASSETS_PATH,
 };
-
-export class OcclusionScene extends xb.Script {
+class OcclusionScene extends xb.Script {
   static dependencies = {
     camera: THREE.Camera,
     depth: xb.Depth,
@@ -4447,12 +3861,7 @@ export class OcclusionScene extends xb.Script {
   }
 }
 
-```
-File: `samples/xr_realism/occlusion/main.js`
-```javascript
-import * as xb from 'xrblocks';
 
-import {OcclusionScene} from './OcclusionScene.js';
 
 const options = new xb.Options();
 options.reticles.enabled = true;
@@ -4474,13 +3883,51 @@ document.addEventListener('DOMContentLoaded', function () {
   start();
 });
 
+</script>
+  </body>
+</html>
+
 ```
 
 
 ### Sample: xr_realism/reticle
-File: `samples/xr_realism/reticle/main.js`
-```javascript
+File: `samples/xr_realism/reticle/index.html`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Reticle | XR Blocks</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+
+    <link type="text/css" rel="stylesheet" href="https://xrblocks.github.io/css/xr.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+          "three/": "https://cdn.jsdelivr.net/npm/three@0.184.0/",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+          "lit": "https://esm.sh/lit@3.3.1",
+          "lit/": "https://esm.sh/lit@3.3.1/",
+          "@pmndrs/uikit": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit@1.0.64/dist/index.min.js",
+          "@pmndrs/uikit-pub-sub": "https://cdn.jsdelivr.net/npm/@pmndrs/uikit-pub-sub@1.0.64/dist/index.min.js",
+          "@pmndrs/msdfonts": "https://cdn.jsdelivr.net/npm/@pmndrs/msdfonts@1.0.64/dist/index.min.js",
+          "@preact/signals-core": "https://cdn.jsdelivr.net/npm/@preact/signals-core@1.14.0/dist/signals-core.mjs",
+          "yoga-layout/load": "https://cdn.jsdelivr.net/npm/yoga-layout@3.2.1/dist/src/load.js",
+          "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/xrblocks.js",
+          "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.21.1/build/addons/"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <script type="module">
 import * as xb from 'xrblocks';
+
 
 class ReticleVisualizer extends xb.Script {
   static dependencies = {
@@ -4598,4 +4045,21 @@ document.addEventListener('DOMContentLoaded', function () {
   xb.init(options);
 });
 
+</script>
+  </body>
+</html>
+
 ```
+
+--------------------------------------------------------------------------------
+🔴 FINAL CHECK: IMPORT MAP AND xb.Script
+Before finishing the response, DOUBLE CHECK the `<script type="importmap">`.
+You **MUST** include ALL the imports defined in Engineering Guidelines #2.
+Ensure `three`, `three/addons/`, `@pmndrs/uikit`, `@preact/signals-core`, `lit`, and `xrblocks` are present and point to the exact URLs specified above.
+Ensure spatial UI controls (`UICard`, `UIButton`, `UIText`, etc.) are imported directly from `'xrblocks'`.
+Do NOT import legacy `uiblocks` or call `options.enableUI()`.
+--------------------------------------------------------------------------------
+After writing code, RECHECK THE TOP 10 RULES and REVISE code.
+Do NOT hallucinate obsolete xrblocks APIs or missing model files.
+Use built-in spatial UI (`xb.UICard`, `xb.UIButton`, `xb.UIText`, `xb.UISlider`) for spatial interfaces.
+In the end, remind users that "The XR app is best viewed in an Android XR device like Galaxy XR. On desktop, we provide you a simulated environment for previewing the app."
