@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.21.1
- * @commitid 822280b
- * @builddate 2026-08-28T22:35:55.904Z
+ * @commitid 7d212b0
+ * @builddate 2026-09-03T03:30:41.279Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -50,7 +50,7 @@ import { GLTFLoader, GLTF } from 'three/addons/loaders/GLTFLoader.js';
 import * as _sparkjsdev_spark from '@sparkjsdev/spark';
 import { SparkRenderer } from '@sparkjsdev/spark';
 
-declare const GEMINI_DEFAULT_FLASH_MODEL = "gemini-3.7-flash";
+declare const GEMINI_DEFAULT_FLASH_MODEL = "gemini-3.8-flash";
 declare const GEMINI_DEFAULT_LIVE_MODEL = "gemini-3.1-flash-live-preview";
 declare const GEMINI_DEFAULT_IMAGE_MODEL = "gemini-3.1-flash-image";
 declare class GeminiOptions {
