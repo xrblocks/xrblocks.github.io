@@ -15,8 +15,8 @@
  *
  * @file xrblocks.js
  * @version v0.21.1
- * @commitid 1ba6a60
- * @builddate 2026-09-10T19:03:30.544Z
+ * @commitid b367f36
+ * @builddate 2026-09-10T19:34:56.644Z
  * @description XR Blocks SDK, built from source with the above commit ID.
  * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
  * and follow rules below:
@@ -23021,10 +23021,9 @@ class Core {
             if (this.lighting) {
                 this.lighting.update();
             }
-            // XREffects renders each eye manually with XR camera auto-update disabled.
-            // Keep the public camera at the current headset pose so view-space UI and
-            // scripts do not use the stale pose from before the XR session started.
-            if (this.effects && this.renderer.xr.isPresenting) {
+            // Rendering updates this camera too late for first-frame UI placement.
+            // Scripts and input need the current headset pose before they run.
+            if (this.renderer.xr.isPresenting) {
                 this.renderer.xr.updateCamera(this.camera);
             }
             this.input.sampleSources();
