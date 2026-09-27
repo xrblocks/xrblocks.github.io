@@ -1,10 +1,11 @@
+//#region demos/animalattack/math_utils.ts
 /**
- * Returns a random integer between 0 (inclusive) and max (exclusive).
- * @param max - The upper bound (exclusive) for the random integer.
- * @returns A random integer.
- */
+* Returns a random integer between 0 (inclusive) and max (exclusive).
+* @param max - The upper bound (exclusive) for the random integer.
+* @returns A random integer.
+*/
 function randInt(max) {
-    return Math.floor(Math.random() * max);
+	return Math.floor(Math.random() * max);
 }
-
+//#endregion
 export { randInt };
