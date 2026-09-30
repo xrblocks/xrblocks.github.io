@@ -250,7 +250,7 @@ var XRCircleToSearchScript = class extends xb.Script {
 				borderWidth: 1.5
 			},
 			children: [new xb.UIIcon({
-				icon: "auto_awesome",
+				icon: "crop_free",
 				style: {
 					fontSize: 16,
 					color: "#38bdf8"
@@ -261,7 +261,7 @@ var XRCircleToSearchScript = class extends xb.Script {
 	}
 	ensureWorker() {
 		if (!this.worker) {
-			this.worker = new Worker(new URL("./efficientsam_worker.js", import.meta.url));
+			this.worker = new Worker(new URL("./efficientsam_worker.js", import.meta.url), { type: "module" });
 			this.worker.addEventListener("message", (event) => {
 				const { id, ok, result, error } = event.data;
 				const pending = this.pendingWorkerRequests.get(id);
