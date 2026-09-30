@@ -15,8 +15,8 @@
 *
 * @file xrblocks.js
 * @version v0.21.1
-* @commitid 07d8ae5
-* @builddate 2026-09-30T23:08:59.694Z
+* @commitid ac99f26
+* @builddate 2026-09-30T23:33:30.590Z
 * @description XR Blocks SDK, built from source with the above commit ID.
 * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
 * and follow rules below:
@@ -4397,6 +4397,16 @@ var Options = class {
 	*/
 	setAppDescription(description) {
 		this.xrButton.appDescription = description;
+		return this;
+	}
+	/**
+	* Sets the WebXR framebuffer scale factor (a numeric multiplier or `'native'`
+	* to use `XRWebGLLayer.getNativeFramebufferScaleFactor(session)`).
+	* @param scaleFactor - Numeric scale factor or `'native'`.
+	* @returns The instance for chaining.
+	*/
+	setFramebufferScaleFactor(scaleFactor) {
+		this.framebufferScaleFactor = scaleFactor;
 		return this;
 	}
 };
