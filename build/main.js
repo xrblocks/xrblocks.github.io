@@ -396,6 +396,7 @@ window.addEventListener('mousemove', (event) => {
 // 4. SCROLL INTERACTIVITY
 // ----------------------------------------------------
 
+const siteHeader = document.querySelector('header');
 const heroSection = document.getElementById('hero');
 const videoSection = document.getElementById('video');
 const carouselSection = document.getElementById('carousel-section');
@@ -409,6 +410,10 @@ let isTransitioningView = false;
 
 function handleScroll(scrollY) {
   const height = window.innerHeight;
+
+  if (siteHeader) {
+    siteHeader.classList.toggle('scrolled', scrollY > 8);
+  }
 
   if (document.body.classList.contains('experiments-view-active')) {
     if (container) container.style.filter = 'blur(60px) saturate(0.6)';
@@ -473,6 +478,7 @@ scroll.on('scroll', (obj) => {
 window.addEventListener('scroll', () => {
   handleScroll(window.scrollY || window.pageYOffset || 0);
 }, { passive: true });
+handleScroll(window.scrollY || window.pageYOffset || 0);
 
 // Premium Scroll Entrance Animation Observer (IntersectionObserver)
 const observerOptions = {
@@ -1873,6 +1879,9 @@ function openAllExperimentsView(pushHistory = true) {
     });
 
     document.body.classList.add('experiments-view-active');
+    if (siteHeader) {
+      siteHeader.classList.remove('scrolled');
+    }
 
     if (scroll) {
       scroll.scrollTo(0, {duration: 0, disableLerp: true});
@@ -1945,6 +1954,9 @@ function closeAllExperimentsView(pushHistory = true) {
     }
     targetScrollY = savedHomeScrollY;
     currentScrollY = savedHomeScrollY;
+    if (siteHeader) {
+      siteHeader.classList.toggle('scrolled', savedHomeScrollY > 8);
+    }
 
     const scrollIndicator = document.querySelector('.scroll-indicator');
     if (scrollIndicator) {
