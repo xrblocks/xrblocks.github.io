@@ -306,13 +306,14 @@ section {
 
 #hero h1 {
   font-family: var(--font-display);
-  font-size: 160px;
+  font-size: clamp(68px, 10vw, 160px);
   font-weight: 500;
-  letter-spacing: -6.4px;
+  letter-spacing: -0.04em;
   line-height: 0.84;
   margin: 0;
   color: #000;
   white-space: nowrap;
+  max-width: 100%;
 }
 
 #hero h1 span.gradient-text {
@@ -443,8 +444,10 @@ section {
   overflow: hidden;
   box-shadow: none;
   position: relative;
-  width: 1088px;
-  height: 610px;
+  width: 100%;
+  max-width: 1088px;
+  height: auto;
+  aspect-ratio: 1088 / 610;
 }
 
 .video-browser-frame iframe {
@@ -944,10 +947,10 @@ section {
 
 .showcase-title {
   font-family: var(--font-display);
-  font-size: 96px;
+  font-size: clamp(48px, 7.5vw, 96px);
   font-weight: 500;
   line-height: normal;
-  letter-spacing: -1.92px;
+  letter-spacing: -0.02em;
   color: #000;
   margin: 0;
   text-align: center;
@@ -1277,10 +1280,10 @@ body.experiments-view-active #all-experiments-view {
 
 .experiments-title {
   font-family: var(--font-display);
-  font-size: 160px;
+  font-size: clamp(56px, 10vw, 160px);
   font-weight: 500;
   line-height: normal;
-  letter-spacing: -9.6px;
+  letter-spacing: -0.06em;
   color: #000;
   text-align: center;
   margin: 0;
@@ -1519,6 +1522,19 @@ body.experiments-animate-in .filter-pill {
   }
 }
 
+/* INTERMEDIATE / ADAPTIVE TABLET LAYOUT OVERRIDES */
+@media (max-width: 1280px) {
+  #hero {
+    padding: 0 32px;
+  }
+  #video {
+    padding: 72px 32px 80px 32px;
+  }
+  .video-browser-frame {
+    border-radius: 28px;
+  }
+}
+
 /* MOBILE RESPONSIVE LAYOUT OVERRIDES */
 @media (max-width: 768px) {
   /* Navigation Menu Toggle */
@@ -1606,12 +1622,12 @@ body.experiments-animate-in .filter-pill {
     gap: 64px;
   }
   #hero h1 {
-    font-size: 88px;
-    letter-spacing: -3.52px;
+    font-size: clamp(64px, 11vw, 88px);
+    letter-spacing: -0.04em;
     line-height: 0.84;
     padding: 0;
     margin: 0;
-    max-width: 329px;
+    max-width: 100%;
     white-space: normal;
   }
   #hero p {
@@ -1624,7 +1640,7 @@ body.experiments-animate-in .filter-pill {
     margin: 0;
     letter-spacing: -0.48px;
     opacity: 0.8;
-    white-space: nowrap;
+    white-space: normal;
   }
   .hero-buttons {
     flex-direction: column;
