@@ -638,7 +638,7 @@ section {
 }
 
 .faq-item {
-  background: #E3E6FC;
+  background: #f0f2ff;
   border-radius: 36px;
   padding: 24px;
   width: 100%;
@@ -647,7 +647,11 @@ section {
   gap: 24px;
   cursor: pointer;
   box-sizing: border-box;
-  transition: background 0.3s ease;
+  transition: background 0.25s ease;
+}
+
+.faq-item:hover {
+  background: #e2e5f8;
 }
 
 .faq-content {
