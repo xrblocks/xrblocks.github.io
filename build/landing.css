@@ -968,6 +968,17 @@ section {
   text-align: center;
 }
 
+.showcase-desc a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: opacity 0.2s ease;
+}
+
+.showcase-desc a:hover {
+  opacity: 0.7;
+}
+
 .carousel-container {
   width: 100%;
   overflow-x: auto;

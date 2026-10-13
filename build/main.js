@@ -1489,6 +1489,35 @@ function linkifyFaqAnswers() {
       });
     });
   });
+
+  document.querySelectorAll('.showcase-desc').forEach((p) => {
+    if (!p.querySelector('a')) {
+      const text = p.textContent || '';
+      const deviceRegex = /(Galaxy XR|Project Aura)/g;
+      if (deviceRegex.test(text)) {
+        p.textContent = '';
+        let lastIndex = 0;
+        text.replace(deviceRegex, (match, name, offset) => {
+          if (offset > lastIndex) {
+            p.appendChild(document.createTextNode(text.slice(lastIndex, offset)));
+          }
+          const a = document.createElement('a');
+          a.href = name === 'Galaxy XR'
+            ? 'https://samsungshop.onelink.me/tRH1/tntjz42v'
+            : 'https://www.xreal.com/aura';
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = name;
+          p.appendChild(a);
+          lastIndex = offset + match.length;
+          return match;
+        });
+        if (lastIndex < text.length) {
+          p.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+      }
+    }
+  });
 }
 
 const fetchedLangs = new Set();
