@@ -1083,9 +1083,7 @@ const langCache = {
     "faq_q3": "What is Android XR?",
     "faq_a3": "XR stands for extended reality. It’s an umbrella term that encompasses all technologies that blend the real and virtual worlds including virtual reality, augmented reality, and mixed reality. Android XR is an operating system for extended reality devices that use these technologies, like headsets and glasses. It provides the user interface, the ability to access popular apps, and AI assistance from Gemini to these devices.",
     "faq_q4": "How do I get Android XR?",
-    "faq_a4": "Android XR is an operating system for headsets and glasses. The first device, Samsung Galaxy XR (https://www.samsung.com/us/xr/galaxy-xr/galaxy-xr/), is available now.",
-    "faq_q5": "When will Android XR-powered devices be available?",
-    "faq_a5": "The first device, Samsung Galaxy XR, is available now. Other devices will be available in 2026.",
+    "faq_a4": "Samsung Galaxy XR is available now, XREAL AURA is available for pre-order.",
     "faq_q6": "How can I start developing for Android XR?",
     "faq_a6": "You can check out developer.android.com/xr (https://developer.android.com/xr) for documentation and information to get started with Android XR. If you are choosing WebXR (https://immersiveweb.dev/), XR Blocks (https://xrblocks.github.io) here is also a great way to make creative Android XR applications.",
     "open": "Open",
@@ -1147,9 +1145,7 @@ const langCache = {
     "faq_q3": "Qu'est-ce qu'Android XR ?",
     "faq_a3": "XR signifie réalité étendue, un terme générique englobant la réalité virtuelle, la réalité augmentée et la réalité mixte. Android XR est un système d'exploitation pour les appareils de réalité étendue tels que les casques et les lunettes, offrant l'interface utilisateur, l'accès aux applications populaires et l'assistance IA de Gemini.",
     "faq_q4": "Comment obtenir Android XR ?",
-    "faq_a4": "Android XR est un système d'exploitation pour casques et lunettes. Le premier appareil, Samsung Galaxy XR (https://www.samsung.com/us/xr/galaxy-xr/galaxy-xr/), est disponible dès maintenant.",
-    "faq_q5": "Quand les appareils sous Android XR seront-ils disponibles ?",
-    "faq_a5": "Le premier appareil, Samsung Galaxy XR, est disponible dès maintenant. D'autres appareils seront disponibles en 2026.",
+    "faq_a4": "Samsung Galaxy XR est disponible dès maintenant, XREAL AURA est disponible en précommande.",
     "faq_q6": "Comment commencer à développer pour Android XR ?",
     "faq_a6": "Consultez developer.android.com/xr (https://developer.android.com/xr) pour obtenir la documentation et les informations de démarrage sur Android XR. Si vous choisissez WebXR (https://immersiveweb.dev/), XR Blocks (https://xrblocks.github.io) est également un excellent moyen de créer des applications Android XR.",
     "open": "Ouvrir",
@@ -1211,9 +1207,7 @@ const langCache = {
     "faq_q3": "¿Qué es Android XR?",
     "faq_a3": "XR significa realidad extendida, un término general que abarca la realidad virtual, la realidad aumentada y la realidad mixta. Android XR es un sistema operativo para dispositivos de realidad extendida, como visores y gafas, que proporciona la interfaz de usuario, acceso a aplicaciones populares y asistencia de IA de Gemini.",
     "faq_q4": "¿Cómo puedo obtener Android XR?",
-    "faq_a4": "Android XR es un sistema operativo para visores y gafas. El primer dispositivo, Samsung Galaxy XR (https://www.samsung.com/us/xr/galaxy-xr/galaxy-xr/), ya está disponible.",
-    "faq_q5": "¿Cuándo estarán disponibles los dispositivos con Android XR?",
-    "faq_a5": "El primer dispositivo, Samsung Galaxy XR, ya está disponible. Otros dispositivos estarán disponibles en 2026.",
+    "faq_a4": "Samsung Galaxy XR ya está disponible, XREAL AURA está disponible para reserva.",
     "faq_q6": "¿Cómo puedo empezar a desarrollar para Android XR?",
     "faq_a6": "Puedes consultar developer.android.com/xr (https://developer.android.com/xr) para obtener documentación e información sobre cómo empezar con Android XR. Si eliges WebXR (https://immersiveweb.dev/), XR Blocks (https://xrblocks.github.io) es también una excelente forma de crear aplicaciones creativas para Android XR.",
     "open": "Abrir",
@@ -1275,9 +1269,7 @@ const langCache = {
     "faq_q3": "Was ist Android XR?",
     "faq_a3": "XR steht für Extended Reality – ein Oberbegriff für alle Technologien, die reale und virtuelle Welten verschmelzen lassen, einschließlich Virtual Reality, Augmented Reality und Mixed Reality. Android XR ist ein Betriebssystem für Extended-Reality-Geräte wie Headsets und Datenbrillen und bietet die Benutzeroberfläche, Zugriff auf beliebte Apps sowie KI-Unterstützung durch Gemini.",
     "faq_q4": "Wie erhalte ich Android XR?",
-    "faq_a4": "Android XR ist ein Betriebssystem für Headsets und Brillen. Das erste Gerät, Samsung Galaxy XR (https://www.samsung.com/us/xr/galaxy-xr/galaxy-xr/), ist ab sofort erhältlich.",
-    "faq_q5": "Wann werden Geräte mit Android XR verfügbar sein?",
-    "faq_a5": "Das erste Gerät, Samsung Galaxy XR, ist ab sofort erhältlich. Weitere Geräte folgen im Jahr 2026.",
+    "faq_a4": "Samsung Galaxy XR ist ab sofort erhältlich, XREAL AURA kann vorbestellt werden.",
     "faq_q6": "Wie kann ich mit der Entwicklung für Android XR beginnen?",
     "faq_a6": "Unter developer.android.com/xr (https://developer.android.com/xr) finden Sie Dokumentationen und Informationen zum Einstieg in Android XR. Wenn Sie WebXR (https://immersiveweb.dev/) wählen, ist XR Blocks (https://xrblocks.github.io) ebenfalls eine hervorragende Möglichkeit, kreative Android XR-Anwendungen zu entwickeln.",
     "open": "Öffnen",
@@ -1339,9 +1331,7 @@ const langCache = {
     "faq_q3": "Cos'è Android XR?",
     "faq_a3": "XR sta per realtà estesa, un termine che comprende realtà virtuale, realtà aumentata e realtà mista. Android XR è un sistema operativo per dispositivi di realtà estesa come visori e occhiali, che offre l'interfaccia utente, l'accesso alle app più diffuse e l'assistenza AI di Gemini.",
     "faq_q4": "Come posso ottenere Android XR?",
-    "faq_a4": "Android XR è un sistema operativo per visori e occhiali. Il primo dispositivo, Samsung Galaxy XR (https://www.samsung.com/us/xr/galaxy-xr/galaxy-xr/), è disponibile ora.",
-    "faq_q5": "Quando saranno disponibili i dispositivi con Android XR?",
-    "faq_a5": "Il primo dispositivo, Samsung Galaxy XR, è disponibile ora. Altri dispositivi saranno disponibili nel 2026.",
+    "faq_a4": "Samsung Galaxy XR è disponibile ora, XREAL AURA è disponibile in preordine.",
     "faq_q6": "Come posso iniziare a sviluppare per Android XR?",
     "faq_a6": "Puoi consultare developer.android.com/xr (https://developer.android.com/xr) per la documentazione e le informazioni su come iniziare con Android XR. Se scegli WebXR (https://immersiveweb.dev/), XR Blocks (https://xrblocks.github.io) è un ottimo modo per realizzare applicazioni creative per Android XR.",
     "open": "Apri",
@@ -1403,9 +1393,7 @@ const langCache = {
     "faq_q3": "Android XR이란 무엇인가요?",
     "faq_a3": "XR은 가상 현실(VR), 증강 현실(AR), 혼합 현실(MR)을 포함하여 현실과 가상 세계를 융합하는 모든 기술을 포괄하는 확장 현실(Extended Reality)을 의미합니다. Android XR은 헤드셋 및 글래스와 같은 확장 현실 기기를 위한 운영체제로, 사용자 인터페이스와 인기 앱 액세스 및 Gemini의 AI 지원을 제공합니다.",
     "faq_q4": "Android XR은 어떻게 이용할 수 있나요?",
-    "faq_a4": "Android XR은 헤드셋과 글래스를 위한 운영체제입니다. 첫 번째 기기인 Samsung Galaxy XR(https://www.samsung.com/us/xr/galaxy-xr/galaxy-xr/)은 지금 구매할 수 있습니다.",
-    "faq_q5": "Android XR 기반 기기는 언제 출시되나요?",
-    "faq_a5": "첫 번째 기기인 Samsung Galaxy XR은 지금 이용 가능하며, 다른 기기들은 2026년에 출시될 예정입니다.",
+    "faq_a4": "Samsung Galaxy XR은 지금 구매할 수 있으며, XREAL AURA는 사전 예약이 가능합니다.",
     "faq_q6": "Android XR용 개발은 어떻게 시작할 수 있나요?",
     "faq_a6": "developer.android.com/xr(https://developer.android.com/xr)에서 Android XR 시작에 필요한 문서와 정보를 확인할 수 있습니다. WebXR(https://immersiveweb.dev/)을 선택하는 경우 XR Blocks(https://xrblocks.github.io) 또한 창의적인 Android XR 애플리케이션을 제작하는 훌륭한 방법입니다.",
     "open": "열기",
@@ -1462,6 +1450,7 @@ function linkifyFaqAnswers() {
     if (!p.querySelector('a')) {
       const text = p.textContent || '';
       const urlRegex = /(https:\/\/[^\s)]+)/g;
+      const faqDeviceRegex = /(Samsung Galaxy XR|XREAL AURA)/g;
       if (urlRegex.test(text)) {
         p.textContent = '';
         let lastIndex = 0;
@@ -1474,6 +1463,27 @@ function linkifyFaqAnswers() {
           a.target = '_blank';
           a.rel = 'noopener noreferrer';
           a.textContent = url;
+          p.appendChild(a);
+          lastIndex = offset + match.length;
+          return match;
+        });
+        if (lastIndex < text.length) {
+          p.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+      } else if (faqDeviceRegex.test(text)) {
+        p.textContent = '';
+        let lastIndex = 0;
+        text.replace(faqDeviceRegex, (match, name, offset) => {
+          if (offset > lastIndex) {
+            p.appendChild(document.createTextNode(text.slice(lastIndex, offset)));
+          }
+          const a = document.createElement('a');
+          a.href = name.includes('Galaxy XR')
+            ? 'https://samsungshop.onelink.me/tRH1/tntjz42v'
+            : 'https://www.xreal.com/aura';
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = name;
           p.appendChild(a);
           lastIndex = offset + match.length;
           return match;
