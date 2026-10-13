@@ -1103,7 +1103,7 @@ const langCache = {
     "google_ai_subscriptions": "Google AI Subscriptions",
     "see": "See",
     "showcase_title": "Get to know XR Blocks",
-    "showcase_desc": "Explore experimental Android XR features through these demos, available on desktop and devices like Galaxy XR and Project Aura.",
+    "showcase_desc": "Explore experimental Android XR features through these demos, available on desktop and devices like Galaxy XR and XREAL AURA.",
     "card1_title": "XR Blocks Gem",
     "card1_desc": "Describe your vision to XR Blocks Gem to instantly build interactive Android XR apps for headsets like Galaxy XR. Preview your app on the Desktop simulator, and visit our blog for details.",
     "card1_cta": "Create XR Now",
@@ -1167,7 +1167,7 @@ const langCache = {
     "google_ai_subscriptions": "Abonnements Google AI",
     "see": "Voir",
     "showcase_title": "Découvrir XR Blocks",
-    "showcase_desc": "Explorez les fonctionnalités expérimentales d'Android XR grâce à ces démos, disponibles sur ordinateur et sur des appareils comme Galaxy XR et Project Aura.",
+    "showcase_desc": "Explorez les fonctionnalités expérimentales d'Android XR grâce à ces démos, disponibles sur ordinateur et sur des appareils comme Galaxy XR et XREAL AURA.",
     "card1_title": "XR Blocks Gem",
     "card1_desc": "Décrivez votre vision à XR Blocks Gem pour créer instantanément des applications Android XR interactives pour des casques comme Galaxy XR. Prévisualisez votre application sur le simulateur de bureau et consultez notre blog pour plus de détails.",
     "card1_cta": "Créer en XR",
@@ -1231,7 +1231,7 @@ const langCache = {
     "google_ai_subscriptions": "Suscripciones de Google AI",
     "see": "Ver",
     "showcase_title": "Conoce XR Blocks",
-    "showcase_desc": "Explora funciones experimentales de Android XR a través de estas demostraciones, disponibles en escritorio y en dispositivos como Galaxy XR y Project Aura.",
+    "showcase_desc": "Explora funciones experimentales de Android XR a través de estas demostraciones, disponibles en escritorio y en dispositivos como Galaxy XR y XREAL AURA.",
     "card1_title": "XR Blocks Gem",
     "card1_desc": "Describe tu visión a XR Blocks Gem para crear al instante aplicaciones interactivas de Android XR para visores como Galaxy XR. Previsualiza tu aplicación en el simulador de escritorio y visita nuestro blog para más detalles.",
     "card1_cta": "Crear XR ahora",
@@ -1295,7 +1295,7 @@ const langCache = {
     "google_ai_subscriptions": "Google KI Abonnements",
     "see": "Siehe",
     "showcase_title": "XR Blocks kennenlernen",
-    "showcase_desc": "Entdecken Sie experimentelle Android XR-Funktionen in diesen Demos – verfügbar auf dem Desktop sowie auf Geräten wie Galaxy XR und Project Aura.",
+    "showcase_desc": "Entdecken Sie experimentelle Android XR-Funktionen in diesen Demos – verfügbar auf dem Desktop sowie auf Geräten wie Galaxy XR und XREAL AURA.",
     "card1_title": "XR Blocks Gem",
     "card1_desc": "Beschreiben Sie XR Blocks Gem Ihre Vision, um sofort interaktive Android XR-Apps für Headsets wie Galaxy XR zu erstellen. Testen Sie Ihre App im Desktop-Simulator und besuchen Sie unseren Blog für Details.",
     "card1_cta": "Jetzt XR erstellen",
@@ -1359,7 +1359,7 @@ const langCache = {
     "google_ai_subscriptions": "Abbonamenti Google AI",
     "see": "Vedi",
     "showcase_title": "Scopri XR Blocks",
-    "showcase_desc": "Esplora le funzionalità sperimentali di Android XR attraverso queste demo, disponibili su desktop e su dispositivi come Galaxy XR e Project Aura.",
+    "showcase_desc": "Esplora le funzionalità sperimentali di Android XR attraverso queste demo, disponibili su desktop e su dispositivi come Galaxy XR e XREAL AURA.",
     "card1_title": "XR Blocks Gem",
     "card1_desc": "Descrivi la tua visione a XR Blocks Gem per creare istantaneamente app Android XR interattive per visori come Galaxy XR. Visualizza l'anteprima della tua app sul simulatore desktop e visita il nostro blog per i dettagli.",
     "card1_cta": "Crea XR ora",
@@ -1423,7 +1423,7 @@ const langCache = {
     "google_ai_subscriptions": "Google AI 구독",
     "see": "보기",
     "showcase_title": "XR Blocks 알아보기",
-    "showcase_desc": "데스크톱과 Galaxy XR 및 Project Aura 같은 기기에서 제공되는 데모를 통해 실험적인 Android XR 기능을 살펴보세요.",
+    "showcase_desc": "데스크톱과 Galaxy XR 및 XREAL AURA 같은 기기에서 제공되는 데모를 통해 실험적인 Android XR 기능을 살펴보세요.",
     "card1_title": "XR Blocks Gem",
     "card1_desc": "XR Blocks Gem에 아이디어를 설명하여 Galaxy XR 같은 헤드셋용 대화형 Android XR 앱을 즉시 구축해 보세요. 데스크톱 시뮬레이터에서 앱을 미리 보고 블로그에서 자세한 내용을 확인하세요.",
     "card1_cta": "지금 XR 만들기",
@@ -1493,7 +1493,7 @@ function linkifyFaqAnswers() {
   document.querySelectorAll('.showcase-desc').forEach((p) => {
     if (!p.querySelector('a')) {
       const text = p.textContent || '';
-      const deviceRegex = /(Galaxy XR|Project Aura)/g;
+      const deviceRegex = /(Galaxy XR|XREAL AURA)/g;
       if (deviceRegex.test(text)) {
         p.textContent = '';
         let lastIndex = 0;
