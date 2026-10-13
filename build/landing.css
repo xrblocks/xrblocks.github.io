@@ -976,8 +976,8 @@ section {
   justify-content: flex-start;
   align-items: stretch;
   gap: 36px;
-  padding: 48px 0;
-  margin: -48px 0;
+  padding: 64px 0;
+  margin: -64px 0;
   overflow-y: visible;
   position: relative;
   z-index: 5;
@@ -1021,11 +1021,17 @@ section {
   align-items: flex-start;
   padding: 24px;
   box-sizing: border-box;
-  will-change: transform, opacity;
+  will-change: transform, opacity, box-shadow;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   opacity: 1;
-  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.carousel-card:hover {
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.14), 0 6px 16px rgba(0, 0, 0, 0.08);
+  z-index: 2;
 }
 
 .card-content {
