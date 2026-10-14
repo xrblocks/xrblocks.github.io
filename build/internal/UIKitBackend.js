@@ -15,8 +15,8 @@
 *
 * @file xrblocks.js
 * @version v0.22.0
-* @commitid 7e8ee7c
-* @builddate 2026-10-14T20:55:14.891Z
+* @commitid 92718ea
+* @builddate 2026-10-14T21:03:45.737Z
 * @description XR Blocks SDK, built from source with the above commit ID.
 * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
 * and follow rules below:
@@ -705,7 +705,7 @@ function parseMergedSvg(content) {
 	const result = svgLoader.parse(content);
 	const groups = /* @__PURE__ */ new Map();
 	for (const path of result.paths) {
-		const shapes = SVGLoader.createShapes(path);
+		const shapes = path.toShapes();
 		if (shapes.length === 0) continue;
 		const key = `${path.color.r} ${path.color.g} ${path.color.b}`;
 		const group = groups.get(key);
