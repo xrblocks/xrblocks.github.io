@@ -372,13 +372,14 @@
 
     #hero h1 {
       font-family: var(--font-display);
-      font-size: 160px;
-      font-weight: 400;
-      letter-spacing: -6.4px;
-      line-height: 1;
+      font-size: clamp(68px, 10vw, 160px);
+      font-weight: 500;
+      letter-spacing: -0.04em;
+      line-height: 0.84;
       margin: 0;
       color: #000;
       white-space: nowrap;
+      max-width: 100%;
     }
 
     #hero h1 span.gradient-text {
@@ -394,13 +395,14 @@
 
     #hero p {
       font-family: 'Google Sans Text', 'Google Sans', var(--font-primary);
-      font-size: 32px;
+      font-size: clamp(20px, 2.2vw, 32px);
       color: #484a64;
       margin: 0;
       font-weight: 400;
       line-height: normal;
       letter-spacing: -0.64px;
       opacity: 0.8;
+      max-width: 100%;
     }
 
     .hero-buttons {
@@ -521,12 +523,17 @@
 
     /* VIDEO SECTION */
     #video {
-      opacity: 0;
-      transform: translateY(100px);
+      opacity: 1;
+      transform: translateY(0);
       transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
       margin-top: 0;
       padding: 85px 10% 90px 10%;
-      pointer-events: none;
+      pointer-events: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     #video.visible {
@@ -578,8 +585,10 @@
       overflow: hidden;
       box-shadow: none;
       position: relative;
-      width: 1088px;
-      height: 610px;
+      width: 100%;
+      max-width: 1088px;
+      height: auto;
+      aspect-ratio: 1088 / 610;
     }
 
     .video-browser-frame iframe {
@@ -1672,6 +1681,19 @@
       }
     }
 
+    /* INTERMEDIATE / ADAPTIVE TABLET LAYOUT OVERRIDES */
+    @media (max-width: 1280px) {
+      #hero {
+        padding: 0 32px;
+      }
+      #video {
+        padding: 72px 32px 80px 32px;
+      }
+      .video-browser-frame {
+        border-radius: 28px;
+      }
+    }
+
     /* MOBILE RESPONSIVE LAYOUT OVERRIDES */
     @media (max-width: 768px) {
       /* Navigation Menu Toggle */
@@ -1759,13 +1781,12 @@
         gap: 64px;
       }
       #hero h1 {
-        font-size: 80px;
-        font-weight: 400;
-        letter-spacing: -3.2px;
-        line-height: 1;
+        font-size: clamp(64px, 11vw, 88px);
+        letter-spacing: -0.04em;
+        line-height: 0.84;
         padding: 0;
         margin: 0;
-        max-width: 329px;
+        max-width: 100%;
         white-space: normal;
       }
       #hero p {
@@ -1778,7 +1799,7 @@
         margin: 0;
         letter-spacing: -0.48px;
         opacity: 0.8;
-        white-space: nowrap;
+        white-space: normal;
       }
       .hero-buttons {
         flex-direction: column;
