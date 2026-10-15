@@ -3,124 +3,2093 @@
 <head>
   <meta charset="utf-8">
   <title>XR Blocks: Build XR without code</title>
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <link rel="icon" type="image/png" href="icons/favicon-96x96.png" sizes="96x96">
-  <link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
-  <link rel="shortcut icon" href="icons/favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-title" content="XR Blocks">
-  <link rel="manifest" href="icons/site.webmanifest">
-
-  <!-- SEO & OpenGraph Meta -->
-  <meta name="title" content="XR Blocks: WebXR + WebAI SDK for Android XR & Desktop | Built on Three.js">
-  <meta name="description" content="Discover XR Blocks, the open-source WebXR SDK for building cross-platform AI+XR experiences. Powered by Three.js, it's designed for rapid prototyping on both Android XR (Galaxy XR) and desktop browsers.">
-  <meta name="keywords" content="XR Blocks, WebXR, WebXR SDK, Android XR, Galaxy XR, Three.js, AI, XR, Mixed Reality, Augmented Reality, SDK, framework, three.js sdk, webxr framework">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://xrblocks.github.io">
-  <meta property="og:title" content="XR Blocks">
-  <meta property="og:description" content="XR Blocks is an open-source WebXR SDK for building cross-platform AI + XR experiences. Powered by three.js, it's designed for rapid prototyping immersive apps on both Android XR and desktop browsers.">
-  <meta property="og:image" content="images/preview0.gif">
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://xrblocks.github.io">
-  <meta property="twitter:title" content="XR Blocks">
-  <meta property="twitter:description" content="XR Blocks is an open-source WebXR SDK for building cross-platform AI + XR experiences. Powered by three.js, it's designed for rapid prototyping immersive apps on both Android XR and desktop browsers.">
-  <meta property="twitter:image" content="images/preview0.gif">
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "XR Blocks",
-      "applicationCategory": "SoftwareDevelopmentKit",
-      "applicationSubCategory": "DeveloperTools",
-      "operatingSystem": ["Android", "Web Browser", "macOS"],
-      "description": "XR Blocks is an open-source WebXR SDK for building cross-platform AI + XR experiences. Powered by three.js, it's designed for rapid prototyping immersive apps on both Android XR and desktop browsers.",
-      "url": "https://xrblocks.github.io",
-      "programmingLanguage": "JavaScript",
-      "runtimePlatform": "Three.js, WebXR"
-    }
-  </script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5EK2RWYHRM"></script>
-  <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-5EK2RWYHRM');</script>
-
+  
   <!-- Modern Premium Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Display:wght@400;500;700&family=Google+Sans+Text:wght@400;500;700&family=Google+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-  <!-- Material Symbols Outlined -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0">
-
+  
   <!-- Ionicons for modern icons -->
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-  <!-- Locomotive Scroll Styles & JS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
-
-  <!-- Import Map -->
+  <!-- Import Maps for Three.js -->
   <script type="importmap">
-    {
-      "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/",
-        "troika-three-text": "https://cdn.jsdelivr.net/gh/protectwise/troika@028b81cf308f0f22e5aa8e78196be56ec1997af5/packages/troika-three-text/src/index.js",
-        "troika-three-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-three-utils/src/index.js",
-        "troika-worker-utils": "https://cdn.jsdelivr.net/gh/protectwise/troika@v0.52.4/packages/troika-worker-utils/src/index.js",
-        "bidi-js": "https://esm.sh/bidi-js@%5E1.0.2?target=es2022",
-        "webgl-sdf-generator": "https://esm.sh/webgl-sdf-generator@1.1.1/es2022/webgl-sdf-generator.mjs",
-        "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js",
-        "lit/": "https://esm.run/lit@3/",
-        "xrblocks": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/xrblocks.js",
-        "xrblocks/addons/": "https://cdn.jsdelivr.net/npm/xrblocks@0.6.0/build/addons/"
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --font-primary: 'Google Sans', -apple-system, sans-serif;
+      --font-display: 'Google Sans Display', 'Google Sans', -apple-system, sans-serif;
+      --color-bg-gradient: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 50%, #ede7f6 100%);
+      --color-text-main: #000000;
+      --color-text-sub: #484a64;
+      --color-accent: #4280f4;
+      --color-gradient-start: #4280F4;
+      --color-gradient-end: #C36A91;
+      --glass-bg: rgba(255, 255, 255, 0.4);
+      --glass-border: rgba(255, 255, 255, 0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      background: var(--color-bg-gradient);
+      color: var(--color-text-main);
+      overflow-x: hidden;
+      min-height: 300vh; /* Allow scrolling */
+    }
+
+    /* Fixed 3D Canvas Background */
+    #canvas-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    #canvas-blur-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    /* Top Sticky Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    /* Progressive Blur Backdrop behind Top Nav (Google Labs 5-layer band masks, no tint) */
+    .header-progressive-blur {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      height: calc(88px + 16px);
+      pointer-events: none;
+    }
+
+    .header-progressive-blur .blur-layer {
+      position: absolute;
+      inset: 0;
+      background: #0000;
+      backdrop-filter: blur(calc(var(--blur) * var(--nav-blur-progress, 0)));
+      -webkit-backdrop-filter: blur(calc(var(--blur) * var(--nav-blur-progress, 0)));
+      mask-repeat: no-repeat;
+      mask-size: 100% 100%;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-size: 100% 100%;
+    }
+
+    .header-progressive-blur .blur-layer-1 {
+      --blur: 4px;
+      mask-image: linear-gradient(to bottom, transparent 0%, transparent 40%, #000 60%, #000 80%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 40%, #000 60%, #000 80%, transparent 100%);
+    }
+
+    .header-progressive-blur .blur-layer-2 {
+      --blur: 6px;
+      mask-image: linear-gradient(to bottom, transparent 0%, transparent 20%, #000 40%, #000 60%, transparent 80%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 20%, #000 40%, #000 60%, transparent 80%, transparent 100%);
+    }
+
+    .header-progressive-blur .blur-layer-3 {
+      --blur: 10px;
+      mask-image: linear-gradient(to bottom, transparent 0%, #000 20%, #000 40%, transparent 60%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 20%, #000 40%, transparent 60%, transparent 100%);
+    }
+
+    .header-progressive-blur .blur-layer-4 {
+      --blur: 18px;
+      mask-image: linear-gradient(to bottom, #000 0%, #000 20%, transparent 40%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 20%, transparent 40%, transparent 100%);
+    }
+
+    .header-progressive-blur .blur-layer-5 {
+      --blur: 34px;
+      mask-image: linear-gradient(to bottom, #000 0%, transparent 20%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 20%, transparent 100%);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      height: 40px;
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: -0.48px;
+      color: #000;
+      pointer-events: auto;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    /* Header Right Actions */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      pointer-events: auto;
+    }
+
+    .menu-toggle {
+      display: none;
+    }
+
+    .mobile-more {
+      display: none !important;
+    }
+
+    .mobile-menu-panel {
+      display: none;
+    }
+
+    .header-actions a,
+    .header-actions button {
+      color: var(--color-text-main);
+      width: 40px;
+      height: 40px;
+      border-radius: 50px;
+      background: #f0f2ff;
+      border: none;
+      padding: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  background-color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      text-decoration: none;
+      font-family: 'Google Sans', var(--font-primary);
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: -0.3px;
+      white-space: nowrap;
+      box-sizing: border-box;
+    }
+
+    .header-actions a.nav-text-btn,
+    .header-actions button.nav-text-btn {
+      width: auto;
+      padding: 8px 16px;
+    }
+
+    .header-actions a:hover,
+    .header-actions button:hover {
+      background-color: #ffffff;
+      transform: scale(1.03);
+    }
+
+    .header-actions a.active,
+    .header-actions button.active {
+      background-color: #ffffff;
+    }
+
+    .header-actions a img,
+    .header-actions button img {
+      width: 24px;
+      height: 24px;
+      display: block;
+    }
+
+    /* Language & Share Dropdown Panels */
+    .lang-dropdown-panel,
+    .share-dropdown-panel {
+      display: none;
+      position: fixed;
+      top: 68px;
+      background: #f0f2ff;
+      border: none;
+      border-radius: 16px;
+      padding: 16px 36px 16px 16px;
+      z-index: 120;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-start;
+      pointer-events: auto;
+    }
+
+    .lang-dropdown-panel {
+      right: 156px;
+    }
+
+    .share-dropdown-panel {
+      right: 112px;
+    }
+
+    .lang-dropdown-panel.active,
+    .share-dropdown-panel.active {
+      display: flex;
+    }
+
+    .lang-option,
+    .share-option {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 36px;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      font-family: 'Google Sans', var(--font-primary);
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: -0.3px;
+      color: #000;
+      white-space: nowrap;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .lang-option:hover,
+    .share-option:hover {
+      opacity: 0.7;
+    }
+
+    .lang-check,
+    .share-option-icon {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .lang-check {
+      opacity: 0;
+    }
+
+    .lang-option.selected .lang-check {
+      opacity: 1;
+    }
+
+    .lang-check img,
+    .share-option-icon img {
+      width: 24px;
+      height: 24px;
+      display: block;
+    }
+
+    /* Sections Container */
+    main {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+    }
+
+    section {
+      width: 100%;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 120px 10%;
+      position: relative;
+    }
+
+    #hero {
+      height: 100vh;
+      padding: 0 10%;
+    }
+
+    /* Scroll Indicators */
+    .scroll-indicator {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.5rem;
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      cursor: pointer;
+      z-index: 150;
+    }
+
+    .scroll-indicator.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .scroll-indicator img {
+      width: 40px;
+      height: 40px;
+      filter: brightness(0);
+      display: block;
+      animation: bounce 2s infinite;
+    }
+
+    /* HERO SECTION */
+    #hero {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 80px;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .hero-header-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      text-align: center;
+    }
+
+    #hero h1 {
+      font-family: var(--font-display);
+      font-size: 160px;
+      font-weight: 400;
+      letter-spacing: -6.4px;
+      line-height: 1;
+      margin: 0;
+      color: #000;
+      white-space: nowrap;
+    }
+
+    #hero h1 span.gradient-text {
+      background: linear-gradient(90deg, #7090ff 0%, #848dff 50%, #6157eb 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      display: inline-block;
+      padding-right: 0.04em;
+      margin-right: -0.04em;
+    }
+
+    #hero p {
+      font-family: 'Google Sans Text', 'Google Sans', var(--font-primary);
+      font-size: 32px;
+      color: #484a64;
+      margin: 0;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: -0.64px;
+      opacity: 0.8;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .cta-btn {
+      position: relative;
+      border: none;
+      width: 280px;
+      height: 95px;
+      padding: 36px 52px;
+      border-radius: 60px;
+      font-family: 'Google Sans Text', 'Google Sans', var(--font-primary);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: 0;
+      text-align: center;
+      white-space: nowrap;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      overflow: hidden;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  background-color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .cta-btn-primary {
+      background-color: #000000;
+      color: #e3e6fc;
+    }
+
+    .cta-btn-primary:hover {
+      background-color: #1a1a1a;
+    }
+
+    .cta-btn-secondary {
+      background-color: #f0f2ff;
+      color: #000000;
+      padding: 36px 56px;
+    }
+
+    .cta-btn-secondary:hover {
+      background-color: #ffffff;
+    }
+
+    .cta-btn:hover {
+      transform: scale(1.02);
+    }
+
+    .cta-content {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 1.25em;
+      transform: translateY(-50%);
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .cta-row {
+      display: block;
+      white-space: nowrap;
+      line-height: 1.25;
+      text-align: center;
+    }
+
+    .cta-row-clone {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+    }
+
+    .cta-word {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+    }
+
+    /* Resting / Unhover state (reverses word-by-word back to initial state) */
+    .cta-row-primary .cta-word {
+      transform: translateY(0%);
+      transition-delay: calc(var(--word-i, 0) * 32ms + 40ms);
+    }
+
+    .cta-row-clone .cta-word {
+      transform: translateY(110%);
+      transition-delay: calc(var(--word-i, 0) * 32ms);
+    }
+
+    /* Hover state (animates out top of mask and in from bottom of mask word-by-word) */
+    .cta-btn:hover .cta-row-primary .cta-word,
+    .see-all-btn:hover .cta-row-primary .cta-word,
+    .newsletter-btn:hover .cta-row-primary .cta-word {
+      transform: translateY(-110%);
+      transition-delay: calc(var(--word-i, 0) * 32ms);
+    }
+
+    .cta-btn:hover .cta-row-clone .cta-word,
+    .see-all-btn:hover .cta-row-clone .cta-word,
+    .newsletter-btn:hover .cta-row-clone .cta-word {
+      transform: translateY(0%);
+      transition-delay: calc(var(--word-i, 0) * 32ms + 40ms);
+    }
+
+    /* VIDEO SECTION */
+    #video {
+      opacity: 0;
+      transform: translateY(100px);
+      transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+      margin-top: 0;
+      padding: 85px 10% 90px 10%;
+      pointer-events: none;
+    }
+
+    #video.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .video-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 24px;
+      padding: 3rem;
+      width: 100%;
+      max-width: 900px;
+      height: 500px;
+      display: flex;
+      align-items: center;
+      gap: 3.5rem;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+      position: relative;
+    }
+
+    /* Dotted background decoration */
+    .video-card::before {
+      content: '';
+      position: absolute;
+      top: 2rem;
+      left: -2rem;
+      width: 150px;
+      height: 150px;
+      background-image: radial-gradient(#111 1.5px, transparent 1.5px);
+      background-size: 12px 12px;
+      opacity: 0.15;
+      z-index: -1;
+    }
+
+    .video-left {
+      flex: 1.1;
+      position: relative;
+    }
+
+    .video-browser-frame {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 36px;
+      overflow: hidden;
+      box-shadow: none;
+      position: relative;
+      width: 1088px;
+      height: 610px;
+    }
+
+    .video-browser-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .video-thumbnail {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .video-thumbnail > img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 0;
+      transform: scale(1);
+      transition: transform 1s ease-out;
+      will-change: transform;
+    }
+
+    .video-thumbnail:hover > img {
+      transform: scale(1.015);
+    }
+
+    .play-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 112px;
+      height: 112px;
+      background: #f0f2ff;
+      color: #000;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), background 0.25s ease;
+      z-index: 10;
+    }
+
+    .video-thumbnail:hover .play-btn {
+      transform: translate(-50%, -50%) scale(1.06);
+      background: #e2e5f8;
+    }
+
+    .play-btn img {
+      width: 48px;
+      height: 48px;
+      display: block;
+    }
+
+    /* Video overlay decorator badge */
+    .decorator-badge {
+      position: absolute;
+      top: -15px;
+      right: -15px;
+      width: 48px;
+      height: 48px;
+      background: #ffdd44;
+      border-radius: 12px;
+      transform: rotate(15deg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      z-index: 5;
+    }
+
+    .decorator-badge ion-icon {
+      font-size: 1.5rem;
+      color: #000;
+    }
+
+    .author-badge {
+      position: absolute;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #3b82f6;
+      color: #fff;
+      padding: 0.5rem 1.2rem;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      white-space: nowrap;
+    }
+
+    .author-badge span {
+      display: block;
+      font-size: 0.65rem;
+      opacity: 0.8;
+      font-weight: 400;
+    }
+
+    .video-right {
+      flex: 0.9;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .summit-badge {
+      align-self: flex-start;
+      border: 1.5px solid #ff9f1c;
+      padding: 0.4rem 1.2rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .summit-badge .summit-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #333;
+      letter-spacing: -0.02em;
+    }
+
+    .summit-badge .summit-sub {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #777;
+      margin-top: -2px;
+    }
+
+    .video-right h2 {
+      font-size: 2.2rem;
+      line-height: 1.2;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+    }
+
+    /* CAROUSEL SECTION */
+    #carousel-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: auto;
+      padding: 120px 0 115px 0;
+      overflow: visible;
+    }
+
+    /* FAQ SECTION */
+    #faq-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: auto;
+      padding: 110px 24px 115px 24px;
+      width: 100%;
+    }
+
+    .faq-container {
+      width: 100%;
+      max-width: 1088px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 48px;
+    }
+
+    .faq-title {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: -1.28px;
+      color: #000;
+      text-align: center;
+      margin: 0;
+    }
+
+    .faq-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .faq-item {
+      background-color: #E3E6FC;
+      border-radius: 36px;
+      padding: 24px;
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      cursor: pointer;
+      box-sizing: border-box;
+      opacity: 0;
+      transform: translateY(18px);
+      scale: 1;
+      will-change: transform, opacity, scale, background-color;
+      transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1) var(--faq-delay, 0s),
+                  transform 0.65s cubic-bezier(0.22, 1, 0.36, 1) var(--faq-delay, 0s),
+                  scale 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  background-color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .faq-list.visible .faq-item {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .faq-list.visible .faq-item:nth-child(1) { --faq-delay: 0.04s; }
+    .faq-list.visible .faq-item:nth-child(2) { --faq-delay: 0.095s; }
+    .faq-list.visible .faq-item:nth-child(3) { --faq-delay: 0.15s; }
+    .faq-list.visible .faq-item:nth-child(4) { --faq-delay: 0.205s; }
+    .faq-list.visible .faq-item:nth-child(5) { --faq-delay: 0.26s; }
+    .faq-list.visible .faq-item:nth-child(6) { --faq-delay: 0.315s; }
+
+    .faq-item:hover {
+      background-color: #E9ECFD;
+      scale: 1.002;
+    }
+
+    .faq-content {
+      flex: 1 0 0;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+    }
+
+    .faq-question {
+      font-family: 'Google Sans Text', 'Google Sans', var(--font-primary);
+      font-size: 24px;
+      font-weight: 700;
+      line-height: normal;
+      letter-spacing: 0;
+      color: #000;
+      margin: 0;
+    }
+
+    .faq-answer-wrapper {
+      display: grid;
+      grid-template-rows: 0fr;
+      width: 100%;
+      transition: grid-template-rows 0.65s cubic-bezier(0.12, 1, 0.24, 1);
+    }
+
+    .faq-item.open .faq-answer-wrapper {
+      grid-template-rows: 1fr;
+    }
+
+    .faq-answer-inner {
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .faq-answer {
+      font-family: 'Google Sans', var(--font-primary);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: 0;
+      color: rgba(0, 0, 0, 0.5);
+      margin: 0;
+      padding-top: 16px;
+      width: 100%;
+      position: relative;
+    }
+
+    .faq-line-word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.2s ease,
+                  transform 0.2s ease;
+      transition-delay: 0s;
+      will-change: opacity, transform;
+    }
+
+    .faq-item.open .faq-line-word {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.55s cubic-bezier(0.33, 1, 0.68, 1),
+                  transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      transition-delay: calc(var(--line-i, 0) * 55ms + 40ms);
+    }
+
+    .faq-answer a,
+    .faq-answer a .faq-line-word {
+      color: inherit;
+      text-decoration: underline;
+    }
+
+    .faq-icon {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(0deg);
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .faq-icon img {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      display: block;
+      transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.3s ease;
+    }
+
+    .faq-icon .icon-add {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+    }
+
+    .faq-icon .icon-close {
+      opacity: 0;
+      transform: rotate(-90deg) scale(0.75);
+    }
+
+    .faq-item.open .faq-icon .icon-add {
+      opacity: 0;
+      transform: rotate(90deg) scale(0.75);
+    }
+
+    .faq-item.open .faq-icon .icon-close {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+    }
+
+    /* NEWSLETTER & FOOTER SECTION */
+    #newsletter-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      height: 662px;
+      padding: 115px 0 0 0;
+      position: relative;
+      background: transparent;
+    }
+
+    .newsletter-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      text-align: center;
+      padding: 0 24px;
+      margin-bottom: 0;
+    }
+
+    .newsletter-title {
+      font-family: var(--font-display);
+      font-size: 64px;
+      line-height: normal;
+      font-weight: 400;
+      color: #000;
+      letter-spacing: -1.28px;
+      max-width: 666px;
+      margin: 0;
+    }
+
+    .newsletter-btn {
+      position: relative;
+      background-color: #f0f2ff;
+      border: none;
+      border-radius: 60px;
+      width: 340px;
+      height: 97px;
+      padding: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: 0;
+      color: #000;
+      text-decoration: none;
+      white-space: nowrap;
+      box-sizing: border-box;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  background-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+      box-shadow: none;
+    }
+
+    .newsletter-btn.scroll-fade.visible:hover,
+    .newsletter-btn:hover {
+      background-color: #ffffff;
+      transform: scale(1.02);
+      transition-delay: 0s;
+    }
+
+    /* Footer styles */
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      width: 100%;
+      padding: 0 24px;
+      position: absolute;
+      bottom: 24px;
+      left: 0;
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .google-logo {
+      width: 83px;
+      height: 27px;
+      opacity: 1;
+      display: block;
+    }
+
+    .footer-link {
+      font-family: var(--font-display);
+      font-size: 20px;
+      color: #000000;
+      text-decoration: none;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: -0.4px;
+      transition: opacity 0.2s ease;
+      display: block;
+    }
+
+    .footer-link:hover {
+      opacity: 0.7;
+    }
+
+    .footer-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .social-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 72px;
+      height: 56px;
+      padding: 16px 24px;
+      border-radius: 60px;
+      background: #f0f2ff;
+      border: none;
+      transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .social-icon img {
+      width: 24px;
+      height: 24px;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    .social-icon:hover {
+      background: #e2e5f8;
+      transform: translateY(-2px);
+    }
+
+    .social-icon:hover img {
+      opacity: 0.95;
+    }
+
+    .footer-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .scroll-to-top {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: transparent;
+      border: none;
+      color: rgba(0, 0, 0, 0.65);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .scroll-to-top:hover {
+      color: #000;
+      transform: translateY(-3px);
+    }
+
+    .showcase-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      text-align: center;
+      margin-bottom: 64px;
+      width: 100%;
+      padding: 0 24px;
+    }
+
+    .scroll-fade {
+      opacity: 0;
+      transform: translateY(25px);
+      transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .scroll-fade.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Scroll-fade stagger delays */
+    .showcase-header .scroll-fade:nth-child(1) { transition-delay: 0s; }
+    .showcase-header .scroll-fade:nth-child(2) { transition-delay: 0.12s; }
+    
+    .newsletter-content .scroll-fade:nth-child(1) { transition-delay: 0s; }
+    .newsletter-content .scroll-fade:nth-child(2) { transition-delay: 0.12s; }
+    .newsletter-content .newsletter-btn.scroll-fade.visible {
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  background-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+      transition-delay: 0s;
+    }
+
+    .showcase-title {
+      font-family: var(--font-display);
+      font-size: 96px;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: -1.92px;
+      color: #000;
+      margin: 0;
+      text-align: center;
+    }
+
+    .showcase-desc {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 400;
+      color: #000;
+      max-width: 570px;
+      margin: 0 auto;
+      line-height: 1.4;
+      letter-spacing: 0;
+      text-align: center;
+    }
+
+    .carousel-container {
+      width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+      display: flex;
+      justify-content: flex-start;
+      align-items: stretch;
+      gap: 36px;
+      padding: 48px 0;
+      margin: -48px 0;
+      overflow-y: visible;
+      position: relative;
+      z-index: 5;
+      cursor: grab;
+      will-change: scroll-position;
+      transform: translateZ(0);
+    }
+
+    .carousel-container.grabbing {
+      cursor: grabbing;
+      user-select: none;
+    }
+
+    .carousel-container.visible .carousel-card {
+      opacity: 1;
+    }
+
+    .carousel-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .carousel-card {
+      background: #ffffff;
+      border-radius: 36px;
+      width: 428px;
+      height: 705px;
+      flex: 0 0 428px;
+      box-shadow: 0 0 0 rgba(72, 74, 100, 0);
+      border: none;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 24px;
+      box-sizing: border-box;
+      scale: 1;
+      will-change: transform, opacity, scale, box-shadow;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      opacity: 0;
+      transition: scale 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                  box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .carousel-card:hover {
+      scale: 1.015;
+      box-shadow: 0 18px 42px rgba(72, 74, 100, 0.1), 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .card-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+      width: 100%;
+    }
+
+    .card-media {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+      background: #f0f2ff;
+    }
+
+    .card-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 16px;
+      pointer-events: none;
+      user-drag: none;
+      -webkit-user-drag: none;
+    }
+
+    .card-text-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      width: 100%;
+      color: #000;
+      text-align: left;
+    }
+
+    .card-title {
+      font-family: 'Google Sans Text', 'Google Sans', var(--font-primary);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: 0;
+      color: #000;
+      margin: 0;
+    }
+
+    .card-desc {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.4;
+      letter-spacing: 0;
+      color: #000;
+      opacity: 0.65;
+      margin: 0;
+    }
+
+    .card-cta-btn {
+      background-color: #f0f2ff;
+      border: none;
+      border-radius: 50px;
+      padding: 16px 24px;
+      height: 56px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      text-decoration: none;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-sizing: border-box;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  background-color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .card-cta-btn span {
+      font-family: 'Google Sans', var(--font-primary);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: -0.36px;
+      color: #000;
+      white-space: nowrap;
+    }
+
+    .card-cta-icon-mask {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .card-cta-arrow {
+      position: absolute;
+      inset: 0;
+      width: 24px;
+      height: 24px;
+      display: block;
+      flex-shrink: 0;
+      transform: translate3d(0%, 0%, 0);
+      transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+    }
+
+    .card-cta-arrow.arrow-out {
+      transform: translate3d(110%, -110%, 0);
+    }
+
+    .card-cta-arrow.arrow-in-prepare {
+      transform: translate3d(-110%, 110%, 0);
+      transition: none;
+    }
+
+    .card-cta-btn:hover {
+      background-color: #e2e5f8;
+      transform: scale(1.03);
+    }
+
+    /* "View on GitHub" Button below Carousel */
+    .see-all-btn {
+      position: relative;
+      background-color: #f0f2ff;
+      border: none;
+      border-radius: 60px;
+      padding: 36px 56px;
+      width: 280px;
+      height: 95px;
+      margin-top: 64px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Google Sans Text', 'Google Sans', var(--font-primary);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: 0;
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+      white-space: nowrap;
+      box-sizing: border-box;
+      overflow: hidden;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  background-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .see-all-btn.scroll-fade.visible:hover,
+    .see-all-btn:hover {
+      transform: scale(1.02);
+      background-color: #ffffff;
+      transition-delay: 0s;
+    }
+
+    /* Upper-left Home Button (replaces .brand on All Experiments page) */
+    .home-back-btn {
+      display: none;
+      background: rgba(0, 0, 0, 0.06);
+      border: none;
+      border-radius: 50px;
+      height: 40px;
+      padding: 8px 16px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      pointer-events: auto;
+      font-family: 'Google Sans', var(--font-primary);
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: -0.3px;
+      color: #000;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: background 0.25s ease,
+                  transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .home-back-btn img {
+      width: 24px;
+      height: 24px;
+      display: block;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .home-back-btn:hover {
+      background: rgba(0, 0, 0, 0.11);
+    }
+
+    .home-back-btn:hover img {
+      transform: translateX(-3px);
+    }
+
+    /* View Switching States */
+    #home-view {
+      width: 100%;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    #home-view.fading-out {
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 0.22s cubic-bezier(0.4, 0, 1, 1),
+                  transform 0.22s cubic-bezier(0.4, 0, 1, 1);
+    }
+
+    body.experiments-view-active .brand {
+      display: none !important;
+    }
+
+    body.experiments-view-active .home-back-btn {
+      display: inline-flex;
+    }
+
+    body.experiments-view-active.experiments-animate-in .home-back-btn {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    body.experiments-view-active #home-view {
+      display: none;
+    }
+
+    body.experiments-view-active .scroll-indicator {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+    /* ALL EXPERIMENTS PAGE VIEW */
+    #all-experiments-view {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      min-height: 100vh;
+      padding: 134px 24px 120px 24px;
+      gap: 100px;
+      box-sizing: border-box;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: opacity, transform;
+    }
+
+    #all-experiments-view.fading-out {
+      opacity: 0;
+      transform: translateY(14px);
+      pointer-events: none;
+    }
+
+    body.experiments-view-active #all-experiments-view {
+      display: flex;
+    }
+
+    .experiments-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      width: 100%;
+    }
+
+    .experiments-title {
+      font-family: var(--font-display);
+      font-size: 160px;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: -9.6px;
+      color: #000;
+      text-align: center;
+      margin: 0;
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+      transition-delay: 0.04s;
+    }
+
+    body.experiments-animate-in .experiments-title {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .experiments-filters {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .filter-pill {
+      background: rgba(0, 0, 0, 0.06);
+      color: #000;
+      border: none;
+      height: 40px;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-family: 'Google Sans', var(--font-primary);
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: -0.3px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                  color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .filter-pill:hover:not(.active) {
+      background: rgba(0, 0, 0, 0.11);
+    }
+
+    .filter-pill.active {
+      background: #000;
+      color: #e3e6fc;
+    }
+
+    body.experiments-animate-in .filter-pill {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      width: 100%;
+      max-width: 1872px;
+      margin: 0 auto;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.58s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.58s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform;
+    }
+
+    .experiments-grid.grid-filtering {
+      opacity: 0;
+      transform: translateY(6px);
+      pointer-events: none;
+      transition: opacity 0.24s cubic-bezier(0.25, 1, 0.5, 1),
+                  transform 0.24s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .experiment-card {
+      position: relative;
+      aspect-ratio: 462 / 700;
+      width: 100%;
+      border-radius: 48px;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 36px;
+      background: #fff;
+      opacity: 0;
+      transform: translateY(52px) scale(0.96);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .experiment-card.card-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .experiment-card.filtered-out {
+      display: none;
+    }
+
+    .experiment-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 37.143%, rgba(0, 0, 0, 0.45) 100%);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .experiment-card:hover .carousel-card-bg {
+      transform: scale(1.08);
+    }
+
+    .experiment-card .card-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+      z-index: 3;
+      color: #fff;
+    }
+
+    .experiment-card .card-title {
+      font-family: 'Google Sans', var(--font-primary);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: 0;
+    }
+
+    .experiment-card .card-author {
+      font-family: 'Google Sans', var(--font-primary);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.4;
+      letter-spacing: -0.32px;
+      opacity: 1;
+      margin-top: 0;
+    }
+
+    .experiment-card:hover .card-btn {
+      transform: scale(1.08);
+    }
+
+    .experiment-card .card-btn:hover {
+      width: 220px;
+      transform: scale(1);
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
       }
     }
-  </script>
 
-  <link rel="stylesheet" href="landing.css?v=14">
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(function(registrations) {
-        for (const registration of registrations) {
-          registration.unregister();
-        }
-      }).catch(function() {});
+    /* MOBILE RESPONSIVE LAYOUT OVERRIDES */
+    @media (max-width: 768px) {
+      /* Navigation Menu Toggle */
+      .menu-toggle {
+        display: none;
+      }
+      .desktop-action {
+        display: none !important;
+      }
+      .mobile-more {
+        display: flex !important;
+      }
+      .lang-dropdown-panel,
+      .share-dropdown-panel {
+        top: 70px;
+        right: 24px;
+      }
+
+      /* Mobile Dropdown Panel */
+      .mobile-menu-panel {
+        display: none;
+        position: fixed;
+        top: 70px;
+        right: 24px;
+        background: #f0f2ff;
+        border: none;
+        border-radius: 16px;
+        padding: 16px 36px 16px 16px;
+        z-index: 120;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        pointer-events: auto;
+      }
+      .mobile-menu-panel.active {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .mobile-menu-links {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        align-items: flex-start;
+      }
+      .mobile-menu-links a {
+        font-family: 'Google Sans', var(--font-primary);
+        font-size: 15px;
+        letter-spacing: -0.3px;
+        color: #000;
+        text-decoration: none;
+        font-weight: 400; /* Google Sans Regular */
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        height: 36px;
+        white-space: nowrap;
+        transition: opacity 0.2s ease;
+      }
+      .mobile-menu-links a:hover {
+        opacity: 0.7;
+      }
+      .mobile-menu-links a:active {
+        opacity: 0.6;
+      }
+      .mobile-menu-icon {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .mobile-menu-links a img {
+        width: 24px;
+        height: 24px;
+        display: block;
+      }
+
+      /* Hero Section */
+      #hero {
+        height: auto !important;
+        padding: 202px 24px 60px 24px !important;
+        gap: 64px;
+      }
+      #hero h1 {
+        font-size: 80px;
+        font-weight: 400;
+        letter-spacing: -3.2px;
+        line-height: 1;
+        padding: 0;
+        margin: 0;
+        max-width: 329px;
+        white-space: normal;
+      }
+      #hero p {
+        background: transparent;
+        color: #484a64;
+        padding: 0;
+        border-radius: 0;
+        display: block;
+        font-size: 24px;
+        margin: 0;
+        letter-spacing: -0.48px;
+        opacity: 0.8;
+        white-space: nowrap;
+      }
+      .hero-buttons {
+        flex-direction: column;
+        gap: 16px;
+      }
+      .cta-btn {
+        width: 280px;
+        height: 71px;
+        padding: 24px 52px;
+        font-size: 18px;
+        border-radius: 60px;
+      }
+      .cta-btn-secondary {
+        padding: 24px 56px;
+      }
+
+      /* Video Section Responsive styles */
+      #video {
+        padding: 60px 24px;
+        margin-top: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .video-browser-frame {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 16/9;
+        border-radius: 20px;
+      }
+      .play-btn {
+        width: 56px !important;
+        height: 56px !important;
+      }
+      .play-btn img {
+        width: 24px !important;
+        height: 24px !important;
+      }
+
+      /* Carousel Section Showcase Header */
+      .showcase-header {
+        padding: 0 24px;
+        text-align: center;
+        gap: 24px;
+        margin-bottom: 48px !important;
+      }
+      .showcase-title {
+        font-size: 48px !important;
+        font-weight: 400 !important;
+        letter-spacing: -0.96px !important;
+        line-height: 1.16 !important;
+        max-width: 318px;
+        margin: 0 auto;
+      }
+      .showcase-desc {
+        font-size: 18px !important;
+        line-height: 1.4 !important;
+        letter-spacing: 0 !important;
+        max-width: 354px;
+      }
+      .showcase-desc br {
+        display: none; /* remove desktop wrapping */
+      }
+
+      /* Carousel cards dimensions on mobile */
+      .carousel-container {
+        gap: 8px;
+      }
+      .carousel-card {
+        width: 354px !important;
+        flex: 0 0 354px !important;
+        height: 656px !important;
+        aspect-ratio: auto !important;
+        border-radius: 36px !important;
+        padding: 24px !important;
+      }
+      .carousel-card .card-title {
+        font-size: 24px !important;
+        line-height: normal !important;
+        letter-spacing: 0 !important;
+      }
+      .carousel-card .card-desc {
+        font-size: 18px !important;
+        line-height: 1.4 !important;
+        letter-spacing: 0 !important;
+      }
+      .see-all-btn {
+        padding: 24px 56px;
+        width: 238px;
+        height: 71px;
+        margin-top: 48px;
+        font-size: 18px;
+      }
+
+      /* All Experiments Mobile Layout overrides (2-column grid) */
+      #all-experiments-view {
+        padding: 96px 24px 80px 24px;
+        gap: 40px;
+      }
+      .experiments-header {
+        gap: 16px;
+      }
+      .experiments-title {
+        font-size: 56px;
+        letter-spacing: -2px;
+        line-height: 1.05;
+      }
+      .experiments-filters {
+        gap: 6px;
+      }
+      .filter-pill {
+        height: 36px;
+        padding: 6px 14px;
+        font-size: 14px;
+      }
+      .experiments-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+      .experiment-card {
+        border-radius: 28px;
+        padding: 20px;
+      }
+      .experiment-card .card-title {
+        font-size: 20px;
+      }
+      .experiment-card .card-author {
+        font-size: 13px;
+      }
+      .experiment-card .card-btn {
+        width: 52px;
+        height: 40px;
+        padding-left: 14px;
+        gap: 8px;
+      }
+      .experiment-card .card-btn img {
+        width: 20px;
+        height: 20px;
+      }
+      .experiment-card .card-btn:hover {
+        width: 160px;
+      }
+      .experiment-card .card-btn span {
+        font-size: 14px;
+      }
+
+      /* FAQ Section Mobile Layout overrides */
+      #faq-section {
+        padding: 60px 24px 60px 24px;
+      }
+      .faq-container {
+        gap: 24px;
+      }
+      .faq-title {
+        font-family: 'Google Sans Text', 'Google Sans', var(--font-primary);
+        font-size: 32px;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: 0;
+      }
+      .faq-question {
+        font-size: 20px;
+      }
+      .faq-icon {
+        width: 24px;
+        height: 24px;
+      }
+      .faq-answer-wrapper {
+        width: calc(100% + 48px);
+      }
+      .faq-answer {
+        padding-top: 8px;
+      }
+
+      /* Newsletter & Footer Layout overrides */
+      #newsletter-section {
+        height: auto;
+        padding: 80px 24px 80px 24px; /* Expanded bottom padding to accommodate footer flow */
+      }
+      .newsletter-content {
+        gap: 32px;
+        padding: 0;
+      }
+      .newsletter-title {
+        font-family: 'Google Sans Text', 'Google Sans', var(--font-primary) !important;
+        font-size: 32px !important;
+        font-weight: 400 !important;
+        line-height: normal !important;
+        letter-spacing: 0 !important;
+        max-width: 354px;
+        margin: 0 auto;
+      }
+      .newsletter-btn {
+        width: 322px !important;
+        height: 71px !important;
+        padding: 24px 56px !important;
+        border-radius: 60px !important;
+        font-family: 'Google Sans Text', 'Google Sans', var(--font-primary) !important;
+        font-size: 18px !important;
+        font-weight: 400 !important;
+        line-height: normal !important;
+      }
+      .footer {
+        position: relative !important;
+        bottom: auto;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        column-gap: 16px;
+        row-gap: 36px;
+        padding: 60px 0 24px 0;
+        margin-top: 40px;
+      }
+      .footer-left {
+        display: flex;
+        align-items: center;
+      }
+      .footer-center {
+        order: -1;
+        width: 100%;
+        position: static !important;
+        transform: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+      }
+      .social-icon {
+        width: 72px !important;
+        height: 56px !important;
+      }
     }
-    if ('caches' in window) {
-      caches.keys().then(function(names) {
-        for (const name of names) {
-          if (name.indexOf('xr-gallery') !== -1) {
-            caches.delete(name);
-          }
-        }
-      }).catch(function() {});
-    }
-  </script>
+  </style>
 </head>
 <body>
+  <script>
+    if (new URLSearchParams(window.location.search).has('debug')) {
+      window.addEventListener('error', function(event) {
+        let el = document.getElementById('debug-overlay');
+        if (!el) {
+          el = document.createElement('div');
+          el.id = 'debug-overlay';
+          el.style.position = 'fixed';
+          el.style.top = '10px';
+          el.style.left = '10px';
+          el.style.padding = '10px';
+          el.style.background = 'rgba(255,0,0,0.85)';
+          el.style.color = '#ffffff';
+          el.style.fontFamily = 'monospace';
+          el.style.fontSize = '12px';
+          el.style.zIndex = '9999';
+          el.style.whiteSpace = 'pre-wrap';
+          el.style.maxWidth = '500px';
+          document.body.appendChild(el);
+        }
+        el.textContent += '[Uncaught Error] ' + event.message + ' at ' + event.filename + ':' + event.lineno + '\n';
+      });
+      window.addEventListener('unhandledrejection', function(event) {
+        let el = document.getElementById('debug-overlay');
+        if (!el) {
+          el = document.createElement('div');
+          el.id = 'debug-overlay';
+          el.style.position = 'fixed';
+          el.style.top = '10px';
+          el.style.left = '10px';
+          el.style.padding = '10px';
+          el.style.background = 'rgba(255,0,0,0.85)';
+          el.style.color = '#ffffff';
+          el.style.fontFamily = 'monospace';
+          el.style.fontSize = '12px';
+          el.style.zIndex = '9999';
+          el.style.whiteSpace = 'pre-wrap';
+          el.style.maxWidth = '500px';
+          document.body.appendChild(el);
+        }
+        el.textContent += '[Unhandled Promise Rejection] ' + (event.reason ? (event.reason.message || event.reason) : event) + '\n';
+      });
+    }
+  </script>
+
+  <!-- 3D Parallax Room Background Canvas -->
+  <div id="canvas-container"></div>
 
   <!-- Header -->
   <header>
-    <a href="./" class="brand">XR Blocks</a>
+    <div class="header-progressive-blur" aria-hidden="true">
+      <div class="blur-layer blur-layer-1"></div>
+      <div class="blur-layer blur-layer-2"></div>
+      <div class="blur-layer blur-layer-3"></div>
+      <div class="blur-layer blur-layer-4"></div>
+      <div class="blur-layer blur-layer-5"></div>
+    </div>
+    <div class="brand">XR Blocks</div>
     <button type="button" class="home-back-btn" aria-label="Back to Home">
       <img src="Designs/arrow_back.svg" alt="">
-      <span data-i18n="home">Home</span>
+      <span>Home</span>
     </button>
 
     <div class="header-actions">
-      <a href="https://xrblocks.github.io/docs/samples/ModelViewer/" target="_blank" rel="noopener noreferrer" class="desktop-action nav-text-btn" data-i18n="demos">Demos</a>
-      <a href="https://xrblocks.github.io/docs/templates/Basic/" target="_blank" rel="noopener noreferrer" class="desktop-action nav-text-btn" data-i18n="templates">Templates</a>
-      <button type="button" class="desktop-action lang-toggle-btn" aria-label="Language" data-i18n-aria="language">
-        <img src="Designs/language.svg" alt="Language" data-i18n-alt="language">
+      <a href="https://xrblocks.github.io/docs/samples/ModelViewer/" target="_blank" rel="noopener noreferrer" class="desktop-action nav-text-btn">Demos</a>
+      <a href="https://xrblocks.github.io/docs/templates/Basic/" target="_blank" rel="noopener noreferrer" class="desktop-action nav-text-btn">Templates</a>
+      <button type="button" class="desktop-action lang-toggle-btn" aria-label="Language">
+        <img src="Designs/language.svg" alt="Language">
       </button>
-      <button type="button" class="desktop-action share-toggle-btn" aria-label="Share" data-i18n-aria="share">
-        <img src="Designs/share.svg" alt="Share" data-i18n-alt="share">
+      <button type="button" class="desktop-action share-toggle-btn" aria-label="Share">
+        <img src="Designs/share.svg" alt="Share">
       </button>
-      <a href="https://xrblocks.github.io/docs/" target="_blank" rel="noopener noreferrer" class="desktop-action" aria-label="Docs" data-i18n-aria="docs">
-        <img src="Designs/docs.svg" alt="Docs" data-i18n-alt="docs">
+      <a href="https://xrblocks.github.io/docs/" target="_blank" rel="noopener noreferrer" class="desktop-action" aria-label="Docs">
+        <img src="Designs/docs.svg" alt="Docs">
       </a>
       <a href="https://github.com/google/xrblocks" target="_blank" rel="noopener noreferrer" class="desktop-action" aria-label="GitHub">
         <img src="Designs/github.svg" alt="GitHub">
@@ -132,27 +2101,27 @@
 
     <!-- Language Dropdown Panel -->
     <div class="lang-dropdown-panel">
-      <button type="button" class="lang-option selected" data-lang="en">
+      <button type="button" class="lang-option selected" data-lang="English">
         <span class="lang-check"><img src="Designs/check.svg" alt="Selected"></span>
         <span>English</span>
       </button>
-      <button type="button" class="lang-option" data-lang="fr">
+      <button type="button" class="lang-option" data-lang="Français">
         <span class="lang-check"><img src="Designs/check.svg" alt="Selected"></span>
         <span>Français</span>
       </button>
-      <button type="button" class="lang-option" data-lang="es">
+      <button type="button" class="lang-option" data-lang="Español">
         <span class="lang-check"><img src="Designs/check.svg" alt="Selected"></span>
         <span>Español</span>
       </button>
-      <button type="button" class="lang-option" data-lang="de">
+      <button type="button" class="lang-option" data-lang="Deutsch">
         <span class="lang-check"><img src="Designs/check.svg" alt="Selected"></span>
         <span>Deutsch</span>
       </button>
-      <button type="button" class="lang-option" data-lang="it">
+      <button type="button" class="lang-option" data-lang="Italiano">
         <span class="lang-check"><img src="Designs/check.svg" alt="Selected"></span>
         <span>Italiano</span>
       </button>
-      <button type="button" class="lang-option" data-lang="ko">
+      <button type="button" class="lang-option" data-lang="Korean">
         <span class="lang-check"><img src="Designs/check.svg" alt="Selected"></span>
         <span>한국어</span>
       </button>
@@ -160,21 +2129,13 @@
 
     <!-- Share Dropdown Panel -->
     <div class="share-dropdown-panel">
-      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://xrblocks.github.io" target="_blank" rel="noopener noreferrer" class="share-option" data-share="LinkedIn">
-        <span class="share-option-icon"><img src="Designs/linkedin.svg" alt="LinkedIn"></span>
-        <span>LinkedIn</span>
-      </a>
-      <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fxrblocks.github.io%2F&amp;src=sdkpreparse" target="_blank" rel="noopener noreferrer" class="share-option" data-share="Facebook">
-        <span class="share-option-icon"><img src="Designs/facebook.svg" alt="Facebook"></span>
-        <span>Facebook</span>
-      </a>
-      <a href="https://twitter.com/intent/tweet?text=Drag%20and%20drop%20off-the-shelf%20ML%20components%20with%20%23VisualBlocks.%20A%20fast,%20easy%20way%20to%20prototype%20ML%20pipelines%20%E2%80%93%20no%20expertise%20or%20coding%20required.%20Try%20it%20yourself:&amp;url=https%3A%2F%2Fxrblocks.github.io" target="_blank" rel="noopener noreferrer" class="share-option" data-share="X">
-        <span class="share-option-icon"><img src="Designs/x.svg" alt="X"></span>
-        <span>X</span>
-      </a>
       <a href="https://discord.com" target="_blank" rel="noopener noreferrer" class="share-option" data-share="Discord">
         <span class="share-option-icon"><img src="Designs/discord.svg" alt="Discord"></span>
         <span>Discord</span>
+      </a>
+      <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="share-option" data-share="X">
+        <span class="share-option-icon"><img src="Designs/x.svg" alt="X"></span>
+        <span>X</span>
       </a>
       <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="share-option" data-share="Instagram">
         <span class="share-option-icon"><img src="Designs/instagram.svg" alt="Instagram"></span>
@@ -185,47 +2146,46 @@
     <!-- Mobile Navigation Panel Dropdown (fades in on click) -->
     <div class="mobile-menu-panel">
       <div class="mobile-menu-links">
-        <a href="https://xrblocks.github.io/docs/samples/ModelViewer/" target="_blank" rel="noopener noreferrer"><span class="mobile-menu-icon"><img src="Designs/experiment.svg" alt="Demos" data-i18n-alt="demos"></span><span data-i18n="demos">Demos</span></a>
-        <a href="https://xrblocks.github.io/docs/templates/Basic/" target="_blank" rel="noopener noreferrer"><span class="mobile-menu-icon"><img src="Designs/team_dashboard.svg" alt="Templates" data-i18n-alt="templates"></span><span data-i18n="templates">Templates</span></a>
-        <a href="#" class="mobile-lang-trigger"><span class="mobile-menu-icon"><img src="Designs/language.svg" alt="Language" data-i18n-alt="language"></span><span class="mobile-lang-label" data-i18n="language_name">English</span></a>
-        <a href="#" class="mobile-share-trigger"><span class="mobile-menu-icon"><img src="Designs/share.svg" alt="Share" data-i18n-alt="share"></span><span data-i18n="share">Share</span></a>
-        <a href="https://xrblocks.github.io/docs/" target="_blank" rel="noopener noreferrer"><span class="mobile-menu-icon"><img src="Designs/docs.svg" alt="Docs" data-i18n-alt="docs"></span><span data-i18n="docs">Docs</span></a>
+        <a href="https://xrblocks.github.io/docs/samples/ModelViewer/" target="_blank" rel="noopener noreferrer"><span class="mobile-menu-icon"><img src="Designs/experiment.svg" alt="Demos"></span><span>Demos</span></a>
+        <a href="https://xrblocks.github.io/docs/templates/Basic/" target="_blank" rel="noopener noreferrer"><span class="mobile-menu-icon"><img src="Designs/team_dashboard.svg" alt="Templates"></span><span>Templates</span></a>
+        <a href="#" class="mobile-lang-trigger"><span class="mobile-menu-icon"><img src="Designs/language.svg" alt="Language"></span><span class="mobile-lang-label">English</span></a>
+        <a href="#" class="mobile-share-trigger"><span class="mobile-menu-icon"><img src="Designs/share.svg" alt="Share"></span><span>Share</span></a>
+        <a href="https://xrblocks.github.io/docs/" target="_blank" rel="noopener noreferrer"><span class="mobile-menu-icon"><img src="Designs/docs.svg" alt="Docs"></span><span>Docs</span></a>
         <a href="https://github.com/google/xrblocks" target="_blank" rel="noopener noreferrer"><span class="mobile-menu-icon"><img src="Designs/github.svg" alt="GitHub"></span><span>GitHub</span></a>
       </div>
     </div>
   </header>
 
-  <!-- 3D Parallax Room Background Canvas -->
-  <div id="canvas-container"></div>
-
   <!-- Main Scrolling Sections -->
   <main data-scroll-container>
     <div id="home-view">
-
     <!-- Hero Section -->
     <section id="hero">
       <div class="hero-header-group">
-        <h1><span data-i18n="build">Build</span> <span class="gradient-text">XR</span><br><span data-i18n="without_code">without code</span></h1>
-        <p data-i18n="hero_subtitle">Accelerating AI + XR Innovation</p>
+        <h1>Build <span class="gradient-text">XR</span><br>without code</h1>
+        <p>Accelerating AI + XR Innovation</p>
       </div>
 
       <div class="hero-buttons">
-        <a href="http://goo.gle/BuildXR" target="_blank" rel="noopener noreferrer" class="cta-btn cta-btn-primary" data-i18n="build_in_ai_studio">Build in AI Studio</a>
-        <a href="https://xrblocks.github.io/gem/" target="_blank" rel="noopener noreferrer" class="cta-btn cta-btn-secondary" data-i18n="try_xr_blocks_gem">Try XR Blocks Gem</a>
+        <a href="https://goo.gle/BuildXR" target="_blank" rel="noopener noreferrer" class="cta-btn cta-btn-primary"><span class="cta-content"><span class="cta-text">Build in AI Studio</span></span></a>
+        <a href="https://xrblocks.github.io/gem/" target="_blank" rel="noopener noreferrer" class="cta-btn cta-btn-secondary"><span class="cta-content"><span class="cta-text">Try XR Blocks Gem</span></span></a>
       </div>
+
+      <!-- Scroll indicator is now fixed globally -->
     </section>
 
     <!-- Get to know XR Blocks Section -->
     <section id="carousel-section">
+      <!-- Title and Description above carousel -->
       <div class="showcase-header">
-        <h2 class="showcase-title scroll-fade" data-i18n="showcase_title">Get to know XR Blocks</h2>
-        <p class="showcase-desc scroll-fade" data-i18n="showcase_desc" data-i18n-en-html='Explore experimental Android XR features through these demos, available on desktop and devices like <a href="https://samsungshop.onelink.me/tRH1/tntjz42v" target="_blank" rel="noopener noreferrer">Galaxy XR</a> and <a href="https://www.xreal.com/aura" target="_blank" rel="noopener noreferrer">XREAL AURA</a>.'>
-          Explore experimental Android XR features through these demos, available on desktop and devices like <a href="https://samsungshop.onelink.me/tRH1/tntjz42v" target="_blank" rel="noopener noreferrer">Galaxy XR</a> and <a href="https://www.xreal.com/aura" target="_blank" rel="noopener noreferrer">XREAL AURA</a>.
+        <h2 class="showcase-title scroll-fade">Get to know XR Blocks</h2>
+        <p class="showcase-desc scroll-fade">
+          Explore experimental Android XR features through these demos, available on desktop and devices like Galaxy XR and Project Aura.
         </p>
       </div>
 
-      <div class="carousel-container visible" data-scroll-prevent data-scroll-prevent-touch>
-
+      <div class="carousel-container" data-scroll-prevent data-scroll-prevent-touch>
+        
         <!-- Card 1: XR Blocks Gem -->
         <div class="carousel-card">
           <div class="card-content">
@@ -233,13 +2193,15 @@
               <video class="card-video" src="Designs/video_xrblocksgem.mp4" autoplay loop muted playsinline preload="auto"></video>
             </div>
             <div class="card-text-group">
-              <h3 class="card-title" data-i18n="card1_title">XR Blocks Gem</h3>
-              <p class="card-desc" data-i18n="card1_desc">Describe your vision to XR Blocks Gem to instantly build interactive Android XR apps for headsets like Galaxy XR. Preview your app on the Desktop simulator, and visit our blog for details.</p>
+              <h3 class="card-title">XR Blocks Gem</h3>
+              <p class="card-desc">Describe your vision to XR Blocks Gem to instantly build interactive Android XR apps for headsets like Galaxy XR. Preview your app on the Desktop simulator, and visit our blog for details.</p>
             </div>
           </div>
           <a href="https://xrblocks.github.io/gem/" target="_blank" rel="noopener noreferrer" class="card-cta-btn">
-            <span data-i18n="card1_cta">Create XR Now</span>
-            <img src="Designs/arrow_outward.svg" alt="">
+            <span>Create XR Now</span>
+            <span class="card-cta-icon-mask">
+              <img class="card-cta-arrow" src="Designs/arrow_outward.svg" alt="">
+            </span>
           </a>
         </div>
 
@@ -250,13 +2212,15 @@
               <video class="card-video" src="Designs/video_immersiveweb.mp4" autoplay loop muted playsinline preload="auto"></video>
             </div>
             <div class="card-text-group">
-              <h3 class="card-title" data-i18n="card2_title">For Immersive Web</h3>
-              <p class="card-desc" data-i18n="card2_desc">XR Blocks is an open-source framework for immersive web experiences, featuring XR Realism, XR Interaction, and AI capabilities.</p>
+              <h3 class="card-title">For Immersive Web</h3>
+              <p class="card-desc">XR Blocks is an open-source framework for immersive web experiences, featuring XR Realism, XR Interaction, and AI capabilities.</p>
             </div>
           </div>
           <a href="https://xrblocks.github.io/docs/samples/ModelViewer/" target="_blank" rel="noopener noreferrer" class="card-cta-btn">
-            <span data-i18n="card2_cta">Explore Live Demos</span>
-            <img src="Designs/arrow_outward.svg" alt="">
+            <span>Explore Live Demos</span>
+            <span class="card-cta-icon-mask">
+              <img class="card-cta-arrow" src="Designs/arrow_outward.svg" alt="">
+            </span>
           </a>
         </div>
 
@@ -267,13 +2231,15 @@
               <video class="card-video" src="Designs/video_gemini.mp4" autoplay loop muted playsinline preload="auto"></video>
             </div>
             <div class="card-text-group">
-              <h3 class="card-title" data-i18n="card3_title">Gemini Ice-breakers</h3>
-              <p class="card-desc" data-i18n="card3_desc">Meet the Gemini assistant on desktop Chrome and Android XR (Galaxy XR) via XR Blocks. This demo uses conversation starters to showcase its capabilities.</p>
+              <h3 class="card-title">Gemini Ice-breakers</h3>
+              <p class="card-desc">Meet the Gemini assistant on desktop Chrome and Android XR (Galaxy XR) via XR Blocks. This demo uses conversation starters to showcase its capabilities.</p>
             </div>
           </div>
           <a href="https://xrblocks.github.io/docs/samples/Gemini-Icebreakers" target="_blank" rel="noopener noreferrer" class="card-cta-btn">
-            <span data-i18n="card3_cta">Explore Demo</span>
-            <img src="Designs/arrow_outward.svg" alt="">
+            <span>Explore Demo</span>
+            <span class="card-cta-icon-mask">
+              <img class="card-cta-arrow" src="Designs/arrow_outward.svg" alt="">
+            </span>
           </a>
         </div>
 
@@ -284,13 +2250,15 @@
               <video class="card-video" src="Designs/video_ballpit.mp4" autoplay loop muted playsinline preload="auto"></video>
             </div>
             <div class="card-text-group">
-              <h3 class="card-title" data-i18n="card4_title">Ballpit</h3>
-              <p class="card-desc" data-i18n="card4_desc">Inspired by DepthLab, this demo maps your space in 3D (simulator and Android XR) for a virtual ballpit with physical collisions.</p>
+              <h3 class="card-title">Ballpit</h3>
+              <p class="card-desc">Inspired by DepthLab, this demo maps your space in 3D (simulator and Android XR) for a virtual ballpit with physical collisions.</p>
             </div>
           </div>
           <a href="https://xrblocks.github.io/docs/samples/Ballpit" target="_blank" rel="noopener noreferrer" class="card-cta-btn">
-            <span data-i18n="card4_cta">Explore Demo</span>
-            <img src="Designs/arrow_outward.svg" alt="">
+            <span>Explore Demo</span>
+            <span class="card-cta-icon-mask">
+              <img class="card-cta-arrow" src="Designs/arrow_outward.svg" alt="">
+            </span>
           </a>
         </div>
 
@@ -301,47 +2269,48 @@
               <video class="card-video" src="Designs/video_gesturerecognition.mp4" autoplay loop muted playsinline preload="auto"></video>
             </div>
             <div class="card-text-group">
-              <h3 class="card-title" data-i18n="card5_title">Gesture Recognition</h3>
-              <p class="card-desc" data-i18n="card5_desc">This XR Blocks and LiteRT demo showcases hand interactions: a "yeah" gesture triggers colorful stripes, and a thumbs-up releases balloons.</p>
+              <h3 class="card-title">Gesture Recognition</h3>
+              <p class="card-desc">This XR Blocks and LiteRT demo showcases hand interactions: a "yeah" gesture triggers colorful stripes, and a thumbs-up releases balloons.</p>
             </div>
           </div>
           <a href="https://xrblocks.github.io/docs/samples/XR-Emoji" target="_blank" rel="noopener noreferrer" class="card-cta-btn">
-            <span data-i18n="card5_cta">Explore Demo</span>
-            <img src="Designs/arrow_outward.svg" alt="">
+            <span>Explore Demo</span>
+            <span class="card-cta-icon-mask">
+              <img class="card-cta-arrow" src="Designs/arrow_outward.svg" alt="">
+            </span>
           </a>
         </div>
 
       </div>
 
-      <a href="https://github.com/google/xrblocks" target="_blank" rel="noopener noreferrer" class="see-all-btn scroll-fade" data-i18n="view_on_github">View on GitHub</a>
+      <a href="https://github.com/google/xrblocks" target="_blank" rel="noopener noreferrer" class="see-all-btn scroll-fade"><span class="cta-content"><span class="cta-text">View on GitHub</span></span></a>
     </section>
 
     <!-- Presentation Video Section -->
-    <section id="video" class="visible">
+    <section id="video">
       <div class="video-browser-frame">
-        <iframe
-          src="https://www.youtube.com/embed/nknCzIxHHzw?start=8&amp;rel=0"
-          title="Vibe Coding XR: Accelerating AI + XR Prototyping with XR Blocks and Gemini"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen>
-        </iframe>
+        <div class="video-thumbnail">
+          <img id="speaker-img" src="https://i.ytimg.com/vi/nknCzIxHHzw/maxresdefault.jpg" onload="if(this.naturalWidth<=120 && !this.dataset.fallback){this.dataset.fallback='1';this.src='https://i.ytimg.com/vi/nknCzIxHHzw/hqdefault.jpg';}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='https://i.ytimg.com/vi/nknCzIxHHzw/hqdefault.jpg';}" alt="Presentation Video Frame">
+          <div class="play-btn">
+            <img src="Designs/play_arrow.svg" alt="Play Video">
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- FAQ Section -->
     <section id="faq-section">
       <div class="faq-container">
-        <h2 class="faq-title scroll-fade" data-i18n="faq_h2">Frequently asked questions</h2>
+        <h2 class="faq-title scroll-fade">Frequently asked questions</h2>
 
         <div class="faq-list">
           <!-- FAQ Item 1 (Open by default) -->
           <div class="faq-item open">
             <div class="faq-content">
-              <h3 class="faq-question" data-i18n="faq_q1">What is XR Blocks?</h3>
+              <h3 class="faq-question">What is XR Blocks?</h3>
               <div class="faq-answer-wrapper">
                 <div class="faq-answer-inner">
-                  <p class="faq-answer" data-i18n="faq_a1">XR Blocks is web-based, a cross-platform framework designed to accelerate human-centered AI+XR innovation. XR Blocks provides a modular architecture with plug-and-play components for core abstraction in AI+XR, including user representation, environmental perception, gestures, and spatial UI. Crucially, it is designed with the mission of “minimum code from idea to reality”, enabling rapid prototyping of complex AI+XR apps. Built upon accessible technologies (WebXR, three.js, TensorFlow, Gemini), our toolkit lowers the barrier to entry for researchers and designers.</p>
+                  <p class="faq-answer">XR Blocks is web-based, a cross-platform framework designed to accelerate human-centered AI+XR innovation. XR Blocks provides a modular architecture with plug-and-play components for core abstraction in AI+XR, including user representation, environmental perception, gestures, and spatial UI. Crucially, it is designed with the mission of “minimum code from idea to reality”, enabling rapid prototyping of complex AI+XR apps. Built upon accessible technologies (WebXR, three.js, TensorFlow, Gemini), our toolkit lowers the barrier to entry for researchers and designers.</p>
                 </div>
               </div>
             </div>
@@ -354,10 +2323,10 @@
           <!-- FAQ Item 2 -->
           <div class="faq-item">
             <div class="faq-content">
-              <h3 class="faq-question" data-i18n="faq_q2">How can I start building with XR Blocks?</h3>
+              <h3 class="faq-question">How can I start building with XR Blocks?</h3>
               <div class="faq-answer-wrapper">
                 <div class="faq-answer-inner">
-                  <p class="faq-answer" data-i18n="faq_a2" data-i18n-en-html='We recommend you to fork our <a href="https://github.com/google/xrblocks" target="_blank" rel="noopener noreferrer">GitHub repository</a>, browse each <a href="https://xrblocks.github.io/docs/templates/Basic" target="_blank" rel="noopener noreferrer">template</a> and <a href="https://xrblocks.github.io/docs/samples/ModelViewer" target="_blank" rel="noopener noreferrer">sample</a> project, and then start coding while referring to the manual. For vibe coders, feel free to try out our <a href="https://xrblocks.github.io/gem" target="_blank" rel="noopener noreferrer">Gemini Gem</a>, and start building AI + XR apps on Android XR devices or desktop.'>We recommend you to fork our <a href="https://github.com/google/xrblocks" target="_blank" rel="noopener noreferrer">GitHub repository</a>, browse each <a href="https://xrblocks.github.io/docs/templates/Basic" target="_blank" rel="noopener noreferrer">template</a> and <a href="https://xrblocks.github.io/docs/samples/ModelViewer" target="_blank" rel="noopener noreferrer">sample</a> project, and then start coding while referring to the manual. For vibe coders, feel free to try out our <a href="https://xrblocks.github.io/gem" target="_blank" rel="noopener noreferrer">Gemini Gem</a>, and start building AI + XR apps on Android XR devices or desktop.</p>
+                  <p class="faq-answer">We recommend you to fork our <a href="https://github.com/google/xrblocks" target="_blank" rel="noopener noreferrer">GitHub repository</a>, browse each <a href="https://xrblocks.github.io/docs/templates/Basic" target="_blank" rel="noopener noreferrer">template</a> and <a href="https://xrblocks.github.io/docs/samples/ModelViewer" target="_blank" rel="noopener noreferrer">sample</a> project, and then start coding while referring to the manual. For vibe coders, feel free to try out our <a href="https://xrblocks.github.io/gem" target="_blank" rel="noopener noreferrer">Gemini Gem</a>, and start building AI + XR apps on Android XR devices or desktop.</p>
                 </div>
               </div>
             </div>
@@ -370,10 +2339,10 @@
           <!-- FAQ Item 3 -->
           <div class="faq-item">
             <div class="faq-content">
-              <h3 class="faq-question" data-i18n="faq_q3">What is Android XR?</h3>
+              <h3 class="faq-question">What is Android XR?</h3>
               <div class="faq-answer-wrapper">
                 <div class="faq-answer-inner">
-                  <p class="faq-answer" data-i18n="faq_a3">XR stands for extended reality. It’s an umbrella term that encompasses all technologies that blend the real and virtual worlds including virtual reality, augmented reality, and mixed reality. Android XR is an operating system for extended reality devices that use these technologies, like headsets and glasses. It provides the user interface, the ability to access popular apps, and AI assistance from Gemini to these devices.</p>
+                  <p class="faq-answer">XR stands for extended reality. It’s an umbrella term that encompasses all technologies that blend the real and virtual worlds including virtual reality, augmented reality, and mixed reality. Android XR is an operating system for extended reality devices that use these technologies, like headsets and glasses. It provides the user interface, the ability to access popular apps, and AI assistance from Gemini to these devices.</p>
                 </div>
               </div>
             </div>
@@ -386,10 +2355,10 @@
           <!-- FAQ Item 4 -->
           <div class="faq-item">
             <div class="faq-content">
-              <h3 class="faq-question" data-i18n="faq_q4">How do I get Android XR?</h3>
+              <h3 class="faq-question">How do I get Android XR?</h3>
               <div class="faq-answer-wrapper">
                 <div class="faq-answer-inner">
-                  <p class="faq-answer" data-i18n="faq_a4" data-i18n-en-html='<a href="https://samsungshop.onelink.me/tRH1/tntjz42v" target="_blank" rel="noopener noreferrer">Samsung Galaxy XR</a> is available now, <a href="https://www.xreal.com/aura" target="_blank" rel="noopener noreferrer">XREAL AURA</a> is available for pre-order.'><a href="https://samsungshop.onelink.me/tRH1/tntjz42v" target="_blank" rel="noopener noreferrer">Samsung Galaxy XR</a> is available now, <a href="https://www.xreal.com/aura" target="_blank" rel="noopener noreferrer">XREAL AURA</a> is available for pre-order.</p>
+                  <p class="faq-answer">Android XR is an operating system for headsets and glasses. The first device, <a href="https://www.samsung.com/us/xr/galaxy-xr/galaxy-xr/" target="_blank" rel="noopener noreferrer">Samsung Galaxy XR</a>, is available now.</p>
                 </div>
               </div>
             </div>
@@ -402,10 +2371,26 @@
           <!-- FAQ Item 5 -->
           <div class="faq-item">
             <div class="faq-content">
-              <h3 class="faq-question" data-i18n="faq_q6">How can I start developing for Android XR?</h3>
+              <h3 class="faq-question">When will Android XR-powered devices be available?</h3>
               <div class="faq-answer-wrapper">
                 <div class="faq-answer-inner">
-                  <p class="faq-answer" data-i18n="faq_a6" data-i18n-en-html='You can check out <a href="https://developer.android.com/xr" target="_blank" rel="noopener noreferrer">developer.android.com/xr</a> for documentation and information to get started with Android XR. If you are choosing <a href="https://immersiveweb.dev/" target="_blank" rel="noopener noreferrer">WebXR</a>, <a href="https://xrblocks.github.io" target="_blank" rel="noopener noreferrer">XR Blocks</a> here is also a great way to make creative Android XR applications.'>You can check out <a href="https://developer.android.com/xr" target="_blank" rel="noopener noreferrer">developer.android.com/xr</a> for documentation and information to get started with Android XR. If you are choosing <a href="https://immersiveweb.dev/" target="_blank" rel="noopener noreferrer">WebXR</a>, <a href="https://xrblocks.github.io" target="_blank" rel="noopener noreferrer">XR Blocks</a> here is also a great way to make creative Android XR applications.</p>
+                  <p class="faq-answer">The first device, Samsung Galaxy XR, is available now. Other devices will be available in 2026.</p>
+                </div>
+              </div>
+            </div>
+            <div class="faq-icon">
+              <img class="icon-add" src="Designs/add.svg" alt="Expand">
+              <img class="icon-close" src="Designs/close_small.svg" alt="Collapse">
+            </div>
+          </div>
+
+          <!-- FAQ Item 6 -->
+          <div class="faq-item">
+            <div class="faq-content">
+              <h3 class="faq-question">How can I start developing for Android XR?</h3>
+              <div class="faq-answer-wrapper">
+                <div class="faq-answer-inner">
+                  <p class="faq-answer">You can check out <a href="https://developer.android.com/xr" target="_blank" rel="noopener noreferrer">developer.android.com/xr</a> for documentation and information to get started with Android XR. If you are choosing <a href="https://immersiveweb.dev/" target="_blank" rel="noopener noreferrer">WebXR</a>, <a href="https://xrblocks.github.io" target="_blank" rel="noopener noreferrer">XR Blocks</a> here is also a great way to make creative Android XR applications.</p>
                 </div>
               </div>
             </div>
@@ -421,9 +2406,9 @@
     <!-- Newsletter & Footer Section -->
     <section id="newsletter-section">
       <div class="newsletter-content">
-        <h2 class="newsletter-title scroll-fade" data-i18n="newsletter_title">Be the first to get updates from XR Blocks</h2>
+        <h2 class="newsletter-title scroll-fade">Be the first to get updates from XR Studio</h2>
         <a href="https://forms.gle/kvPCrnfsxFTspATT6" target="_blank" rel="noopener noreferrer" class="newsletter-btn scroll-fade">
-          <span data-i18n="newsletter_btn">Sign up for the newsletter</span>
+          <span class="cta-content"><span class="cta-text">Sign up for the newsletter</span></span>
         </a>
       </div>
 
@@ -431,447 +2416,185 @@
         <div class="footer-left">
           <img class="google-logo" src="Designs/Google.svg" alt="Google">
         </div>
+        <div class="footer-center">
+          <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://xrblocks.github.io" target="_blank" rel="noopener noreferrer" class="social-icon">
+            <img src="Designs/linkedin.svg" alt="LinkedIn">
+          </a>
+          <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fxrblocks.github.io%2F&amp;src=sdkpreparse" target="_blank" rel="noopener noreferrer" class="social-icon">
+            <img src="Designs/facebook.svg" alt="Facebook">
+          </a>
+          <a href="https://twitter.com/intent/tweet?text=Drag%20and%20drop%20off-the-shelf%20ML%20components%20with%20%23VisualBlocks.%20A%20fast,%20easy%20way%20to%20prototype%20ML%20pipelines%20%E2%80%93%20no%20expertise%20or%20coding%20required.%20Try%20it%20yourself:&amp;url=https%3A%2F%2Fxrblocks.github.io" target="_blank" rel="noopener noreferrer" class="social-icon">
+            <img src="Designs/twitter.svg" alt="Twitter">
+          </a>
+        </div>
         <div class="footer-right">
-          <a href="https://policies.google.com/" target="_blank" rel="noopener noreferrer" class="footer-link" data-i18n="privacy_and_terms">Privacy &amp; Terms</a>
+          <a href="https://policies.google.com/" target="_blank" rel="noopener noreferrer" class="footer-link">Privacy &amp; Terms</a>
         </div>
       </footer>
     </section>
     </div>
 
-    <!-- Demo Gallery Page View -->
-    <section id="all-experiments-view" aria-label="Demo Gallery" data-i18n-aria="demo_gallery">
+    <!-- All Experiments Page View -->
+    <section id="all-experiments-view" aria-label="All experiments">
       <div class="experiments-header">
-        <h1 class="experiments-title" data-i18n="demo_gallery">Demo Gallery</h1>
-        <div class="experiments-filters" role="tablist" aria-label="Demo Gallery" data-i18n-aria="demo_gallery">
-          <button type="button" class="filter-pill active" data-filter="All" data-i18n="all">All</button>
-          <button type="button" class="filter-pill" data-filter="Spatial UI" data-i18n="cat_spatial_ui">Spatial UI</button>
-          <button type="button" class="filter-pill" data-filter="Realism" data-i18n="cat_realism">Realism</button>
-          <button type="button" class="filter-pill" data-filter="Avatars" data-i18n="cat_avatars">Avatars</button>
-          <button type="button" class="filter-pill" data-filter="Interactions" data-i18n="cat_interactions">Interactions</button>
-          <button type="button" class="filter-pill" data-filter="AI + XR" data-i18n="cat_ai_xr">AI + XR</button>
-          <button type="button" class="filter-pill" data-filter="Advanced" data-i18n="cat_advanced">Advanced</button>
+        <h1 class="experiments-title">All experiments</h1>
+        <div class="experiments-filters" role="tablist" aria-label="Filter experiments">
+          <button type="button" class="filter-pill active" data-filter="All">All</button>
+          <button type="button" class="filter-pill" data-filter="Spatial UI">Spatial UI</button>
+          <button type="button" class="filter-pill" data-filter="Realism">Realism</button>
+          <button type="button" class="filter-pill" data-filter="Avatars">Avatars</button>
+          <button type="button" class="filter-pill" data-filter="Interactions">Interactions</button>
+          <button type="button" class="filter-pill" data-filter="AI + XR">AI + XR</button>
+          <button type="button" class="filter-pill" data-filter="Advanced">Advanced</button>
         </div>
       </div>
 
       <div class="experiments-grid">
-        <div class="experiment-card" data-categories="AI + XR">
-          <img class="carousel-card-bg" src="Designs/showcase.turf.jpg" alt="3D Object Detection">
+        <!-- Row 1 -->
+        <div class="experiment-card" data-categories="Realism,Interactions">
+          <img class="carousel-card-bg" src="Designs/showcase.balls.jpg" alt="Interior Sandbox">
           <div class="card-meta">
-            <div class="card-title">3D Object Detection</div>
-            <div class="card-author">XR Blocks · AI + XR</div>
+            <div class="card-title">Interior Sandbox</div>
+            <div class="card-author">David Li</div>
           </div>
-          <a href="https://xrblocks.github.io/docs/samples/Objects-3D/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
+          <button class="card-btn">
             <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
+            <span>Open Canvas</span>
+          </button>
         </div>
 
-        <div class="experiment-card" data-categories="Realism">
-          <img class="carousel-card-bg" src="Designs/showcase.garden.jpg" alt="3DGS Walkthrough">
+        <div class="experiment-card" data-categories="Spatial UI,AI + XR">
+          <img class="carousel-card-bg" src="Designs/showcase.xr.jpg" alt="Studio Playground">
           <div class="card-meta">
-            <div class="card-title">3DGS Walkthrough</div>
-            <div class="card-author">XR Blocks · XR Realism</div>
+            <div class="card-title">Studio Playground</div>
+            <div class="card-author">Ruofei Du</div>
           </div>
-          <a href="https://xrblocks.github.io/docs/samples/3DGS-Walkthrough/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
+          <button class="card-btn">
             <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
+            <span>Open Canvas</span>
+          </button>
         </div>
 
-        <div class="experiment-card" data-categories="Advanced">
-          <img class="carousel-card-bg" src="Designs/showcase.bubbles.jpg" alt="Balloon Pop">
+        <div class="experiment-card" data-categories="Interactions,Spatial UI">
+          <img class="carousel-card-bg" src="Designs/showcase.bubbles.jpg" alt="Bubble Party">
           <div class="card-meta">
-            <div class="card-title">Balloon Pop</div>
-            <div class="card-author">XR Blocks · Advanced Demos</div>
+            <div class="card-title">Bubble Party</div>
+            <div class="card-author">Wren Fischer</div>
           </div>
-          <a href="https://xrblocks.github.io/docs/samples/BalloonPop/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
+          <button class="card-btn">
             <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
+            <span>Open Canvas</span>
+          </button>
         </div>
 
-        <div class="experiment-card" data-categories="Advanced">
-          <img class="carousel-card-bg" src="Designs/showcase.balls.jpg" alt="Ballpit">
+        <div class="experiment-card" data-categories="AI + XR,Realism">
+          <img class="carousel-card-bg" src="Designs/showcase.garden.jpg" alt="Cube Canopy">
           <div class="card-meta">
-            <div class="card-title">Ballpit</div>
-            <div class="card-author">XR Blocks · Advanced Demos</div>
+            <div class="card-title">Cube Canopy</div>
+            <div class="card-author">Randkeep Katari</div>
           </div>
-          <a href="https://xrblocks.github.io/docs/samples/Ballpit/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
+          <button class="card-btn">
             <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
+            <span>Open Canvas</span>
+          </button>
         </div>
 
-        <div class="experiment-card" data-categories="AI + XR">
-          <img class="carousel-card-bg" src="Designs/showcase.garden.jpg" alt="Collaborative Roomcraft">
+        <!-- Row 2 -->
+        <div class="experiment-card" data-categories="Advanced,Realism">
+          <img class="carousel-card-bg" src="Designs/showcase.mirror.jpg" alt="Mirror Portal">
           <div class="card-meta">
-            <div class="card-title">Collaborative Roomcraft</div>
-            <div class="card-author">XR Blocks · AI + XR</div>
+            <div class="card-title">Mirror Portal</div>
+            <div class="card-author">Nadia Chen</div>
           </div>
-          <a href="https://xrblocks.github.io/docs/samples/Collaborative-Roomcraft/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
+          <button class="card-btn">
             <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
+            <span>Open Canvas</span>
+          </button>
         </div>
 
-        <div class="experiment-card" data-categories="Realism">
-          <img class="carousel-card-bg" src="Designs/showcase.turf.jpg" alt="Depth Map">
+        <div class="experiment-card" data-categories="AI + XR,Interactions">
+          <img class="carousel-card-bg" src="Designs/showcase.bees.jpg" alt="Voxel Garden">
           <div class="card-meta">
-            <div class="card-title">Depth Map</div>
-            <div class="card-author">XR Blocks · XR Realism</div>
+            <div class="card-title">Voxel Garden</div>
+            <div class="card-author">Emmalyn Harrell</div>
           </div>
-          <a href="https://xrblocks.github.io/docs/samples/DepthMap/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
+          <button class="card-btn">
             <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
+            <span>Open Canvas</span>
+          </button>
         </div>
 
-        <div class="experiment-card" data-categories="Realism">
-          <img class="carousel-card-bg" src="Designs/showcase.balls.jpg" alt="Depth Mesh">
+        <div class="experiment-card" data-categories="Realism,Advanced">
+          <img class="carousel-card-bg" src="Designs/showcase.turf.jpg" alt="Synth Turf">
           <div class="card-meta">
-            <div class="card-title">Depth Mesh</div>
-            <div class="card-author">XR Blocks · XR Realism</div>
+            <div class="card-title">Synth Turf</div>
+            <div class="card-author">Chloe Vance</div>
           </div>
-          <a href="https://xrblocks.github.io/docs/samples/DepthMesh/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
+          <button class="card-btn">
             <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
+            <span>Open Canvas</span>
+          </button>
         </div>
 
-        <div class="experiment-card" data-categories="Advanced">
-          <img class="carousel-card-bg" src="Designs/showcase.turf.jpg" alt="Drone">
+        <div class="experiment-card" data-categories="Interactions,Spatial UI">
+          <img class="carousel-card-bg" src="Designs/showcase.pong.jpg" alt="Spatial Pong">
           <div class="card-meta">
-            <div class="card-title">Drone</div>
-            <div class="card-author">XR Blocks · Advanced Demos</div>
+            <div class="card-title">Spatial Pong</div>
+            <div class="card-author">Marcus Vance</div>
           </div>
-          <a href="https://xrblocks.github.io/docs/samples/Drone/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
+          <button class="card-btn">
             <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
+            <span>Open Canvas</span>
+          </button>
         </div>
 
-        <div class="experiment-card" data-categories="Avatars">
-          <img class="carousel-card-bg" src="Designs/showcase.mirror.jpg" alt="Face Landmarks">
+        <!-- Row 3 -->
+        <div class="experiment-card" data-categories="Avatars,AI + XR">
+          <img class="carousel-card-bg" src="Designs/showcase.aquarium.jpg" alt="Virtual Pets">
           <div class="card-meta">
-            <div class="card-title">Face Landmarks</div>
-            <div class="card-author">XR Blocks · Avatar Lab</div>
+            <div class="card-title">Virtual Pets</div>
+            <div class="card-author">Keaton Singh</div>
           </div>
-          <a href="https://xrblocks.github.io/docs/samples/Face-Mirror/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
+          <button class="card-btn">
             <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
+            <span>Open Canvas</span>
+          </button>
         </div>
 
-        <div class="experiment-card" data-categories="Avatars">
-          <img class="carousel-card-bg" src="Designs/showcase.mirror.jpg" alt="GNM Head">
+        <div class="experiment-card" data-categories="Realism,Advanced">
+          <img class="carousel-card-bg" src="Designs/showcase.balls.jpg" alt="Ballpit Physics">
           <div class="card-meta">
-            <div class="card-title">GNM Head</div>
-            <div class="card-author">XR Blocks · Avatar Lab</div>
+            <div class="card-title">Ballpit Physics</div>
+            <div class="card-author">David Li</div>
           </div>
-          <a href="https://xrblocks.github.io/docs/samples/GNM-Head/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
+          <button class="card-btn">
             <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
+            <span>Open Canvas</span>
+          </button>
         </div>
 
-        <div class="experiment-card" data-categories="AI + XR">
-          <img class="carousel-card-bg" src="Designs/showcase.aquarium.jpg" alt="Gemini Icebreakers">
+        <div class="experiment-card" data-categories="Avatars,Interactions">
+          <img class="carousel-card-bg" src="Designs/showcase.garden.jpg" alt="Gesture Avatar">
           <div class="card-meta">
-            <div class="card-title">Gemini Icebreakers</div>
-            <div class="card-author">XR Blocks · AI + XR</div>
+            <div class="card-title">Gesture Avatar</div>
+            <div class="card-author">Randkeep Katari</div>
           </div>
-          <a href="https://xrblocks.github.io/docs/samples/Gemini-Icebreakers/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
+          <button class="card-btn">
             <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
+            <span>Open Canvas</span>
+          </button>
         </div>
 
-        <div class="experiment-card" data-categories="Interactions">
-          <img class="carousel-card-bg" src="Designs/showcase.xr.jpg" alt="Hand Gestures">
+        <div class="experiment-card" data-categories="Spatial UI,Avatars,Advanced">
+          <img class="carousel-card-bg" src="Designs/showcase.xr.jpg" alt="Spatial Workspace">
           <div class="card-meta">
-            <div class="card-title">Hand Gestures</div>
-            <div class="card-author">XR Blocks · XR Interaction</div>
+            <div class="card-title">Spatial Workspace</div>
+            <div class="card-author">Ruofei Du</div>
           </div>
-          <a href="https://xrblocks.github.io/docs/samples/Custom-Gestures/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
+          <button class="card-btn">
             <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Interactions">
-          <img class="carousel-card-bg" src="Designs/showcase.mirror.jpg" alt="Head Gestures">
-          <div class="card-meta">
-            <div class="card-title">Head Gestures</div>
-            <div class="card-author">XR Blocks · XR Interaction</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/Head-Gestures/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="AI + XR">
-          <img class="carousel-card-bg" src="Designs/showcase.bees.jpg" alt="Language Detector">
-          <div class="card-meta">
-            <div class="card-title">Language Detector</div>
-            <div class="card-author">XR Blocks · AI + XR</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/Language-Detector/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Realism">
-          <img class="carousel-card-bg" src="Designs/showcase.aquarium.jpg" alt="Lighting">
-          <div class="card-meta">
-            <div class="card-title">Lighting</div>
-            <div class="card-author">XR Blocks · XR Realism</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/Lighting/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Avatars">
-          <img class="carousel-card-bg" src="Designs/showcase.bees.jpg" alt="Lipsync Puppet">
-          <div class="card-meta">
-            <div class="card-title">Lipsync Puppet</div>
-            <div class="card-author">XR Blocks · Avatar Lab</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/Lipsync/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Advanced">
-          <img class="carousel-card-bg" src="Designs/showcase.pong.jpg" alt="Math Tutor">
-          <div class="card-meta">
-            <div class="card-title">Math Tutor</div>
-            <div class="card-author">XR Blocks · Advanced Demos</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/Math-Tutor/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Spatial UI">
-          <img class="carousel-card-bg" src="Designs/showcase.xr.jpg" alt="Model Viewer">
-          <div class="card-meta">
-            <div class="card-title">Model Viewer</div>
-            <div class="card-author">XR Blocks · Spatial UI</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/ModelViewer/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Avatars">
-          <img class="carousel-card-bg" src="Designs/showcase.pong.jpg" alt="Netblocks">
-          <div class="card-meta">
-            <div class="card-title">Netblocks</div>
-            <div class="card-author">XR Blocks · Avatar Lab</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/Netblocks/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Realism">
-          <img class="carousel-card-bg" src="Designs/showcase.garden.jpg" alt="Occlusion">
-          <div class="card-meta">
-            <div class="card-title">Occlusion</div>
-            <div class="card-author">XR Blocks · XR Realism</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/Occlusion/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Advanced">
-          <img class="carousel-card-bg" src="Designs/showcase.bees.jpg" alt="Paint">
-          <div class="card-meta">
-            <div class="card-title">Paint</div>
-            <div class="card-author">XR Blocks · Advanced Demos</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/Paint/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Avatars">
-          <img class="carousel-card-bg" src="Designs/showcase.aquarium.jpg" alt="Person Segmentation">
-          <div class="card-meta">
-            <div class="card-title">Person Segmentation</div>
-            <div class="card-author">XR Blocks · Avatar Lab</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/Magic-Window/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Advanced">
-          <img class="carousel-card-bg" src="Designs/showcase.aquarium.jpg" alt="Portal Gallery">
-          <div class="card-meta">
-            <div class="card-title">Portal Gallery</div>
-            <div class="card-author">XR Blocks · Advanced Demos</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/Portals/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Advanced">
-          <img class="carousel-card-bg" src="Designs/showcase.garden.jpg" alt="Rain">
-          <div class="card-meta">
-            <div class="card-title">Rain</div>
-            <div class="card-author">XR Blocks · Advanced Demos</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/Rain/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Realism">
-          <img class="carousel-card-bg" src="Designs/showcase.pong.jpg" alt="Reticle">
-          <div class="card-meta">
-            <div class="card-title">Reticle</div>
-            <div class="card-author">XR Blocks · XR Realism</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/Reticle/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Interactions">
-          <img class="carousel-card-bg" src="Designs/showcase.pong.jpg" alt="Rock Paper Scissors">
-          <div class="card-meta">
-            <div class="card-title">Rock Paper Scissors</div>
-            <div class="card-author">XR Blocks · XR Interaction</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/RockPaperScissors/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Advanced">
-          <img class="carousel-card-bg" src="Designs/showcase.mirror.jpg" alt="Screen Wiper">
-          <div class="card-meta">
-            <div class="card-title">Screen Wiper</div>
-            <div class="card-author">XR Blocks · Advanced Demos</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/ScreenWiper/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Advanced">
-          <img class="carousel-card-bg" src="Designs/showcase.balls.jpg" alt="Splash">
-          <div class="card-meta">
-            <div class="card-title">Splash</div>
-            <div class="card-author">XR Blocks · Advanced Demos</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/Splash/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="AI + XR">
-          <img class="carousel-card-bg" src="Designs/showcase.mirror.jpg" alt="Super-Resolution">
-          <div class="card-meta">
-            <div class="card-title">Super-Resolution</div>
-            <div class="card-author">XR Blocks · AI + XR</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/Super-Resolution/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Spatial UI">
-          <img class="carousel-card-bg" src="Designs/showcase.mirror.jpg" alt="UI Blocks">
-          <div class="card-meta">
-            <div class="card-title">UI Blocks</div>
-            <div class="card-author">XR Blocks · Spatial UI</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/UI/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Avatars">
-          <img class="carousel-card-bg" src="Designs/showcase.xr.jpg" alt="VRM Avatar">
-          <div class="card-meta">
-            <div class="card-title">VRM Avatar</div>
-            <div class="card-author">XR Blocks · Avatar Lab</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/VRM-Avatar/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Advanced">
-          <img class="carousel-card-bg" src="Designs/showcase.xr.jpg" alt="Virtual Screens">
-          <div class="card-meta">
-            <div class="card-title">Virtual Screens</div>
-            <div class="card-author">XR Blocks · Advanced Demos</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/Virtual-Screens/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="Interactions">
-          <img class="carousel-card-bg" src="Designs/showcase.bubbles.jpg" alt="XR Emoji">
-          <div class="card-meta">
-            <div class="card-title">XR Emoji</div>
-            <div class="card-author">XR Blocks · XR Interaction</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/XR-Emoji/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="AI + XR">
-          <img class="carousel-card-bg" src="Designs/showcase.xr.jpg" alt="XR Object">
-          <div class="card-meta">
-            <div class="card-title">XR Object</div>
-            <div class="card-author">XR Blocks · AI + XR</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/Gemini-XRObject/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
-        </div>
-
-        <div class="experiment-card" data-categories="AI + XR">
-          <img class="carousel-card-bg" src="Designs/showcase.garden.jpg" alt="XR Poet">
-          <div class="card-meta">
-            <div class="card-title">XR Poet</div>
-            <div class="card-author">XR Blocks · AI + XR</div>
-          </div>
-          <a href="https://xrblocks.github.io/docs/samples/XR-Poet/" target="_blank" rel="noopener noreferrer" class="card-btn" style="text-decoration: none;" onclick="event.stopPropagation();">
-            <img src="Designs/external.svg" alt="Open Canvas">
-            <span data-i18n="open">Open</span>
-          </a>
+            <span>Open Canvas</span>
+          </button>
         </div>
       </div>
     </section>
@@ -883,6 +2606,8 @@
     <img src="Designs/downarrow.svg" alt="Down Arrow">
   </div>
 
+  <!-- Script for Three.js 3D Background and Scroll/Mouse Interactivity -->
   <script type="module" src="main.js"></script>
+
 </body>
 </html>
