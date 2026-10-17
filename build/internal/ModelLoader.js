@@ -15,8 +15,8 @@
 *
 * @file xrblocks.js
 * @version v0.23.0
-* @commitid 7c29e0e
-* @builddate 2026-10-16T16:14:15.992Z
+* @commitid b0b524a
+* @builddate 2026-10-17T02:46:12.627Z
 * @description XR Blocks SDK, built from source with the above commit ID.
 * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
 * and follow rules below:
@@ -4199,6 +4199,7 @@ var Options = class {
 		if (hideSimulatorUi) {
 			this.simulator.simulatorSettingsPanel.enabled = false;
 			this.simulator.instructions.enabled = false;
+			this.simulator.instructions.overlayEnabled = false;
 			this.simulator.handPosePanel.enabled = false;
 		}
 		return this;
