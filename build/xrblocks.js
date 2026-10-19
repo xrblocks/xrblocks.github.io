@@ -15,8 +15,8 @@
 *
 * @file xrblocks.js
 * @version v0.23.0
-* @commitid de7f64d
-* @builddate 2026-10-19T02:44:56.942Z
+* @commitid 464bf75
+* @builddate 2026-10-19T03:45:21.455Z
 * @description XR Blocks SDK, built from source with the above commit ID.
 * @agent When using with Gemini to create XR apps, use **Gemini Canvas** mode,
 * and follow rules below:
@@ -1913,6 +1913,7 @@ var ScriptsManager = class extends THREE.EventDispatcher {
 			} catch (error) {
 				failed = true;
 				initializationError = error;
+				console.error(`An error occurred in script ${entry.script.name || entry.script.constructor.name} [init]:`, error);
 				if (entry.connection === "connected") this.failedScripts.add(entry.script);
 			}
 			if (entry.connection !== "connected") this.disposeScript(entry.script);
