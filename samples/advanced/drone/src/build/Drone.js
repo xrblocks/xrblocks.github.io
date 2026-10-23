@@ -14,12 +14,12 @@ var Drone = class extends xb.Script {
 		this.moveSpeed = moveSpeed;
 		this.rotationSpeed = rotationSpeed;
 		this.add(this.keyboardControls);
-		this.add(this.createInstructions());
 		this.moveSpeed = moveSpeed;
 		this.rotationSpeed = rotationSpeed;
 	}
 	async init() {
 		this.add(new THREE.HemisphereLight(16777215, 6710886, 3));
+		xb.add(this.createInstructions());
 		await this.loadDroneModel();
 		this.resetDrone();
 	}
@@ -55,15 +55,14 @@ var Drone = class extends xb.Script {
 		this.updateRigidBody();
 	}
 	createInstructions() {
-		const overlay = new xb.UIOverlay({
-			style: {
-				width: 720,
-				position: "absolute",
-				left: "50%",
-				bottom: 32,
-				transform: { translateX: "-50%" },
-				gap: 8
+		const card = new xb.UICard({
+			size: {
+				width: .72,
+				height: "auto"
 			},
+			manipulation: true,
+			edge: true,
+			style: { gap: 8 },
 			children: [
 				new xb.UIExitButton(),
 				new xb.UIText({
@@ -87,8 +86,9 @@ var Drone = class extends xb.Script {
 				})
 			]
 		});
-		overlay.name = "Drone controls";
-		return overlay;
+		card.position.set(0, 1.1, -1.2);
+		card.name = "Drone controls";
+		return card;
 	}
 	updateRigidBody() {
 		const rigidBody = this.rigidBody;
