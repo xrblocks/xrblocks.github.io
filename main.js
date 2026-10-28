@@ -1105,7 +1105,7 @@ if (playBtn && browserFrame) {
   const handlePlayVideo = () => {
     browserFrame.innerHTML = `
       <iframe 
-        src="https://www.youtube.com/embed/nknCzIxHHzw?autoplay=1" 
+        src="https://www.youtube.com/embed/M9MyQ3LKCy0?autoplay=1" 
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
         allowfullscreen>
       </iframe>
