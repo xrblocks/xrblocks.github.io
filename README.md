@@ -80,8 +80,8 @@ Currently loaded in `<head>` of `index.html`:
 2. **Three.js (`0.180.0`)**
    - Loaded via `<script type="importmap">` from `https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js` and `three/addons/`.
    - *Production tip:* Can be bundled via Vite/Webpack/Rollup (`npm install three@0.180.0`) or self-hosted if strict CSP disallows `cdn.jsdelivr.net`.
-3. **YouTube Embed (`M9MyQ3LKCy0`)**
-   - The video section (`#video`) displays the high-res thumbnail (`https://i.ytimg.com/vi/M9MyQ3LKCy0/maxresdefault.jpg` with automatic fallback to `hqdefault.jpg`) and injects a YouTube `<iframe>` (`https://www.youtube.com/embed/M9MyQ3LKCy0?autoplay=1&rel=0`) when clicked.
+3. **YouTube Embed (`ZzmWNUtVHB8`)**
+   - The video section (`#video`) displays the high-res thumbnail (`https://i.ytimg.com/vi/ZzmWNUtVHB8/maxresdefault.jpg` with automatic fallback to `hqdefault.jpg`) and injects a YouTube `<iframe>` (`https://www.youtube.com/embed/ZzmWNUtVHB8?autoplay=1&rel=0`) when clicked.
 
 ---
 
@@ -105,7 +105,7 @@ All outbound links open in a new tab (`target="_blank" rel="noopener noreferrer"
 | **Carousel Card 4** | `Explore Demo` (Ballpit) | `https://xrblocks.github.io/docs/samples/Ballpit` | Live |
 | **Carousel Card 5** | `Explore Demo` (Gesture Recognition) | `https://xrblocks.github.io/docs/samples/XR-Emoji` | Live |
 | **Carousel Section CTA** | `View on GitHub` | `https://github.com/google/xrblocks` | Live |
-| **Video Section** | Presentation Video | `https://www.youtube.com/watch?v=M9MyQ3LKCy0` | Embedded on click |
+| **Video Section** | Presentation Video | `https://www.youtube.com/watch?v=ZzmWNUtVHB8` | Embedded on click |
 | **Newsletter CTA** | `Sign up for the newsletter` | `https://forms.gle/kvPCrnfsxFTspATT6` | Live Google Form |
 | **Footer Social** | `LinkedIn` | `https://www.linkedin.com/sharing/share-offsite/?url=https://xrblocks.github.io` | Live share intent |
 | **Footer Social** | `Facebook` | `https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fxrblocks.github.io%2F&src=sdkpreparse` | Live share intent |
