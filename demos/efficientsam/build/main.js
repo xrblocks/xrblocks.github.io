@@ -7,6 +7,7 @@ const QUAD_DISTANCE_METERS = .3;
 const QUAD_SIZE_METERS = .8;
 const MOUSE_QUAD_DISTANCE_METERS = 1;
 const MOUSE_QUAD_SIZE_METERS = 1.4;
+const CAMERA_STORAGE_KEY = "xrblocks:efficientsam:camera";
 /**
 * XR Circle to Search Script powered by XR Blocks (v0.20.0+) and LiteRT 2.5.3 EfficientSAM-Ti.
 * All CPU/GPU-intensive LiteRT compilation, image preprocessing, inference, and mask
@@ -38,6 +39,7 @@ var XRCircleToSearchScript = class extends xb.Script {
 	hudMetricsText = null;
 	hudCutoutPlaceholder = null;
 	hudCutoutImage = null;
+	hudCameraBtn = null;
 	telemetryBadgeCard = null;
 	telemetryBadgeText = null;
 	targetDevice;
@@ -45,9 +47,21 @@ var XRCircleToSearchScript = class extends xb.Script {
 	domMetricTotal;
 	domMetricSplit;
 	domMetricIou;
+	domCameraBtn;
 	constructor() {
 		super();
-		this.targetDevice = typeof navigator !== "undefined" && /OculusBrowser|Quest/i.test(navigator.userAgent) ? "quest3" : "galaxyxr";
+		const urlCamera = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("camera")?.toLowerCase() : null;
+		let storedCamera = null;
+		try {
+			storedCamera = localStorage.getItem(CAMERA_STORAGE_KEY)?.toLowerCase() ?? null;
+		} catch {
+			storedCamera = null;
+		}
+		const initialCamera = urlCamera || storedCamera;
+		if (initialCamera === "aura" || initialCamera === "galaxyxr" || initialCamera === "quest3") {
+			this.targetDevice = initialCamera;
+			this.persistCameraDevice(initialCamera);
+		} else this.targetDevice = typeof navigator !== "undefined" && /OculusBrowser|Quest/i.test(navigator.userAgent) ? "quest3" : "galaxyxr";
 		this.quadCanvas = document.createElement("canvas");
 		this.quadCanvas.width = MODEL_IMG_SIZE;
 		this.quadCanvas.height = MODEL_IMG_SIZE;
@@ -67,6 +81,14 @@ var XRCircleToSearchScript = class extends xb.Script {
 		this.domMetricTotal = document.getElementById("xr-metric-total");
 		this.domMetricSplit = document.getElementById("xr-metric-split");
 		this.domMetricIou = document.getElementById("xr-metric-iou");
+		this.domCameraBtn = document.getElementById("xr-camera-btn");
+		if (this.domCameraBtn) {
+			this.domCameraBtn.textContent = this.getCameraButtonLabel();
+			this.domCameraBtn.addEventListener("click", (e) => {
+				e.stopPropagation();
+				this.toggleCameraDevice();
+			});
+		}
 		const clearBtn = document.getElementById("xr-clear-btn");
 		if (clearBtn) clearBtn.addEventListener("click", (e) => {
 			e.stopPropagation();
@@ -174,6 +196,13 @@ var XRCircleToSearchScript = class extends xb.Script {
 				this.clearQuadOverlay();
 			}
 		});
+		this.hudCameraBtn = new xb.UIButton({
+			label: this.getCameraButtonLabel(),
+			icon: "photo_camera",
+			onClick: () => {
+				this.toggleCameraDevice();
+			}
+		});
 		const card = new xb.UICard({
 			size: {
 				width: .54,
@@ -208,7 +237,7 @@ var XRCircleToSearchScript = class extends xb.Script {
 						justifyContent: "flex-start",
 						gap: 8
 					},
-					children: [clearBtn]
+					children: [clearBtn, this.hudCameraBtn]
 				})
 			]
 		});
@@ -319,6 +348,27 @@ var XRCircleToSearchScript = class extends xb.Script {
 	updateStatusText(msg) {
 		if (this.domStatus) this.domStatus.innerHTML = msg;
 		if (this.hudStatusText) this.hudStatusText.text = msg.replace(/<[^>]*>/g, "");
+	}
+	getCameraButtonLabel() {
+		if (this.targetDevice === "aura") return "Camera: Aura";
+		if (this.targetDevice === "quest3") return "Camera: Quest 3";
+		return "Camera: Galaxy XR";
+	}
+	persistCameraDevice(device) {
+		try {
+			localStorage.setItem(CAMERA_STORAGE_KEY, device);
+		} catch {}
+	}
+	/**
+	* Switches between Galaxy XR and Aura camera parameters in XR.
+	*/
+	toggleCameraDevice() {
+		this.targetDevice = this.targetDevice === "aura" ? "galaxyxr" : "aura";
+		this.persistCameraDevice(this.targetDevice);
+		const label = this.getCameraButtonLabel();
+		if (this.hudCameraBtn) this.hudCameraBtn.label = label;
+		if (this.domCameraBtn) this.domCameraBtn.textContent = label;
+		this.updateStatusText(`Switched to <strong>${this.targetDevice === "aura" ? "Aura" : "Galaxy XR"}</strong> camera parameters — Pinch & circle!`);
 	}
 	isDescendantOf(obj, ancestor) {
 		if (!obj || !ancestor) return false;
