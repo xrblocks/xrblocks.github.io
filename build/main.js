@@ -1143,6 +1143,549 @@ const mobileMenuBtn = document.querySelector('.mobile-more');
 const mobileMenuPanel = document.querySelector('.mobile-menu-panel');
 const mobileEnvBtns = document.querySelectorAll('.mobile-env-btn');
 
+const VALID_LANGS = new Set(['en', 'fr', 'es', 'de', 'it', 'ko']);
+const langCache = {
+  en: {
+    "title": "XR Blocks: Build XR without code",
+    "home": "Home",
+    "faq": "FAQ",
+    "faq_h2": "Frequently asked questions",
+    "faq_q1": "What is XR Blocks?",
+    "faq_a1": "XR Blocks is web-based, a cross-platform framework designed to accelerate human-centered AI+XR innovation. XR Blocks provides a modular architecture with plug-and-play components for core abstraction in AI+XR, including user representation, environmental perception, gestures, and spatial UI. Crucially, it is designed with the mission of “minimum code from idea to reality”, enabling rapid prototyping of complex AI+XR apps. Built upon accessible technologies (WebXR, three.js, TensorFlow, Gemini), our toolkit lowers the barrier to entry for researchers and designers.",
+    "faq_q2": "How can I start building with XR Blocks?",
+    "faq_a2": "We recommend you to fork our GitHub repository (https://github.com/google/xrblocks), browse each template (https://xrblocks.github.io/docs/templates/Basic) and sample (https://xrblocks.github.io/docs/samples/ModelViewer) project, and then start coding while referring to the manual. For vibe coders, feel free to try out our Gemini Gem (https://xrblocks.github.io/gem), and start building AI + XR apps on Android XR devices or desktop.",
+    "faq_q3": "What is Android XR?",
+    "faq_a3": "XR stands for extended reality. It’s an umbrella term that encompasses all technologies that blend the real and virtual worlds including virtual reality, augmented reality, and mixed reality. Android XR is an operating system for extended reality devices that use these technologies, like headsets and glasses. It provides the user interface, the ability to access popular apps, and AI assistance from Gemini to these devices.",
+    "faq_q4": "How do I get Android XR?",
+    "faq_a4": "Samsung Galaxy XR is available now, XREAL AURA is available for pre-order.",
+    "faq_q6": "How can I start developing for Android XR?",
+    "faq_a6": "You can check out developer.android.com/xr (https://developer.android.com/xr) for documentation and information to get started with Android XR. If you are choosing WebXR (https://immersiveweb.dev/), XR Blocks (https://xrblocks.github.io) here is also a great way to make creative Android XR applications.",
+    "open": "Open",
+    "templates": "Templates",
+    "demos": "Demos",
+    "docs": "Docs",
+    "language_name": "English",
+    "build": "Build",
+    "without_code": "without code",
+    "hero_subtitle": "Accelerating AI + XR Innovation",
+    "build_in_ai_studio": "Build in AI Studio",
+    "try_xr_blocks_gem": "Try XR Blocks Gem",
+    "explore_gallery": "Explore Gallery",
+    "explore": "Explore",
+    "google_ai_subscriptions": "Google AI Subscriptions",
+    "see": "See",
+    "showcase_title": "Get to know XR Blocks",
+    "showcase_desc": "Explore experimental Android XR features through these demos, available on desktop and devices like Galaxy XR and XREAL AURA.",
+    "card1_title": "XR Blocks Gem",
+    "card1_desc": "Describe your vision to XR Blocks Gem to instantly build interactive Android XR apps for headsets like Galaxy XR. Preview your app on the Desktop simulator, and visit our blog for details.",
+    "card1_cta": "Create XR Now",
+    "card2_title": "For Immersive Web",
+    "card2_desc": "XR Blocks is an open-source framework for immersive web experiences, featuring XR Realism, XR Interaction, and AI capabilities.",
+    "card2_cta": "Explore Live Demos",
+    "card3_title": "Gemini Ice-breakers",
+    "card3_desc": "Meet the Gemini assistant on desktop Chrome and Android XR (Galaxy XR) via XR Blocks. This demo uses conversation starters to showcase its capabilities.",
+    "card3_cta": "Explore Demo",
+    "card4_title": "Ballpit",
+    "card4_desc": "Inspired by DepthLab, this demo maps your space in 3D (simulator and Android XR) for a virtual ballpit with physical collisions.",
+    "card4_cta": "Explore Demo",
+    "card5_title": "Gesture Recognition",
+    "card5_desc": "This XR Blocks and LiteRT demo showcases hand interactions: a \"yeah\" gesture triggers colorful stripes, and a thumbs-up releases balloons.",
+    "card5_cta": "Explore Demo",
+    "view_on_github": "View on GitHub",
+    "newsletter_title": "Be the first to get updates from XR Blocks",
+    "newsletter_btn": "Sign up for the newsletter",
+    "see_all": "See all",
+    "demo_gallery": "Demo Gallery",
+    "cat_spatial_ui": "Spatial UI",
+    "cat_realism": "Realism",
+    "cat_avatars": "Avatars",
+    "cat_interactions": "Interactions",
+    "cat_ai_xr": "AI + XR",
+    "cat_advanced": "Advanced",
+    "language": "Language",
+    "share": "Share",
+    "privacy_and_terms": "Privacy & Terms",
+    "all": "All"
+  },
+  fr: {
+    "title": "XR Blocks : Créer en XR sans code",
+    "home": "Accueil",
+    "faq": "FAQ",
+    "faq_h2": "Questions fréquentes",
+    "faq_q1": "Qu'est-ce que XR Blocks ?",
+    "faq_a1": "XR Blocks est un framework web multiplateforme conçu pour accélérer l'innovation IA+XR centrée sur l'humain. XR Blocks fournit une architecture modulaire avec des composants prêts à l'emploi pour la représentation de l'utilisateur, la perception de l'environnement, les gestes et l'interface spatiale. Conçu avec la mission « un minimum de code de l'idée à la réalité », notre kit s'appuie sur des technologies accessibles (WebXR, three.js, TensorFlow, Gemini) pour le prototypage rapide.",
+    "faq_q2": "Comment commencer à développer avec XR Blocks ?",
+    "faq_a2": "Nous vous recommandons de forker notre dépôt GitHub (https://github.com/google/xrblocks), de parcourir chaque modèle (https://xrblocks.github.io/docs/templates/Basic) et exemple (https://xrblocks.github.io/docs/samples/ModelViewer), puis de commencer à coder en consultant le manuel. Vous pouvez également essayer notre Gemini Gem (https://xrblocks.github.io/gem) pour créer des applications IA + XR sur les appareils Android XR ou sur ordinateur.",
+    "faq_q3": "Qu'est-ce qu'Android XR ?",
+    "faq_a3": "XR signifie réalité étendue, un terme générique englobant la réalité virtuelle, la réalité augmentée et la réalité mixte. Android XR est un système d'exploitation pour les appareils de réalité étendue tels que les casques et les lunettes, offrant l'interface utilisateur, l'accès aux applications populaires et l'assistance IA de Gemini.",
+    "faq_q4": "Comment obtenir Android XR ?",
+    "faq_a4": "Samsung Galaxy XR est disponible dès maintenant, XREAL AURA est disponible en précommande.",
+    "faq_q6": "Comment commencer à développer pour Android XR ?",
+    "faq_a6": "Consultez developer.android.com/xr (https://developer.android.com/xr) pour obtenir la documentation et les informations de démarrage sur Android XR. Si vous choisissez WebXR (https://immersiveweb.dev/), XR Blocks (https://xrblocks.github.io) est également un excellent moyen de créer des applications Android XR.",
+    "open": "Ouvrir",
+    "templates": "Modèles",
+    "demos": "Démos",
+    "docs": "Docs",
+    "language_name": "Français",
+    "build": "Créer",
+    "without_code": "sans code",
+    "hero_subtitle": "Accélérer l'innovation IA + XR",
+    "build_in_ai_studio": "Créer dans AI Studio",
+    "try_xr_blocks_gem": "Essayer XR Blocks Gem",
+    "explore_gallery": "Explorer la Galerie",
+    "explore": "Explorer",
+    "google_ai_subscriptions": "Abonnements Google AI",
+    "see": "Voir",
+    "showcase_title": "Découvrir XR Blocks",
+    "showcase_desc": "Explorez les fonctionnalités expérimentales d'Android XR grâce à ces démos, disponibles sur ordinateur et sur des appareils comme Galaxy XR et XREAL AURA.",
+    "card1_title": "XR Blocks Gem",
+    "card1_desc": "Décrivez votre vision à XR Blocks Gem pour créer instantanément des applications Android XR interactives pour des casques comme Galaxy XR. Prévisualisez votre application sur le simulateur de bureau et consultez notre blog pour plus de détails.",
+    "card1_cta": "Créer en XR",
+    "card2_title": "Pour le Web immersif",
+    "card2_desc": "XR Blocks est un framework open source pour les expériences web immersives, intégrant le réalisme XR, l'interaction XR et des fonctionnalités d'IA.",
+    "card2_cta": "Explorer les démos",
+    "card3_title": "Brise-glaces Gemini",
+    "card3_desc": "Rencontrez l'assistant Gemini sur Chrome pour ordinateur et Android XR (Galaxy XR) via XR Blocks. Cette démo utilise des amorces de conversation pour présenter ses capacités.",
+    "card3_cta": "Explorer la démo",
+    "card4_title": "Piscine à balles",
+    "card4_desc": "Inspirée par DepthLab, cette démo cartographie votre espace en 3D (simulateur et Android XR) pour créer une piscine à balles virtuelle avec des collisions physiques.",
+    "card4_cta": "Explorer la démo",
+    "card5_title": "Reconnaissance gestuelle",
+    "card5_desc": "Cette démo XR Blocks et LiteRT présente les interactions manuelles : un geste « yeah » déclenche des bandes colorées et un pouce levé libère des ballons.",
+    "card5_cta": "Explorer la démo",
+    "view_on_github": "Voir sur GitHub",
+    "newsletter_title": "Soyez le premier à recevoir les mises à jour de XR Blocks",
+    "newsletter_btn": "S'inscrire à la newsletter",
+    "see_all": "Tout voir",
+    "demo_gallery": "Galerie de démos",
+    "cat_spatial_ui": "Interface spatiale",
+    "cat_realism": "Réalisme",
+    "cat_avatars": "Avatars",
+    "cat_interactions": "Interactions",
+    "cat_ai_xr": "IA + XR",
+    "cat_advanced": "Avancé",
+    "language": "Langue",
+    "share": "Partager",
+    "privacy_and_terms": "Confidentialité et conditions",
+    "all": "Tous"
+  },
+  es: {
+    "title": "XR Blocks: Crea en XR sin código",
+    "home": "Inicio",
+    "faq": "Preguntas frecuentes",
+    "faq_h2": "Preguntas frecuentes",
+    "faq_q1": "¿Qué es XR Blocks?",
+    "faq_a1": "XR Blocks es un framework multiplataforma basado en la web diseñado para acelerar la innovación en IA+XR centrada en las personas. Proporciona una arquitectura modular con componentes listos para usar para la representación del usuario, percepción del entorno, gestos e interfaz espacial. Diseñado con la misión de “código mínimo de la idea a la realidad”, está construido sobre tecnologías accesibles (WebXR, three.js, TensorFlow, Gemini) para facilitar la creación rápida de prototipos.",
+    "faq_q2": "¿Cómo puedo empezar a crear con XR Blocks?",
+    "faq_a2": "Te recomendamos hacer un fork de nuestro repositorio de GitHub (https://github.com/google/xrblocks), explorar cada plantilla (https://xrblocks.github.io/docs/templates/Basic) y proyecto de ejemplo (https://xrblocks.github.io/docs/samples/ModelViewer), y comenzar a programar consultando el manual. También puedes probar nuestro Gemini Gem (https://xrblocks.github.io/gem) para crear aplicaciones de IA + XR en dispositivos Android XR o de escritorio.",
+    "faq_q3": "¿Qué es Android XR?",
+    "faq_a3": "XR significa realidad extendida, un término general que abarca la realidad virtual, la realidad aumentada y la realidad mixta. Android XR es un sistema operativo para dispositivos de realidad extendida, como visores y gafas, que proporciona la interfaz de usuario, acceso a aplicaciones populares y asistencia de IA de Gemini.",
+    "faq_q4": "¿Cómo puedo obtener Android XR?",
+    "faq_a4": "Samsung Galaxy XR ya está disponible, XREAL AURA está disponible para reserva.",
+    "faq_q6": "¿Cómo puedo empezar a desarrollar para Android XR?",
+    "faq_a6": "Puedes consultar developer.android.com/xr (https://developer.android.com/xr) para obtener documentación e información sobre cómo empezar con Android XR. Si eliges WebXR (https://immersiveweb.dev/), XR Blocks (https://xrblocks.github.io) es también una excelente forma de crear aplicaciones creativas para Android XR.",
+    "open": "Abrir",
+    "templates": "Plantillas",
+    "demos": "Demos",
+    "docs": "Docs",
+    "language_name": "Español",
+    "build": "Crea",
+    "without_code": "sin código",
+    "hero_subtitle": "Acelerando la innovación en IA y XR",
+    "build_in_ai_studio": "Crear en AI Studio",
+    "try_xr_blocks_gem": "Probar XR Blocks Gem",
+    "explore_gallery": "Explorar Galería",
+    "explore": "Explorar",
+    "google_ai_subscriptions": "Suscripciones de Google AI",
+    "see": "Ver",
+    "showcase_title": "Conoce XR Blocks",
+    "showcase_desc": "Explora funciones experimentales de Android XR a través de estas demostraciones, disponibles en escritorio y en dispositivos como Galaxy XR y XREAL AURA.",
+    "card1_title": "XR Blocks Gem",
+    "card1_desc": "Describe tu visión a XR Blocks Gem para crear al instante aplicaciones interactivas de Android XR para visores como Galaxy XR. Previsualiza tu aplicación en el simulador de escritorio y visita nuestro blog para más detalles.",
+    "card1_cta": "Crear XR ahora",
+    "card2_title": "Para la Web inmersiva",
+    "card2_desc": "XR Blocks es un framework de código abierto para experiencias web inmersivas, que incluye realismo XR, interacción XR y capacidades de IA.",
+    "card2_cta": "Explorar demos en vivo",
+    "card3_title": "Rompehielos con Gemini",
+    "card3_desc": "Conoce al asistente Gemini en Chrome de escritorio y Android XR (Galaxy XR) mediante XR Blocks. Esta demo utiliza temas de conversación para mostrar sus capacidades.",
+    "card3_cta": "Explorar demo",
+    "card4_title": "Piscina de pelotas",
+    "card4_desc": "Inspirada en DepthLab, esta demo mapea tu espacio en 3D (simulador y Android XR) para una piscina de pelotas virtual con colisiones físicas.",
+    "card4_cta": "Explorar demo",
+    "card5_title": "Reconocimiento de gestos",
+    "card5_desc": "Esta demo de XR Blocks y LiteRT muestra interacciones manuales: un gesto de \"victoria\" activa franjas de colores y un pulgar arriba suelta globos.",
+    "card5_cta": "Explorar demo",
+    "view_on_github": "Ver en GitHub",
+    "newsletter_title": "Sé el primero en recibir actualizaciones de XR Blocks",
+    "newsletter_btn": "Regístrate en el boletín informativo",
+    "see_all": "Ver todo",
+    "demo_gallery": "Galería de demostraciones",
+    "cat_spatial_ui": "IU espacial",
+    "cat_realism": "Realismo",
+    "cat_avatars": "Avatares",
+    "cat_interactions": "Interacciones",
+    "cat_ai_xr": "IA + XR",
+    "cat_advanced": "Avanzado",
+    "language": "Idioma",
+    "share": "Compartir",
+    "privacy_and_terms": "Privacidad y condiciones",
+    "all": "Todos"
+  },
+  de: {
+    "title": "XR Blocks: XR ohne Code erstellen",
+    "home": "Startseite",
+    "faq": "FAQ",
+    "faq_h2": "Häufig gestellte Fragen",
+    "faq_q1": "Was ist XR Blocks?",
+    "faq_a1": "XR Blocks ist ein webbasiertes, plattformübergreifendes Framework zur Beschleunigung menschenzentrierter KI+XR-Innovationen. XR Blocks bietet eine modulare Architektur mit Plug-and-Play-Komponenten für Kernabstraktionen in KI+XR, darunter Benutzerdarstellung, Umgebungswahrnehmung, Gesten und räumliche Benutzeroberflächen. Entwickelt mit der Mission „minimaler Code von der Idee zur Realität“, ermöglicht unser Toolkit auf Basis zugänglicher Technologien (WebXR, three.js, TensorFlow, Gemini) schnelles Prototyping komplexer KI+XR-Apps.",
+    "faq_q2": "Wie kann ich mit XR Blocks starten?",
+    "faq_a2": "Wir empfehlen Ihnen, unser GitHub-Repository (https://github.com/google/xrblocks) zu forken, die Vorlagen (https://xrblocks.github.io/docs/templates/Basic) und Beispielprojekte (https://xrblocks.github.io/docs/samples/ModelViewer) durchzusehen und anhand des Handbuchs mit dem Programmieren zu beginnen. Für Vibe-Coder steht außerdem unser Gemini Gem (https://xrblocks.github.io/gem) bereit, um KI + XR-Apps für Android XR-Geräte oder den Desktop zu erstellen.",
+    "faq_q3": "Was ist Android XR?",
+    "faq_a3": "XR steht für Extended Reality – ein Oberbegriff für alle Technologien, die reale und virtuelle Welten verschmelzen lassen, einschließlich Virtual Reality, Augmented Reality und Mixed Reality. Android XR ist ein Betriebssystem für Extended-Reality-Geräte wie Headsets und Datenbrillen und bietet die Benutzeroberfläche, Zugriff auf beliebte Apps sowie KI-Unterstützung durch Gemini.",
+    "faq_q4": "Wie erhalte ich Android XR?",
+    "faq_a4": "Samsung Galaxy XR ist ab sofort erhältlich, XREAL AURA kann vorbestellt werden.",
+    "faq_q6": "Wie kann ich mit der Entwicklung für Android XR beginnen?",
+    "faq_a6": "Unter developer.android.com/xr (https://developer.android.com/xr) finden Sie Dokumentationen und Informationen zum Einstieg in Android XR. Wenn Sie WebXR (https://immersiveweb.dev/) wählen, ist XR Blocks (https://xrblocks.github.io) ebenfalls eine hervorragende Möglichkeit, kreative Android XR-Anwendungen zu entwickeln.",
+    "open": "Öffnen",
+    "templates": "Vorlagen",
+    "demos": "Demos",
+    "docs": "Doku",
+    "language_name": "Deutsch",
+    "build": "Erstellen",
+    "without_code": "ohne Code",
+    "hero_subtitle": "Beschleunigung von KI + XR Innovationen",
+    "build_in_ai_studio": "In AI Studio erstellen",
+    "try_xr_blocks_gem": "XR Blocks Gem testen",
+    "explore_gallery": "Galerie erkunden",
+    "explore": "Erkunden",
+    "google_ai_subscriptions": "Google KI Abonnements",
+    "see": "Siehe",
+    "showcase_title": "XR Blocks kennenlernen",
+    "showcase_desc": "Entdecken Sie experimentelle Android XR-Funktionen in diesen Demos – verfügbar auf dem Desktop sowie auf Geräten wie Galaxy XR und XREAL AURA.",
+    "card1_title": "XR Blocks Gem",
+    "card1_desc": "Beschreiben Sie XR Blocks Gem Ihre Vision, um sofort interaktive Android XR-Apps für Headsets wie Galaxy XR zu erstellen. Testen Sie Ihre App im Desktop-Simulator und besuchen Sie unseren Blog für Details.",
+    "card1_cta": "Jetzt XR erstellen",
+    "card2_title": "Für das immersive Web",
+    "card2_desc": "XR Blocks ist ein Open-Source-Framework für immersive Web-Erlebnisse mit XR-Realismus, XR-Interaktion und KI-Funktionen.",
+    "card2_cta": "Live-Demos erkunden",
+    "card3_title": "Gemini-Eisbrecher",
+    "card3_desc": "Erleben Sie den Gemini-Assistenten auf Desktop-Chrome und Android XR (Galaxy XR) über XR Blocks. Diese Demo nutzt Gesprächseinstiege, um seine Fähigkeiten zu zeigen.",
+    "card3_cta": "Demo erkunden",
+    "card4_title": "Bällebad",
+    "card4_desc": "Inspiriert von DepthLab kartiert diese Demo Ihren Raum in 3D (Simulator und Android XR) für ein virtuelles Bällebad mit physikalischen Kollisionen.",
+    "card4_cta": "Demo erkunden",
+    "card5_title": "Gestenerkennung",
+    "card5_desc": "Diese XR Blocks- und LiteRT-Demo zeigt Handinteraktionen: Eine „Yeah“-Geste löst bunte Streifen aus und ein Daumen-hoch lässt Ballons steigen.",
+    "card5_cta": "Demo erkunden",
+    "view_on_github": "Auf GitHub ansehen",
+    "newsletter_title": "Erhalten Sie als Erster Updates von XR Blocks",
+    "newsletter_btn": "Für den Newsletter anmelden",
+    "see_all": "Alle ansehen",
+    "demo_gallery": "Demo-Galerie",
+    "cat_spatial_ui": "Räumliche UI",
+    "cat_realism": "Realismus",
+    "cat_avatars": "Avatare",
+    "cat_interactions": "Interaktionen",
+    "cat_ai_xr": "KI + XR",
+    "cat_advanced": "Erweitert",
+    "language": "Sprache",
+    "share": "Teilen",
+    "privacy_and_terms": "Datenschutzerklärung & Nutzungsbedingungen",
+    "all": "Alle"
+  },
+  it: {
+    "title": "XR Blocks: Crea in XR senza codice",
+    "home": "Home",
+    "faq": "FAQ",
+    "faq_h2": "Domande frequenti",
+    "faq_q1": "Cos'è XR Blocks?",
+    "faq_a1": "XR Blocks è un framework multipiattaforma basato sul web progettato per accelerare l'innovazione AI+XR incentrata sull'uomo. Fornisce un'architettura modulare con componenti plug-and-play per la rappresentazione dell'utente, la percezione ambientale, i gesti e l'interfaccia utente spaziale. Creato con la missione di “codice minimo dall'idea alla realtà” su tecnologie accessibili (WebXR, three.js, TensorFlow, Gemini), riduce le barriere d'ingresso per ricercatori e designer.",
+    "faq_q2": "Come posso iniziare a sviluppare con XR Blocks?",
+    "faq_a2": "Ti consigliamo di effettuare il fork del nostro repository GitHub (https://github.com/google/xrblocks), esplorare ogni template (https://xrblocks.github.io/docs/templates/Basic) ed esempio (https://xrblocks.github.io/docs/samples/ModelViewer), e iniziare a programmare consultando il manuale. Puoi anche provare il nostro Gemini Gem (https://xrblocks.github.io/gem) per creare app AI + XR su dispositivi Android XR o desktop.",
+    "faq_q3": "Cos'è Android XR?",
+    "faq_a3": "XR sta per realtà estesa, un termine che comprende realtà virtuale, realtà aumentata e realtà mista. Android XR è un sistema operativo per dispositivi di realtà estesa come visori e occhiali, che offre l'interfaccia utente, l'accesso alle app più diffuse e l'assistenza AI di Gemini.",
+    "faq_q4": "Come posso ottenere Android XR?",
+    "faq_a4": "Samsung Galaxy XR è disponibile ora, XREAL AURA è disponibile in preordine.",
+    "faq_q6": "Come posso iniziare a sviluppare per Android XR?",
+    "faq_a6": "Puoi consultare developer.android.com/xr (https://developer.android.com/xr) per la documentazione e le informazioni su come iniziare con Android XR. Se scegli WebXR (https://immersiveweb.dev/), XR Blocks (https://xrblocks.github.io) è un ottimo modo per realizzare applicazioni creative per Android XR.",
+    "open": "Apri",
+    "templates": "Modelli",
+    "demos": "Demo",
+    "docs": "Documenti",
+    "language_name": "Italiano",
+    "build": "Crea",
+    "without_code": "senza codice",
+    "hero_subtitle": "Accelerare l'innovazione AI + XR",
+    "build_in_ai_studio": "Crea in AI Studio",
+    "try_xr_blocks_gem": "Prova XR Blocks Gem",
+    "explore_gallery": "Esplora la Galleria",
+    "explore": "Esplora",
+    "google_ai_subscriptions": "Abbonamenti Google AI",
+    "see": "Vedi",
+    "showcase_title": "Scopri XR Blocks",
+    "showcase_desc": "Esplora le funzionalità sperimentali di Android XR attraverso queste demo, disponibili su desktop e su dispositivi come Galaxy XR e XREAL AURA.",
+    "card1_title": "XR Blocks Gem",
+    "card1_desc": "Descrivi la tua visione a XR Blocks Gem per creare istantaneamente app Android XR interattive per visori come Galaxy XR. Visualizza l'anteprima della tua app sul simulatore desktop e visita il nostro blog per i dettagli.",
+    "card1_cta": "Crea XR ora",
+    "card2_title": "Per il Web immersivo",
+    "card2_desc": "XR Blocks è un framework open-source per esperienze web immersive, dotato di realismo XR, interazione XR e funzionalità AI.",
+    "card2_cta": "Esplora le demo live",
+    "card3_title": "Rompighiaccio Gemini",
+    "card3_desc": "Incontra l'assistente Gemini su Chrome desktop e Android XR (Galaxy XR) tramite XR Blocks. Questa demo utilizza spunti di conversazione per mostrare le sue capacità.",
+    "card3_cta": "Esplora la demo",
+    "card4_title": "Vasca di palline",
+    "card4_desc": "Ispirata a DepthLab, questa demo mappa il tuo spazio in 3D (simulatore e Android XR) per una vasca di palline virtuale con collisioni fisiche.",
+    "card4_cta": "Esplora la demo",
+    "card5_title": "Riconoscimento dei gesti",
+    "card5_desc": "Questa demo di XR Blocks e LiteRT mostra le interazioni con le mani: il gesto \"yeah\" attiva strisce colorate e il pollice in su rilascia palloncini.",
+    "card5_cta": "Esplora la demo",
+    "view_on_github": "Vedi su GitHub",
+    "newsletter_title": "Ricevi per primo gli aggiornamenti da XR Blocks",
+    "newsletter_btn": "Iscriviti alla newsletter",
+    "see_all": "Vedi tutto",
+    "demo_gallery": "Galleria demo",
+    "cat_spatial_ui": "UI spaziale",
+    "cat_realism": "Realismo",
+    "cat_avatars": "Avatar",
+    "cat_interactions": "Interazioni",
+    "cat_ai_xr": "AI + XR",
+    "cat_advanced": "Avanzato",
+    "language": "Lingua",
+    "share": "Condividi",
+    "privacy_and_terms": "Privacy e termini",
+    "all": "Tutti"
+  },
+  ko: {
+    "title": "XR Blocks: 코드 없이 XR 구축",
+    "home": "홈",
+    "faq": "FAQ",
+    "faq_h2": "자주 묻는 질문",
+    "faq_q1": "XR Blocks란 무엇인가요?",
+    "faq_a1": "XR Blocks는 인간 중심의 AI+XR 혁신을 가속화하기 위해 설계된 웹 기반 크로스 플랫폼 프레임워크입니다. 사용자 표현, 환경 인식, 제스처 및 공간 UI를 포함한 AI+XR 핵심 추상화를 위한 플러그 앤 플레이 모듈식 아키텍처를 제공합니다. '아이디어에서 현실까지 최소한의 코드'라는 사명으로 설계되었으며 WebXR, three.js, TensorFlow, Gemini를 기반으로 복잡한 AI+XR 앱의 빠른 프로토타이핑을 지원합니다.",
+    "faq_q2": "XR Blocks로 개발을 시작하려면 어떻게 해야 하나요?",
+    "faq_a2": "GitHub 저장소(https://github.com/google/xrblocks)를 포크하고 각 템플릿(https://xrblocks.github.io/docs/templates/Basic)과 샘플(https://xrblocks.github.io/docs/samples/ModelViewer) 프로젝트를 살펴본 후 매뉴얼을 참고하여 코딩을 시작하는 것을 권장합니다. 바이브 코더를 위해 Gemini Gem(https://xrblocks.github.io/gem)을 사용하여 Android XR 기기나 데스크톱에서 AI + XR 앱을 구축할 수도 있습니다.",
+    "faq_q3": "Android XR이란 무엇인가요?",
+    "faq_a3": "XR은 가상 현실(VR), 증강 현실(AR), 혼합 현실(MR)을 포함하여 현실과 가상 세계를 융합하는 모든 기술을 포괄하는 확장 현실(Extended Reality)을 의미합니다. Android XR은 헤드셋 및 글래스와 같은 확장 현실 기기를 위한 운영체제로, 사용자 인터페이스와 인기 앱 액세스 및 Gemini의 AI 지원을 제공합니다.",
+    "faq_q4": "Android XR은 어떻게 이용할 수 있나요?",
+    "faq_a4": "Samsung Galaxy XR은 지금 구매할 수 있으며, XREAL AURA는 사전 예약이 가능합니다.",
+    "faq_q6": "Android XR용 개발은 어떻게 시작할 수 있나요?",
+    "faq_a6": "developer.android.com/xr(https://developer.android.com/xr)에서 Android XR 시작에 필요한 문서와 정보를 확인할 수 있습니다. WebXR(https://immersiveweb.dev/)을 선택하는 경우 XR Blocks(https://xrblocks.github.io) 또한 창의적인 Android XR 애플리케이션을 제작하는 훌륭한 방법입니다.",
+    "open": "열기",
+    "templates": "템플릿",
+    "demos": "데모",
+    "docs": "문서",
+    "language_name": "한국어",
+    "build": "구축",
+    "without_code": "코드 없이",
+    "hero_subtitle": "AI + XR 혁신 가속화",
+    "build_in_ai_studio": "AI Studio에서 구축하기",
+    "try_xr_blocks_gem": "XR Blocks Gem 사용해 보기",
+    "explore_gallery": "갤러리 탐색",
+    "explore": "탐색",
+    "google_ai_subscriptions": "Google AI 구독",
+    "see": "보기",
+    "showcase_title": "XR Blocks 알아보기",
+    "showcase_desc": "데스크톱과 Galaxy XR 및 XREAL AURA 같은 기기에서 제공되는 데모를 통해 실험적인 Android XR 기능을 살펴보세요.",
+    "card1_title": "XR Blocks Gem",
+    "card1_desc": "XR Blocks Gem에 아이디어를 설명하여 Galaxy XR 같은 헤드셋용 대화형 Android XR 앱을 즉시 구축해 보세요. 데스크톱 시뮬레이터에서 앱을 미리 보고 블로그에서 자세한 내용을 확인하세요.",
+    "card1_cta": "지금 XR 만들기",
+    "card2_title": "몰입형 웹 환경",
+    "card2_desc": "XR Blocks는 XR 리얼리즘, XR 상호작용 및 AI 기능을 갖춘 몰입형 웹 경험을 위한 오픈소스 프레임워크입니다.",
+    "card2_cta": "라이브 데모 탐색",
+    "card3_title": "Gemini 아이스브레이커",
+    "card3_desc": "XR Blocks를 통해 데스크톱 Chrome 및 Android XR(Galaxy XR)에서 Gemini 어시스턴트를 만나보세요. 이 데모는 대화 시작 주제를 사용하여 다양한 기능을 선보입니다.",
+    "card3_cta": "데모 탐색",
+    "card4_title": "볼풀(Ballpit)",
+    "card4_desc": "DepthLab에서 영감을 받은 이 데모는 시뮬레이터와 Android XR에서 공간을 3D로 매핑하여 물리적 충돌이 적용된 가상 볼풀을 구현합니다.",
+    "card4_cta": "데모 탐색",
+    "card5_title": "제스처 인식",
+    "card5_desc": "이 XR Blocks 및 LiteRT 데모는 손 상호작용을 보여줍니다. '브이(V)' 제스처는 다채로운 줄무늬를 실행하고 엄지척 제스처는 풍선을 띄웁니다.",
+    "card5_cta": "데모 탐색",
+    "view_on_github": "GitHub에서 보기",
+    "newsletter_title": "XR Blocks의 최신 소식을 가장 먼저 받아보세요",
+    "newsletter_btn": "뉴스레터 가입",
+    "see_all": "모두 보기",
+    "demo_gallery": "데모 갤러리",
+    "cat_spatial_ui": "공간 UI",
+    "cat_realism": "리얼리즘",
+    "cat_avatars": "아바타",
+    "cat_interactions": "상호작용",
+    "cat_ai_xr": "AI + XR",
+    "cat_advanced": "고급",
+    "language": "언어",
+    "share": "공유",
+    "privacy_and_terms": "개인정보처리방침 및 약관",
+    "all": "전체"
+  }
+};
+
+function linkifyFaqAnswers() {
+  document.querySelectorAll('.faq-answer').forEach((p) => {
+    if (!p.querySelector('a')) {
+      const text = p.textContent || '';
+      const urlRegex = /(https:\/\/[^\s)]+)/g;
+      const faqDeviceRegex = /(Samsung Galaxy XR|XREAL AURA)/g;
+      if (urlRegex.test(text)) {
+        p.textContent = '';
+        let lastIndex = 0;
+        text.replace(urlRegex, (match, url, offset) => {
+          if (offset > lastIndex) {
+            p.appendChild(document.createTextNode(text.slice(lastIndex, offset)));
+          }
+          const a = document.createElement('a');
+          a.href = url;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = url;
+          p.appendChild(a);
+          lastIndex = offset + match.length;
+          return match;
+        });
+        if (lastIndex < text.length) {
+          p.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+      } else if (faqDeviceRegex.test(text)) {
+        p.textContent = '';
+        let lastIndex = 0;
+        text.replace(faqDeviceRegex, (match, name, offset) => {
+          if (offset > lastIndex) {
+            p.appendChild(document.createTextNode(text.slice(lastIndex, offset)));
+          }
+          const a = document.createElement('a');
+          a.href = name.includes('Galaxy XR')
+            ? 'https://samsungshop.onelink.me/tRH1/tntjz42v'
+            : 'https://www.xreal.com/aura';
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = name;
+          p.appendChild(a);
+          lastIndex = offset + match.length;
+          return match;
+        });
+        if (lastIndex < text.length) {
+          p.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+      }
+    }
+    p.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+    });
+  });
+
+  document.querySelectorAll('.showcase-desc').forEach((p) => {
+    if (!p.querySelector('a')) {
+      const text = p.textContent || '';
+      const deviceRegex = /(Galaxy XR|XREAL AURA)/g;
+      if (deviceRegex.test(text)) {
+        p.textContent = '';
+        let lastIndex = 0;
+        text.replace(deviceRegex, (match, name, offset) => {
+          if (offset > lastIndex) {
+            p.appendChild(document.createTextNode(text.slice(lastIndex, offset)));
+          }
+          const a = document.createElement('a');
+          a.href = name === 'Galaxy XR'
+            ? 'https://samsungshop.onelink.me/tRH1/tntjz42v'
+            : 'https://www.xreal.com/aura';
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = name;
+          p.appendChild(a);
+          lastIndex = offset + match.length;
+          return match;
+        });
+        if (lastIndex < text.length) {
+          p.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+      }
+    }
+  });
+}
+
+const fetchedLangs = new Set();
+
+async function applyLanguage(lang, updateUrl = true) {
+  const normalizedLang = VALID_LANGS.has(lang) ? lang : 'en';
+  try {
+    if (!fetchedLangs.has(normalizedLang)) {
+      fetchedLangs.add(normalizedLang);
+      try {
+        const resp = await fetch(`lang/lang_${normalizedLang}.json`);
+        if (resp.ok) {
+          const remoteStrings = await resp.json();
+          langCache[normalizedLang] = Object.assign(
+            {},
+            langCache[normalizedLang] || {},
+            remoteStrings
+          );
+        }
+      } catch (fetchErr) {
+        // Use inline langCache fallback
+      }
+    }
+    const strings = langCache[normalizedLang] || langCache.en;
+    document.documentElement.lang = normalizedLang;
+    if (strings.title) {
+      document.title = strings.title;
+    }
+
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      const key = el.getAttribute('data-i18n');
+      const enHtml = el.getAttribute('data-i18n-en-html');
+      if (normalizedLang === 'en' && enHtml) {
+        el.innerHTML = enHtml;
+      } else if (key && strings[key]) {
+        el.textContent = strings[key];
+      }
+    });
+
+    document.querySelectorAll('[data-i18n-aria]').forEach((el) => {
+      const key = el.getAttribute('data-i18n-aria');
+      if (key && strings[key]) {
+        el.setAttribute('aria-label', strings[key]);
+      }
+    });
+
+    document.querySelectorAll('[data-i18n-alt]').forEach((el) => {
+      const key = el.getAttribute('data-i18n-alt');
+      if (key && strings[key]) {
+        el.setAttribute('alt', strings[key]);
+      }
+    });
+
+    langOptions.forEach((opt) => {
+      const isSelected = opt.getAttribute('data-lang') === normalizedLang;
+      opt.classList.toggle('selected', isSelected);
+      if (isSelected && mobileLangLabel) {
+        const labelSpan = opt.querySelector('span:not(.lang-check)');
+        if (labelSpan) mobileLangLabel.textContent = labelSpan.textContent;
+      }
+    });
+
+    linkifyFaqAnswers();
+
+    if (updateUrl) {
+      const url = new URL(window.location.href);
+      if (normalizedLang === 'en') {
+        url.searchParams.delete('lang');
+      } else {
+        url.searchParams.set('lang', normalizedLang);
+      }
+      history.replaceState(history.state, '', url.toString());
+    }
+
+    if (scroll) {
+      scroll.update();
+    }
+  } catch (err) {
+    console.error('[i18n] Failed to load language strings:', err);
+  }
+}
+
+
+
 if (langToggleBtn && langDropdownPanel) {
   langToggleBtn.addEventListener('click', (e) => {
     e.preventDefault();
@@ -1176,15 +1719,13 @@ if (langOptions.length > 0 && langDropdownPanel) {
     opt.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      langOptions.forEach((o) => o.classList.remove('selected'));
-      opt.classList.add('selected');
-      const labelSpan = opt.querySelector('span:not(.lang-check)');
-      if (mobileLangLabel && labelSpan) {
-        mobileLangLabel.textContent = labelSpan.textContent;
-      }
       langDropdownPanel.classList.remove('active');
       if (langToggleBtn) langToggleBtn.classList.remove('active');
       if (mobileMenuBtn) mobileMenuBtn.classList.remove('active');
+      const selectedLang = opt.getAttribute('data-lang');
+      if (selectedLang) {
+        applyLanguage(selectedLang, true);
+      }
     });
   });
 }
@@ -1307,6 +1848,13 @@ if (mobileEnvBtns.length > 0) {
 // ----------------------------------------------------
 // 11. FAQ ACCORDION INTERACTIVITY
 // ----------------------------------------------------
+linkifyFaqAnswers();
+
+const initialLangParam = new URLSearchParams(window.location.search).get('lang');
+if (initialLangParam && VALID_LANGS.has(initialLangParam) && initialLangParam !== 'en') {
+  applyLanguage(initialLangParam, false);
+}
+
 const faqItems = document.querySelectorAll('.faq-item');
 const heroFaqLink = document.querySelector('.hero-faq-link');
 
