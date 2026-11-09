@@ -8,6 +8,13 @@ const QUAD_SIZE_METERS = .8;
 const MOUSE_QUAD_DISTANCE_METERS = 1;
 const MOUSE_QUAD_SIZE_METERS = 1.4;
 const CAMERA_STORAGE_KEY = "xrblocks:efficientsam:camera";
+function readStoredCameraDevice() {
+	try {
+		return localStorage.getItem(CAMERA_STORAGE_KEY)?.toLowerCase();
+	} catch {
+		return;
+	}
+}
 /**
 * XR Circle to Search Script powered by XR Blocks (v0.20.0+) and LiteRT 2.5.3 EfficientSAM-Ti.
 * All CPU/GPU-intensive LiteRT compilation, image preprocessing, inference, and mask
@@ -42,7 +49,6 @@ var XRCircleToSearchScript = class extends xb.Script {
 	hudCameraBtn = null;
 	telemetryBadgeCard = null;
 	telemetryBadgeText = null;
-	targetDevice;
 	domStatus;
 	domMetricTotal;
 	domMetricSplit;
@@ -50,18 +56,6 @@ var XRCircleToSearchScript = class extends xb.Script {
 	domCameraBtn;
 	constructor() {
 		super();
-		const urlCamera = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("camera")?.toLowerCase() : null;
-		let storedCamera = null;
-		try {
-			storedCamera = localStorage.getItem(CAMERA_STORAGE_KEY)?.toLowerCase() ?? null;
-		} catch {
-			storedCamera = null;
-		}
-		const initialCamera = urlCamera || storedCamera;
-		if (initialCamera === "aura" || initialCamera === "galaxyxr" || initialCamera === "quest3") {
-			this.targetDevice = initialCamera;
-			this.persistCameraDevice(initialCamera);
-		} else this.targetDevice = typeof navigator !== "undefined" && /OculusBrowser|Quest/i.test(navigator.userAgent) ? "quest3" : "galaxyxr";
 		this.quadCanvas = document.createElement("canvas");
 		this.quadCanvas.width = MODEL_IMG_SIZE;
 		this.quadCanvas.height = MODEL_IMG_SIZE;
@@ -82,13 +76,10 @@ var XRCircleToSearchScript = class extends xb.Script {
 		this.domMetricSplit = document.getElementById("xr-metric-split");
 		this.domMetricIou = document.getElementById("xr-metric-iou");
 		this.domCameraBtn = document.getElementById("xr-camera-btn");
-		if (this.domCameraBtn) {
-			this.domCameraBtn.textContent = this.getCameraButtonLabel();
-			this.domCameraBtn.addEventListener("click", (e) => {
-				e.stopPropagation();
-				this.toggleCameraDevice();
-			});
-		}
+		if (this.domCameraBtn) this.domCameraBtn.addEventListener("click", (e) => {
+			e.stopPropagation();
+			this.toggleCameraDevice();
+		});
 		const clearBtn = document.getElementById("xr-clear-btn");
 		if (clearBtn) clearBtn.addEventListener("click", (e) => {
 			e.stopPropagation();
@@ -96,6 +87,8 @@ var XRCircleToSearchScript = class extends xb.Script {
 		});
 	}
 	async init() {
+		if (xb.getUrlParameter("camera")) this.persistCameraDevice(this.targetDevice);
+		if (this.domCameraBtn) this.domCameraBtn.textContent = this.getCameraButtonLabel();
 		this.createInvisibleCircleQuad();
 		this.createSpatialHudCard();
 		await this.initLiteRtModels();
@@ -349,6 +342,10 @@ var XRCircleToSearchScript = class extends xb.Script {
 		if (this.domStatus) this.domStatus.innerHTML = msg;
 		if (this.hudStatusText) this.hudStatusText.text = msg.replace(/<[^>]*>/g, "");
 	}
+	/** The SDK's device camera profile, which the camera button switches. */
+	get targetDevice() {
+		return xb.core.deviceCamera?.targetDevice ?? xb.resolveDeviceCameraTarget();
+	}
 	getCameraButtonLabel() {
 		if (this.targetDevice === "aura") return "Camera: Aura";
 		if (this.targetDevice === "quest3") return "Camera: Quest 3";
@@ -363,8 +360,10 @@ var XRCircleToSearchScript = class extends xb.Script {
 	* Switches between Galaxy XR and Aura camera parameters in XR.
 	*/
 	toggleCameraDevice() {
-		this.targetDevice = this.targetDevice === "aura" ? "galaxyxr" : "aura";
-		this.persistCameraDevice(this.targetDevice);
+		const deviceCamera = xb.core.deviceCamera;
+		if (!deviceCamera) return;
+		deviceCamera.targetDevice = deviceCamera.targetDevice === "aura" ? "galaxyxr" : "aura";
+		this.persistCameraDevice(deviceCamera.targetDevice);
 		const label = this.getCameraButtonLabel();
 		if (this.hudCameraBtn) this.hudCameraBtn.label = label;
 		if (this.domCameraBtn) this.domCameraBtn.textContent = label;
@@ -853,6 +852,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	options.controllers.visualizeRays = false;
 	options.enableHands();
 	options.enableCamera("environment");
+	options.deviceCamera.targetDevice = readStoredCameraDevice();
 	options.hands.enabled = true;
 	options.hands.visualization = false;
 	options.hands.visualizeJoints = false;
