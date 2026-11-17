@@ -320,10 +320,16 @@ let zVelocity = 0;
 const ctaBtn = document.querySelector('.cta-btn');
 const ctaBtns = document.querySelectorAll('.cta-btn');
 
-function initCtaWordMask(btn) {
+function initCtaWordMask(btn, label) {
   const content = btn.querySelector('.cta-content');
   if (!content) return;
-  const text = content.textContent.trim();
+  // Remember the i18n key before the label is split into word spans, so
+  // applyLanguage() can rebuild the button with translated text.
+  const keyed = content.querySelector('[data-i18n]');
+  if (keyed && !content.dataset.i18nKey) {
+    content.dataset.i18nKey = keyed.getAttribute('data-i18n');
+  }
+  const text = (label ?? content.textContent).trim();
   const words = text.split(/\s+/);
 
   const buildWordSpans = () =>
@@ -1143,7 +1149,7 @@ const mobileMenuBtn = document.querySelector('.mobile-more');
 const mobileMenuPanel = document.querySelector('.mobile-menu-panel');
 const mobileEnvBtns = document.querySelectorAll('.mobile-env-btn');
 
-const VALID_LANGS = new Set(['en', 'fr', 'es', 'de', 'it', 'ko']);
+const VALID_LANGS = new Set(['en', 'fr', 'es', 'de', 'it', 'ko', 'zh-Hans', 'zh-Hant']);
 const langCache = {
   en: {
     "title": "XR Blocks: Build XR without code",
@@ -1516,6 +1522,130 @@ const langCache = {
     "share": "공유",
     "privacy_and_terms": "개인정보처리방침 및 약관",
     "all": "전체"
+  },
+  'zh-Hans': {
+    "title": "XR Blocks：无需代码，构建 XR",
+    "home": "首页",
+    "faq": "常见问题",
+    "faq_h2": "常见问题",
+    "faq_q1": "什么是 XR Blocks？",
+    "faq_a1": "XR Blocks 是一个基于 Web 的跨平台框架，旨在加速以人为本的 AI + XR 创新。XR Blocks 采用模块化架构，为 AI + XR 中的核心抽象提供即插即用的组件，包括用户表示、环境感知、手势和空间 UI。最重要的是，它秉承“从创意到现实，代码最少”的理念，让复杂的 AI + XR 应用也能快速完成原型开发。我们的工具包基于易于上手的技术（WebXR、three.js、TensorFlow、Gemini）构建，降低了研究人员和设计师的入门门槛。",
+    "faq_q2": "如何开始使用 XR Blocks 进行开发？",
+    "faq_a2": "建议你先 fork 我们的 GitHub 代码库 (https://github.com/google/xrblocks) ，浏览各个模板 (https://xrblocks.github.io/docs/templates/Basic) 和示例 (https://xrblocks.github.io/docs/samples/ModelViewer) 项目，然后参照手册开始编码。如果你喜欢 vibe coding，欢迎试用我们的 Gemini Gem (https://xrblocks.github.io/gem) ，在 Android XR 设备或桌面上构建 AI + XR 应用。",
+    "faq_q3": "什么是 Android XR？",
+    "faq_a3": "XR 是扩展现实（extended reality）的缩写，泛指所有融合真实世界与虚拟世界的技术，包括虚拟现实、增强现实和混合现实。Android XR 是面向使用这些技术的扩展现实设备（如头显和眼镜）的操作系统，为这些设备提供用户界面、常用应用访问能力以及来自 Gemini 的 AI 助手。",
+    "faq_q4": "如何获得 Android XR？",
+    "faq_a4": "Samsung Galaxy XR 现已发售，XREAL AURA 现已开放预订。",
+    "faq_q6": "如何开始为 Android XR 开发应用？",
+    "faq_a6": "你可以访问 developer.android.com/xr (https://developer.android.com/xr) ，查看文档并了解如何开始使用 Android XR。如果你选择 WebXR (https://immersiveweb.dev/) ，这里的 XR Blocks (https://xrblocks.github.io) 也是打造创意 Android XR 应用的绝佳方式。",
+    "open": "打开",
+    "templates": "模板",
+    "demos": "演示",
+    "docs": "文档",
+    "language_name": "简体中文",
+    "build": "构建",
+    "without_code": "无需代码",
+    "hero_subtitle": "加速 AI + XR 创新",
+    "build_in_ai_studio": "在 AI Studio 中构建",
+    "try_xr_blocks_gem": "试用 XR Blocks Gem",
+    "explore_gallery": "浏览作品库",
+    "explore": "探索",
+    "google_ai_subscriptions": "Google AI 订阅",
+    "see": "查看",
+    "showcase_title": "认识 XR Blocks",
+    "showcase_desc": "通过这些演示探索 Android XR 的实验性功能，可在桌面以及 Galaxy XR 和 XREAL AURA 等设备上体验。",
+    "card1_title": "XR Blocks Gem",
+    "card1_desc": "向 XR Blocks Gem 描述你的构想，即可为 Galaxy XR 等头显即时构建交互式 Android XR 应用。你可以在桌面模拟器中预览应用，详情请参阅我们的博客。",
+    "card1_cta": "立即创建 XR",
+    "card2_title": "面向沉浸式 Web",
+    "card2_desc": "XR Blocks 是一个用于构建沉浸式 Web 体验的开源框架，具备 XR 真实感、XR 交互和 AI 能力。",
+    "card2_cta": "浏览在线演示",
+    "card3_title": "Gemini 破冰话题",
+    "card3_desc": "通过 XR Blocks，在桌面版 Chrome 和 Android XR（Galaxy XR）上与 Gemini 助手见面。此演示用一系列开场话题来展示它的能力。",
+    "card3_cta": "查看演示",
+    "card4_title": "球池",
+    "card4_desc": "此演示受 DepthLab 启发，在模拟器和 Android XR 中对你所在的空间进行 3D 建模，打造带有物理碰撞的虚拟球池。",
+    "card4_cta": "查看演示",
+    "card5_title": "手势识别",
+    "card5_desc": "此 XR Blocks 与 LiteRT 演示展示了手部交互：比出“耶”的手势会触发彩色条纹，竖起大拇指则会放飞气球。",
+    "card5_cta": "查看演示",
+    "view_on_github": "在 GitHub 上查看",
+    "newsletter_title": "抢先获取 XR Blocks 的最新动态",
+    "newsletter_btn": "订阅新闻通讯",
+    "see_all": "查看全部",
+    "demo_gallery": "演示作品库",
+    "cat_spatial_ui": "空间 UI",
+    "cat_realism": "真实感",
+    "cat_avatars": "虚拟形象",
+    "cat_interactions": "交互",
+    "cat_ai_xr": "AI + XR",
+    "cat_advanced": "高级",
+    "language": "语言",
+    "share": "分享",
+    "privacy_and_terms": "隐私权和条款",
+    "all": "全部"
+  },
+  'zh-Hant': {
+    "title": "XR Blocks：無需程式碼，建構 XR",
+    "home": "首頁",
+    "faq": "常見問題",
+    "faq_h2": "常見問題",
+    "faq_q1": "什麼是 XR Blocks？",
+    "faq_a1": "XR Blocks 是一個基於 Web 的跨平臺框架，旨在加速以人為本的 AI + XR 創新。XR Blocks 採用模組化架構，為 AI + XR 中的核心抽象提供即插即用的元件，包括使用者表示、環境感知、手勢和空間 UI。最重要的是，它秉承「從創意到現實，程式碼最少」的理念，讓複雜的 AI + XR 應用也能快速完成原型開發。我們的工具包基於易於上手的技術（WebXR、three.js、TensorFlow、Gemini）建構，降低了研究人員和設計師的入門門檻。",
+    "faq_q2": "如何開始使用 XR Blocks 進行開發？",
+    "faq_a2": "建議你先 fork 我們的 GitHub 程式碼庫 (https://github.com/google/xrblocks) ，瀏覽各個範本 (https://xrblocks.github.io/docs/templates/Basic) 和範例 (https://xrblocks.github.io/docs/samples/ModelViewer) 專案，然後參照手冊開始撰寫程式碼。如果你喜歡 vibe coding，歡迎試用我們的 Gemini Gem (https://xrblocks.github.io/gem) ，在 Android XR 裝置或桌面上建構 AI + XR 應用。",
+    "faq_q3": "什麼是 Android XR？",
+    "faq_a3": "XR 是擴充套件現實（extended reality）的縮寫，泛指所有融合真實世界與虛擬世界的技術，包括虛擬現實、增強現實和混合現實。Android XR 是面向使用這些技術的擴充套件現實裝置（如頭戴裝置和眼鏡）的作業系統，為這些裝置提供使用者介面、常用應用訪問能力以及來自 Gemini 的 AI 助手。",
+    "faq_q4": "如何獲得 Android XR？",
+    "faq_a4": "Samsung Galaxy XR 現已發售，XREAL AURA 現已開放預訂。",
+    "faq_q6": "如何開始為 Android XR 開發應用？",
+    "faq_a6": "你可以前往 developer.android.com/xr (https://developer.android.com/xr) ，檢視文件並瞭解如何開始使用 Android XR。如果你選擇 WebXR (https://immersiveweb.dev/) ，這裡的 XR Blocks (https://xrblocks.github.io) 也是打造創意 Android XR 應用的絕佳方式。",
+    "open": "開啟",
+    "templates": "範本",
+    "demos": "示範",
+    "docs": "文件",
+    "language_name": "繁體中文",
+    "build": "建構",
+    "without_code": "無需程式碼",
+    "hero_subtitle": "加速 AI + XR 創新",
+    "build_in_ai_studio": "在 AI Studio 中建構",
+    "try_xr_blocks_gem": "試用 XR Blocks Gem",
+    "explore_gallery": "瀏覽作品庫",
+    "explore": "探索",
+    "google_ai_subscriptions": "Google AI 訂閱",
+    "see": "檢視",
+    "showcase_title": "認識 XR Blocks",
+    "showcase_desc": "透過這些示範探索 Android XR 的實驗性功能，可在桌面以及 Galaxy XR 和 XREAL AURA 等裝置上體驗。",
+    "card1_title": "XR Blocks Gem",
+    "card1_desc": "向 XR Blocks Gem 描述你的構想，即可為 Galaxy XR 等頭戴裝置即時建構互動式 Android XR 應用。你可以在桌面模擬器中預覽應用，詳情請參閱我們的部落格。",
+    "card1_cta": "立即建立 XR",
+    "card2_title": "面向沉浸式 Web",
+    "card2_desc": "XR Blocks 是一個用於建構沉浸式 Web 體驗的開源框架，具備 XR 真實感、XR 互動和 AI 能力。",
+    "card2_cta": "瀏覽線上示範",
+    "card3_title": "Gemini 破冰話題",
+    "card3_desc": "透過 XR Blocks，在桌面版 Chrome 和 Android XR（Galaxy XR）上與 Gemini 助手見面。此示範用一系列開場話題來展示它的能力。",
+    "card3_cta": "檢視示範",
+    "card4_title": "球池",
+    "card4_desc": "此示範受 DepthLab 啟發，在模擬器和 Android XR 中對你所在的空間進行 3D 建模，打造帶有物理碰撞的虛擬球池。",
+    "card4_cta": "檢視示範",
+    "card5_title": "手勢識別",
+    "card5_desc": "此 XR Blocks 與 LiteRT 示範展示了手部互動：比出「耶」的手勢會觸發彩色條紋，豎起大拇指則會放飛氣球。",
+    "card5_cta": "檢視示範",
+    "view_on_github": "在 GitHub 上檢視",
+    "newsletter_title": "搶先獲取 XR Blocks 的最新動態",
+    "newsletter_btn": "訂閱新聞通訊",
+    "see_all": "檢視全部",
+    "demo_gallery": "示範作品庫",
+    "cat_spatial_ui": "空間 UI",
+    "cat_realism": "真實感",
+    "cat_avatars": "虛擬形象",
+    "cat_interactions": "互動",
+    "cat_ai_xr": "AI + XR",
+    "cat_advanced": "進階",
+    "language": "語言",
+    "share": "分享",
+    "privacy_and_terms": "隱私權和條款",
+    "all": "全部"
   }
 };
 
@@ -1639,6 +1769,13 @@ async function applyLanguage(lang, updateUrl = true) {
       } else if (key && strings[key]) {
         el.textContent = strings[key];
       }
+    });
+
+    document.querySelectorAll('.cta-content[data-i18n-key]').forEach((content) => {
+      const key = content.dataset.i18nKey;
+      const label = strings[key] || langCache.en[key];
+      const btn = content.parentElement;
+      if (label && btn) initCtaWordMask(btn, label);
     });
 
     document.querySelectorAll('[data-i18n-aria]').forEach((el) => {
