@@ -320,10 +320,16 @@ let zVelocity = 0;
 const ctaBtn = document.querySelector('.cta-btn');
 const ctaBtns = document.querySelectorAll('.cta-btn');
 
-function initCtaWordMask(btn) {
+function initCtaWordMask(btn, label) {
   const content = btn.querySelector('.cta-content');
   if (!content) return;
-  const text = content.textContent.trim();
+  // Remember the i18n key before the label is split into word spans, so
+  // applyLanguage() can rebuild the button with translated text.
+  const keyed = content.querySelector('[data-i18n]');
+  if (keyed && !content.dataset.i18nKey) {
+    content.dataset.i18nKey = keyed.getAttribute('data-i18n');
+  }
+  const text = (label ?? content.textContent).trim();
   const words = text.split(/\s+/);
 
   const buildWordSpans = () =>
@@ -1143,7 +1149,7 @@ const mobileMenuBtn = document.querySelector('.mobile-more');
 const mobileMenuPanel = document.querySelector('.mobile-menu-panel');
 const mobileEnvBtns = document.querySelectorAll('.mobile-env-btn');
 
-const VALID_LANGS = new Set(['en', 'fr', 'es', 'de', 'it', 'ko']);
+const VALID_LANGS = new Set(['en', 'fr', 'es', 'de', 'it', 'ko', 'zh-Hans', 'zh-Hant']);
 const langCache = {
   en: {
     "title": "XR Blocks: Build XR without code",
@@ -1639,6 +1645,13 @@ async function applyLanguage(lang, updateUrl = true) {
       } else if (key && strings[key]) {
         el.textContent = strings[key];
       }
+    });
+
+    document.querySelectorAll('.cta-content[data-i18n-key]').forEach((content) => {
+      const key = content.dataset.i18nKey;
+      const label = strings[key] || langCache.en[key];
+      const btn = content.parentElement;
+      if (label && btn) initCtaWordMask(btn, label);
     });
 
     document.querySelectorAll('[data-i18n-aria]').forEach((el) => {
