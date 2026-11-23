@@ -64,7 +64,6 @@ var Drone = class extends xb.Script {
 			edge: true,
 			style: { gap: 8 },
 			children: [
-				new xb.UIExitButton(),
 				new xb.UIText({
 					text: "DRONE CONTROLS",
 					pointerEvents: "none",
@@ -83,7 +82,8 @@ var Drone = class extends xb.Script {
 						textAlign: "center",
 						whiteSpace: "pre-line"
 					}
-				})
+				}),
+				new xb.UIExitButton()
 			]
 		});
 		card.position.set(0, 1.1, -1.2);
