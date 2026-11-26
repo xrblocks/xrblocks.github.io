@@ -320,21 +320,42 @@ let zVelocity = 0;
 const ctaBtn = document.querySelector('.cta-btn');
 const ctaBtns = document.querySelectorAll('.cta-btn');
 
-function initCtaWordMask(btn) {
+function initCtaWordMask(btn, overrideText) {
   const content = btn.querySelector('.cta-content');
   if (!content) return;
-  const text = content.textContent.trim();
-  const words = text.split(/\s+/);
+  if (!btn.dataset.ctaI18nKey) {
+    const i18nEl = content.querySelector('[data-i18n]');
+    const key = (i18nEl && i18nEl.getAttribute('data-i18n')) || btn.getAttribute('data-i18n');
+    if (key) {
+      btn.dataset.ctaI18nKey = key;
+    }
+  }
+  const sourceEl = content.querySelector('.cta-row-primary') || content;
+  const text = (overrideText !== undefined ? overrideText : sourceEl.textContent).trim();
+  const words = text ? text.split(/\s+/) : [];
 
-  const buildWordSpans = () =>
-    words
-      .map((word, i) => `<span class="cta-word" style="--word-i: ${i}">${word}</span>`)
-      .join(' ');
+  const createRow = (className, ariaHidden) => {
+    const row = document.createElement('span');
+    row.className = className;
+    if (ariaHidden) {
+      row.setAttribute('aria-hidden', 'true');
+    }
+    words.forEach((word, i) => {
+      if (i > 0) {
+        row.appendChild(document.createTextNode(' '));
+      }
+      const span = document.createElement('span');
+      span.className = 'cta-word';
+      span.style.setProperty('--word-i', String(i));
+      span.textContent = word;
+      row.appendChild(span);
+    });
+    return row;
+  };
 
-  content.innerHTML = `
-    <span class="cta-row cta-row-primary">${buildWordSpans()}</span>
-    <span class="cta-row cta-row-clone" aria-hidden="true">${buildWordSpans()}</span>
-  `;
+  content.textContent = '';
+  content.appendChild(createRow('cta-row cta-row-primary', false));
+  content.appendChild(createRow('cta-row cta-row-clone', true));
 }
 
 document.querySelectorAll('.cta-btn, .see-all-btn, .newsletter-btn').forEach((btn) => {
@@ -1170,6 +1191,7 @@ const langCache = {
     "hero_subtitle": "Accelerating AI + XR Innovation",
     "build_in_ai_studio": "Build in AI Studio",
     "try_xr_blocks_gem": "Try XR Blocks Gem",
+    "read_guided_tutorial": "Read Guided Tutorial",
     "explore_gallery": "Explore Gallery",
     "explore": "Explore",
     "google_ai_subscriptions": "Google AI Subscriptions",
@@ -1232,6 +1254,7 @@ const langCache = {
     "hero_subtitle": "Accélérer l'innovation IA + XR",
     "build_in_ai_studio": "Créer dans AI Studio",
     "try_xr_blocks_gem": "Essayer XR Blocks Gem",
+    "read_guided_tutorial": "Lire le tutoriel guidé",
     "explore_gallery": "Explorer la Galerie",
     "explore": "Explorer",
     "google_ai_subscriptions": "Abonnements Google AI",
@@ -1294,6 +1317,7 @@ const langCache = {
     "hero_subtitle": "Acelerando la innovación en IA y XR",
     "build_in_ai_studio": "Crear en AI Studio",
     "try_xr_blocks_gem": "Probar XR Blocks Gem",
+    "read_guided_tutorial": "Leer tutorial guiado",
     "explore_gallery": "Explorar Galería",
     "explore": "Explorar",
     "google_ai_subscriptions": "Suscripciones de Google AI",
@@ -1356,6 +1380,7 @@ const langCache = {
     "hero_subtitle": "Beschleunigung von KI + XR Innovationen",
     "build_in_ai_studio": "In AI Studio erstellen",
     "try_xr_blocks_gem": "XR Blocks Gem testen",
+    "read_guided_tutorial": "Geführtes Tutorial lesen",
     "explore_gallery": "Galerie erkunden",
     "explore": "Erkunden",
     "google_ai_subscriptions": "Google KI Abonnements",
@@ -1418,6 +1443,7 @@ const langCache = {
     "hero_subtitle": "Accelerare l'innovazione AI + XR",
     "build_in_ai_studio": "Crea in AI Studio",
     "try_xr_blocks_gem": "Prova XR Blocks Gem",
+    "read_guided_tutorial": "Leggi il tutorial guidato",
     "explore_gallery": "Esplora la Galleria",
     "explore": "Esplora",
     "google_ai_subscriptions": "Abbonamenti Google AI",
@@ -1480,6 +1506,7 @@ const langCache = {
     "hero_subtitle": "AI + XR 혁신 가속화",
     "build_in_ai_studio": "AI Studio에서 구축하기",
     "try_xr_blocks_gem": "XR Blocks Gem 사용해 보기",
+    "read_guided_tutorial": "가이드 튜토리얼 읽기",
     "explore_gallery": "갤러리 탐색",
     "explore": "탐색",
     "google_ai_subscriptions": "Google AI 구독",
@@ -1604,6 +1631,61 @@ function linkifyFaqAnswers() {
   });
 }
 
+function wrapFaqTextWords(node, container) {
+  if (node.nodeType === Node.TEXT_NODE) {
+    const parts = node.textContent.split(/(\s+)/);
+    parts.forEach((part) => {
+      if (!part) return;
+      if (/^\s+$/.test(part)) {
+        container.appendChild(document.createTextNode(' '));
+      } else {
+        const span = document.createElement('span');
+        span.className = 'faq-line-word';
+        span.textContent = part;
+        container.appendChild(span);
+      }
+    });
+  } else if (node.nodeType === Node.ELEMENT_NODE) {
+    const clone = node.cloneNode(false);
+    node.childNodes.forEach((child) => wrapFaqTextWords(child, clone));
+    container.appendChild(clone);
+  }
+}
+
+function updateFaqLineIndices(answerEl) {
+  if (!answerEl) return;
+  const words = answerEl.querySelectorAll('.faq-line-word');
+  if (!words.length) return;
+  let lineIndex = 0;
+  let currentTop = null;
+  words.forEach((word) => {
+    const top = word.offsetTop;
+    if (currentTop === null) {
+      currentTop = top;
+    } else if (Math.abs(top - currentTop) > 4) {
+      lineIndex += 1;
+      currentTop = top;
+    }
+    word.style.setProperty('--line-i', String(lineIndex));
+  });
+}
+
+function rewrapFaqAnswers() {
+  document.querySelectorAll('.faq-item .faq-answer').forEach((answerEl) => {
+    if (answerEl.querySelector('.faq-line-word')) return;
+    const frag = document.createDocumentFragment();
+    Array.from(answerEl.childNodes).forEach((child) => wrapFaqTextWords(child, frag));
+    answerEl.innerHTML = '';
+    answerEl.appendChild(frag);
+    answerEl.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+    });
+    updateFaqLineIndices(answerEl);
+  });
+}
+
 const fetchedLangs = new Set();
 
 async function applyLanguage(lang, updateUrl = true) {
@@ -1612,7 +1694,7 @@ async function applyLanguage(lang, updateUrl = true) {
     if (!fetchedLangs.has(normalizedLang)) {
       fetchedLangs.add(normalizedLang);
       try {
-        const resp = await fetch(`lang/lang_${normalizedLang}.json`);
+        const resp = await fetch(`lang/lang_${normalizedLang}.json?v=20261125`);
         if (resp.ok) {
           const remoteStrings = await resp.json();
           langCache[normalizedLang] = Object.assign(
@@ -1641,6 +1723,13 @@ async function applyLanguage(lang, updateUrl = true) {
       }
     });
 
+    document.querySelectorAll('[data-cta-i18n-key]').forEach((btn) => {
+      const key = btn.dataset.ctaI18nKey;
+      if (key && strings[key]) {
+        initCtaWordMask(btn, strings[key]);
+      }
+    });
+
     document.querySelectorAll('[data-i18n-aria]').forEach((el) => {
       const key = el.getAttribute('data-i18n-aria');
       if (key && strings[key]) {
@@ -1665,6 +1754,7 @@ async function applyLanguage(lang, updateUrl = true) {
     });
 
     linkifyFaqAnswers();
+    rewrapFaqAnswers();
 
     if (updateUrl) {
       const url = new URL(window.location.href);
@@ -1862,55 +1952,7 @@ if (faqItems.length > 0) {
   let userToggledFaq = false;
   const mobileFaqMedia = window.matchMedia('(max-width: 768px)');
 
-  const wrapFaqTextWords = (node, container) => {
-    if (node.nodeType === Node.TEXT_NODE) {
-      const parts = node.textContent.split(/(\s+)/);
-      parts.forEach((part) => {
-        if (!part) return;
-        if (/^\s+$/.test(part)) {
-          container.appendChild(document.createTextNode(' '));
-        } else {
-          const span = document.createElement('span');
-          span.className = 'faq-line-word';
-          span.textContent = part;
-          container.appendChild(span);
-        }
-      });
-    } else if (node.nodeType === Node.ELEMENT_NODE) {
-      const clone = node.cloneNode(false);
-      node.childNodes.forEach((child) => wrapFaqTextWords(child, clone));
-      container.appendChild(clone);
-    }
-  };
-
-  const updateFaqLineIndices = (answerEl) => {
-    if (!answerEl) return;
-    const words = answerEl.querySelectorAll('.faq-line-word');
-    if (!words.length) return;
-    let lineIndex = 0;
-    let currentTop = null;
-    words.forEach((word) => {
-      const top = word.offsetTop;
-      if (currentTop === null) {
-        currentTop = top;
-      } else if (Math.abs(top - currentTop) > 4) {
-        lineIndex += 1;
-        currentTop = top;
-      }
-      word.style.setProperty('--line-i', String(lineIndex));
-    });
-  };
-
-  faqItems.forEach((item) => {
-    const answerEl = item.querySelector('.faq-answer');
-    if (answerEl) {
-      const frag = document.createDocumentFragment();
-      Array.from(answerEl.childNodes).forEach((child) => wrapFaqTextWords(child, frag));
-      answerEl.innerHTML = '';
-      answerEl.appendChild(frag);
-      updateFaqLineIndices(answerEl);
-    }
-  });
+  rewrapFaqAnswers();
 
   window.addEventListener('resize', () => {
     faqItems.forEach((item) => updateFaqLineIndices(item.querySelector('.faq-answer')));
