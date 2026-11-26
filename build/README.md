@@ -98,7 +98,7 @@ All outbound links open in a new tab (`target="_blank" rel="noopener noreferrer"
 | **Header Dropdown** | `Language` (`English`, `Français`, etc.) | UI state selector in `main.js` | Wire `data-lang` selection in `.lang-option` to i18n routing/localization if multi-locale support is required. |
 | **Header Dropdown** | `Share` (`Discord`, `X`, `Instagram`) | `https://discord.com`, `https://x.com`, `https://instagram.com` | Update to specific community/social URLs if desired. |
 | **Hero CTA (Primary)** | `Build in AI Studio` | `https://aistudio-preprod.corp.google.com/app/apps` | **IMPORTANT:** Currently points to internal `aistudio-preprod.corp.google.com`. Update to public production AI Studio URL prior to public launch. |
-| **Hero CTA (Secondary)** | `Try XR Blocks Gem` | `https://xrblocks.github.io/gem/` | Live |
+| **Hero CTA (Secondary)** | `Read Guided Tutorial` | `https://aistudio.google.com/learn/xr-blocks-in-ai-studio` | Live |
 | **Carousel Card 1** | `Create XR Now` (XR Blocks Gem) | `https://xrblocks.github.io/gem/` | Live |
 | **Carousel Card 2** | `Explore Live Demos` (For Immersive Web) | `https://xrblocks.github.io/docs/samples/ModelViewer/` | Live |
 | **Carousel Card 3** | `Explore Demo` (Gemini Ice-breakers) | `https://xrblocks.github.io/docs/samples/Gemini-Icebreakers` | Live |

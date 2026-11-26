@@ -416,7 +416,8 @@
     .cta-btn {
       position: relative;
       border: none;
-      width: 280px;
+      min-width: 280px;
+      width: auto;
       height: 95px;
       padding: 36px 52px;
       border-radius: 60px;
@@ -465,12 +466,8 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 50%;
+      position: relative;
       height: 1.25em;
-      transform: translateY(-50%);
       overflow: hidden;
       pointer-events: none;
     }
@@ -974,7 +971,8 @@
       background-color: #f0f2ff;
       border: none;
       border-radius: 60px;
-      width: 340px;
+      min-width: 340px;
+      width: auto;
       height: 97px;
       padding: 36px;
       display: inline-flex;
@@ -1358,7 +1356,8 @@
       border: none;
       border-radius: 60px;
       padding: 36px 56px;
-      width: 280px;
+      min-width: 280px;
+      width: auto;
       height: 95px;
       margin-top: 64px;
       display: inline-flex;
@@ -1807,7 +1806,9 @@
         gap: 16px;
       }
       .cta-btn {
-        width: 280px;
+        min-width: 280px;
+        width: auto;
+        max-width: calc(100vw - 32px);
         height: 71px;
         padding: 24px 52px;
         font-size: 18px;
@@ -1889,7 +1890,9 @@
       }
       .see-all-btn {
         padding: 24px 56px;
-        width: 238px;
+        min-width: 238px;
+        width: auto;
+        max-width: calc(100vw - 32px);
         height: 71px;
         margin-top: 48px;
         font-size: 18px;
@@ -1994,9 +1997,11 @@
         margin: 0 auto;
       }
       .newsletter-btn {
-        width: 322px !important;
+        min-width: 322px;
+        width: auto !important;
+        max-width: calc(100vw - 32px);
         height: 71px !important;
-        padding: 24px 56px !important;
+        padding: 24px 40px !important;
         border-radius: 60px !important;
         font-family: 'Google Sans Text', 'Google Sans', var(--font-primary) !important;
         font-size: 18px !important;
@@ -2203,7 +2208,7 @@
 
       <div class="hero-buttons">
         <a href="https://goo.gle/BuildXR" target="_blank" rel="noopener noreferrer" class="cta-btn cta-btn-primary"><span class="cta-content"><span class="cta-text" data-i18n="build_in_ai_studio">Build in AI Studio</span></span></a>
-        <a href="https://xrblocks.github.io/gem/" target="_blank" rel="noopener noreferrer" class="cta-btn cta-btn-secondary"><span class="cta-content"><span class="cta-text" data-i18n="try_xr_blocks_gem">Try XR Blocks Gem</span></span></a>
+        <a href="https://aistudio.google.com/learn/xr-blocks-in-ai-studio" target="_blank" rel="noopener noreferrer" class="cta-btn cta-btn-secondary"><span class="cta-content"><span class="cta-text" data-i18n="read_guided_tutorial">Read Guided Tutorial</span></span></a>
       </div>
 
       <!-- Scroll indicator is now fixed globally -->
@@ -2626,7 +2631,7 @@
   </div>
 
   <!-- Script for Three.js 3D Background and Scroll/Mouse Interactivity -->
-  <script type="module" src="main.js"></script>
+  <script type="module" src="main.js?v=20261125"></script>
 
 </body>
 </html>
